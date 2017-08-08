@@ -113,6 +113,54 @@ module.exports.addMessage = (senderId, receiverId, text) => {
 // 2. friendeeId does not map to an existing user
 // 3. addType is not either 'create' or 'accept'
 module.exports.addFriend = (frienderUserId, friendeeUserId, addType) => {
+  if (addType !== null && addType !== undefined && addType.constructor === String && (addType === 'create' || addType === 'accept')) {
+    return module.exports.getUser({id: frienderUserId})
+    .then((friender) => {
+      return module.exports.getUser({id: friendeeUserId});
+    })
+    .then((friendee) => {
+      // Both users have been checked
+      return models.friends.findAll({
+        where: {
+          $or: [
+            {
+              friender_id: frienderUserId,
+              friendee_id: friendeeUserId
+            },
+            {
+              friender_id: friendeeUserId,
+              friendee_id: frienderUserId
+            }
+          ]
+        }
+      });
+    })
+    .then((friendData) => {
+      if (friendData.length > 1) {
+        return new Promise((resolve, reject) => {
+          reject(`Friend data is corrupted: Expected at most one friendship between users ${frienderUserId} and ${friendeeUserId} but instead found ${friendData.length}`);
+        });
+      }
+      if (addType === 'create') {
+        if (friendData.length === 0) {
+          // Create friend request
+        } else {
+          // No changes are made
+        }
+      }
+      if (addType === 'accept') {
+        if (friendData.length === 1) {
+          // Accept friend request
+        } else {
+          // No changes are made
+        }
+      }
+    });
+  } else {
+    return new Promise((resolve, reject) => {
+      reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
+    });
+  }
 };
 
 // Wipes any friend relationship between two users
@@ -123,6 +171,12 @@ module.exports.addFriend = (frienderUserId, friendeeUserId, addType) => {
 // 1. unfrienderId does not map to an existing user
 // 2. unfriendeeId does not map to an existing user
 module.exports.removeFriend = (unfrienderUserId, unfriendeeUserId) => {
+  return module.exports.getUser({id: unfrienderUserId})
+  .then((friender) => {
+    return module.exports.getUser({id: unfriendeeUserId});
+  }).then((friendee) => {
+    // Destroy the friendship
+  });
 };
 
 // Returns a promise containing an object that has data about friends and open friend requests
@@ -136,6 +190,10 @@ module.exports.removeFriend = (unfrienderUserId, unfriendeeUserId) => {
 // Exceptions:
 // 1. userId does not map to an existing user
 module.exports.getFriendData = (userId) => {
+  return module.exports.getUser({id: userId})
+  .then((user) => {
+    // Get friend data
+  });
 };
 
 
