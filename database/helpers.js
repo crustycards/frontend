@@ -4,6 +4,9 @@ module.exports.models = models.models;
 module.exports.sequelize = models.sequelize;
 module.exports.Sequelize = models.Sequelize;
 
+// TODO - Find a less ugly way to export everything from models.js
+models = models.models; // Since models exports an object containing the models in a key called models
+
 // Accepts an object containing one piece of unique data
 // (email or userID in the case of users) and returns a
 // promise that will resolve with the entire data of the
@@ -13,6 +16,24 @@ module.exports.Sequelize = models.Sequelize;
 // 1. userInfoObj does not map to any existing users
 // 2. userInfoObj maps to more than one user
 module.exports.getUser = (userInfoObj) => {
+  return models.users.findAll({
+    where: userInfoObj
+  }).then((userData) => {
+    if (userData.length === 1) {
+      return userData;
+    } else {
+      if (userData.length > 1) {
+        return new Promise((resolve, reject) => {
+          reject('There are multiple users that match the criteria');
+        });
+      }
+      if (userData.length < 1) {
+        return new Promise((resolve, reject) => {
+          reject('There are no users that match the criteria');
+        });
+      }
+    }
+  });
 };
 
 
