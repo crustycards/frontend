@@ -1,0 +1,49 @@
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.navbar {
+    text-align: center;
+    overflow: visible;
+}
+.navbar a{
+    color: #2B2D42;
+    font-size: 20px;
+    padding: 20px 30px;
+    font-weight: 400;
+}
+.navbar a:hover{
+    background: #8D99AE;
+    text-decoration: none;
+}
+
+.content-wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    overflow: hidden;
+}
+
+.subpanel {
+    padding: 10px;
+    background: #6D798E;
+    border-radius: 0.25em;
+    margin: 5px;
+}
+
+.panel {
+    background: #8D99AE;
+    border-radius: 0.5em;
+    padding: 10px;
+    margin: 10px;
+    max-width: 400px;
+}
+
+.panel .title {
+    font-size: 1.25em;
+    font-weight: 500;
+}
+
+a {
+    text-decoration: none;
+}
