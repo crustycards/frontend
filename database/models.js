@@ -140,7 +140,7 @@ Messages.belongsTo(Users, {
     foreignKey: 'sender_id'
 });
 Messages.belongsTo(Users, {
-    foreignKey: 'recipient_id'
+    foreignKey: 'receiver_id'
 });
 db.messages = Messages;
 
