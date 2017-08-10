@@ -54,7 +54,7 @@ app.use('/api', apiRouter(sockets));
 app.use('/', authRouter); // Middleware redirector
 
 // Serve static files
-app.get('/bundle.js', (req, res) => {
+app.get('*/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
 app.get('/*', (req, res) => {
@@ -62,7 +62,7 @@ app.get('/*', (req, res) => {
 });
 
 // Launch server
-var port = process.env.PORT || 8080;
+var port = process.env.PORT || 3000;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 http.listen(port, () => {
