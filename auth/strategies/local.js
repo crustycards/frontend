@@ -1,8 +1,8 @@
-var bCrypt = require('bcryptjs');
+const bCrypt = require('bcryptjs');
 
-module.exports = (passport, user) => {
-    var User = user;
-    var LocalStrategy = require('passport-local').Strategy;
+module.exports = (passport, userModel) => {
+    let User = userModel;
+    let LocalStrategy = require('passport-local').Strategy;
     passport.use('local-signup', new LocalStrategy(
         {
             usernameField: 'email',
@@ -10,7 +10,7 @@ module.exports = (passport, user) => {
             passReqToCallback: true
         },
         (req, email, password, done) => {
-            var generateHash = (password) => {
+            let generateHash = (password) => {
                 return bCrypt.hashSync(password, bCrypt.genSaltSync(8), null);
             };
 
@@ -24,8 +24,8 @@ module.exports = (passport, user) => {
                         message: 'That email is already in use!'
                     });
                 } else {
-                    var userPassword = generateHash(password);
-                    var data = {
+                    let userPassword = generateHash(password);
+                    let data = {
                         email: email,
                         password: userPassword,
                         firstname: req.body.firstname,
@@ -51,8 +51,8 @@ module.exports = (passport, user) => {
             passReqToCallback: true
         },
         (req, email, password, done) => {
-            var User = user;
-            var isValidPassword = (userpass, password) => {
+            let User = user;
+            let isValidPassword = (userpass, password) => {
                 return bCrypt.compareSync(password, userpass);
             }
             User.findOne({
@@ -71,7 +71,7 @@ module.exports = (passport, user) => {
                         message: 'Incorrect password'
                     });
                 }
-                var userInfo = user.get();
+                let userInfo = user.get();
                 return done(null, userInfo);
             }).catch((err) => {
                 console.log('Error: ' + err);
@@ -81,17 +81,4 @@ module.exports = (passport, user) => {
             });
         }
     ));
-
-    passport.serializeUser((user, done) => {
-        done(null, user.id);
-    });
-    passport.deserializeUser((id, done) => {
-        User.findById(id).then((user) => {
-            if (user) {
-                done(null, user.get());
-            } else {
-                done(null, null);
-            }
-        });
-    });
 };
