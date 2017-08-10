@@ -16,7 +16,7 @@ const passportSocketIo = require('passport.socketio');
 var sessionStore = sessionstore.createSessionStore();
 
 // Initialize passport strategy
-require('../config/passport.js')(passport, db.models.users);
+require('../config/auth.js')(passport, db.models.users);
 
 // Sync database
 db.sequelize.sync().then(() => {
