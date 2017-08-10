@@ -8,14 +8,14 @@ const env = require('dotenv').load();
 const path = require('path');
 const apiRouter = require('./apiRouter.js');
 const cookieParser = require('cookie-parser');
-const pageRouter = require('./pageRouter.js');
-const sessionstore = require('sessionstore');
+const authRouter = require('./authRouter.js');
+const SessionStore = require('sessionstore');
 const passportSocketIo = require('passport.socketio');
 
 // Create session store
-var sessionStore = sessionstore.createSessionStore();
+let sessionStore = SessionStore.createSessionStore();
 
-// Initialize passport strategy
+// Initialize passport strategies
 require('../auth')(passport, db.models.users);
 
 // Sync database
@@ -29,16 +29,15 @@ db.sequelize.sync().then(() => {
 // Create app
 var app = express();
 
-// Setup body parser
+// ---- MIDDLEWARE ----
+// Body parser
 app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
-
-// Setup cookie parser
+// Cookie parser
 app.use(cookieParser());
-
-// Setup passport and sessions
+// Passport and sessions
 app.use(session({
   store: sessionStore,
   secret: 'thisisasecret',
@@ -46,13 +45,13 @@ app.use(session({
   saveUninitialized: true
 }));
 app.use(passport.initialize());
-app.use(passport.session()); // Persistent login sessions
+app.use(passport.session());
 
 var sockets = {};
 
-// Setup page and api routing
+// Setup auth and api routing
 app.use('/api', apiRouter(sockets));
-app.use('/', pageRouter); // Middleware redirector
+app.use('/', authRouter); // Middleware redirector
 
 // Serve static files
 app.get('/bundle.js', (req, res) => {
