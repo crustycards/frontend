@@ -1,5 +1,5 @@
-var router = require('express').Router();
-var passport = require('passport');
+let router = require('express').Router();
+let passport = require('passport');
 
 // Middleware function that will redirect unauthenticated users to
 // login screen when trying to access a page that uses this
@@ -11,19 +11,32 @@ var isLoggedIn = (req, res, next) => {
   }
 };
 
-// Allows passport login on this page
+router.get('/authtest', isLoggedIn, (req, res) => {
+  res.send(JSON.stringify(req.user));
+});
+
+router.get('/auth/google', passport.authenticate('google', {
+  scope: ['email', 'profile']
+}));
+router.get('/auth/google/callback', passport.authenticate('google', {
+  succesRedirect: '/googleSuccess',
+  failureRedirect: '/googleFailure'
+}));
+
+
+// Allows passport local login on this page
 router.post('/login', passport.authenticate('local-signin', {
   successRedirect: '/',
   failureRedirect: '/login'
 }));
 
-// Allows passport signup on this page
+// Allows passport local signup on this page
 router.post('/signup', passport.authenticate('local-signup', {
   successRedirect: '/login',
   failureRedirect: '/signup'
 }));
 
-// Destroys current session when entering this page
+// Destroys current session when entering this page (for any passport strategy)
 router.get('/logout', (req, res) => {
   req.session.destroy((err) => {
     res.redirect('/');
