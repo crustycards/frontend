@@ -24,11 +24,12 @@ module.exports = (passport, userModel) => {
           if (user) {
             return done(null, user);
           } else {
+            console.log(profile.name);
             User.create({
-              id: profile.id,
+              google_id: profile.id,
               token: token,
               firstname: profile.name.givenName,
-              lastname: profile.name.familyname,
+              lastname: profile.name.familyName,
               email: profile.emails[0].value
             })
             .then((newUser) => {

@@ -16,17 +16,23 @@ db.Sequelize = Sequelize;
 // USERS SCHEMA
 var Users = sequelize.define('users', {
     id: {
+        type: Sequelize.INTEGER,
         autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER
+        primaryKey: true
+    },
+    google_id: {
+        type: Sequelize.STRING,
+        unique: true
     },
     firstname: {
         type: Sequelize.STRING,
-        notEmpty: true
+        notEmpty: true,
+        allowNull: false
     },
     lastname: {
         type: Sequelize.STRING,
-        notEmpty: true
+        notEmpty: true,
+        allowNull: false
     },
     email: {
         type: Sequelize.STRING,
@@ -35,8 +41,7 @@ var Users = sequelize.define('users', {
         }
     },
     password: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
     }
 });
 db.models.users = Users;
