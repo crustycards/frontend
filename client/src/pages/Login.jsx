@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import GoogleButton from 'react-google-button';
 
 class Login extends React.Component {
   constructor(props) {
@@ -50,6 +51,10 @@ class Login extends React.Component {
     }
   }
 
+  googleOAuthRedirect () {
+    window.location.href = '/auth/google';
+  }
+
   render() {
     return (
       <div>
@@ -62,6 +67,7 @@ class Login extends React.Component {
         <div>
           <p>No account? <a href='/signup'>Sign up!</a></p>
         </div>
+        <GoogleButton onClick={this.googleOAuthRedirect} />
       </div>
     ) 
   }
