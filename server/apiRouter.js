@@ -1,8 +1,8 @@
 module.exports = (sockets) => {
+  const passport = require('passport');
+
   var router = require('express').Router();
   var db = require('../database');
-
-  const passport = require('passport');
 
   var isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {
@@ -11,6 +11,10 @@ module.exports = (sockets) => {
       res.redirect('/login');
     }
   };
+
+  router.get('/currentuser', isLoggedIn, (req, res) => {
+    res.send(JSON.stringify(req.user));
+  });
 
   router.get('/messages', isLoggedIn, (req, res) => {
     var userId = req.user.id;
