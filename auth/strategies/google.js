@@ -17,7 +17,7 @@ module.exports = (passport, userModel) => {
       process.nextTick(() => {
         User.findOne({
           where: {
-            id: profile.id
+            google_id: profile.id
           }
         })
         .then((user) => {
