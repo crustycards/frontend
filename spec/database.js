@@ -76,6 +76,19 @@ module.exports.run = () => {
       });
     });
 
+    after(() => {
+      return sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+      .then(() => {
+        return sequelize.sync({force: true});
+      })
+      .then(() => {
+        return sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+      })
+      .then(() => {
+        return sequelize.sync();
+      });
+    });
+
     describe('Helpers', () => {
       describe('addFriend()', () => {
         it('Should exist', () => {
