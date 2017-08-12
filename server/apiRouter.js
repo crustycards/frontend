@@ -46,7 +46,7 @@ module.exports = (sockets) => {
     .then(res.end);
   });
 
-  router.get('/frienddata', auth.isLoggedIn, (req, res) => {
+  router.get('/friends', auth.isLoggedIn, (req, res) => {
     db.getFriendData(req.user.id).then(JSON.stringify).then((data) => {
       res.end(data);
     });
@@ -54,7 +54,7 @@ module.exports = (sockets) => {
 
   // Expects another user's email in req.body.userEmail
   // and then adds a friend request with that particular user
-  router.post('/addfriend', auth.isLoggedIn, (req, res) => {
+  router.post('/friends', auth.isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
     db.getUser({email: req.body.userEmail}).then((user) => {
@@ -76,8 +76,7 @@ module.exports = (sockets) => {
       }
     });
   });
-
-  router.post('/acceptfriendrequest', isLoggedIn, (req, res) => {
+  router.post('/friends', isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
     db.getUser({id: req.body.friendId}).then((user) => {
@@ -93,7 +92,7 @@ module.exports = (sockets) => {
     });
   });
 
-  router.post('/removefriend', isLoggedIn, (req, res) => {
+  router.delete('/friends', isLoggedIn, (req, res) => {
     var unfriender = req.user;
     var unfriendee;
     db.getUser({id: req.body.friendId}).then((user) => {
