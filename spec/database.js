@@ -239,6 +239,30 @@ module.exports.run = () => {
       });
     });
 
+    describe('getFriendData()', () => {
+      it('Should exist', () => {
+        expect(dbExports.getFriendData).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.getFriendData).to.be.a('function');
+      });
+      it('Should return correct data', () => {
+        return dbExports.getFriendData('hello@world.com')
+        .then((friendData) => {
+          expect(friendData).to.exist;
+          expect(friendData.friends).to.exist;
+          expect(friendData.requestsSent).to.exist;
+          expect(friendData.requestsReceived).to.exist;
+
+          // TODO - Add more extensive testing for friend-related functions
+          expect(friendData.friends[0].id).to.equal(db.users[1].id);
+          expect(friendData.friends[0].email).to.equal(db.users[1].email);
+          expect(friendData.friends[0].firstname).to.equal(db.users[1].firstname);
+          expect(friendData.friends[0].lastname).to.equal(db.users[1].lastname);
+        });
+      });
+    });
+
     describe('removeFriend()', () => {
       it('Should resolve to null when attempting to remove friendship between users who are not friends', () => {
         return dbExports.removeFriend(db.users[0].email, db.users[3].email)

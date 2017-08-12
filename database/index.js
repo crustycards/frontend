@@ -19,12 +19,30 @@ module.exports.getUser = (userEmail) => {
     }
   })
   .then((userData) => {
-    if (userData === null) {
+    if (!userData) {
       return new Promise((resolve, reject) => {
         reject('No user is registered under ' + userEmail);
       });
     } else {
       delete userData.dataValues.password; // Prevents password from being sent over http/sockets
+      return userData.dataValues;
+    }
+  });
+};
+
+var getUserById = (userId) => {
+  return models.users.findOne({
+    where: {
+      id: userId
+    }
+  })
+  .then((userData) => {
+    if (!userData) {
+      return new Promise((resolve, reject) => {
+        reject('No user has ID ' + userId);
+      });
+    } else {
+      delete userData.dataValues.password;
       return userData.dataValues;
     }
   });
@@ -159,10 +177,69 @@ module.exports.removeFriend = (unfrienderEmail, unfriendeeEmail) => {
 // Exceptions:
 // 1. userEmail does not map to an existing user
 module.exports.getFriendData = (userEmail) => {
-  // return module.exports.getUser({id: userId})
-  // .then((user) => {
-  //   // Get friend data
-  // });
+  return module.exports.getUser(userEmail)
+  .then((user) => {
+    return models.friends.findAll({
+      where: {
+        $or: [
+          {
+            friender_id: user.id
+          },
+          {
+            friendee_id: user.id
+          }
+        ]
+      }
+    })
+    .then((userRelationsData) => {
+      let getUserPromises = [];
+      for (let i = 0; i < userRelationsData.length; i++) {
+        getUserPromises.push(
+          getUserById(userRelationsData[i].dataValues.friender_id)
+          .then((friender) => {
+            userRelationsData[i].dataValues.friender = friender;
+            delete userRelationsData[i].dataValues.friender_id;
+          })
+        );
+        getUserPromises.push(
+          getUserById(userRelationsData[i].dataValues.friendee_id)
+          .then((friendee) => {
+            userRelationsData[i].dataValues.friendee = friendee;
+            delete userRelationsData[i].dataValues.friendee_id;
+          })
+        );
+      }
+      return Promise.all(getUserPromises)
+      .then(() => {
+        return userRelationsData;
+      });
+    })
+    .then((userRelationsData) => {
+      let friends = [];
+      let requestsSent = [];
+      let requestsReceived = [];
+
+      for (let i = 0; i < userRelationsData.length; i++) {
+        if (userRelationsData[i].dataValues.friender.email === userEmail) {
+          // User is friender
+          if (userRelationsData[i].dataValues.accepted ===  true) {
+            friends.push(userRelationsData[i].dataValues.friendee);
+          } else {
+            requestsSent.push(userRelationsData[i].dataValues.friendee);
+          }
+        } else {
+          // User is friendee
+          if (userRelationsData[i].dataValues.accepted ===  true) {
+            friends.push(userRelationsData[i].dataValues.friender);
+          } else {
+            requestsReceived.push(userRelationsData[i].dataValues.friender);
+          }
+        }
+      }
+
+      return {friends, requestsSent, requestsReceived};
+    });
+  });
 };
 
 
