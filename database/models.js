@@ -109,11 +109,7 @@ module.exports = (sequelize) => {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        friender_accepted: {
-            allowNull: false,
-            type: Sequelize.BOOLEAN
-        },
-        friendee_accepted: {
+        accepted: {
             allowNull: false,
             type: Sequelize.BOOLEAN
         }

@@ -156,5 +156,47 @@ module.exports.run = () => {
         });
       });
     });
+
+    describe('sendFriendRequest()', () => {
+      it('Should exist', () => {
+        expect(dbExports.sendFriendRequest).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.sendFriendRequest).to.be.a('function');
+      });
+      it('Should add a friend request when there is no open request/friendship with another user', () => {
+        return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus.id).to.exist;
+          expect(friendshipStatus.friender).to.exist;
+          expect(friendshipStatus.friendee).to.exist;
+          expect(friendshipStatus.accepted).to.exist;
+          expect(friendshipStatus.friender_id).to.not.exist;
+          expect(friendshipStatus.friendee_id).to.not.exist;
+
+          expect(friendshipStatus.friender.id).to.equal(db.users[0].id);
+          expect(friendshipStatus.friendee.id).to.equal(db.users[1].id);
+          expect(friendshipStatus.friender.email).to.equal(db.users[0].email);
+          expect(friendshipStatus.friendee.email).to.equal(db.users[1].email);
+          expect(friendshipStatus.friender.firstname).to.equal(db.users[0].firstname);
+          expect(friendshipStatus.friendee.firstname).to.equal(db.users[1].firstname);
+          expect(friendshipStatus.friender.lastname).to.equal(db.users[0].lastname);
+          expect(friendshipStatus.friendee.lastname).to.equal(db.users[1].lastname);
+          expect(friendshipStatus.accepted).to.equal(false);
+        });
+      });
+      it('Should not add a duplicate friend request and resolve to null when attempted', () => {
+        return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.equal(null);
+        });
+      });
+      it('Should not allow sending friend requests to users who have sent friend requests to you', () => {
+        return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.equal(null);
+        });
+      });
+    });
   });
 };

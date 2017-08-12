@@ -99,11 +99,11 @@ module.exports.getMessages = (senderEmail, receiverEmail) => {
 };
 
 module.exports.sendFriendRequest = (frienderEmail, friendeeEmail) => {
-  return helpers.addFriend(frienderEmail, friendeeEmail, 'create');
+  return addFriend(frienderEmail, friendeeEmail, 'create');
 };
 
 module.exports.acceptFriendRequest = (acceptorEmail, accepteeEmail) => {
-  return helpers.addFriend(accepterEmail, accepteeEmail, 'accept');
+  return addFriend(acceptorEmail, accepteeEmail, 'accept');
 };
 
 // Wipes any friend relationship between two users
@@ -243,16 +243,16 @@ module.exports.getCards = (cardpackId) => {
 // 1. frienderEmail does not map to an existing user
 // 2. friendeeEmail does not map to an existing user
 // 3. addType is not either 'create' or 'accept'
-module.exports.addFriend = (frienderEmail, friendeeEmail, addType) => {
+addFriend = (frienderEmail, friendeeEmail, addType) => {
   if (!addType || addType.constructor !== String && (addType !== 'create' || addType !== 'accept')) {
     return new Promise((resolve, reject) => {
       reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
     });
   }
 
-  return DBExports.getUser(frienderEmail)
+  return module.exports.getUser(frienderEmail)
   .then((friender) => {
-    return DBExports.getUser(friendeeEmail)
+    return module.exports.getUser(friendeeEmail)
     .then((friendee) => {
       return {friender, friendee};
     });
@@ -271,16 +271,51 @@ module.exports.addFriend = (frienderEmail, friendeeEmail, addType) => {
           }
         ]
       }
+    })
+    .then((friendData) => {
+      let friendStatus = null;
+      if (friendData) {
+        friendStatus = friendData;
+      }
+      return {friends, friendStatus};
     });
   })
-  .then((friendData) => {
-    console.log(friendData);
-    if (addType === 'create' && !friendData) {
+  .then((friendshipData) => {
+    if (addType === 'create' && !friendshipData.friendStatus) {
       // Create friend request
-    } else if (addType === 'accept' && friendData) {
+      return models.friends.create({
+        friender_id: friendshipData.friends.friender.id,
+        friendee_id: friendshipData.friends.friendee.id,
+        accepted: false
+      })
+      .then((friendshipData) => {
+        return friendshipData.dataValues;
+      })
+      .then((friendship) => {
+        return module.exports.getUser(frienderEmail)
+        .then((friender) => {
+          return module.exports.getUser(friendeeEmail)
+          .then((friendee) => {
+            return {friender, friendee};
+          });
+        })
+        .then((friends) => {
+          delete friendship.friender_id;
+          delete friendship.friendee_id;
+          friendship.friender = friends.friender;
+          friendship.friendee = friends.friendee;
+          return friendship;
+        });
+      });
+    } else if (addType === 'accept' && friendshipData.friendStatus) {
       // Accept friend request
+      if (friendshipData.friendStatus.dataValues.friendee_id === friendshipData.friends.friender.id)
+      friendshipData.friendStatus.update({
+        accepted: true
+      });
     } else {
       // Do nothing
+      return null;
     }
   });
 };
