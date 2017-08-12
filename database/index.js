@@ -1,5 +1,13 @@
-let models = require('./models.js');
-let helpers = require('./helpers.js');
+const env = process.env.NODE_ENV || 'development';
+const config = require('./config.json')[env];
+const Sequelize = require('sequelize');
+const helpers = require('./helpers.js');
+
+let sequelize = new Sequelize(config.database, config.username, config.password, config);
+let models = require('./models.js')(sequelize);
+
+module.exports.models = models;
+module.exports.sequelize = sequelize;
 
 // Accepts a user's email and returns the
 // user stored in the database
