@@ -1,16 +1,7 @@
+const auth = require('./authHelpers.js');
+
 let router = require('express').Router();
 let passport = require('passport');
-
-// Middleware function that will redirect authenticated users from
-// login/signup pages so that they don't get the impression that they
-// aren't logged in even if they are
-var isNotLoggedIn = (req, res, next) => {
-  if (!req.isAuthenticated()) {
-    return next();
-  } else {
-    res.redirect('/');
-  }
-};
 
 router.get('/auth/google', passport.authenticate('google', {
   scope: ['email', 'profile']
@@ -21,8 +12,9 @@ router.get('/auth/google/callback', passport.authenticate('google', {
 }));
 
 // Redirects these pages to homepage if the user is logged in already
-router.get('/login', isNotLoggedIn);
-router.get('/signup', isNotLoggedIn);
+router.get('/login', auth.isNotLoggedIn);
+router.get('/signup', auth.isNotLoggedIn);
+router.get('/', auth.isLoggedIn);
 
 // Allows passport local login on this page
 router.post('/login', passport.authenticate('local-signin', {

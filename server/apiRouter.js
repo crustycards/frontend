@@ -76,7 +76,7 @@ module.exports = (sockets) => {
       }
     });
   });
-  router.post('/friends', isLoggedIn, (req, res) => {
+  router.post('/friends', auth.isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
     db.getUser({id: req.body.friendId}).then((user) => {
@@ -92,7 +92,7 @@ module.exports = (sockets) => {
     });
   });
 
-  router.delete('/friends', isLoggedIn, (req, res) => {
+  router.delete('/friends', auth.isLoggedIn, (req, res) => {
     var unfriender = req.user;
     var unfriendee;
     db.getUser({id: req.body.friendId}).then((user) => {
