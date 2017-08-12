@@ -121,23 +121,30 @@ module.exports.removeFriend = (unfrienderEmail, unfriendeeEmail) => {
       return {unfriender, unfriendee};
     });
   }).then((friends) => {
-    models.friends.findOne({
+    return models.friends.findOne({
       where: {
         $or: [
           {
-            sender_id: friends.unfriender.id,
-            receiver_id: friends.unfriendee.id
+            friender_id: friends.unfriender.id,
+            friendee_id: friends.unfriendee.id
           },
           {
-            sender_id: friends.unfriendee.id,
-            receiver_id: friends.unfriender.id
+            friender_id: friends.unfriendee.id,
+            friendee_id: friends.unfriender.id
           }
         ]
       }
-    })
-    .then((friendship) => {
-      return friendship.destroy();
     });
+  })
+  .then((friendship) => {
+    if (friendship) {
+      return friendship.destroy()
+      .then(() => {
+        return true;
+      });
+    } else {
+      return null;
+    }
   });
 };
 

@@ -238,5 +238,27 @@ module.exports.run = () => {
         });
       });
     });
+
+    describe('removeFriend()', () => {
+      it('Should resolve to null when attempting to remove friendship between users who are not friends', () => {
+        return dbExports.removeFriend(db.users[0].email, db.users[3].email)
+        .then((response) => {
+          expect(response).to.equal(null);
+        });
+      });
+      it('Should remove a friendship', () => {
+        return dbExports.removeFriend(db.users[0].email, db.users[1].email)
+        .then((response) => {
+          expect(response).to.exist;
+          expect(response).to.equal(true);
+        });
+      });
+      // it('Should remove a sent friend request', () => {
+      //   //
+      // });
+      // it('Should remove a received friend request', () => {
+      //   //
+      // });
+    });
   });
 };
