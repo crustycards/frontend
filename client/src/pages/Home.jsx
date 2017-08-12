@@ -9,12 +9,21 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io();
+    this.state = {
+      currentUser: null
+    };
+    axios.get('/api/currentuser')
+    .then((response) => {
+      let currentUser = response.data;
+      this.setState({currentUser});
+    });
   }
 
   render() {
     return (
       <div>
         <div>Homepage</div>
+        <div>{this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}</div>
         <FriendsList />
         <FriendRequestsSent />
         <FriendRequestsReceived />
