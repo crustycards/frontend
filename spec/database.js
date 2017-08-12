@@ -170,7 +170,6 @@ module.exports.run = () => {
           expect(friendshipStatus.id).to.exist;
           expect(friendshipStatus.friender).to.exist;
           expect(friendshipStatus.friendee).to.exist;
-          expect(friendshipStatus.accepted).to.exist;
           expect(friendshipStatus.friender_id).to.not.exist;
           expect(friendshipStatus.friendee_id).to.not.exist;
 
@@ -195,6 +194,47 @@ module.exports.run = () => {
         return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
         .then((friendshipStatus) => {
           expect(friendshipStatus).to.equal(null);
+        });
+      });
+    });
+
+    describe('acceptFriendRequest()', () => {
+      it('Should exist', () => {
+        expect(dbExports.acceptFriendRequest).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.acceptFriendRequest).to.be.a('function');
+      });
+      it('Should not accept a request that does not exist', () => {
+        return dbExports.acceptFriendRequest(db.users[1].email, db.users[2].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.equal(null);
+        });
+      });
+      it('Should not accept a request that was sent by the acceptor', () => {
+        return dbExports.acceptFriendRequest(db.users[0].email, db.users[1].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.equal(null);
+        });
+      });
+      it('Should accept friend requests from other users', () => {
+        return dbExports.acceptFriendRequest(db.users[1].email, db.users[0].email)
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.exist;
+          expect(friendshipStatus.friender).to.exist;
+          expect(friendshipStatus.friendee).to.exist;
+          expect(friendshipStatus.friender_id).to.not.exist;
+          expect(friendshipStatus.friendee_id).to.not.exist;
+
+          expect(friendshipStatus.friender.id).to.equal(db.users[1].id);
+          expect(friendshipStatus.friendee.id).to.equal(db.users[0].id);
+          expect(friendshipStatus.friender.email).to.equal(db.users[1].email);
+          expect(friendshipStatus.friendee.email).to.equal(db.users[0].email);
+          expect(friendshipStatus.friender.firstname).to.equal(db.users[1].firstname);
+          expect(friendshipStatus.friendee.firstname).to.equal(db.users[0].firstname);
+          expect(friendshipStatus.friender.lastname).to.equal(db.users[1].lastname);
+          expect(friendshipStatus.friendee.lastname).to.equal(db.users[0].lastname);
+          expect(friendshipStatus.accepted).to.equal(true);
         });
       });
     });

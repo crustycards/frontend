@@ -300,12 +300,25 @@ addFriend = (frienderEmail, friendeeEmail, addType) => {
       });
     } else if (addType === 'accept' && friendshipData.friendStatus) {
       // Set friend request to accepted only if you are the receiver of the request
-      if (friendshipData.friendStatus.dataValues.friendee_id === friendshipData.friends.friender.id) {
-        //
+      if (friendshipData.friends.friender.id === friendshipData.friendStatus.dataValues.friendee_id) {
+        // If the request recipient accepts the request, change the request to the accepted state and return it
+        return friendshipData.friendStatus.update({
+          accepted: true
+        })
+        .then((newFriendshipStatus) => {
+          return newFriendshipStatus.dataValues;
+        })
+        .then((friendship) => {
+          delete friendship.friender_id;
+          delete friendship.friendee_id;
+          friendship.friender = friendshipData.friends.friender;
+          friendship.friendee = friendshipData.friends.friendee;
+          return friendship;
+        });
+      } else {
+        // If the original request sender tries to accept, return the current request status without modifying it
+        return null;
       }
-      friendshipData.friendStatus.update({
-        accepted: true
-      });
     } else {
       // Do nothing
       return null;
