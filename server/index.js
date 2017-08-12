@@ -62,7 +62,7 @@ app.get('/*', (req, res) => {
 });
 
 // Launch server
-var port = process.env.PORT || 3000;
+var port = 8080;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 http.listen(port, () => {

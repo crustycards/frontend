@@ -14,9 +14,9 @@
         "dialect": "mysql"
     },
     "production": {
-        "username": "student",
-        "password": "student",
-        "database": "",
+        "username": "server",
+        "password": "serverpass",
+        "database": "cards",
         "host": "localhost",
         "dialect": "mysql"
     }
