@@ -1,5 +1,4 @@
-const env = process.env.NODE_ENV || 'development';
-const config = require('./config.json')[env];
+const config = require('./config.js');
 const Sequelize = require('sequelize');
 const helpers = require('./helpers.js');
 
@@ -101,9 +100,11 @@ module.exports.getMessages = (senderEmail, receiverEmail) => {
 };
 
 module.exports.sendFriendRequest = (frienderEmail, friendeeEmail) => {
+  return helpers.addFriend(frienderEmail, friendeeEmail, 'create');
 };
 
 module.exports.acceptFriendRequest = (acceptorEmail, accepteeEmail) => {
+  return helpers.addFriend(accepterEmail, accepteeEmail, 'accept');
 };
 
 // Wipes any friend relationship between two users

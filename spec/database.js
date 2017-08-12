@@ -1,11 +1,13 @@
-let sinon = require('sinon');
-let path = require('path');
-let chai = require('chai');
-let chaiAsPromised = require('chai-as-promised');
+const Sequelize = require('sequelize');
+const dbConfig = require('../database/config.js');
+const sinon = require('sinon');
+const chai = require('chai');
+const chaiAsPromised = require('chai-as-promised');
+const expect = chai.expect;
 chai.use(chaiAsPromised);
-let expect = chai.expect;
 
-let models = require('../database/models.js');
+let sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
+let models = require('../database/models.js')(sequelize);
 let helpers = require('../database/helpers.js');
 let exportFuncs = require('../database/index.js');
 
@@ -48,15 +50,15 @@ module.exports.run = () => {
   describe('Functions', () => {
     // Forcefully sync database before testing
     before(() => {
-      return models.sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
+      return sequelize.query('SET FOREIGN_KEY_CHECKS = 0')
       .then(() => {
-        return models.sequelize.sync({force: true});
+        return sequelize.sync({force: true});
       })
       .then(() => {
-        return models.sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+        return sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
       })
       .then(() => {
-        return models.sequelize.sync();
+        return sequelize.sync();
       })
       .then(() => {
         let promises = [];
