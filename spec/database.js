@@ -110,8 +110,48 @@ module.exports.run = () => {
         });
       });
 
+      describe('addMessage()', () => {
+        it('Should exist', () => {
+          expect(exportFuncs.addMessage).to.exist;
+        });
+        it('Should be a function', () => {
+          expect(exportFuncs.addMessage).to.be.a('function');
+        });
+        it('Should add messages', () => {
+          let messageText = 'thisisamessage';
+          return exportFuncs.addMessage(db.users[0].email, db.users[1].email, messageText)
+          .then((message) => {
+            expect(message.createdAt).to.exist;
+            expect(message.updatedAt).to.exist;
+            expect(message.sender_id).to.equal(db.users[0].id);
+            expect(message.receiver_id).to.equal(db.users[1].id);
+            expect(message.id).to.exist;
+            expect(message.text).to.equal(messageText);
+          });
+        });
+      });
+
       describe('getMessages()', () => {
-        //
+        it('Should exist', () => {
+          expect(exportFuncs.getMessages).to.exist;
+        });
+        it('Should be a function', () => {
+          expect(exportFuncs.getMessages).to.be.a('function');
+        });
+        it('Should retrieve messages between users', () => {
+          return exportFuncs.getMessages(db.users[0].email, db.users[1].email)
+          .then((messages) => {
+            expect(messages.length).to.equal(db.messages.length + 1); // +1 because of the addMessage() tests adding a message
+            for (let i = 0; i < db.messages.length; i++) {
+              expect(messages[i].text).to.exist;
+              expect(messages[i].sender_id).to.exist;
+              expect(messages[i].receiver_id).to.exist;
+              expect(messages[i].text).to.equal(db.messages[i].text);
+              expect(messages[i].sender_id).to.equal(db.messages[i].sender_id);
+              expect(messages[i].receiver_id).to.equal(db.messages[i].receiver_id);
+            }
+          });
+        });
       });
     });
   });

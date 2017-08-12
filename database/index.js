@@ -26,29 +26,6 @@ module.exports.getUser = (userEmail) => {
 
 
 
-// Returns a promise that will resolve with an array
-// containing all messages between the two users
-//
-// Exceptions:
-// 1. senderEmail does not map to an existing user
-// 2. receiverEmail does not map to an existing user
-module.exports.getMessages = (senderEmail, receiverEmail) => {
-  // return models.messages.findAll({
-  //   where: {
-  //     $or: [
-  //       {
-  //         sender_id: senderId,
-  //         receiver_id: receiverId
-  //       },
-  //       {
-  //         sender_id: receiverId,
-  //         receiver_id: senderId
-  //       }
-  //     ]
-  //   }
-  // });
-};
-
 // Adds a message that was sent from one person to another
 // and returns a promise that will resolve to the message
 // contents including the database-stored timestamp
@@ -58,25 +35,61 @@ module.exports.getMessages = (senderEmail, receiverEmail) => {
 // 2. receiverEmail does not map to an existing user
 // 3. text is null/undefined/emptystring/notastring
 module.exports.addMessage = (senderEmail, receiverEmail, text) => {
-  // if (text !== null && text !== undefined && text.constructor === String && text !== '') {
-  //   // Doesn't use the user data, simply runs the functions
-  //   // to see if they throw errors due to invalid user IDs
-  //   return module.exports.getUser({id: senderId})
-  //   .then((sender) => {
-  //     return module.exports.getUser({id: receiverId});
-  //   })
-  //   .then((receiver) => {
-  //     return models.messages.create({
-  //       sender_id: senderId,
-  //       receiver_id: receiverId,
-  //       text: text
-  //     });
-  //   });
-  // } else {
-  //   return new Promise((resolve, reject) => {
-  //     reject('Message text is blank');
-  //   });
-  // }
+  if (!text || text.constructor !== String) {
+    return new Promise((resolve, reject) => {
+      reject('Message has no text');
+    });
+  }
+
+  return module.exports.getUser(senderEmail)
+  .then((sender) => {
+    return module.exports.getUser(receiverEmail)
+    .then((receiver) => {
+      return {sender, receiver};
+    });
+  })
+  .then((users) => {
+    return models.messages.create({
+      sender_id: users.sender.id,
+      receiver_id: users.receiver.id,
+      text: text
+    });
+  })
+  .then((messageData) => {
+    return messageData.dataValues;
+  });
+};
+
+// Returns a promise that will resolve with an array
+// containing all messages between the two users
+//
+// Exceptions:
+// 1. senderEmail does not map to an existing user
+// 2. receiverEmail does not map to an existing user
+module.exports.getMessages = (senderEmail, receiverEmail) => {
+  return module.exports.getUser(senderEmail)
+  .then((sender) => {
+    return module.exports.getUser(receiverEmail)
+    .then((receiver) => {
+      return {sender, receiver};
+    })
+  })
+  .then((users) => {
+    return models.messages.findAll({
+      where: {
+        $or: [
+          {
+            sender_id: users.sender.id,
+            receiver_id: users.receiver.id
+          },
+          {
+            sender_id: users.receiver.id,
+            receiver_id: users.sender.id
+          }
+        ]
+      }
+    });
+  });
 };
 
 module.exports.sendFriendRequest = (frienderEmail, friendeeEmail) => {
