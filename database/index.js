@@ -1,6 +1,5 @@
 const config = require('./config.js');
 const Sequelize = require('sequelize');
-const helpers = require('./helpers.js');
 
 let sequelize = new Sequelize(config.database, config.username, config.password, config);
 let models = require('./models.js')(sequelize);
@@ -115,11 +114,30 @@ module.exports.acceptFriendRequest = (acceptorEmail, accepteeEmail) => {
 // 1. unfrienderEmail does not map to an existing user
 // 2. unfriendeeEmail does not map to an existing user
 module.exports.removeFriend = (unfrienderEmail, unfriendeeEmail) => {
-  return module.exports.getUser({id: unfrienderUserId})
-  .then((friender) => {
-    return module.exports.getUser({id: unfriendeeUserId});
-  }).then((friendee) => {
-    // Destroy the friendship
+  return module.exports.getUser(unfrienderEmail)
+  .then((unfriender) => {
+    return module.exports.getUser(unfriendeeEmail)
+    .then((unfriendee) => {
+      return {unfriender, unfriendee};
+    });
+  }).then((friends) => {
+    models.friends.findOne({
+      where: {
+        $or: [
+          {
+            sender_id: friends.unfriender.id,
+            receiver_id: friends.unfriendee.id
+          },
+          {
+            sender_id: friends.unfriendee.id,
+            receiver_id: friends.unfriender.id
+          }
+        ]
+      }
+    })
+    .then((friendship) => {
+      return friendship.destroy();
+    });
   });
 };
 
@@ -206,4 +224,63 @@ module.exports.deleteCard = (cardId) => {
 // Exceptions:
 // 1. cardpackId does not map to an existing cardpack
 module.exports.getCards = (cardpackId) => {
+};
+
+
+
+
+
+
+
+// Adds a user-to-user friend relationship, automatically
+// disallowing duplicate duplicate entries, and returning
+// a promise with the new friendship status between the
+// two users
+//
+// AddType is a string containing either 'create' or 'accept'
+//
+// Exceptions:
+// 1. frienderEmail does not map to an existing user
+// 2. friendeeEmail does not map to an existing user
+// 3. addType is not either 'create' or 'accept'
+module.exports.addFriend = (frienderEmail, friendeeEmail, addType) => {
+  if (!addType || addType.constructor !== String && (addType !== 'create' || addType !== 'accept')) {
+    return new Promise((resolve, reject) => {
+      reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
+    });
+  }
+
+  return DBExports.getUser(frienderEmail)
+  .then((friender) => {
+    return DBExports.getUser(friendeeEmail)
+    .then((friendee) => {
+      return {friender, friendee};
+    });
+  })
+  .then((friends) => {
+    return models.friends.findOne({
+      where: {
+        $or: [
+          {
+            friender_id: friends.friender.id,
+            friendee_id: friends.friendee.id
+          },
+          {
+            friender_id: friends.friendee.id,
+            friendee_id: friends.friender.id
+          }
+        ]
+      }
+    });
+  })
+  .then((friendData) => {
+    console.log(friendData);
+    if (addType === 'create' && !friendData) {
+      // Create friend request
+    } else if (addType === 'accept' && friendData) {
+      // Accept friend request
+    } else {
+      // Do nothing
+    }
+  });
 };

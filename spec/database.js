@@ -8,9 +8,7 @@ chai.use(chaiAsPromised);
 
 let sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
 let models = require('../database/models.js')(sequelize);
-let helpers = require('../database/helpers.js');
-let exportFuncs = require('../database/index.js');
-
+let dbExports = require('../database/index.js');
 let db = require('./mockDB.json');
 
 module.exports.run = () => {
@@ -89,27 +87,16 @@ module.exports.run = () => {
       });
     });
 
-    describe('Helpers', () => {
-      describe('addFriend()', () => {
-        it('Should exist', () => {
-          expect(helpers.addFriend).to.exist;
-        });
-        it('Should be a function', () => {
-          expect(helpers.addFriend).to.be.a('function');
-        });
-      });
-    });
-
     describe('Export Functions', () => {
       describe('getUserByEmail()', () => {
         it('Should exist', () => {
-          expect(exportFuncs.getUser).to.exist;
+          expect(dbExports.getUser).to.exist;
         });
         it('Should be a function', () => {
-          expect(exportFuncs.getUser).to.be.a('function');
+          expect(dbExports.getUser).to.be.a('function');
         });
         it('Should retrieve a user if they exist', () => {
-          let promise = exportFuncs.getUser(db.users[0].email)
+          let promise = dbExports.getUser(db.users[0].email)
           .then((user) => {
             expect(user.createdAt).to.exist;
             expect(user.updatedAt).to.exist;
@@ -121,20 +108,20 @@ module.exports.run = () => {
           return expect(promise).to.eventually.deep.equal(db.users[0]);
         });
         it('Should reject if a user does not exist', () => {
-          return expect(exportFuncs.getUser('thisisafakeemail')).to.be.rejected;
+          return expect(dbExports.getUser('thisisafakeemail')).to.be.rejected;
         });
       });
 
       describe('addMessage()', () => {
         it('Should exist', () => {
-          expect(exportFuncs.addMessage).to.exist;
+          expect(dbExports.addMessage).to.exist;
         });
         it('Should be a function', () => {
-          expect(exportFuncs.addMessage).to.be.a('function');
+          expect(dbExports.addMessage).to.be.a('function');
         });
         it('Should add messages', () => {
           let messageText = 'thisisamessage';
-          return exportFuncs.addMessage(db.users[0].email, db.users[1].email, messageText)
+          return dbExports.addMessage(db.users[0].email, db.users[1].email, messageText)
           .then((message) => {
             expect(message.createdAt).to.exist;
             expect(message.updatedAt).to.exist;
@@ -148,13 +135,13 @@ module.exports.run = () => {
 
       describe('getMessages()', () => {
         it('Should exist', () => {
-          expect(exportFuncs.getMessages).to.exist;
+          expect(dbExports.getMessages).to.exist;
         });
         it('Should be a function', () => {
-          expect(exportFuncs.getMessages).to.be.a('function');
+          expect(dbExports.getMessages).to.be.a('function');
         });
         it('Should retrieve messages between users', () => {
-          return exportFuncs.getMessages(db.users[0].email, db.users[1].email)
+          return dbExports.getMessages(db.users[0].email, db.users[1].email)
           .then((messages) => {
             expect(messages.length).to.equal(db.messages.length + 1); // +1 because of the addMessage() tests adding a message
             for (let i = 0; i < db.messages.length; i++) {
