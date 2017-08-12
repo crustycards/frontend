@@ -5,7 +5,7 @@ var Sequelize = require('sequelize');
 var env = process.env.NODE_ENV || 'development';
 var config = require('./config.json')[env];
 var sequelize = new Sequelize(config.database, config.username, config.password, config);
-var db = {models: {}};
+var db = {};
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
@@ -44,7 +44,7 @@ var Users = sequelize.define('users', {
         type: Sequelize.STRING
     }
 });
-db.models.users = Users;
+db.users = Users;
 
 // CARDPACKS SCHEMA
 var Cardpacks = sequelize.define('cardpacks', {
@@ -62,7 +62,7 @@ var Cardpacks = sequelize.define('cardpacks', {
 Cardpacks.belongsTo(Users, {
     foreignKey: 'owner_user_id'
 });
-db.models.cardpacks = Cardpacks;
+db.cardpacks = Cardpacks;
 
 // CARDS SCHEMA
 var Cards = sequelize.define('cards', {
@@ -85,7 +85,7 @@ var Cards = sequelize.define('cards', {
 Cards.belongsTo(Cardpacks, {
     foreignKey: 'cardpack_id'
 });
-db.models.cards = Cards;
+db.cards = Cards;
 
 // CARDPACK JOIN TABLE SCHEMA
 // Allows for multiple uses to 'own' a cardpack
@@ -104,6 +104,7 @@ CardpackShare.belongsTo(Cardpacks, {
 CardpackShare.belongsTo(Users, {
     foreignKey: 'user_id'
 });
+db.cardpackjointable = CardpackShare;
 
 // FRIENDS SCHEMA
 var Friends = sequelize.define('friends', {
