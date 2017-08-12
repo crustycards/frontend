@@ -1,3 +1,6 @@
+process.env.NODE_ENV = 'development';
+process.env.PORT = 8080;
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
@@ -62,11 +65,10 @@ app.get('/*', (req, res) => {
 });
 
 // Launch server
-var port = 8080;
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
-http.listen(port, () => {
-  console.log('Listening on port ' + port);
+http.listen(process.env.PORT, () => {
+  console.log('Listening on port ' + process.env.PORT);
 });
 
 // Setup passport authentication for web sockets
