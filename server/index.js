@@ -1,5 +1,5 @@
 process.env.NODE_ENV = 'development';
-process.env.PORT = 8080;
+process.env.PORT = 3000;
 
 const express = require('express');
 const bodyParser = require('body-parser');

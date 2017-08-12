@@ -1,22 +1,16 @@
 module.exports = (sockets) => {
   const passport = require('passport');
+  const auth = require('./authHelpers.js');
 
-  var router = require('express').Router();
-  var db = require('../database');
+  let router = require('express').Router();
+  let db = require('../database');
 
-  var isLoggedIn = (req, res, next) => {
-    if (req.isAuthenticated()) {
-      return next();
-    } else {
-      res.redirect('/login');
-    }
-  };
-
-  router.get('/currentuser', isLoggedIn, (req, res) => {
+  // Returns data about the user who sent this request
+  router.get('/currentuser', auth.isLoggedIn, (req, res) => {
     res.send(JSON.stringify(req.user));
   });
 
-  router.get('/messages', isLoggedIn, (req, res) => {
+  router.get('/messages', auth.isLoggedIn, (req, res) => {
     var userId = req.user.id;
     var otherUserId;
     var userEmail;
@@ -52,12 +46,7 @@ module.exports = (sockets) => {
     .then(res.end);
   });
 
-  // Returns data about the user who sent this request
-  router.get('/currentuser', (req, res) => {
-    res.send(JSON.stringify(req.user));
-  });
-
-  router.get('/frienddata', (req, res) => {
+  router.get('/frienddata', auth.isLoggedIn, (req, res) => {
     db.getFriendData(req.user.id).then(JSON.stringify).then((data) => {
       res.end(data);
     });
@@ -65,7 +54,7 @@ module.exports = (sockets) => {
 
   // Expects another user's email in req.body.userEmail
   // and then adds a friend request with that particular user
-  router.post('/addfriend', (req, res) => {
+  router.post('/addfriend', auth.isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
     db.getUser({email: req.body.userEmail}).then((user) => {
@@ -88,7 +77,7 @@ module.exports = (sockets) => {
     });
   });
 
-  router.post('/acceptfriendrequest', (req, res) => {
+  router.post('/acceptfriendrequest', isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
     db.getUser({id: req.body.friendId}).then((user) => {
@@ -104,7 +93,7 @@ module.exports = (sockets) => {
     });
   });
 
-  router.post('/removefriend', (req, res) => {
+  router.post('/removefriend', isLoggedIn, (req, res) => {
     var unfriender = req.user;
     var unfriendee;
     db.getUser({id: req.body.friendId}).then((user) => {
