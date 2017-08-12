@@ -292,24 +292,17 @@ addFriend = (frienderEmail, friendeeEmail, addType) => {
         return friendshipData.dataValues;
       })
       .then((friendship) => {
-        return module.exports.getUser(frienderEmail)
-        .then((friender) => {
-          return module.exports.getUser(friendeeEmail)
-          .then((friendee) => {
-            return {friender, friendee};
-          });
-        })
-        .then((friends) => {
-          delete friendship.friender_id;
-          delete friendship.friendee_id;
-          friendship.friender = friends.friender;
-          friendship.friendee = friends.friendee;
-          return friendship;
-        });
+        delete friendship.friender_id;
+        delete friendship.friendee_id;
+        friendship.friender = friendshipData.friends.friender;
+        friendship.friendee = friendshipData.friends.friendee;
+        return friendship;
       });
     } else if (addType === 'accept' && friendshipData.friendStatus) {
-      // Accept friend request
-      if (friendshipData.friendStatus.dataValues.friendee_id === friendshipData.friends.friender.id)
+      // Set friend request to accepted only if you are the receiver of the request
+      if (friendshipData.friendStatus.dataValues.friendee_id === friendshipData.friends.friender.id) {
+        //
+      }
       friendshipData.friendStatus.update({
         accepted: true
       });
