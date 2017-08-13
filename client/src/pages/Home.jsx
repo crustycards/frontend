@@ -10,6 +10,9 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io();
+    this.socket.on('unfriend', (data) => {
+      console.log(JSON.parse(data));
+    });
     this.state = {
       currentUser: null,
       friends: [],

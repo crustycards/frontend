@@ -2,8 +2,8 @@ let sockets = {};
 
 module.exports.openSocket = (socket) => {
   console.log('A user has connected');
-  if (socket.request.user.id) {
-    sockets[socket.request.user.id] = socket;
+  if (socket.request.user.email) {
+    sockets[socket.request.user.email] = socket;
   }
   // Add event listeners here
 };
@@ -15,11 +15,11 @@ module.exports.closeSocket = (socket) => {
   }
 };
 
-module.exports.respondByUser = (userEmailArray, dataType, data) => {
-  for (let socket in sockets) {
+module.exports.respondByUserEmail = (userEmailArray, dataType, data) => {
+  for (let emailKey in sockets) {
     for (let i = 0; i < userEmailArray.length; i++) {
-      if (socket.request.user.email === userEmailArray[i]) {
-        socket.emit(dataType, JSON.stringify(data));
+      if (userEmailArray[i] === emailKey) {
+        sockets[emailKey].emit(dataType, JSON.stringify(data));
       }
     }
   }
