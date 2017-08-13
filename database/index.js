@@ -258,7 +258,6 @@ module.exports.getFriendData = (userEmail) => {
 
 
 // Returns a promise that will resolve with the cardpack data
-// (userId represents the owner of the cardpack)
 //
 // Exceptions:
 // 1. userEmail does not map to an existing user
@@ -411,6 +410,10 @@ let addFriend = (frienderEmail, friendeeEmail, addType) => {
           friendship.friender = friendshipData.friends.friender;
           friendship.friendee = friendshipData.friends.friendee;
           return friendship;
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          reject('There is already an open friend request with this person');
         });
       }
     } else {
