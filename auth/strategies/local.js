@@ -51,7 +51,6 @@ module.exports = (passport, userModel) => {
             passReqToCallback: true
         },
         (req, email, password, done) => {
-            let User = user;
             let isValidPassword = (userpass, password) => {
                 return bCrypt.compareSync(password, userpass);
             }
