@@ -172,7 +172,9 @@ module.exports.removeFriend = (unfrienderEmail, unfriendeeEmail) => {
         return true;
       });
     } else {
-      return null;
+      return new Promise((resolve, reject) => {
+        reject('You are not friends with this person');
+      });
     }
   });
 };
@@ -412,11 +414,14 @@ let addFriend = (frienderEmail, friendeeEmail, addType) => {
         });
       } else {
         // If the original request sender tries to accept, return the current request status without modifying it
-        return null;
+        return new Promise((resolve, reject) => {
+          reject('You have already sent a friend request to this person');
+        });
       }
     } else {
-      // Do nothing
-      return null;
+      return new Promise((resolve, reject) => {
+        reject(`Expected type to be 'create' or 'accept'`);
+      });
     }
   });
 };

@@ -188,17 +188,11 @@ module.exports.run = () => {
           expect(friendshipStatus.accepted).to.equal(false);
         });
       });
-      it('Should not add a duplicate friend request and resolve to null when attempted', () => {
-        return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
-        .then((friendshipStatus) => {
-          expect(friendshipStatus).to.equal(null);
-        });
+      it('Should not add a duplicate friend request and reject when attempted', () => {
+        return expect(dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)).to.be.rejected;
       });
       it('Should not allow sending friend requests to users who have sent friend requests to you', () => {
-        return dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)
-        .then((friendshipStatus) => {
-          expect(friendshipStatus).to.equal(null);
-        });
+        return expect(dbExports.sendFriendRequest(db.users[0].email, db.users[1].email)).to.be.rejected;
       });
     });
 
@@ -210,16 +204,10 @@ module.exports.run = () => {
         expect(dbExports.acceptFriendRequest).to.be.a('function');
       });
       it('Should not accept a request that does not exist', () => {
-        return dbExports.acceptFriendRequest(db.users[1].email, db.users[2].email)
-        .then((friendshipStatus) => {
-          expect(friendshipStatus).to.equal(null);
-        });
+        return expect(dbExports.acceptFriendRequest(db.users[1].email, db.users[2].email)).to.be.rejected;
       });
       it('Should not accept a request that was sent by the acceptor', () => {
-        return dbExports.acceptFriendRequest(db.users[0].email, db.users[1].email)
-        .then((friendshipStatus) => {
-          expect(friendshipStatus).to.equal(null);
-        });
+        return expect(dbExports.acceptFriendRequest(db.users[0].email, db.users[1].email)).to.be.rejected;
       });
       it('Should accept friend requests from other users', () => {
         return dbExports.acceptFriendRequest(db.users[1].email, db.users[0].email)
@@ -268,11 +256,8 @@ module.exports.run = () => {
     });
 
     describe('removeFriend()', () => {
-      it('Should resolve to null when attempting to remove friendship between users who are not friends', () => {
-        return dbExports.removeFriend(db.users[0].email, db.users[3].email)
-        .then((response) => {
-          expect(response).to.equal(null);
-        });
+      it('Should reject when attempting to remove friendship between users who are not friends', () => {
+        return expect(dbExports.removeFriend(db.users[0].email, db.users[3].email)).to.be.rejected;
       });
       it('Should remove a friendship', () => {
         return dbExports.removeFriend(db.users[0].email, db.users[1].email)
