@@ -11,44 +11,17 @@ module.exports = (sockets) => {
   });
 
   router.get('/messages', auth.isLoggedIn, (req, res) => {
-    var userId = req.user.id;
-    var otherUserId;
-    var userEmail;
-    var otherUserEmail;
-    db.getUser({email: req.query.user})
-    .then((user) => {
-      otherUserId = user.id;
-      otherUserEmail = user.email;
-    })
-    .then(() => {
-      return db.getUser({id: userId});
-    })
-    .then((user) => {
-      userEmail = user.email;
-    })
-    .then(() => {
-      return db.getMessages(userId, otherUserId);
-    })
-    .then((messagesOld) => {
-      var messages = JSON.parse(JSON.stringify(messagesOld));
-      for (var i = 0; i < messages.length; i++) {
-        if (messages[i].sender_id === userId) {
-          messages[i].sender = userEmail;
-          messages[i].recipient = otherUserEmail;
-        } else {
-          messages[i].sender = otherUserEmail;
-          messages[i].recipient = userEmail;
-        }
-      }
-      return messages;
-    })
+    db.getMessages(req.user.email, req.query.user)
     .then(JSON.stringify)
-    .then(res.end);
+    .then(res.send)
+    .catch((error) => {
+      res.send(JSON.stringify({error}));
+    });
   });
 
   router.get('/friends', auth.isLoggedIn, (req, res) => {
-    db.getFriendData(req.user.id).then(JSON.stringify).then((data) => {
-      res.end(data);
+    db.getFriendData(req.user.email).then(JSON.stringify).then((data) => {
+      res.send(data);
     });
   });
 
@@ -62,7 +35,7 @@ module.exports = (sockets) => {
     }).then(() => {
       return db.addFriend(friender.id, friendee.id, 'create');
     }).catch((err) => {
-      res.end('The email you entered is not linked to an existing user');
+      res.send('The email you entered is not linked to an existing user');
     }).then((data) => {
       if (data) {
         for (var key in sockets) {
@@ -70,12 +43,13 @@ module.exports = (sockets) => {
             sockets[key].emit('add friend send request', JSON.stringify({friender, friendee}));
           }
         }
-        res.end('Friend request sent');
+        res.send('Friend request sent');
       } else {
-        res.end('Something went wrong when submitting friend request');
+        res.send('Something went wrong when submitting friend request');
       }
     });
   });
+  // TODO - Link these together
   router.post('/friends', auth.isLoggedIn, (req, res) => {
     var friender = req.user;
     var friendee;
@@ -88,7 +62,7 @@ module.exports = (sockets) => {
           sockets[key].emit('add friend accept request', JSON.stringify({friender, friendee}));
         }
       }
-      res.end('Friend request accepted');
+      res.send('Friend request accepted');
     });
   });
 
@@ -104,12 +78,12 @@ module.exports = (sockets) => {
           sockets[key].emit('remove friend', JSON.stringify({unfriender, unfriendee}));
         }
       }
-      res.end('Friend successfully removed');
+      res.send('Friend successfully removed');
     });
   });
 
   router.get('/*', (req, res) => {
-    res.end();
+    res.send();
   });
 
   return router;
