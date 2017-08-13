@@ -10,6 +10,12 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io();
+    this.socket.on('friendrequestsend', (data) => {
+      console.log(JSON.parse(data));
+    });
+    this.socket.on('friendrequestaccept', (data) => {
+      console.log(JSON.parse(data));
+    });
     this.socket.on('unfriend', (data) => {
       console.log(JSON.parse(data));
     });

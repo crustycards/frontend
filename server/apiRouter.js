@@ -30,6 +30,16 @@ module.exports = (socketHandler) => {
     if (req.body.type === 'request') {
       db.sendFriendRequest(req.user.email, req.body.user)
       .then(() => {
+        return db.getUser(req.body.user)
+        .then((friendee) => {
+          return {friender: req.user, friendee};
+        });
+      })
+      .then((users) => {
+        socketHandler.respondByUserEmail([users.friender.email, users.friendee.email], 'friendrequestsend', {
+          friender: users.friender,
+          friendee: users.friendee
+        });
         res.send(JSON.stringify({message: 'success'}));
       })
       .catch((error) => {
@@ -38,6 +48,16 @@ module.exports = (socketHandler) => {
     } else if (req.body.type === 'accept') {
       db.acceptFriendRequest(req.user.email, req.body.user)
       .then(() => {
+        return db.getUser(req.body.user)
+        .then((acceptee) => {
+          return {acceptor: req.user, acceptee};
+        });
+      })
+      .then((users) => {
+        socketHandler.respondByUserEmail([users.acceptor.email, users.acceptee.email], 'friendrequestaccept', {
+          acceptor: users.acceptor,
+          acceptee: users.acceptee
+        });
         res.send(JSON.stringify({message: 'success'}));
       })
       .catch((error) => {
