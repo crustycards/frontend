@@ -27,16 +27,34 @@ module.exports = (sockets) => {
     });
   });
   router.post('/friends', auth.isLoggedIn, (req, res) => {
-    db.sendFriendRequest(req.user.email, req.body.user)
+    if (req.body.type === 'request') {
+      db.sendFriendRequest(req.user.email, req.body.user)
+        .then(() => {
+        res.send(JSON.stringify({message: 'success'}));
+      })
+      .catch((error) => {
+        res.send(JSON.stringify({error}));
+      });
+    } else if (req.body.type === 'accept') {
+      db.acceptFriendRequest(req.user.email, req.body.user)
+        .then(() => {
+        res.send(JSON.stringify({message: 'success'}));
+      })
+      .catch((error) => {
+        res.send(JSON.stringify({error}));
+      });
+    } else {
+      res.send(JSON.stringify({error: 'Did not specify whether a friend request was sent or accepted'}));
+    }
+  });
+  router.delete('/friends', auth.isLoggedIn, (req, res) => {
+    db.removeFriend(req.user.email, req.query.user)
     .then(() => {
-      res.send(JSON.stringify({message: 'success'}))
+      res.send(JSON.stringify({message: 'success'}));
     })
     .catch((error) => {
       res.send(JSON.stringify({error}));
     });
-  });
-  router.delete('/friends', auth.isLoggedIn, (req, res) => {
-    // Remove friend request/friend
   });
 
   // Expects another user's email in req.body.userEmail
