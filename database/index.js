@@ -412,15 +412,11 @@ let addFriend = (frienderEmail, friendeeEmail, addType) => {
           friendship.friendee = friendshipData.friends.friendee;
           return friendship;
         });
-      } else {
-        // If the original request sender tries to accept, return the current request status without modifying it
-        return new Promise((resolve, reject) => {
-          reject('You have already sent a friend request to this person');
-        });
       }
     } else {
+      // If the original request sender tries to accept, return the current request status without modifying it
       return new Promise((resolve, reject) => {
-        reject(`Expected type to be 'create' or 'accept'`);
+        reject('There is already an open friend request with this person');
       });
     }
   });
