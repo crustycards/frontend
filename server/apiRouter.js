@@ -50,15 +50,21 @@ module.exports = (socketHandler) => {
   router.delete('/friends', auth.isLoggedIn, (req, res) => {
     db.removeFriend(req.user.email, req.query.user)
     .then(() => {
-      socketHandler.respondByUserEmail([req.user.email, req.query.user], 'unfriend', {
-        unfriender: req.user.email,
-        unfriendee: req.query.user
+      return db.getUser(req.query.user)
+      .then((unfriendee) => {
+        return {unfriender: req.user, unfriendee};
       });
-      res.send(JSON.stringify({message: 'successsss'}));
     })
-    // .catch((error) => {
-    //   res.send(JSON.stringify({error}));
-    // });
+    .then((users) => {
+      socketHandler.respondByUserEmail([users.unfriender.email, users.unfriendee.email], 'unfriend', {
+        unfriender: users.unfriender,
+        unfriendee: users.unfriendee
+      });
+      res.send(JSON.stringify({message: 'success'}));
+    })
+    .catch((error) => {
+      res.send(JSON.stringify({error}));
+    });
   });
 
   router.get('/*', (req, res) => {
