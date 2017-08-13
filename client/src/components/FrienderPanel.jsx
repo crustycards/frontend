@@ -24,7 +24,7 @@ class FrienderPanel extends React.Component {
 
   render () {
     return (
-      <div>
+      <div className="panel">
         <div>Friender Panel</div>
         <input type='email' value={this.state.requestEmail} onChange={this.onInputChange} />
         <button onClick={this.sendRequest}>Send Friend Request</button>

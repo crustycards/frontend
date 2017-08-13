@@ -24,7 +24,6 @@ class Home extends React.Component {
     axios.get('/api/friends')
     .then((response) => {
       let friendData = response.data;
-      console.log(friendData);
       this.setState({friends: friendData.friends});
       this.setState({requestsSent: friendData.requestsSent});
       this.setState({requestReceived: friendData.requestsReceived});

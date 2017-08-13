@@ -1,4 +1,5 @@
 import React from 'react';
+import FriendRequest from './FriendRequest.jsx';
 
 class FriendRequestsSent extends React.Component {
   constructor (props) {
@@ -7,10 +8,10 @@ class FriendRequestsSent extends React.Component {
 
   render () {
     return (
-      <div>
+      <div className="panel">
         <div>Friend Requests Sent</div>
-        {this.props.requestsSent.map((user) => {
-          return <div>{user.firstname} {user.lastname}</div>
+        {this.props.requestsSent.map((user, index) => {
+          return <FriendRequest user={user} type="sent" key={index} />
         })}
       </div>
     );
