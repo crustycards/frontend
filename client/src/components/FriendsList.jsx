@@ -1,4 +1,5 @@
 import React from 'react';
+import Friend from './Friend.jsx';
 
 class FriendsList extends React.Component {
   constructor (props) {
@@ -7,10 +8,10 @@ class FriendsList extends React.Component {
 
   render () {
     return (
-      <div>
+      <div className="panel">
         <div>Friends List</div>
         {this.props.friends.map((friend) => {
-          return <div>{friend.firstname} {friend.lastname}</div>
+          return <Friend user={friend} />
         })}
       </div>
     );
