@@ -256,6 +256,12 @@ module.exports.run = () => {
     });
 
     describe('removeFriend()', () => {
+      it('Should exist', () => {
+        expect(dbExports.removeFriend).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.removeFriend).to.be.a('function');
+      });
       it('Should reject when attempting to remove friendship between users who are not friends', () => {
         return expect(dbExports.removeFriend(db.users[0].email, db.users[3].email)).to.be.rejected;
       });
@@ -275,6 +281,12 @@ module.exports.run = () => {
     });
 
     describe('createCardpack()', () => {
+      it('Should exist', () => {
+        expect(dbExports.createCardpack).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.createCardpack).to.be.a('function');
+      });
       it('Should create a cardpack when given an existing user', () => {
         let cardpackName = 'testcardpack';
         let ownerEmail = db.users[0].email;
@@ -314,6 +326,24 @@ module.exports.run = () => {
         let cardpackName = '';
         let ownerEmail = db.users[1].email;
         return expect(dbExports.createCardpack(ownerEmail, cardpackName)).to.be.rejected;
+      });
+    });
+
+    describe('deleteCardpack()', () => {
+      it('Should exist', () => {
+        expect(dbExports.deleteCardpack).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.deleteCardpack).to.be.a('function');
+      });
+      it('Should reject when trying to delete a cardpack that exists but is owned by someone else', () => {
+        return expect(dbExports.deleteCardpack(db.users[1].email, 1)).to.be.rejected;
+      });
+      it('Should reject when trying to delete a cardpack that does not exist', () => {
+        return expect(dbExports.deleteCardpack(db.users[1].email, 999)).to.be.rejected;
+      });
+      it('Should resolve to true when trying to delete a cardpack that you own', () => {
+        return expect(dbExports.deleteCardpack(db.users[0].email, 1)).to.eventually.equal(true);
       });
     });
   });

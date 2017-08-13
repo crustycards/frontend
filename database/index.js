@@ -292,6 +292,25 @@ module.exports.createCardpack = (userEmail, cardpackName) => {
 // 1. userEmail does not map to an existing user
 // 1. cardpackId does not map to an existing cardpack
 module.exports.deleteCardpack = (userEmail, cardpackId) => {
+  return module.exports.getUser(userEmail)
+  .then((owner) => {
+    return models.cardpacks.findOne({
+      where: {
+        id: cardpackId
+      }
+    })
+    .then((cardpack) => {
+      if (cardpack.owner_user_id !== owner.id) {
+        return new Promise((resolve, reject) => {
+          reject(`Cannot delete someone else's cardpack`);
+        });
+      }
+      return cardpack.destroy()
+      .then(() => {
+        return true;
+      });
+    });
+  });
 };
 
 // Returns a promise that will resolve with an array
