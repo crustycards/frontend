@@ -123,6 +123,11 @@ module.exports.getMessages = (senderEmail, receiverEmail) => {
 };
 
 module.exports.sendFriendRequest = (frienderEmail, friendeeEmail) => {
+  if (frienderEmail === friendeeEmail) {
+    return new Promise((resolve, reject) => {
+      reject('Cannot friend yourself');
+    });
+  }
   return addFriend(frienderEmail, friendeeEmail, 'create');
 };
 
