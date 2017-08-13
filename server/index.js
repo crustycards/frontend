@@ -30,7 +30,7 @@ db.sequelize.sync().then(() => {
 });
 
 // Create app
-var app = express();
+let app = express();
 
 // ---- MIDDLEWARE ----
 // Body parser
@@ -50,7 +50,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-var sockets = {};
+let sockets = {};
 
 // Setup auth and api routing
 app.use('/api', apiRouter(sockets));
@@ -65,8 +65,8 @@ app.get('/*', (req, res) => {
 });
 
 // Launch server
-var http = require('http').Server(app);
-var io = require('socket.io')(http);
+let http = require('http').Server(app);
+let io = require('socket.io')(http);
 http.listen(process.env.PORT, () => {
   console.log('Listening on port ' + process.env.PORT);
 });
@@ -94,31 +94,5 @@ io.on('connection', (socket) => {
     }
   });
   socket.on('message', (messageString) => {
-    var message = JSON.parse(messageString);
-    var userEmail = socket.request.user.email;
-    var userId = socket.request.user.id;
-    var otherUserId;
-    var otherUserEmail = message.email;
-    db.getUser({email: message.email}).then((user) => {
-      otherUserId = user.dataValues.id;
-    })
-    .then(() => {
-      return db.addMessage(userId, otherUserId, message.text);
-    })
-    .then((messageData) => {
-      var message = JSON.parse(JSON.stringify(messageData.dataValues));
-      message.sender = userEmail;
-      message.recipient = otherUserEmail;
-      return message;
-    })
-    .then((message) => {
-      // Key is a user ID
-      for (var key in sockets) {
-        if (userId.toString() === key || otherUserId.toString() === key) {
-          sockets[key].emit('message', JSON.stringify(message));
-        }
-      }
-      return message;
-    });
   });
 });

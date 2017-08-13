@@ -29,7 +29,7 @@ module.exports = (sockets) => {
   router.post('/friends', auth.isLoggedIn, (req, res) => {
     if (req.body.type === 'request') {
       db.sendFriendRequest(req.user.email, req.body.user)
-        .then(() => {
+      .then(() => {
         res.send(JSON.stringify({message: 'success'}));
       })
       .catch((error) => {
@@ -37,7 +37,7 @@ module.exports = (sockets) => {
       });
     } else if (req.body.type === 'accept') {
       db.acceptFriendRequest(req.user.email, req.body.user)
-        .then(() => {
+      .then(() => {
         res.send(JSON.stringify({message: 'success'}));
       })
       .catch((error) => {
