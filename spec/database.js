@@ -273,5 +273,48 @@ module.exports.run = () => {
       //   //
       // });
     });
+
+    describe('createCardpack()', () => {
+      it('Should create a cardpack when given an existing user', () => {
+        let cardpackName = 'testcardpack';
+        let ownerEmail = db.users[0].email;
+        return dbExports.createCardpack(ownerEmail, cardpackName)
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.createdAt).to.exist;
+          expect(cardpack.updatedAt).to.exist;
+          expect(cardpack.owner_user_id).to.not.exist;
+          expect(cardpack.owner).to.exist;
+
+          expect(cardpack.owner.email).to.equal(ownerEmail);
+          expect(cardpack.name).to.equal(cardpackName);
+        });
+      });
+      it('Should create a cardpack of the same name as a previous cardpack and the same user', () => {
+        let cardpackName = 'testcardpack';
+        let ownerEmail = db.users[0].email;
+        return dbExports.createCardpack(ownerEmail, cardpackName)
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.createdAt).to.exist;
+          expect(cardpack.updatedAt).to.exist;
+          expect(cardpack.owner_user_id).to.not.exist;
+          expect(cardpack.owner).to.exist;
+
+          expect(cardpack.owner.email).to.equal(ownerEmail);
+          expect(cardpack.name).to.equal(cardpackName);
+        });
+      });
+      it('Should not create a cardpack when given a non-existing user', () => {
+        let cardpackName = 'testcardpack';
+        let ownerEmail = 'notarealemail@fakesite.com';
+        return expect(dbExports.createCardpack(ownerEmail, cardpackName)).to.be.rejected;
+      });
+      it('Should not create a cardpack when given an empty string as a cardpack name', () => {
+        let cardpackName = '';
+        let ownerEmail = db.users[1].email;
+        return expect(dbExports.createCardpack(ownerEmail, cardpackName)).to.be.rejected;
+      });
+    });
   });
 };

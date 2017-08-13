@@ -263,6 +263,25 @@ module.exports.getFriendData = (userEmail) => {
 // 1. userEmail does not map to an existing user
 // 2. cardpackName is null/undefined/emptystring/notastring
 module.exports.createCardpack = (userEmail, cardpackName) => {
+  if (!cardpackName || cardpackName.constructor !== String) {
+    return new Promise((resolve, reject) => {
+      reject('Cardpack name is invalid - name must be a non-empty string');
+    });
+  }
+
+  return module.exports.getUser(userEmail)
+  .then((user) => {
+    return models.cardpacks.create({
+      name: cardpackName,
+      owner_user_id: user.id
+    })
+    .then((cardpackImmutable) => {
+      let cardpack = JSON.parse(JSON.stringify(cardpackImmutable));
+      delete cardpack.owner_user_id;
+      cardpack.owner = user;
+      return cardpack;
+    });
+  });
 };
 
 // Returns a promise that will resolve with no
