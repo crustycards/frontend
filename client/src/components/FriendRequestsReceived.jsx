@@ -7,7 +7,12 @@ class FriendRequestsReceived extends React.Component {
 
   render () {
     return (
-      <div>Friend Requests Received</div>
+      <div>
+        <div>Friend Requests Received</div>
+        {this.props.requestsReceived.map((request) => {
+          return <div>{request.firstname} {request.lastname}</div>
+        })}
+      </div>
     );
   }
 }

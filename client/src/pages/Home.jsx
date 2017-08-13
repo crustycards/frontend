@@ -10,12 +10,23 @@ class Home extends React.Component {
     super(props);
     this.socket = io();
     this.state = {
-      currentUser: null
+      currentUser: null,
+      friends: [],
+      requestsSent: [],
+      requestReceived: []
     };
     axios.get('/api/currentuser')
     .then((response) => {
       let currentUser = response.data;
       this.setState({currentUser});
+    });
+    axios.get('/api/friends')
+    .then((response) => {
+      let friendData = response.data;
+      console.log(friendData);
+      this.setState({friends: friendData.friends});
+      this.setState({requestsSent: friendData.requestsSent});
+      this.setState({requestReceived: friendData.requestsReceived});
     });
   }
 
@@ -24,9 +35,9 @@ class Home extends React.Component {
       <div>
         <div>Homepage</div>
         <div>{this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}</div>
-        <FriendsList />
-        <FriendRequestsSent />
-        <FriendRequestsReceived />
+        <FriendsList friends={this.state.friends} />
+        <FriendRequestsSent requestsSent={this.state.requestsSent} />
+        <FriendRequestsReceived requestsReceived={this.state.requestReceived} />
       </div>
     ) 
   }

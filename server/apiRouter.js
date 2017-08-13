@@ -11,6 +11,7 @@ module.exports = (sockets) => {
   });
 
   router.get('/messages', auth.isLoggedIn, (req, res) => {
+    // Get a list of messages with a particular user
     db.getMessages(req.user.email, req.query.user)
     .then(JSON.stringify)
     .then(res.send)
@@ -20,9 +21,16 @@ module.exports = (sockets) => {
   });
 
   router.get('/friends', auth.isLoggedIn, (req, res) => {
+    // Get a list of all friends and pending friend requests
     db.getFriendData(req.user.email).then(JSON.stringify).then((data) => {
       res.send(data);
     });
+  });
+  router.post('/friends', auth.isLoggedIn, (req, res) => {
+    // Send/accept friend requests
+  });
+  router.delete('/friends', auth.isLoggedIn, (req, res) => {
+    // Remove friend request/friend
   });
 
   // Expects another user's email in req.body.userEmail

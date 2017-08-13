@@ -7,7 +7,12 @@ class FriendsList extends React.Component {
 
   render () {
     return (
-      <div>Friends List</div>
+      <div>
+        <div>Friends List</div>
+        {this.props.friends.map((friend) => {
+          return <div>{friend.firstname} {friend.lastname}</div>
+        })}
+      </div>
     );
   }
 }
