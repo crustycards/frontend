@@ -11,7 +11,6 @@ class Home extends React.Component {
     super(props);
     this.socket = io();
     this.socket.on('friendrequestsend', (data) => {
-      console.log(JSON.parse(data));
       let users = JSON.parse(data);
       let otherUser;
       if (users.friender.id === this.state.currentUser.id) {
@@ -23,7 +22,6 @@ class Home extends React.Component {
       }
     });
     this.socket.on('friendrequestaccept', (data) => {
-      console.log(JSON.parse(data));
       let users = JSON.parse(data);
       let otherUser;
       if (users.acceptor.id === this.state.currentUser.id) {
@@ -84,7 +82,6 @@ class Home extends React.Component {
     this.forceUpdate();
   }
   removeFriendRequestSent (friend) {
-    console.log('BOOP');
     for (let i = 0; i < this.state.requestsSent.length; i++) {
       if (this.state.requestsSent[i].email === friend.email) {
         this.state.requestsSent.splice(i, 1);
@@ -97,7 +94,6 @@ class Home extends React.Component {
     this.forceUpdate();
   }
   removeFriendRequestReceived (friend) {
-    console.log('BOOP');
     for (let i = 0; i < this.state.requestsReceived.length; i++) {
       if (this.state.requestsReceived[i].email === friend.email) {
         this.state.requestsReceived.splice(i, 1);
