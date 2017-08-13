@@ -329,6 +329,34 @@ module.exports.run = () => {
       });
     });
 
+    describe('getCardpacks()', () => {
+      it('Should exist', () => {
+        expect(dbExports.getCardpacks).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.getCardpacks).to.be.a('function');
+      });
+      it('Should resolve to empty array for user that has no cardpacks', () => {
+        return expect(dbExports.getCardpacks(db.users[3].email)).to.eventually.deep.equal([]);
+      });
+      it('Should resolve to an array of cardpacks for users that have cardpacks', () => {
+        return dbExports.getCardpacks(db.users[0].email)
+        .then((cardpacks) => {
+          expect(cardpacks).to.exist;
+          expect(cardpacks.constructor).to.equal(Array);
+          expect(cardpacks.length).to.equal(2);
+          expect(cardpacks[0].name).to.equal('testcardpack');
+          expect(cardpacks[1].name).to.equal('testcardpack');
+          expect(cardpacks[0].owner_user_id).to.not.exist;
+          expect(cardpacks[1].owner_user_id).to.not.exist;
+          expect(cardpacks[0].owner).to.exist;
+          expect(cardpacks[1].owner).to.exist;
+          expect(cardpacks[0].owner.email).to.equal(db.users[0].email);
+          expect(cardpacks[1].owner.email).to.equal(db.users[0].email);
+        });
+      });
+    });
+
     describe('deleteCardpack()', () => {
       it('Should exist', () => {
         expect(dbExports.deleteCardpack).to.exist;

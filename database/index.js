@@ -284,6 +284,27 @@ module.exports.createCardpack = (userEmail, cardpackName) => {
   });
 };
 
+// Returns a promise that will resolve with an array
+// containing all cardpacks that the user owns or is
+// subscribed to
+//
+// Exceptions:
+// 1. userEmail does not map to an existing user
+module.exports.getCardpacks = (userEmail) => {
+  return module.exports.getUser(userEmail)
+  .then((user) => {
+    return models.cardpacks.findAll({
+      where: {
+        owner_user_id: user.id
+      }
+    });
+  })
+  .then((cardpacks) => {
+    console.log(cardpacks);
+    return replaceForeignKeys(cardpacks, 'owner_user_id', models.users, 'owner');
+  });
+};
+
 // Returns a promise that will resolve with no
 // data once the cardpack and all associated cards
 // have been removed from the database
@@ -311,15 +332,6 @@ module.exports.deleteCardpack = (userEmail, cardpackId) => {
       });
     });
   });
-};
-
-// Returns a promise that will resolve with an array
-// containing all cardpacks that the user owns or is
-// subscribed to
-//
-// Exceptions:
-// 1. userEmail does not map to an existing user
-module.exports.getCardpacks = (userEmail) => {
 };
 
 
