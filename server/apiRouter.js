@@ -1,4 +1,4 @@
-module.exports = (sockets) => {
+module.exports = (socketHandler) => {
   const passport = require('passport');
   const auth = require('./authHelpers.js');
 
@@ -70,11 +70,6 @@ module.exports = (sockets) => {
       res.send('The email you entered is not linked to an existing user');
     }).then((data) => {
       if (data) {
-        for (var key in sockets) {
-          if (friender.id.toString() === key || friendee.id.toString() === key) {
-            sockets[key].emit('add friend send request', JSON.stringify({friender, friendee}));
-          }
-        }
         res.send('Friend request sent');
       } else {
         res.send('Something went wrong when submitting friend request');
@@ -89,11 +84,6 @@ module.exports = (sockets) => {
       friendee = user;
       return db.addFriend(friender.id, friendee.id, 'accept')
     }).then(() => {
-      for (var key in sockets) {
-        if (friender.id.toString() === key || friendee.id.toString() === key) {
-          sockets[key].emit('add friend accept request', JSON.stringify({friender, friendee}));
-        }
-      }
       res.send('Friend request accepted');
     });
   });
@@ -105,11 +95,6 @@ module.exports = (sockets) => {
       unfriendee = user;
       db.removeFriend(unfriender.id, unfriendee.id)
     }).then(() => {
-      for (var key in sockets) {
-        if (unfriender.id.toString() === key || unfriendee.id.toString() === key) {
-          sockets[key].emit('remove friend', JSON.stringify({unfriender, unfriendee}));
-        }
-      }
       res.send('Friend successfully removed');
     });
   });

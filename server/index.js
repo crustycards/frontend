@@ -14,6 +14,7 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
 const SessionStore = require('sessionstore');
 const passportSocketIo = require('passport.socketio');
+const socketHandler = require('./socketHandler.js');
 
 // Create session store
 let sessionStore = SessionStore.createSessionStore();
@@ -50,10 +51,8 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-let sockets = {};
-
 // Setup auth and api routing
-app.use('/api', apiRouter(sockets));
+app.use('/api', apiRouter(socketHandler));
 app.use('/', authRouter); // Middleware redirector
 
 // Serve static files
@@ -83,16 +82,8 @@ io.use(passportSocketIo.authorize({
 // Setup socket event handlers
 // TODO - Allow for any user to have multiple open sockets
 io.on('connection', (socket) => {
-  console.log('A user has connected');
-  if (socket.request.user.id) {
-    sockets[socket.request.user.id] = socket;
-  }
+  socketHandler.openSocket(socket);
   socket.on('disconnect', () => {
-    console.log('A user has disconnected');
-    if (socket.request.user.id) {
-      delete sockets[socket.request.user.id];
-    }
-  });
-  socket.on('message', (messageString) => {
+    socketHandler.closeSocket(socket);
   });
 });
