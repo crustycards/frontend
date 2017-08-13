@@ -4,6 +4,7 @@ import io from 'socket.io-client';
 import FriendsList from '../components/FriendsList.jsx';
 import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
+import FrienderPanel from '../components/FrienderPanel.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -38,6 +39,7 @@ class Home extends React.Component {
         <FriendsList friends={this.state.friends} />
         <FriendRequestsSent requestsSent={this.state.requestsSent} />
         <FriendRequestsReceived requestsReceived={this.state.requestReceived} />
+        <FrienderPanel />
       </div>
     ) 
   }

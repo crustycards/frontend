@@ -27,7 +27,13 @@ module.exports = (sockets) => {
     });
   });
   router.post('/friends', auth.isLoggedIn, (req, res) => {
-    // Send/accept friend requests
+    db.sendFriendRequest(req.user.email, req.body.user)
+    .then(() => {
+      res.send(JSON.stringify({message: 'success'}))
+    })
+    .catch((error) => {
+      res.send(JSON.stringify({error}));
+    });
   });
   router.delete('/friends', auth.isLoggedIn, (req, res) => {
     // Remove friend request/friend
