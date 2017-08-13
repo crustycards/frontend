@@ -146,11 +146,15 @@ module.exports.run = () => {
             expect(messages.length).to.equal(db.messages.length + 1); // +1 because of the addMessage() tests adding a message
             for (let i = 0; i < db.messages.length; i++) {
               expect(messages[i].text).to.exist;
-              expect(messages[i].sender_id).to.exist;
-              expect(messages[i].receiver_id).to.exist;
+              expect(messages[i].sender_id).to.not.exist;
+              expect(messages[i].receiver_id).to.not.exist;
+              expect(messages[i].sender).to.exist;
+              expect(messages[i].receiver).to.exist;
+              expect(messages[i].sender.id).to.exist;
+              expect(messages[i].receiver.id).to.exist;
               expect(messages[i].text).to.equal(db.messages[i].text);
-              expect(messages[i].sender_id).to.equal(db.messages[i].sender_id);
-              expect(messages[i].receiver_id).to.equal(db.messages[i].receiver_id);
+              expect(messages[i].sender.id).to.equal(db.messages[i].sender_id);
+              expect(messages[i].receiver.id).to.equal(db.messages[i].receiver_id);
             }
           });
         });

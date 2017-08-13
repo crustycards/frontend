@@ -113,6 +113,12 @@ module.exports.getMessages = (senderEmail, receiverEmail) => {
         ]
       }
     });
+  })
+  .then((messages) => {
+    return replaceForeignKeys(messages, 'sender_id', models.users, 'sender');
+  })
+  .then((messages) => {
+    return replaceForeignKeys(messages, 'receiver_id', models.users, 'receiver');
   });
 };
 
@@ -327,7 +333,7 @@ module.exports.getCards = (cardpackId) => {
 // 1. frienderEmail does not map to an existing user
 // 2. friendeeEmail does not map to an existing user
 // 3. addType is not either 'create' or 'accept'
-addFriend = (frienderEmail, friendeeEmail, addType) => {
+let addFriend = (frienderEmail, friendeeEmail, addType) => {
   if (!addType || addType.constructor !== String && (addType !== 'create' || addType !== 'accept')) {
     return new Promise((resolve, reject) => {
       reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
@@ -407,5 +413,25 @@ addFriend = (frienderEmail, friendeeEmail, addType) => {
       // Do nothing
       return null;
     }
+  });
+};
+
+let replaceForeignKeys = (modelArrayImmutable, foreignKey, foreignModel, newKey) => {
+  let modelArray = JSON.parse(JSON.stringify(modelArrayImmutable));
+  let promiseArray = [];
+  for (let i = 0; i < modelArray.length; i++) {
+    promiseArray.push(
+      foreignModel.findOne({
+        where: {id: modelArray[i][foreignKey]}
+      })
+      .then((model) => {
+        delete modelArray[i][foreignKey];
+        modelArray[i][newKey] = model;
+      })
+    );
+  }
+  return Promise.all(promiseArray)
+  .then(() => {
+    return modelArray;
   });
 };
