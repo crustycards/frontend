@@ -30,7 +30,7 @@ module.exports.getUser = (userEmail) => {
   });
 };
 
-var getUserById = (userId) => {
+let getUserById = (userId) => {
   return models.users.findOne({
     where: {
       id: userId

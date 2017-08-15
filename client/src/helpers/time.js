@@ -1,14 +1,14 @@
 module.exports.parse = (timeString, relativeTime) => {
-var date = new Date(timeString);
+let date = new Date(timeString);
 
 if (relativeTime) {
-    var secondsSinceSent = ((new Date().getTime() - date.getTime()) / 1000);
-    var minutesSinceSent = secondsSinceSent / 60;
-    var hoursSinceSent = minutesSinceSent / 60;
-    var daysSinceSent = hoursSinceSent / 24;
-    var weeksSinceSent = daysSinceSent / 7;
-    var monthsSinceSent = minutesSinceSent / 43800; // There are exactly 43800 minutes in a month
-    var yearsSinceSent = monthsSinceSent / 12;
+    let secondsSinceSent = ((new Date().getTime() - date.getTime()) / 1000);
+    let minutesSinceSent = secondsSinceSent / 60;
+    let hoursSinceSent = minutesSinceSent / 60;
+    let daysSinceSent = hoursSinceSent / 24;
+    let weeksSinceSent = daysSinceSent / 7;
+    let monthsSinceSent = minutesSinceSent / 43800; // There are exactly 43800 minutes in a month
+    let yearsSinceSent = monthsSinceSent / 12;
 
     secondsSinceSent = Math.round(secondsSinceSent);
     minutesSinceSent = Math.round(minutesSinceSent);
@@ -19,7 +19,7 @@ if (relativeTime) {
     yearsSinceSent = Math.round(yearsSinceSent);
 
     if (secondsSinceSent < 60) {
-        var seconds = Math.round(secondsSinceSent);
+        let seconds = Math.round(secondsSinceSent);
         if (seconds <= 5) {
             return 'Just now';
         } else {
@@ -77,9 +77,9 @@ if (relativeTime) {
     }
 }
 
-var dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
-var timeString = '';
-var amORpm = 'AM';
+let dateString = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear();
+let timeString = '';
+let amORpm = 'AM';
 
 if (date.getHours() > 12) {
     timeString += (date.getHours() - 12) + ':';

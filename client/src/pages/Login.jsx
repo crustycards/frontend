@@ -14,7 +14,7 @@ class Login extends React.Component {
   }
 
   handleInputChange (property, e) {
-    var stateChange = {};
+    let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
   }
@@ -30,15 +30,15 @@ class Login extends React.Component {
         return res;
       });
     } else {
-      var missingVals = [];
+      let missingVals = [];
       if (!this.state.email) {
         missingVals.push('email');
       }
       if (!this.state.password) {
         missingVals.push('password');
       }
-      var errorString = `Incomplete! You're missing`;
-      for (var i = 0; i < missingVals.length; i++) {
+      let errorString = `Incomplete! You're missing`;
+      for (let i = 0; i < missingVals.length; i++) {
         if (i === missingVals.length - 1 && missingVals.length > 1) {
           errorString += ', and ' + missingVals[i];
         } else if (i === 0) {
