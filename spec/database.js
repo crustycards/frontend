@@ -1,15 +1,8 @@
-const Sequelize = require('sequelize');
-const dbConfig = require('../database/config.js');
-const sinon = require('sinon');
-const chai = require('chai');
-const chaiAsPromised = require('chai-as-promised');
-const expect = chai.expect;
-chai.use(chaiAsPromised);
-
-let sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, dbConfig);
-let models = require('../database/models.js')(sequelize);
-let dbExports = require('../database/index.js');
-let db = require('./mockDB.json');
+const expect = require('chai').use(require('chai-as-promised')).expect;
+const db = require('./mockDB.json');
+const dbExports = require('../database/index.js');
+const sequelize = dbExports.sequelize;
+const models = require('../database/models.js')(sequelize);
 
 module.exports.run = () => {
   describe('Models', () => {
