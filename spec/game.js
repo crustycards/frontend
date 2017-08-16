@@ -1,6 +1,6 @@
 const expect = require('chai').use(require('chai-as-promised')).expect;
 const Game = require('../game/Game.js');
-const Users = require('../game/users.js');
+const Users = require('../game/Users.js');
 
 module.exports.run = () => {
   describe('Users', () => {
