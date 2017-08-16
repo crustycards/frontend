@@ -8,10 +8,10 @@ class Users {
     this.size = 0;
   }
 
-  addUser (user) {
+  addUser (user, cards) {
     // If the user is already registered in this Users object, don't do anything
     if (!this.userTable[user.email]) {
-      let userNode = new Node(user.email);
+      let userNode = new Node(user.email, cards);
       this.size++;
       this.userTable[user.email] = userNode;
       if (this.head === null) {
@@ -61,8 +61,9 @@ class Users {
 }
 
 class Node {
-  constructor (email, prev = null, next = null) {
+  constructor (email, cards, prev = null, next = null) {
     this.email = email;
+    this.cards = cards;
     this.prev = prev;
     this.next = next;
   }
