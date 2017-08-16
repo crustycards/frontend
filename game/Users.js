@@ -8,10 +8,10 @@ class Users {
     this.size = 0;
   }
 
-  addUser (user, cards) {
+  addUser (user) {
     // If the user is already registered in this Users object, don't do anything
     if (!this.userTable[user.email]) {
-      let userNode = new Node(user.email, cards);
+      let userNode = new Node(user.email);
       this.size++;
       this.userTable[user.email] = userNode;
       if (this.head === null) {
@@ -46,6 +46,9 @@ class Users {
       delete this.userTable[user.email];
     }
   }
+  containsUser () {
+    return !!this.userTable[user.email];
+  }
   cycleJudge () {
     this.judge = this.judge.next || this.head;
   }
@@ -61,9 +64,8 @@ class Users {
 }
 
 class Node {
-  constructor (email, cards, prev = null, next = null) {
+  constructor (email, prev = null, next = null) {
     this.email = email;
-    this.cards = cards;
     this.prev = prev;
     this.next = next;
   }
