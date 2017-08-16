@@ -6,10 +6,15 @@ import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
 
+import store from '../store';
+import {connect} from 'react-redux';
+
 class Home extends React.Component {
   constructor(props) {
     super(props);
     this.socket = io();
+    this.state = store.getState();
+
     this.socket.on('friendrequestsend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -21,6 +26,7 @@ class Home extends React.Component {
         this.addFriendRequestReceived(otherUser);
       }
     });
+
     this.socket.on('friendrequestaccept', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -33,6 +39,7 @@ class Home extends React.Component {
       this.removeFriendRequestReceived(otherUser);
       this.addFriend(otherUser);
     });
+
     this.socket.on('unfriend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -45,75 +52,77 @@ class Home extends React.Component {
       this.removeFriendRequestReceived(otherUser);
       this.removeFriend(otherUser);
     });
-    this.state = {
-      currentUser: null,
-      friends: [],
-      requestsSent: [],
-      requestsReceived: []
-    };
+
     axios.get('/api/currentuser')
     .then((response) => {
       let currentUser = response.data;
-      this.setState({currentUser});
+      store.dispatch({type: 'SIGN_IN', payload: {currentUser}});
     });
+
     axios.get('/api/friends')
     .then((response) => {
       let friendData = response.data;
-      this.setState({friends: friendData.friends});
-      this.setState({requestsSent: friendData.requestsSent});
-      this.setState({requestsReceived: friendData.requestsReceived});
+      store.dispatch(
+        {
+          type: 'ADD_FRIENDS', 
+          payload: friendData.friends
+        }
+      );
+      store.dispatch(
+        {
+          type: 'ADD_REQUESTS_SENT', 
+          payload: friendData.requestsSent
+        }
+      );
+      store.dispatch(
+        {
+          type: 'ADD_REQUESTS_RECEIVED', 
+          payload: friendData.requestsReceived
+        }
+      );
     });
+
   }
 
   addFriend (friend) {
-    this.state.friends.push(friend);
-    this.forceUpdate();
+    store.dispatch({type: 'ADD_FRIEND', payload: friend});
   }
+
   removeFriend (friend) {
-    for (let i = 0; i < this.state.friends.length; i++) {
-      if (this.state.friends[i].email === friend.email) {
-        this.state.friends.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
+    store.dispatch({type: 'REMOVE_FRIEND', payload: friend});
   }
+
   addFriendRequestSent (friend) {
-    this.state.requestsSent.push(friend);
-    this.forceUpdate();
+    store.dispatch({type: 'ADD_REQUESTS_SENT', payload: friend});
   }
+
   removeFriendRequestSent (friend) {
-    for (let i = 0; i < this.state.requestsSent.length; i++) {
-      if (this.state.requestsSent[i].email === friend.email) {
-        this.state.requestsSent.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
+    store.dispatch({type: 'REMOVE_REQUESTS_SENT', payload: friend});
   }
+
   addFriendRequestReceived (friend) {
-    this.state.requestsReceived.push(friend);
-    this.forceUpdate();
+    store.dispatch({type: 'ADD_REQUESTS_RECEIVED', payload: friend});
   }
+
   removeFriendRequestReceived (friend) {
-    for (let i = 0; i < this.state.requestsReceived.length; i++) {
-      if (this.state.requestsReceived[i].email === friend.email) {
-        this.state.requestsReceived.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
+    store.dispatch({type: 'REMOVE_REQUESTS_RECEIVED', payload: friend});
   }
 
   render() {
     return (
       <div>
         <div>Homepage</div>
-        <div>{this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}</div>
-        <FriendsList friends={this.state.friends} />
+        <div>
+          {this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}
+        </div>
+        <FriendsList />
         <FriendRequestsSent requestsSent={this.state.requestsSent} />
         <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
         <FrienderPanel />
       </div>
     ) 
   }
+
 }
 
-export default Home;
+export default connect((state) => state)(Home);
