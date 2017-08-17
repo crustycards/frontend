@@ -116,8 +116,8 @@ class Home extends React.Component {
           {this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}
         </div>
         <FriendsList />
-        <FriendRequestsSent requestsSent={this.state.requestsSent} />
-        <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
+        <FriendRequestsSent />
+        <FriendRequestsReceived />
         <FrienderPanel />
       </div>
     ) 
