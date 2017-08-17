@@ -146,7 +146,7 @@ class Game {
   }
 
   sendDataToUsers (dataType, data) {
-    socketHandler.respondByUserEmail(this.users.getEmailsOfCurrentUsers(), dataType, data);
+    socketHandler.respondToUsersByEmail(this.users.getCurrentUsers(), dataType, data);
   }
 }
 

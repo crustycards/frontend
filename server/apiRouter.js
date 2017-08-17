@@ -43,7 +43,7 @@ module.exports = (socketHandler) => {
           });
         })
         .then((users) => {
-          socketHandler.respondByUserEmail([users.friender.email, users.friendee.email], 'friendrequestsend', {
+          socketHandler.respondToUsers([users.friender, users.friendee], 'friendrequestsend', {
             friender: users.friender,
             friendee: users.friendee
           });
@@ -61,7 +61,7 @@ module.exports = (socketHandler) => {
           });
         })
         .then((users) => {
-          socketHandler.respondByUserEmail([users.acceptor.email, users.acceptee.email], 'friendrequestaccept', {
+          socketHandler.respondToUsers([users.acceptor, users.acceptee], 'friendrequestaccept', {
             acceptor: users.acceptor,
             acceptee: users.acceptee
           });
@@ -83,7 +83,7 @@ module.exports = (socketHandler) => {
         });
       })
       .then((users) => {
-        socketHandler.respondByUserEmail([users.unfriender.email, users.unfriendee.email], 'unfriend', {
+        socketHandler.respondToUsers([users.unfriender, users.unfriendee], 'unfriend', {
           unfriender: users.unfriender,
           unfriendee: users.unfriendee
         });

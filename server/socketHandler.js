@@ -21,12 +21,23 @@ module.exports.closeSocket = (socket) => {
   }
 };
 
-module.exports.respondByUserEmail = (userEmailArray, dataType, data) => {
-  for (let i = 0; i < userEmailArray.length; i++) {
+module.exports.respondToUsers = (users, dataType, data) => {
+  for (let i = 0; i < users.length; i++) {
     // If this user has any open socket connections
-    if (sockets[userEmailArray[i]]) {
-      for (let j = 0; j < sockets[userEmailArray[i]].length; j++) {
-        sockets[userEmailArray[i]][j].emit(dataType, JSON.stringify(data));
+    if (sockets[users[i].email]) {
+      for (let j = 0; j < sockets[users[i].email].length; j++) {
+        sockets[users[i].email][j].emit(dataType, JSON.stringify(data));
+      }
+    }
+  }
+};
+
+module.exports.respondToUsersByEmail = (userEmails, dataType, data) => {
+  for (let i = 0; i < userEmails.length; i++) {
+    // If this user has any open socket connections
+    if (sockets[userEmails[i]]) {
+      for (let j = 0; j < sockets[userEmails[i]].length; j++) {
+        sockets[userEmails[i]][j].emit(dataType, JSON.stringify(data));
       }
     }
   }
