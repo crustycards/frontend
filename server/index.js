@@ -63,12 +63,17 @@ app.get('/*', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
 });
 
-// Launch server
 let http = require('http').Server(app);
 let io = require('socket.io')(http);
-http.listen(process.env.PORT, () => {
-  console.log('Listening on port ' + process.env.PORT);
-});
+
+// Launch/export server
+if (module.parent) {
+  module.exports = app;
+} else {
+  http.listen(process.env.PORT, () => {
+    console.log('Listening on port ' + process.env.PORT);
+  });
+}
 
 // Setup passport authentication for web sockets
 io.use(passportSocketIo.authorize({

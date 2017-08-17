@@ -3,3 +3,4 @@
 
 require('./database.js').run();
 require('./game.js').run();
+require('./apiRouter.js').run();
