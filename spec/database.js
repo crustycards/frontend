@@ -368,18 +368,21 @@ module.exports.run = () => {
       });
     });
 
+    let cardId;
+    let cardOwnerEmail = db.users[0].email;
     describe('createCard()', () => {
       let cardpackId;
       before(() => {
-        return dbExports.createCardpack(db.users[0].email, 'Cardpack')
+        return dbExports.createCardpack(cardOwnerEmail, 'Cardpack')
         .then((cardpack) => {
           cardpackId = cardpack.id;
         });
       });
 
       it('Should create a black card', () => {
-        return dbExports.createCard(db.users[0].email, cardpackId, 'test card', 'black')
+        return dbExports.createCard(cardOwnerEmail, cardpackId, 'test card', 'black')
         .then((card) => {
+          cardId = card.id;
           expect(card).to.exist;
           expect(card.createdAt).to.exist;
           expect(card.updatedAt).to.exist;
@@ -391,7 +394,7 @@ module.exports.run = () => {
         });
       });
       it('Should create a white card', () => {
-        return dbExports.createCard(db.users[0].email, cardpackId, 'test card 2', 'white')
+        return dbExports.createCard(cardOwnerEmail, cardpackId, 'test card 2', 'white')
         .then((card) => {
           expect(card).to.exist;
           expect(card.createdAt).to.exist;
@@ -404,16 +407,51 @@ module.exports.run = () => {
         });
       });
       it('Should not create a card if the card type is invalid', () => {
-        return expect(dbExports.createCard(db.users[0].email, cardpackId, 'test', 'invalidcardtype')).to.be.rejected;
+        return expect(dbExports.createCard(cardOwnerEmail, cardpackId, 'test', 'invalidcardtype')).to.be.rejected;
       });
       it('Should not create a card if the card text is blank', () => {
-        return expect(dbExports.createCard(db.users[0].email, cardpackId, '', 'white')).to.be.rejected;
+        return expect(dbExports.createCard(cardOwnerEmail, cardpackId, '', 'white')).to.be.rejected;
       });
       it('Should not create a card if the cardpack ID doesn\'t map to an existing cardpack', () => {
-        return expect(dbExports.createCard(db.users[0].email, cardpackId + 1, 'test', 'white')).to.be.rejected;
+        return expect(dbExports.createCard(cardOwnerEmail, cardpackId + 1, 'test', 'white')).to.be.rejected;
       });
       it('Should not create a card if the card creator is not the cardpack owner', () => {
         return expect(dbExports.createCard(db.users[1].email, cardpackId, 'test', 'white')).to.be.rejected;
+      });
+    });
+
+    describe('updateCard()', () => {
+      it('Should modify an existing card', () => {
+        return dbExports.updateCard(cardOwnerEmail, cardId, 'updated card name')
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.id).to.equal(cardId);
+          expect(card.text).to.equal('updated card name');
+        });
+      });
+      it('Should modify a previously modified card', () => {
+        return dbExports.updateCard(cardOwnerEmail, cardId, 'twice updated card name')
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.id).to.equal(cardId);
+          expect(card.text).to.equal('twice updated card name');
+        });
+      });
+      it('Should reject when modifying a card using an email that is not tied to a user', () => {
+        return expect(dbExports.updateCard('thisisafake@email.com', cardId, 'thrice updated card name')).to.be.rejected;
+      });
+      it('Should reject when modifying a card that is not owned by the user modifying the card', () => {
+        return expect(dbExports.updateCard(db.users[1].email, cardId, 'thrice updated card name')).to.be.rejected;
+      });
+      it('Should reject when passing in a card ID that does not map to an existing card', () => {
+        return expect(dbExports.updateCard(cardOwnerEmail, 123456789, 'thrice updated card name')).to.be.rejectedWith('Card ID does not map to an existing card');
+      });
+      it('Should reject when changing card text to a blank string', () => {
+        return expect(dbExports.updateCard(cardOwnerEmail, cardId, '')).to.be.rejectedWith('Card should be a non-empty string');
       });
     });
   });
