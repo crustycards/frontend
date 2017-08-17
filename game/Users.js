@@ -46,6 +46,9 @@ class Users {
       delete this.userTable[user.email];
     }
   }
+  containsUser () {
+    return !!this.userTable[user.email];
+  }
   cycleJudge () {
     this.judge = this.judge.next || this.head;
   }
