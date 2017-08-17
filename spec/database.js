@@ -469,5 +469,25 @@ module.exports.run = () => {
         });
       });
     });
+
+    describe('getCards()', () => {
+      before(() => {
+        return dbExports.createCardpack(db.users[2].email, 'testcardpack')
+        .then((cardpack) => {
+          cardpackId = cardpack.id;
+          return dbExports.createCard(db.users[2].email, cardpackId, 'testcard', 'white');
+        })
+        .then(() => {
+          return dbExports.createCard(db.users[2].email, cardpackId, 'testcard2', 'black');
+        });
+      });
+
+      it('Should get cards for a cardpack', () => {
+        return dbExports.getCards(cardpackId)
+        .then((cards) => {
+          expect(cards.length).to.equal(2);
+        });
+      });
+    });
   });
 };
