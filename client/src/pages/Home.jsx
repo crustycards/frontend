@@ -5,6 +5,7 @@ import FriendsList from '../components/FriendsList.jsx';
 import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
+import CardpackManager from '../components/CardpackManager.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -111,6 +112,7 @@ class Home extends React.Component {
         <FriendRequestsSent requestsSent={this.state.requestsSent} />
         <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
         <FrienderPanel />
+        <CardpackManager />
       </div>
     ) 
   }

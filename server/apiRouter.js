@@ -93,6 +93,56 @@ module.exports = (socketHandler) => {
         res.send(JSON.stringify({error}));
       });
     });
+  
+  // Returns array of all cardpacks owned by the requestor
+  router.get('/cardpacks', (req, res) => {
+    db.getCardpacks(req.user.email)
+    .then((cardpacks) => {
+      res.send(cardpacks);
+    })
+    .catch((error) => {
+      res.send({error});
+    });
+  });
+  // Returns array of all cardpacks owned by the specified user
+  router.get('/cardpacks/:user', (req, res) => {
+    db.getCardpacks(req.params.user)
+    .then((cardpacks) => {
+      res.send(cardpacks);
+    })
+    .catch((error) => {
+      res.send({error});
+    });
+  });
+  // Creates a cardpack and sets the owner as the current user
+  router.post('/cardpacks', auth.isLoggedIn, (req, res) => {
+    db.createCardpack(req.user.email, req.body.name)
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      res.send({error});
+    });
+  });
+  router.delete('/cardpacks', auth.isLoggedIn, (req, res) => {
+    db.deleteCard(req.user.email, req.body.id)
+    .then((dbResponse) => {
+      res.send(dbResponse);
+    })
+    .catch((error) => {
+      res.send({error});
+    });
+  });
+
+  router.get('cards/:cardpackId', (req, res) => {
+    res.send();
+  });
+  router.post('/cards/:cardpackId', (req, res) => {
+    res.send();
+  });
+  router.delete('/cards/:cardId', (req, res) => {
+    res.send();
+  });
 
   router.get('/*', (req, res) => {
     res.send('Invalid api request');
