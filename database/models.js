@@ -67,12 +67,12 @@ module.exports = (sequelize) => {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        cardText: {
+        text: {
             type: Sequelize.STRING,
             notEmpty: true,
             allowNull: false
         },
-        cardType: {
+        type: {
             type: Sequelize.STRING,
             notEmpty: true,
             allowNull: false

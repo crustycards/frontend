@@ -367,5 +367,54 @@ module.exports.run = () => {
         return expect(dbExports.deleteCardpack(db.users[0].email, 1)).to.eventually.equal(true);
       });
     });
+
+    describe('createCard()', () => {
+      let cardpackId;
+      before(() => {
+        return dbExports.createCardpack(db.users[0].email, 'Cardpack')
+        .then((cardpack) => {
+          cardpackId = cardpack.id;
+        });
+      });
+
+      it('Should create a black card', () => {
+        return dbExports.createCard(db.users[0].email, cardpackId, 'test card', 'black')
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.cardpack_id).to.not.exist;
+          expect(card.cardpack).to.exist;
+          expect(card.cardpack.id).to.equal(cardpackId);
+          expect(card.text).to.equal('test card');
+          expect(card.type).to.equal('black');
+        });
+      });
+      it('Should create a white card', () => {
+        return dbExports.createCard(db.users[0].email, cardpackId, 'test card 2', 'white')
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.cardpack_id).to.not.exist;
+          expect(card.cardpack).to.exist;
+          expect(card.cardpack.id).to.equal(cardpackId);
+          expect(card.text).to.equal('test card 2');
+          expect(card.type).to.equal('white');
+        });
+      });
+      it('Should not create a card if the card type is invalid', () => {
+        return expect(dbExports.createCard(db.users[0].email, cardpackId, 'test', 'invalidcardtype')).to.be.rejected;
+      });
+      it('Should not create a card if the card text is blank', () => {
+        return expect(dbExports.createCard(db.users[0].email, cardpackId, '', 'white')).to.be.rejected;
+      });
+      it('Should not create a card if the cardpack ID doesn\'t map to an existing cardpack', () => {
+        return expect(dbExports.createCard(db.users[0].email, cardpackId + 1, 'test', 'white')).to.be.rejected;
+      });
+      it('Should not create a card if the card creator is not the cardpack owner', () => {
+        return expect(dbExports.createCard(db.users[1].email, cardpackId, 'test', 'white')).to.be.rejected;
+      });
+    });
   });
 };

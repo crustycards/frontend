@@ -343,7 +343,51 @@ module.exports.deleteCardpack = (userEmail, cardpackId) => {
 // 1. cardpackId does not map to an existing cardpack
 // 2. cardText is null/undefined/emptystring/notastring
 // 3. cardType is not either 'black' or 'white'
-module.exports.createCard = (cardpackId, cardText, cardType) => {
+module.exports.createCard = (userEmail, cardpackId, cardText, cardType) => {
+  if (!cardType || (cardType !== 'black' && cardType !== 'white')) {
+    return new Promise((resolve, reject) => {
+      reject('Expected card type to be white or black, but instead received ' + cardType);
+    });
+  }
+  if (!cardText || cardText.constructor !== String || cardText === '') {
+    return new Promise((resolve, reject) => {
+      reject('Expected card text to be a non-empty string, but instead received ' + cardText);
+    })
+  }
+
+  return models.cardpacks.findOne({
+    where: {id: cardpackId}
+  })
+  .then((cardpack) => {
+    return module.exports.getUser(userEmail)
+    .then((user) => {
+      if (user.id === cardpack.owner_user_id) {
+        return models.cards.create({
+          cardpack_id: cardpackId,
+          text: cardText,
+          type: cardType
+        });
+      } else {
+        return new Promise((resolve, reject) => {
+          reject('Cannot create cards in a cardpack that you do not own');
+        });
+      }
+    });
+  })
+  .then((cardImmutable) => {
+    let card = JSON.parse(JSON.stringify(cardImmutable));
+    return models.cardpacks.findOne({
+      where: {
+        id: card.cardpack_id
+      }
+    })
+    .then((cardpack) => {
+
+      delete card.cardpack_id;
+      card.cardpack = cardpack;
+      return card;
+    });
+  });
 };
 
 // Returns a promise that will resolve
