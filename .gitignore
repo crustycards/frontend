@@ -3,4 +3,3 @@ node_modules
 
 /client/dist/bundle.js
 /auth/googleConfig.json
-package-lock.json

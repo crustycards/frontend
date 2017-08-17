@@ -10,7 +10,7 @@ class FriendRequestsReceived extends React.Component {
     return (
       <div className="panel">
         <div>Friend Requests Received</div>
-        {(this.props.requestsReceived||[]).map((user, index) => {
+        {this.props.requestsReceived.map((user, index) => {
           return <FriendRequest user={user} type="received" key={index} />
         })}
       </div>
