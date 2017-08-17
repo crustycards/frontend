@@ -437,7 +437,31 @@ module.exports.updateCard = (userEmail, cardId, cardText) => {
 //
 // Exceptions:
 // 1. cardId does not map to an existing card
-module.exports.deleteCard = (cardId) => {
+module.exports.deleteCard = (userEmail, cardId) => {
+  return module.exports.getUser(userEmail)
+  .then((user) => {
+    return models.cards.findOne({
+      where: {id: cardId}
+    })
+    .then((card) => {
+      if (!card) {
+        return new Promise((resolve, reject) => {
+          reject('Card ID does not map to an existing card');
+        });
+      }
+      return models.cardpacks.findOne({
+        where: {id: card.cardpack_id}
+      })
+      .then((cardpack) => {
+        if (cardpack.owner_user_id !== user.id) {
+          return new Promise((resolve, reject) => {
+            reject('User does not own this card');
+          });
+        }
+        return card.destroy();
+      });
+    });
+  });
 };
 
 // Returns a promise that will resolve

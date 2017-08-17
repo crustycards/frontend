@@ -454,5 +454,20 @@ module.exports.run = () => {
         return expect(dbExports.updateCard(cardOwnerEmail, cardId, '')).to.be.rejectedWith('Card should be a non-empty string');
       });
     });
+
+    describe('deleteCard()', () => {
+      it('Should reject when deleting a card you do not own', () => {
+        return expect(dbExports.deleteCard(db.users[1].email, cardId)).to.be.rejectedWith('User does not own this card');
+      });
+      it('Should reject when deleting a card that does not exist', () => {
+        return expect(dbExports.deleteCard(cardOwnerEmail, 123456789)).to.be.rejectedWith('Card ID does not map to an existing card');
+      });
+      it('Should delete a card when all parameters are valid', () => {
+        return dbExports.deleteCard(cardOwnerEmail, cardId)
+        .then((deletedCard) => {
+          expect(deletedCard).to.exist;
+        });
+      });
+    });
   });
 };
