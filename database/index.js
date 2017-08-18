@@ -328,6 +328,11 @@ module.exports.deleteCardpack = (userEmail, cardpackId) => {
       }
     })
     .then((cardpack) => {
+      if (!cardpack) {
+        return new Promise((resolve, reject) => {
+          reject('Cardpack does not exist');
+        });
+      }
       if (cardpack.owner_user_id !== owner.id) {
         return new Promise((resolve, reject) => {
           reject(`Cannot delete someone else's cardpack`);

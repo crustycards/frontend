@@ -281,5 +281,83 @@ module.exports.run = () => {
         });
       });
     });
+
+    describe('/api/cardpacks', () => {
+      it('Should create cardpacks when logged in', (done) => {
+        agent.post('/api/cardpacks')
+        .send({name: 'test cardpack'})
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          let cardpack = res.body;
+          expect(cardpack).to.exist;
+          expect(cardpack.owner_user_id).to.not.exist;
+          //---------------------------
+          expect(cardpack.id).to.exist;
+          expect(cardpack.owner).to.exist;
+          expect(cardpack.createdAt).to.exist;
+          expect(cardpack.updatedAt).to.exist;
+          expect(cardpack.name).to.equal('test cardpack');
+          expect(Object.keys(cardpack).length).to.equal(5);
+          done();
+        });
+      });
+      it('Should redirect to login page when not logged in', (done) => {
+        request.post('/api/cardpacks')
+        .send({name: 'test cardpack'})
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+          done();
+        });
+      });
+      it('Should get cardpacks of current user when performing a GET with no user specified', (done) => {
+        agent.get('/api/cardpacks')
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          let cardpacks = res.body;
+          expect(cardpacks).to.be.a('array');
+          expect(cardpacks.length).to.equal(1);
+          done()
+        });
+      });
+      it('Should get cardpacks of specific user when performing a GET with a particular user specified', (done) => {
+        agent2.get('/api/cardpacks/' + 'hello@world.com')
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          let cardpacks = res.body;
+          expect(cardpacks).to.be.a('array');
+          expect(cardpacks.length).to.equal(1);
+          expect(cardpacks[0].id).to.exist;
+          done()
+        });
+      });
+      it('Should return an error when retrieving cardpacks for a user that does not exist', (done) => {
+        agent.get('/api/cardpacks/' + 'fake@email.com')
+        .end((err, res) => {
+          expect(err).to.exist;
+          done();
+        });
+      });
+
+      let cardpackId = 1; // Since we've only created one cardpack
+
+      it('Should return error when attempting to delete a cardpack that you do not own', (done) => {
+        agent2.delete('/api/cardpacks')
+        .send({id: cardpackId})
+        .end((err, res) => {
+          expect(err).to.exist;
+          done();
+        });
+      });
+      it('Should succeed when deleting a cardpack that you own', (done) => {
+        agent.delete('/api/cardpacks')
+        .send({id: cardpackId})
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          expect(res.body).to.equal('success');
+          done();
+        });
+      });
+    });
   });
 };

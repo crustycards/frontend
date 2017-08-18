@@ -134,9 +134,9 @@ module.exports = (socketHandler) => {
     });
   });
   router.delete('/cardpacks', auth.isLoggedIn, (req, res) => {
-    db.deleteCard(req.user.email, req.body.id)
-    .then((dbResponse) => {
-      res.json(dbResponse);
+    db.deleteCardpack(req.user.email, req.body.id)
+    .then(() => {
+      res.json('success');
     })
     .catch((error) => {
       res.status(500).send(error);
