@@ -126,8 +126,9 @@ module.exports = (socketHandler) => {
   // Creates a cardpack and sets the owner as the current user
   router.post('/cardpacks', auth.isLoggedIn, (req, res) => {
     db.createCardpack(req.user.email, req.body.name)
-    .then((data) => {
-      res.json(data);
+    .then((cardpack) => {
+      res.json('success');
+      socketHandler.respondToUsers([req.user], 'cardpackcreate', cardpack);
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -137,6 +138,7 @@ module.exports = (socketHandler) => {
     db.deleteCardpack(req.user.email, req.body.id)
     .then(() => {
       res.json('success');
+      socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id});
     })
     .catch((error) => {
       res.status(500).send(error);

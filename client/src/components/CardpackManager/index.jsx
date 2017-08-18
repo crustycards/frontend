@@ -11,6 +11,15 @@ class CardpackManager extends React.Component {
     }
     this.createCardpack = this.createCardpack.bind(this);
     this.fetchCardpacks();
+
+    props.socket.on('cardpackcreate', (data) => {
+      let cardpack = JSON.parse(data);
+      this.addCardpack(cardpack);
+    });
+    props.socket.on('cardpackdelete', (data) => {
+      let cardpackId = JSON.parse(data).id;
+      this.removeCardpack(cardpackId);
+    });
   }
 
   fetchCardpacks () {
@@ -27,14 +36,12 @@ class CardpackManager extends React.Component {
   createCardpack () {
     axios.post('/api/cardpacks', {
       name: this.state.newCardpackName
-    })
-    .then((res) => {
-      if (!res.data.error) {
-        this.setState({cardpacks: [...this.state.cardpacks, res.data]});
-      }
     });
   }
 
+  addCardpack(cardpack) {
+    this.setState({cardpacks: [...this.state.cardpacks, cardpack]});
+  }
   removeCardpack (id) {
     this.setState({cardpacks: this.state.cardpacks.filter((cardpack) => {
       return cardpack.id !== id;
@@ -50,7 +57,7 @@ class CardpackManager extends React.Component {
       {this.state.cardpacks.map((cardpack, index) => {
         return (
           <div key={index}>
-            <Cardpack cardpack={cardpack} delete={this.removeCardpack.bind(this, cardpack.id)} />
+            <Cardpack cardpack={cardpack} />
           </div>
         )
       })}

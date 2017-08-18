@@ -289,15 +289,7 @@ module.exports.run = () => {
         .end((err, res) => {
           expect(err).to.not.exist;
           let cardpack = res.body;
-          expect(cardpack).to.exist;
-          expect(cardpack.owner_user_id).to.not.exist;
-          //---------------------------
-          expect(cardpack.id).to.exist;
-          expect(cardpack.owner).to.exist;
-          expect(cardpack.createdAt).to.exist;
-          expect(cardpack.updatedAt).to.exist;
-          expect(cardpack.name).to.equal('test cardpack');
-          expect(Object.keys(cardpack).length).to.equal(5);
+          expect(cardpack).to.equal('success');
           done();
         });
       });

@@ -112,7 +112,7 @@ class Home extends React.Component {
         <FriendRequestsSent requestsSent={this.state.requestsSent} />
         <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
         <FrienderPanel />
-        <CardpackManager />
+        <CardpackManager socket={this.socket} />
       </div>
     ) 
   }

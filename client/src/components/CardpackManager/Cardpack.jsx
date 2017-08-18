@@ -10,9 +10,6 @@ class Cardpack extends React.Component {
   delete () {
     axios.delete('/api/cardpacks', {
       data: {id: this.props.cardpack.id}
-    })
-    .then(() => {
-      this.props.delete();
     });
   }
 
