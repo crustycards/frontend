@@ -1,4 +1,5 @@
 import React from 'react';
+import Cardpack from './Cardpack.jsx';
 import axios from 'axios';
 
 class CardpackManager extends React.Component {
@@ -24,7 +25,6 @@ class CardpackManager extends React.Component {
   }
 
   createCardpack () {
-    console.log('Creating cardpack...');
     axios.post('/api/cardpacks', {
       name: this.state.newCardpackName
     })
@@ -35,6 +35,12 @@ class CardpackManager extends React.Component {
     });
   }
 
+  removeCardpack (id) {
+    this.setState({cardpacks: this.state.cardpacks.filter((cardpack) => {
+      return cardpack.id !== id;
+    })});
+  }
+
   render () {
     return (
     <div className='panel'>
@@ -42,7 +48,11 @@ class CardpackManager extends React.Component {
       <input value={this.state.newCardpackName} type='text' onChange={this.handleNewCardpackNameChange.bind(this)} />
       <button onClick={this.createCardpack}>Create Cardpack</button>
       {this.state.cardpacks.map((cardpack, index) => {
-        return <div key={index}>{cardpack.name}</div>
+        return (
+          <div key={index}>
+            <Cardpack cardpack={cardpack} delete={this.removeCardpack.bind(this, cardpack.id)} />
+          </div>
+        )
       })}
     </div>
     );
