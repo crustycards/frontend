@@ -107,7 +107,7 @@ module.exports = (socketHandler) => {
   router.get('/cardpacks', (req, res) => {
     db.getCardpacks(req.user.email)
     .then((cardpacks) => {
-      res.send(cardpacks);
+      res.json(cardpacks);
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -117,7 +117,7 @@ module.exports = (socketHandler) => {
   router.get('/cardpacks/:user', (req, res) => {
     db.getCardpacks(req.params.user)
     .then((cardpacks) => {
-      res.send(cardpacks);
+      res.json(cardpacks);
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -127,7 +127,7 @@ module.exports = (socketHandler) => {
   router.post('/cardpacks', auth.isLoggedIn, (req, res) => {
     db.createCardpack(req.user.email, req.body.name)
     .then((data) => {
-      res.send(data);
+      res.json(data);
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -136,10 +136,10 @@ module.exports = (socketHandler) => {
   router.delete('/cardpacks', auth.isLoggedIn, (req, res) => {
     db.deleteCard(req.user.email, req.body.id)
     .then((dbResponse) => {
-      res.send(dbResponse);
+      res.json(dbResponse);
     })
     .catch((error) => {
-      res.send({error});
+      res.status(500).send(error);
     });
   });
 
@@ -154,7 +154,7 @@ module.exports = (socketHandler) => {
   });
 
   router.get('/*', (req, res) => {
-    res.send('Invalid api request');
+    res.status(500).send('Invalid api request');
   });
 
   return router;
