@@ -15,17 +15,23 @@ module.exports = (socketHandler) => {
   router.route('/messages')
     .get(auth.isLoggedIn, (req, res) => {
       // Get a list of messages with a particular user
-      db.getMessages(req.user.email, req.query.user)
-      .then(JSON.stringify)
-      .then(res.send)
+      db.getMessages(req.user.email, req.body.user)
+      .then((messages) => {
+        res.json(messages);
+      })
       .catch((error) => {
-        res.send(JSON.stringify({error}));
+        res.status(500).send({error});
       });
     })
     .post(auth.isLoggedIn, (req, res) => {
-      // TODO - Implement this
       console.log(req.body);
-      res.send(JSON.stringify({message: 'success'}));
+      db.addMessage(req.user.email, req.body.user, req.body.text)
+      .then((message) => {
+        res.json(message);
+      })
+      .catch((error) => {
+        res.status(500).send({error});
+      });
     });
 
   router.route('/friends')
