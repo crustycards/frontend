@@ -61,7 +61,7 @@ let getUserById = (userId) => {
 module.exports.addMessage = (senderEmail, receiverEmail, text) => {
   if (!text || text.constructor !== String) {
     return new Promise((resolve, reject) => {
-      reject('Message has no text');
+      reject('Expected message text to be a non-empty string');
     });
   }
 
@@ -77,10 +77,17 @@ module.exports.addMessage = (senderEmail, receiverEmail, text) => {
       sender_id: users.sender.id,
       receiver_id: users.receiver.id,
       text: text
+    })
+    .then((messageData) => {
+      return messageData.dataValues;
+    })
+    .then((message) => {
+      delete message.sender_id;
+      delete message.receiver_id;
+      message.sender = users.sender;
+      message.receiver = users.receiver;
+      return message;
     });
-  })
-  .then((messageData) => {
-    return messageData.dataValues;
   });
 };
 

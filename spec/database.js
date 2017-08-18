@@ -101,7 +101,8 @@ module.exports.run = () => {
           return expect(promise).to.eventually.deep.equal(db.users[0]);
         });
         it('Should reject if a user does not exist', () => {
-          return expect(dbExports.getUser('thisisafakeemail')).to.be.rejected;
+          let fakeEmail = 'thisisafakeemail'
+          return expect(dbExports.getUser(fakeEmail)).to.be.rejectedWith('No user is registered under ' + fakeEmail);
         });
       });
 
@@ -118,11 +119,18 @@ module.exports.run = () => {
           .then((message) => {
             expect(message.createdAt).to.exist;
             expect(message.updatedAt).to.exist;
-            expect(message.sender_id).to.equal(db.users[0].id);
-            expect(message.receiver_id).to.equal(db.users[1].id);
+            expect(message.sender_id).to.not.exist;
+            expect(message.receiver_id).to.not.exist;
+            expect(message.sender).to.exist;
+            expect(message.receiver).to.exist;
+            expect(message.sender.id).to.equal(db.users[0].id);
+            expect(message.receiver.id).to.equal(db.users[1].id);
             expect(message.id).to.exist;
             expect(message.text).to.equal(messageText);
           });
+        });
+        it('Should reject if message text is anything but a non-empty string', () => {
+          return expect(dbExports.addMessage(db.users[0].email, db.users[1].email, '')).to.be.rejectedWith('Expected message text to be a non-empty string');
         });
       });
 
