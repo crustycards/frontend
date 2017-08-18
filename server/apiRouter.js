@@ -20,7 +20,7 @@ module.exports = (socketHandler) => {
         res.json(messages);
       })
       .catch((error) => {
-        res.status(500).send({error});
+        res.status(500).send(error);
       });
     })
     .post(auth.isLoggedIn, (req, res) => {
@@ -30,15 +30,16 @@ module.exports = (socketHandler) => {
         res.json(message);
       })
       .catch((error) => {
-        res.status(500).send({error});
+        res.status(500).send(error);
       });
     });
 
   router.route('/friends')
     .get(auth.isLoggedIn, (req, res) => {
       // Get a list of all friends and pending friend requests
-      db.getFriendData(req.user.email).then(JSON.stringify).then((data) => {
-        res.send(data);
+      db.getFriendData(req.user.email)
+      .then((data) => {
+        res.json(data);
       });
     })
     .post(auth.isLoggedIn, (req, res) => {
@@ -55,10 +56,10 @@ module.exports = (socketHandler) => {
             friender: users.friender,
             friendee: users.friendee
           });
-          res.send(JSON.stringify({message: 'success'}));
+          res.json('success');
         })
         .catch((error) => {
-          res.send(JSON.stringify({error}));
+          res.status(500).send(error);
         });
       } else if (req.body.type === 'accept') {
         db.acceptFriendRequest(req.user.email, req.body.user)
@@ -73,19 +74,19 @@ module.exports = (socketHandler) => {
             acceptor: users.acceptor,
             acceptee: users.acceptee
           });
-          res.send(JSON.stringify({message: 'success'}));
+          res.json('success');
         })
         .catch((error) => {
-          res.send(JSON.stringify({error}));
+          res.status(500).send(error);
         });
       } else {
-        res.send(JSON.stringify({error: 'Did not specify whether a friend request was sent or accepted'}));
+        res.status(500).send('Did not specify whether a friend request was sent or accepted');
       }
     })
     .delete(auth.isLoggedIn, (req, res) => {
-      db.removeFriend(req.user.email, req.query.user)
+      db.removeFriend(req.user.email, req.body.user)
       .then(() => {
-        return db.getUser(req.query.user)
+        return db.getUser(req.body.user)
         .then((unfriendee) => {
           return {unfriender: req.user, unfriendee};
         });
@@ -95,10 +96,10 @@ module.exports = (socketHandler) => {
           unfriender: users.unfriender,
           unfriendee: users.unfriendee
         });
-        res.send(JSON.stringify({message: 'success'}));
+        res.json('success');
       })
       .catch((error) => {
-        res.send(JSON.stringify({error}));
+        res.status(500).send(error);
       });
     });
   
@@ -109,7 +110,7 @@ module.exports = (socketHandler) => {
       res.send(cardpacks);
     })
     .catch((error) => {
-      res.send({error});
+      res.status(500).send(error);
     });
   });
   // Returns array of all cardpacks owned by the specified user
@@ -119,7 +120,7 @@ module.exports = (socketHandler) => {
       res.send(cardpacks);
     })
     .catch((error) => {
-      res.send({error});
+      res.status(500).send(error);
     });
   });
   // Creates a cardpack and sets the owner as the current user
@@ -129,7 +130,7 @@ module.exports = (socketHandler) => {
       res.send(data);
     })
     .catch((error) => {
-      res.send({error});
+      res.status(500).send(error);
     });
   });
   router.delete('/cardpacks', auth.isLoggedIn, (req, res) => {

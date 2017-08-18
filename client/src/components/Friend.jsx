@@ -8,7 +8,7 @@ class Friend extends React.Component {
   }
 
   remove () {
-    axios.delete('/api/friends?user=' + this.props.user.email);
+    axios.delete('/api/friends', {data: {user: this.props.user.email}});
   }
 
   render () {
