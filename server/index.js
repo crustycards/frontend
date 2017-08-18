@@ -68,7 +68,7 @@ let io = require('socket.io')(http);
 
 // Launch/export server
 if (module.parent) {
-  module.exports = app;
+  module.exports = http;
 } else {
   http.listen(process.env.PORT, () => {
     console.log('Listening on port ' + process.env.PORT);

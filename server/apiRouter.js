@@ -7,7 +7,9 @@ module.exports = (socketHandler) => {
 
   // Returns data about the user who sent this request
   router.get('/currentuser', auth.isLoggedIn, (req, res) => {
-    res.send(JSON.stringify(req.user));
+    let currentUser = req.user;
+    delete currentUser.password;
+    res.json(currentUser);
   });
 
   router.route('/messages')
