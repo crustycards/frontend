@@ -7,17 +7,22 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      errorMessage: '',
+      showError: false
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.sendLoginRequest = this.sendLoginRequest.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.showError = this.showError.bind(this);
+    this.hideError = this.hideError.bind(this);
   }
 
   handleInputChange (property, e) {
@@ -60,8 +65,16 @@ class Login extends React.Component {
           errorString += ', ' + missingVals[i];
         }
       }
-      console.log(errorString);
+      this.setState({errorMessage: errorString});
+      this.showError();
     }
+  }
+
+  showError () {
+    this.setState({showError: true});
+  }
+  hideError () {
+    this.setState({showError: false});
   }
 
   googleOAuthRedirect () {
@@ -78,6 +91,7 @@ class Login extends React.Component {
             <RaisedButton className='btn' onClick={this.sendLoginRequest}>Login</RaisedButton>
             <FlatButton className='btn' href='/signup'>Sign Up</FlatButton>
             <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
+            <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
           </div>
       </MuiThemeProvider>
     ) 
