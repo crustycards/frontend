@@ -51,7 +51,7 @@ class Signup extends React.Component {
         return res;
       })
       .catch((err) => {
-        this.setState({errorMessage: 'Email is already taken'});
+        this.setState({errorMessage: 'Email is invalid or already in use'});
         this.showError();
       });
     } else {
