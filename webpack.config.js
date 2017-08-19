@@ -20,6 +20,13 @@ module.exports = {
       },
       {
         test: /\.css$/, loader: 'style-loader!css-loader' // Allows css in React
+      },
+      {
+        test: /\.(jpg|png|svg)$/,
+        loader: 'url-loader',
+        options: {
+          limit: 25000,
+        }
       }
     ]
   }
