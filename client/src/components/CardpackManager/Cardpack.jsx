@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
+import time from '../../helpers/time.js';
 
 class Cardpack extends React.Component {
   constructor (props) {
@@ -15,10 +18,15 @@ class Cardpack extends React.Component {
 
   render () {
     return (
-      <div>
-        <div>{this.props.cardpack.name}</div>
-        <button onClick={this.delete}>Delete</button>
-      </div>
+      <Card>
+        <CardHeader
+          title={this.props.cardpack.name}
+          subtitle={'Created ' + time.parse(this.props.cardpack.createdAt, true)}
+        />
+        <CardActions>
+          <FlatButton label='Delete' onClick={this.delete} />
+        </CardActions>
+      </Card>
     )
   }
 }
