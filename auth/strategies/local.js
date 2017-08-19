@@ -21,7 +21,7 @@ module.exports = (passport, userModel) => {
             }).then((user) => {
                 if (user) {
                     return done(null, false, {
-                        message: 'That email is already in use!'
+                        message: 'Email is already in use'
                     });
                 } else {
                     let userPassword = generateHash(password);
@@ -37,6 +37,11 @@ module.exports = (passport, userModel) => {
                         } else {
                             return done(null, newUser);
                         }
+                    })
+                    .catch((err) => {
+                        return done(null, false, {
+                            message: 'Email is invalid'
+                        });
                     });
                 }
             });
