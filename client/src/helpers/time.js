@@ -1,5 +1,5 @@
-module.exports.parse = (timeString, relativeTime) => {
-let date = new Date(timeString);
+module.exports.parse = (timeStringRaw, relativeTime) => {
+let date = new Date(timeStringRaw);
 
 if (relativeTime) {
     let secondsSinceSent = ((new Date().getTime() - date.getTime()) / 1000);
@@ -21,7 +21,7 @@ if (relativeTime) {
     if (secondsSinceSent < 60) {
         let seconds = Math.round(secondsSinceSent);
         if (seconds <= 5) {
-            return 'Just now';
+            return 'just now';
         } else {
             return 'less than a minute ago';
         }
