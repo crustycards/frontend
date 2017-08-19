@@ -1,6 +1,12 @@
 import React from 'react';
 import axios from 'axios';
 import GoogleButton from 'react-google-button';
+import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 
 class Login extends React.Component {
   constructor(props) {
@@ -57,18 +63,16 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div>
-        <div className='login'>
-          <h1>Login</h1>
-          Email:<br/><input type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
-          Password:<br/><input type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
-          <button onClick={this.sendLoginRequest}>Login</button>
-        </div>
-        <div>
-          <p>No account? <a href='/signup'>Sign up!</a></p>
-        </div>
-        <GoogleButton onClick={this.googleOAuthRedirect} />
-      </div>
+      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+          <div className='login'>
+            <h1>Login</h1>
+            <TextField hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
+            <TextField floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
+            <RaisedButton className='btn' onClick={this.sendLoginRequest}>Login</RaisedButton>
+            <FlatButton className='btn' href='/signup'>Sign Up</FlatButton>
+            <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
+          </div>
+      </MuiThemeProvider>
     ) 
   }
 }
