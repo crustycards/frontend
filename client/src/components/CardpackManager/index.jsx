@@ -9,6 +9,7 @@ class CardpackManager extends React.Component {
       newCardpackName: '',
       cardpacks: []
     }
+    setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
     this.createCardpack = this.createCardpack.bind(this);
     this.fetchCardpacks();
 
