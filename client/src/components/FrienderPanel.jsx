@@ -1,5 +1,8 @@
 import React from 'react';
 import axios from 'axios';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import helpers from '../helpers';
 
 class FrienderPanel extends React.Component {
   constructor (props) {
@@ -8,26 +11,37 @@ class FrienderPanel extends React.Component {
       requestEmail: ''
     };
     this.sendRequest = this.sendRequest.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   sendRequest () {
-    axios.post('/api/friends', {
-      type: 'request',
-      user: this.state.requestEmail
-    });
+    if (helpers.isEmail(this.state.requestEmail)) {
+      axios.post('/api/friends', {
+        type: 'request',
+        user: this.state.requestEmail
+      });
+      this.setState({requestEmail: ''});
+    }
   }
 
-  onInputChange (e) {
-    this.setState({requestEmail: e.target.value});
+  handleInputChange (property, e) {
+    let stateChange = {};
+    stateChange[property] = e.target.value;
+    this.setState(stateChange);
+  }
+  handleKeyPress (e) {
+    if (e.key === 'Enter') {
+      this.sendRequest();
+    }
   }
 
   render () {
     return (
       <div className="panel">
-        <div>Friender Panel</div>
-        <input type='email' value={this.state.requestEmail} onChange={this.onInputChange} />
-        <button onClick={this.sendRequest}>Send Friend Request</button>
+        <div>Add Friends</div>
+        <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.requestEmail} onChange={this.handleInputChange.bind(this, 'requestEmail')} />
+        <RaisedButton label='Send Friend Request' onClick={this.sendRequest} disabled={!helpers.isEmail(this.state.requestEmail)} />
       </div>
     );
   }
