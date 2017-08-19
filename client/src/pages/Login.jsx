@@ -46,6 +46,10 @@ class Login extends React.Component {
       .then((res) => {
         window.location.replace(res.request.responseURL); // Performs redirect to proper page
         return res;
+      })
+      .catch((err) => {
+        this.setState({errorMessage: 'Incorrect email or password'});
+        this.showError();
       });
     } else {
       let missingVals = [];

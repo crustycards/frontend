@@ -18,14 +18,12 @@ router.get('/', auth.isLoggedIn);
 
 // Allows passport local login on this page
 router.post('/login', passport.authenticate('local-signin', {
-  successRedirect: '/',
-  failureRedirect: '/login'
+  successRedirect: '/'
 }));
 
 // Allows passport local signup on this page
 router.post('/signup', passport.authenticate('local-signup', {
-  successRedirect: '/login',
-  failureRedirect: '/signup'
+  successRedirect: '/'
 }));
 
 // Destroys current session when entering this page (for any passport strategy)

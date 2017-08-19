@@ -49,6 +49,10 @@ class Signup extends React.Component {
       .then((res) => {
         window.location.replace(res.request.responseURL); // Performs redirect to proper page
         return res;
+      })
+      .catch((err) => {
+        this.setState({errorMessage: 'Email is already taken'});
+        this.showError();
       });
     } else {
       let missingVals = [];
