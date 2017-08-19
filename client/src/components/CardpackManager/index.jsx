@@ -1,6 +1,8 @@
 import React from 'react';
-import Cardpack from './Cardpack.jsx';
 import axios from 'axios';
+import TextField from 'material-ui/TextField';
+import RaisedButton from 'material-ui/RaisedButton';
+import Cardpack from './Cardpack.jsx';
 
 class CardpackManager extends React.Component {
   constructor (props) {
@@ -30,8 +32,15 @@ class CardpackManager extends React.Component {
     });
   }
 
-  handleNewCardpackNameChange (e) {
-    this.setState({newCardpackName: e.target.value});
+  handleInputChange (property, e) {
+    let stateChange = {};
+    stateChange[property] = e.target.value;
+    this.setState(stateChange);
+  }
+  handleKeyPress (e) {
+    if (e.key === 'Enter') {
+      this.sendRequest();
+    }
   }
 
   createCardpack () {
@@ -53,8 +62,8 @@ class CardpackManager extends React.Component {
     return (
     <div className='panel'>
       <div>Cardpack Manager</div>
-      <input value={this.state.newCardpackName} type='text' onChange={this.handleNewCardpackNameChange.bind(this)} />
-      <button onClick={this.createCardpack}>Create Cardpack</button>
+      <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} />
+      <RaisedButton label='Create Cardpack' onClick={this.createCardpack} disabled={!this.state.newCardpackName} />
       {this.state.cardpacks.map((cardpack, index) => {
         return (
           <div key={index}>
