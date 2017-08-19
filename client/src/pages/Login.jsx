@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import GoogleButton from 'react-google-button';
+import GoogleButton from '../components/GoogleButton/index.jsx';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
