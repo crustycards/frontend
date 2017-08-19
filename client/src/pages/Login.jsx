@@ -84,7 +84,7 @@ class Login extends React.Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-          <div className='login'>
+          <div className='login center'>
             <h1>Login</h1>
             <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
             <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>

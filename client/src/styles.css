@@ -51,3 +51,9 @@ a {
 .btn {
     margin: 0.2em;
 }
+
+.center {
+    margin: auto;
+    width: 50%;
+    text-align: center;
+}

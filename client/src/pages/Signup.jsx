@@ -89,7 +89,7 @@ class Signup extends React.Component {
   render() {
     return (
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        <div className='signup'>
+        <div className='signup center'>
           <h1>Signup</h1>
           <TextField onKeyPress={this.handleKeyPress} hintText='Joe' floatingLabelText='First Name' type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
           <TextField onKeyPress={this.handleKeyPress} hintText='Swanson' floatingLabelText='Last Name' type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
