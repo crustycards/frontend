@@ -107,7 +107,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
-        <Navbar />
+        <Navbar/>
         <div>Homepage</div>
         <div>{this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}</div>
         <FriendsList friends={this.state.friends} />
