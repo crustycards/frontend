@@ -17,12 +17,19 @@ class Login extends React.Component {
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.sendLoginRequest = this.sendLoginRequest.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
   }
 
   handleInputChange (property, e) {
     let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
+  }
+
+  handleKeyPress (e) {
+    if (e.key === 'Enter') {
+      this.sendLoginRequest();
+    }
   }
 
   sendLoginRequest () {
@@ -66,8 +73,8 @@ class Login extends React.Component {
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
           <div className='login'>
             <h1>Login</h1>
-            <TextField hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
-            <TextField floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
+            <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
+            <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
             <RaisedButton className='btn' onClick={this.sendLoginRequest}>Login</RaisedButton>
             <FlatButton className='btn' href='/signup'>Sign Up</FlatButton>
             <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
