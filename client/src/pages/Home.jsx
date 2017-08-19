@@ -6,6 +6,7 @@ import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
+import Navbar from '../components/Navbar.jsx';
 
 class Home extends React.Component {
   constructor(props) {
@@ -106,6 +107,7 @@ class Home extends React.Component {
   render() {
     return (
       <div>
+        <Navbar />
         <div>Homepage</div>
         <div>{this.state.currentUser ? this.state.currentUser.firstname + ' ' + this.state.currentUser.lastname : 'Loading...'}</div>
         <FriendsList friends={this.state.friends} />
