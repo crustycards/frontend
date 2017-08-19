@@ -11,6 +11,9 @@ class CardpackManager extends React.Component {
       newCardpackName: '',
       cardpacks: []
     }
+    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.createCardpack = this.createCardpack.bind(this);
     setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
     this.createCardpack = this.createCardpack.bind(this);
     this.fetchCardpacks();
@@ -39,14 +42,17 @@ class CardpackManager extends React.Component {
   }
   handleKeyPress (e) {
     if (e.key === 'Enter') {
-      this.sendRequest();
+      this.createCardpack();
     }
   }
 
   createCardpack () {
-    axios.post('/api/cardpacks', {
-      name: this.state.newCardpackName
-    });
+    if (this.state.newCardpackName) {
+      axios.post('/api/cardpacks', {
+        name: this.state.newCardpackName
+      });
+      this.setState({newCardpackName: ''});
+    }
   }
 
   addCardpack(cardpack) {
