@@ -57,3 +57,7 @@ a {
     width: 50%;
     text-align: center;
 }
+
+h1 {
+    font-weight: 400;
+}
