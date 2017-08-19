@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 class FriendRequest extends React.Component {
   constructor (props) {
@@ -22,18 +24,28 @@ class FriendRequest extends React.Component {
   render () {
     if (this.props.type === 'received') {
       return (
-        <div className="subpanel">
-          <div>{this.props.user.firstname} {this.props.user.lastname} ({this.props.user.email})</div>
-          <button onClick={this.accept}>Accept</button>
-          <button onClick={this.remove}>Decline</button>
-        </div>
+        <Card>
+          <CardHeader
+            title={this.props.user.firstname + ' ' + this.props.user.lastname}
+            subtitle={this.props.user.email}
+          />
+          <CardActions>
+            <FlatButton label='Accept' onClick={this.accept} />
+            <FlatButton label='Decline' onClick={this.remove} />
+          </CardActions>
+        </Card>
       );
     } else if (this.props.type === "sent") {
       return (
-        <div className="subpanel">
-          <div>{this.props.user.firstname} {this.props.user.lastname} ({this.props.user.email})</div>
-          <button onClick={this.remove}>Revoke</button>
-        </div>
+        <Card>
+          <CardHeader
+            title={this.props.user.firstname + ' ' + this.props.user.lastname}
+            subtitle={this.props.user.email}
+          />
+          <CardActions>
+            <FlatButton label='Revoke' onClick={this.remove} />
+          </CardActions>
+        </Card>
       );
     }
   }

@@ -1,5 +1,7 @@
 import React from 'react';
 import axios from 'axios';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import FlatButton from 'material-ui/FlatButton';
 
 class Friend extends React.Component {
   constructor (props) {
@@ -13,10 +15,15 @@ class Friend extends React.Component {
 
   render () {
     return (
-      <div className="subpanel">
-        <div>{this.props.user.firstname} {this.props.user.lastname} ({this.props.user.email})</div>
-        <button onClick={this.remove}>Unfriend</button>
-      </div>
+      <Card>
+        <CardHeader
+          title={this.props.user.firstname + ' ' + this.props.user.lastname}
+          subtitle={this.props.user.email}
+        />
+        <CardActions>
+          <FlatButton label='Unfriend' onClick={this.remove} />
+        </CardActions>
+      </Card>
     );
   }
 }
