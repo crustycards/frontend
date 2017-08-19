@@ -40,7 +40,7 @@ class FrienderPanel extends React.Component {
     return (
       <div className="panel">
         <div>Add Friends</div>
-        <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.requestEmail} onChange={this.handleInputChange.bind(this, 'requestEmail')} />
+        <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.requestEmail} onChange={this.handleInputChange.bind(this, 'requestEmail')} /><br/>
         <RaisedButton label='Send Friend Request' onClick={this.sendRequest} disabled={!helpers.isEmail(this.state.requestEmail)} />
       </div>
     );

@@ -108,11 +108,17 @@ class Home extends React.Component {
     return (
       <div>
         <Navbar/>
-        <FriendsList friends={this.state.friends} />
-        <FriendRequestsSent requestsSent={this.state.requestsSent} />
-        <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
-        <FrienderPanel />
-        <CardpackManager socket={this.socket} />
+        <div className='content-wrap'>
+          <div className='col-narrow'>
+          <FriendsList friends={this.state.friends} />
+          <FriendRequestsSent requestsSent={this.state.requestsSent} />
+          <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
+          <FrienderPanel />
+          </div>
+          <div className='col-wide'>
+            <CardpackManager socket={this.socket} />
+          </div>
+        </div>
       </div>
     ) 
   }

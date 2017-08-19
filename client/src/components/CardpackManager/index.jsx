@@ -62,7 +62,7 @@ class CardpackManager extends React.Component {
     return (
     <div className='panel'>
       <div>Cardpack Manager</div>
-      <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} />
+      <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} /><br/>
       <RaisedButton label='Create Cardpack' onClick={this.createCardpack} disabled={!this.state.newCardpackName} />
       {this.state.cardpacks.map((cardpack, index) => {
         return (

@@ -37,7 +37,6 @@ body {
     border-radius: 0.5em;
     padding: 10px;
     margin: 10px;
-    max-width: 400px;
 }
 
 .panel .title {
@@ -68,4 +67,21 @@ h1 {
 }
 .card:last-child {
     margin-bottom: 0;
+}
+
+.content-wrap{
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 10px;
+    overflow: hidden;
+}
+  .col-narrow{
+    width: 40%;
+    float: left;
+    min-height: 175px;
+}
+  .col-wide{
+    width: 60%;
+    float: right;
+    min-height: 175px;
 }
