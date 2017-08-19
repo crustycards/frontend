@@ -1,8 +1,16 @@
 const GoogleStrategy = require('passport-google-oauth2').Strategy;
-const googleConfig = require('../googleConfig.json');
-const GOOGLE_CLIENT_ID = googleConfig.GOOGLE_CLIENT_ID;
-const GOOGLE_CLIENT_SECRET = googleConfig.GOOGLE_CLIENT_SECRET;
-const callbackURL = googleConfig.callbackURL;
+
+let GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
+let GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
+let callbackURL = process.env.callbackURL;
+
+if (!(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && callbackURL)) {
+  const googleConfig = require('../googleConfig.json');
+  GOOGLE_CLIENT_ID = googleConfig.GOOGLE_CLIENT_ID;
+  GOOGLE_CLIENT_SECRET = googleConfig.GOOGLE_CLIENT_SECRET;
+  callbackURL = googleConfig.callbackURL;
+}
+
 
 module.exports = (passport, userModel) => {
   let User = userModel;
