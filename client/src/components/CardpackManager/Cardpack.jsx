@@ -18,7 +18,7 @@ class Cardpack extends React.Component {
 
   render () {
     return (
-      <Card>
+      <Card className='card'>
         <CardHeader
           title={this.props.cardpack.name}
           subtitle={'Created ' + time.parse(this.props.cardpack.createdAt, true)}

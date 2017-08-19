@@ -62,3 +62,10 @@ a {
 h1 {
     font-weight: 400;
 }
+
+.card {
+    margin: 5px 0;
+}
+.card:last-child {
+    margin-bottom: 0;
+}

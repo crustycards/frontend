@@ -24,7 +24,7 @@ class FriendRequest extends React.Component {
   render () {
     if (this.props.type === 'received') {
       return (
-        <Card>
+        <Card className='card'>
           <CardHeader
             title={this.props.user.firstname + ' ' + this.props.user.lastname}
             subtitle={this.props.user.email}
@@ -37,7 +37,7 @@ class FriendRequest extends React.Component {
       );
     } else if (this.props.type === "sent") {
       return (
-        <Card>
+        <Card className='card'>
           <CardHeader
             title={this.props.user.firstname + ' ' + this.props.user.lastname}
             subtitle={this.props.user.email}

@@ -15,7 +15,7 @@ class Friend extends React.Component {
 
   render () {
     return (
-      <Card>
+      <Card className='card'>
         <CardHeader
           title={this.props.user.firstname + ' ' + this.props.user.lastname}
           subtitle={this.props.user.email}
