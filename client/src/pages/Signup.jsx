@@ -1,8 +1,5 @@
 import React from 'react';
 import axios from 'axios';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -92,18 +89,16 @@ class Signup extends React.Component {
 
   render() {
     return (
-      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        <div className='signup center'>
-          <h1>Signup</h1>
-          <TextField onKeyPress={this.handleKeyPress} hintText='Joe' floatingLabelText='First Name' type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
-          <TextField onKeyPress={this.handleKeyPress} hintText='Swanson' floatingLabelText='Last Name' type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
-          <TextField onKeyPress={this.handleKeyPress} hintText='joeswanson@familyguy.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
-          <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
-          <RaisedButton className='btn' onClick={this.sendSignupRequest}>Signup</RaisedButton>
-          <FlatButton className='btn' href='/login'>Login</FlatButton>
-          <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
-        </div>
-      </MuiThemeProvider>
+      <div className='signup center'>
+        <h1>Signup</h1>
+        <TextField onKeyPress={this.handleKeyPress} hintText='Joe' floatingLabelText='First Name' type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
+        <TextField onKeyPress={this.handleKeyPress} hintText='Swanson' floatingLabelText='Last Name' type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
+        <TextField onKeyPress={this.handleKeyPress} hintText='joeswanson@familyguy.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
+        <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
+        <RaisedButton className='btn' onClick={this.sendSignupRequest}>Signup</RaisedButton>
+        <FlatButton className='btn' href='/login'>Login</FlatButton>
+        <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
+      </div>
     ) 
   }
 }
