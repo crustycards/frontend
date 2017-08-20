@@ -482,11 +482,21 @@ module.exports.deleteCard = (userEmail, cardId) => {
 // Exceptions:
 // 1. cardpackId does not map to an existing cardpack
 module.exports.getCards = (cardpackId) => {
-  return models.cards.findAll({
-    where: {cardpack_id: cardpackId}
+  return models.cardpacks.findOne({
+    where: {id: cardpackId}
   })
-  .then((cards) => {
-    return replaceForeignKeys(cards, 'cardpack_id', models.cardpacks, 'cardpack');
+  .then((cardpack) => {
+    if (!cardpack) {
+      return new Promise((resolve, reject) => {
+        reject('Cardpack ID does not map to an existing cardpack');
+      });
+    }
+    return models.cards.findAll({
+      where: {cardpack_id: cardpackId}
+    })
+    .then((cards) => {
+      return replaceForeignKeys(cards, 'cardpack_id', models.cardpacks, 'cardpack');
+    });
   });
 };
 
