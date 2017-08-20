@@ -26,10 +26,10 @@ module.exports.run = () => {
 
     describe('/api/currentuser', () => {
       describe('GET', () => {
-        it('Should redirect to login page when not logged in', (done) => {
+        it('Should return error when not logged in', (done) => {
           request.get('/api/currentuser')
           .end((err, res) => {
-            expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+            expect(err).to.exist;
             done();
           });
         });
@@ -58,10 +58,10 @@ module.exports.run = () => {
 
     describe('/api/messages', () => {
       describe('POST', () => {
-        it('Should redirect to login page when not logged in', (done) => {
+        it('Should return error when not logged in', (done) => {
           request.post('/api/messages')
           .end((err, res) => {
-            expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+            expect(err).to.exist;
             done();
           });
         });
@@ -113,10 +113,10 @@ module.exports.run = () => {
             done();
           });
         });
-        it('Should redirect to login page when not logged in', (done) => {
+        it('Should return error when not logged in', (done) => {
           request.get('/api/messages')
           .end((err, res) => {
-            expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+            expect(err).to.exist;
             done();
           });
         });
@@ -132,10 +132,10 @@ module.exports.run = () => {
     });
 
     describe('/api/friends', () => {
-      it('Should redirect to login page when not logged in', (done) => {
+      it('Should return error when not logged in', (done) => {
         request.get('/api/friends')
         .end((err, res) => {
-          expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+          expect(err).to.exist;
           done();
         });
       });
@@ -196,11 +196,10 @@ module.exports.run = () => {
           done();
         });
       });
-      it('Should redirect to login page when not logged in', (done) => {
+      it('Should return error when not logged in', (done) => {
         request.get('/api/friends')
         .end((err, res) => {
-          expect(err).to.not.exist;
-          expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+          expect(err).to.exist;
           done();
         });
       })
@@ -293,12 +292,11 @@ module.exports.run = () => {
           done();
         });
       });
-      it('Should redirect to login page when not logged in', (done) => {
+      it('Should return error when not logged in', (done) => {
         request.post('/api/cardpacks')
         .send({name: 'test cardpack'})
         .end((err, res) => {
-          expect(err).to.not.exist;
-          expect(res).to.redirectTo('http://127.0.0.1:8080/login');
+          expect(err).to.exist;
           done();
         });
       });

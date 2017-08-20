@@ -1,19 +1,22 @@
 module.exports = (socketHandler) => {
   const passport = require('passport');
-  const auth = require('./authHelpers.js');
 
   let router = require('express').Router();
   let db = require('../database');
 
   // Returns data about the user who sent this request
-  router.get('/currentuser', auth.isLoggedIn, (req, res) => {
-    let currentUser = req.user;
-    delete currentUser.password;
-    res.json(currentUser);
+  router.get('/currentuser', (req, res) => {
+    if (req.user) {
+      let currentUser = req.user;
+      delete currentUser.password;
+      res.json(currentUser || null);
+    } else {
+      res.status(500).send('Not logged in');
+    }
   });
 
   router.route('/messages')
-    .get(auth.isLoggedIn, (req, res) => {
+    .get((req, res) => {
       // Get a list of messages with a particular user
       db.getMessages(req.user.email, req.body.user)
       .then((messages) => {
@@ -23,7 +26,7 @@ module.exports = (socketHandler) => {
         res.status(500).send(error);
       });
     })
-    .post(auth.isLoggedIn, (req, res) => {
+    .post((req, res) => {
       console.log(req.body);
       db.addMessage(req.user.email, req.body.user, req.body.text)
       .then((message) => {
@@ -35,14 +38,14 @@ module.exports = (socketHandler) => {
     });
 
   router.route('/friends')
-    .get(auth.isLoggedIn, (req, res) => {
+    .get((req, res) => {
       // Get a list of all friends and pending friend requests
       db.getFriendData(req.user.email)
       .then((data) => {
         res.json(data);
       });
     })
-    .post(auth.isLoggedIn, (req, res) => {
+    .post((req, res) => {
       if (req.body.type === 'request') {
         db.sendFriendRequest(req.user.email, req.body.user)
         .then(() => {
@@ -83,7 +86,7 @@ module.exports = (socketHandler) => {
         res.status(500).send('Did not specify whether a friend request was sent or accepted');
       }
     })
-    .delete(auth.isLoggedIn, (req, res) => {
+    .delete((req, res) => {
       db.removeFriend(req.user.email, req.body.user)
       .then(() => {
         return db.getUser(req.body.user)
@@ -124,7 +127,7 @@ module.exports = (socketHandler) => {
     });
   });
   // Creates a cardpack and sets the owner as the current user
-  router.post('/cardpacks', auth.isLoggedIn, (req, res) => {
+  router.post('/cardpacks', (req, res) => {
     db.createCardpack(req.user.email, req.body.name)
     .then((cardpack) => {
       res.json('success');
@@ -134,7 +137,7 @@ module.exports = (socketHandler) => {
       res.status(500).send(error);
     });
   });
-  router.delete('/cardpacks', auth.isLoggedIn, (req, res) => {
+  router.delete('/cardpacks', (req, res) => {
     db.deleteCardpack(req.user.email, req.body.id)
     .then(() => {
       res.json('success');
