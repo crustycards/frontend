@@ -10,6 +10,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {GridList, GridTile} from 'material-ui/GridList';
+import time from '../helpers/time.js';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -27,6 +28,9 @@ class CardpackViewer extends React.Component {
       newCardType: 'white',
       cardpack: undefined
     };
+    if (this.props.liveUpdateTime === true) {
+      setInterval(this.forceUpdate.bind(this), 1000);
+    }
     axios.get('/api/currentuser')
     .then((response) => {
       let currentUser = response.data;
@@ -143,7 +147,7 @@ class CardpackViewer extends React.Component {
       cardElements.push(
         <CardHeader
           title={card.text}
-          subtitle={card.type}
+          subtitle={'Created ' + time.parse(card.createdAt, true)}
           key={0}
         />
       );
