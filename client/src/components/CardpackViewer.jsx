@@ -17,13 +17,14 @@ class CardpackViewer extends React.Component {
       currentUser: null,
       cards: [],
       newCardName: '',
-      cardpackExists: true
+      cardpack: undefined
     };
     axios.get('/api/currentuser')
     .then((response) => {
       let currentUser = response.data;
       this.setState({currentUser});
     });
+    this.fetchCurrentCardpack();
     this.fetchCards();
   }
 
@@ -38,6 +39,16 @@ class CardpackViewer extends React.Component {
     }
   }
 
+  fetchCurrentCardpack () {
+    axios.get('/api/cardpacks/' + this.cardpackId)
+    .then((response) => {
+      let cardpack = response.data;
+      this.setState({cardpack});
+    })
+    .catch(() => {
+      this.setState({cardpack: null});
+    });
+  }
   fetchCards () {
     if (this.cardpackId) {
       axios.get('/api/cards/' + this.cardpackId)
@@ -46,7 +57,7 @@ class CardpackViewer extends React.Component {
         this.setState({cards});
       })
       .catch((error) => {
-        this.setState({cardpackExists: false});
+        this.setState({cardpack: null});
       });
     }
   }
@@ -65,56 +76,49 @@ class CardpackViewer extends React.Component {
   }
 
   render () {
+    if (this.state.cardpack === null) {
+      return (
+        <div className='panel'>Cardpack does not exist</div>
+      );
+    }
+
+    let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
     let cardAdder = (<div>
       <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} /><br/>
       <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCard} />
     </div>);
     let cards = [];
-    if (this.state.cardpackExists) {
-      if (this.state.currentUser) {
-        for (let i = 0; i < this.state.cards.length; i++) {
-          cards.push(
-            <Card className='card' key={i}>
-              <CardHeader
-                title={this.state.cards[i].text}
-                subtitle={this.state.cards[i].type}
-              />
-              <CardActions>
-                <FlatButton label='Delete' onClick={this.removeCard.bind(this, this.state.cards[i])} />
-              </CardActions>
-            </Card>
-          );
-        }
-      } else {
-        for (let i = 0; i < this.state.cards.length; i++) {
-          cards.push(
-            <Card className='card' key={i}>
-              <CardHeader
-                title={this.state.cards[i].text}
-                subtitle={this.state.cards[i].type}
-              />
-            </Card>
-          );
-        }
+
+    if (isOwner) {
+      for (let i = 0; i < this.state.cards.length; i++) {
+        cards.push(
+          <Card className='card' key={i}>
+            <CardHeader
+              title={this.state.cards[i].text}
+              subtitle={this.state.cards[i].type}
+            />
+            <CardActions>
+              <FlatButton label='Delete' onClick={this.removeCard.bind(this, this.state.cards[i])} />
+            </CardActions>
+          </Card>
+        );
       }
     } else {
-      return (
-        <div className='panel'>Cardpack does not exist</div>
-      );
+      for (let i = 0; i < this.state.cards.length; i++) {
+        cards.push(
+          <Card className='card' key={i}>
+            <CardHeader
+              title={this.state.cards[i].text}
+              subtitle={this.state.cards[i].type}
+            />
+          </Card>
+        );
+      }
     }
-    /*<Card className='card'>
-        <CardHeader
-          title={this.props.user.firstname + ' ' + this.props.user.lastname}
-          subtitle={this.props.user.email}
-        />
-        <CardActions>
-          <FlatButton label='Unfriend' onClick={this.remove} />
-        </CardActions>
-      </Card>*/
     return (
       <div className='panel'>
-        <div>Cardpack Editor</div>
-        {this.state.currentUser ? cardAdder : null}
+        <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
+        {isOwner ? cardAdder : null}
         {cards}
       </div>
     );
