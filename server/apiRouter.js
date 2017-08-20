@@ -148,14 +148,33 @@ module.exports = (socketHandler) => {
     });
   });
 
-  router.get('cards/:cardpackId', (req, res) => {
-    res.send();
+  router.get('/cards/:cardpackId', (req, res) => {
+    db.getCards(req.params.cardpackId)
+    .then((cards) => {
+      res.json(cards);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
   });
   router.post('/cards/:cardpackId', (req, res) => {
-    res.send();
+    db.createCard(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
+    .then(() => {
+      res.json('success');
+      // socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id}); // TODO - Implement this
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
   });
   router.delete('/cards/:cardId', (req, res) => {
-    res.send();
+    db.deleteCard(req.user.email, req.params.cardId)
+    .then(() => {
+      res.json('success');
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
   });
 
   router.get('/*', (req, res) => {

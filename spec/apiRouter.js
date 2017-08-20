@@ -349,5 +349,136 @@ module.exports.run = () => {
         });
       });
     });
+
+    describe('/api/cards', () => {
+      before((done) => {
+        agent.post('/api/cardpacks')
+        .send({name: 'test cardpack'})
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          expect(res.body).to.equal('success');
+          done();
+        });
+      });
+
+      let cardpackId = 2;
+      describe('POST', () => {
+        it('Should be able to add cards to existing cardpacks', (done) => {
+          agent.post('/api/cards/' + cardpackId)
+          .send({
+            cardText: 'testcard',
+            cardType: 'white'
+          })
+          .end((err, res) => {
+            expect(err).to.not.exist;
+            expect(res.body).to.equal('success');
+            done();
+          });
+        });
+        it('Should return error when adding cards to cardpack owned by another user', (done) => {
+          agent2.post('/api/cards/' + cardpackId)
+          .send({
+            cardText: 'testcard',
+            cardType: 'white'
+          })
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+        it('Should return error when adding cards to cardpack that does not exist', (done) => {
+          agent.post('/api/cards/' + 123456789)
+          .send({
+            cardText: 'testcard',
+            cardType: 'white'
+          })
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+        it('Should return error when adding cards using no cardpack ID in the url', (done) => {
+          agent.post('/api/cards')
+          .send({
+            cardText: 'testcard',
+            cardType: 'white'
+          })
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+        it('Should return error when adding a card with an invalid card type', (done) => {
+          agent.post('/api/cards/' + cardpackId)
+          .send({
+            cardText: 'testcard',
+            cardType: 'asdf'
+          })
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+
+      describe('GET', () => {
+        it('Should retrieve cards from a cardpack when logged in as the cardpack owner', (done) => {
+          agent.get('/api/cards/' + cardpackId)
+          .end((err, res) => {
+            expect(err).to.not.exist;
+            let cards = res.body
+            expect(cards).to.be.a('array');
+            expect(cards.length).to.equal(1); // Since we only added one card in the previous tests
+            expect(cards[0].text).to.equal('testcard');
+            done();
+          });
+        });
+        it('Should retrieve cards from a cardpack when not logged in', (done) => {
+          request.get('/api/cards/' + cardpackId)
+          .end((err, res) => {
+            expect(err).to.not.exist;
+            let cards = res.body
+            expect(cards).to.be.a('array');
+            expect(cards.length).to.equal(1); // Since we only added one card in the previous tests
+            expect(cards[0].text).to.equal('testcard');
+            done();
+          });
+        });
+        it('Should return error when retrieving cards with no card ID in the url', (done) => {
+          request.get('/api/cards')
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+      });
+
+      describe('DELETE', () => {
+        let cardId = 1;
+
+        it('Should not be able to delete cards when not logged in', (done) => {
+          request.delete('/api/cards/' + cardId)
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+        it('Should not be able to delete cards from another user\'s cardpack', (done) => {
+          agent2.delete('/api/cards/' + cardId)
+          .end((err, res) => {
+            expect(err).to.exist;
+            done();
+          });
+        });
+        it('Should be able to delete cards when logged in', (done) => {
+          agent.delete('/api/cards/' + cardId)
+          .end((err, res) => {
+            expect(err).to.not.exist;
+            expect(res.body).to.equal('success');
+            done();
+          });
+        });
+      })
+    });
   });
 };
