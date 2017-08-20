@@ -9,6 +9,7 @@ import FlatButton from 'material-ui/FlatButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
+import {GridList, GridTile} from 'material-ui/GridList';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -104,6 +105,19 @@ class CardpackViewer extends React.Component {
   }
 
   render () {
+    const styles = {
+      root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'space-around',
+      },
+      gridList: {
+        width: 'auto',
+        height: 500,
+        overflowY: 'auto'
+      }
+    };
+
     if (this.state.cardpack === null) {
       return (
         <div className='panel'>Cardpack does not exist</div>
@@ -113,7 +127,7 @@ class CardpackViewer extends React.Component {
     let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
     let cardAdder;
     if (isOwner) {
-      cardAdder = (<div>
+      cardAdder = (<div className='panel'>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} /><br/>
         <DropDownMenu value={this.state.newCardType} onChange={this.handleNewSelect}>
           <MenuItem value={'white'} primaryText='White' />
@@ -154,14 +168,14 @@ class CardpackViewer extends React.Component {
         </Card>
       );
 
-      cards.push(<div key={index}>{cardWrapper}</div>);
+      cards.push(<GridTile key={index}>{cardWrapper}</GridTile>);
     });
 
     return (
       <div className='panel'>
         <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
         {isOwner ? cardAdder : null}
-        {cards}
+        <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
       </div>
     );
   }
