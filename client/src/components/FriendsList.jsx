@@ -9,7 +9,7 @@ class FriendsList extends React.Component {
   render () {
     return (
       <div className="panel">
-        <div>Friends List</div>
+        <div>Friends</div>
         {this.props.friends.map((friend, index) => {
           return <Friend user={friend} key={index} />
         })}

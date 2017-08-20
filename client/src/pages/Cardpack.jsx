@@ -17,7 +17,9 @@ class Cardpack extends React.Component {
     return (
       <div>
         <Navbar/>
-        <CardpackViewer cardpackId={this.state.id} socket={this.socket} />
+        <div className='content-wrap'>
+          <CardpackViewer cardpackId={this.state.id} socket={this.socket} />
+        </div>
       </div>
     );
   }

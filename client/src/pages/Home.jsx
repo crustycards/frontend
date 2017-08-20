@@ -110,10 +110,10 @@ class Home extends React.Component {
         <Navbar/>
         <div className='content-wrap'>
           <div className='col-narrow'>
+          <FrienderPanel />
           <FriendsList friends={this.state.friends} />
           <FriendRequestsSent requestsSent={this.state.requestsSent} />
           <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
-          <FrienderPanel />
           </div>
           <div className='col-wide'>
             <CardpackManager socket={this.socket} />
