@@ -311,7 +311,7 @@ module.exports.run = () => {
         });
       });
       it('Should get cardpacks of specific user when performing a GET with a particular user specified', (done) => {
-        agent2.get('/api/cardpacks/' + 'hello@world.com')
+        agent2.get('/api/cardpacks/user/' + 'hello@world.com')
         .end((err, res) => {
           expect(err).to.not.exist;
           let cardpacks = res.body;
@@ -322,7 +322,25 @@ module.exports.run = () => {
         });
       });
       it('Should return an error when retrieving cardpacks for a user that does not exist', (done) => {
-        agent.get('/api/cardpacks/' + 'fake@email.com')
+        agent.get('/api/cardpacks/user/' + 'fake@email.com')
+        .end((err, res) => {
+          expect(err).to.exist;
+          done();
+        });
+      });
+
+      it('Should get cardpack by ID when performing a GET with a particular cardpack ID specified', (done) => {
+        agent2.get('/api/cardpacks/' + 1)
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          let cardpack = res.body;
+          expect(cardpack).to.be.a('object');
+          expect(cardpack.name).to.equal('test cardpack');
+          done()
+        });
+      });
+      it('Should return an error when retrieving a cardpack by an ID that does not map to an existing cardpack', (done) => {
+        agent.get('/api/cardpacks/' + 123456789)
         .end((err, res) => {
           expect(err).to.exist;
           done();

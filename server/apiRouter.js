@@ -116,8 +116,18 @@ module.exports = (socketHandler) => {
       res.status(500).send(error);
     });
   });
+  // Returns the cardpack referenced by the specified ID
+  router.get('/cardpacks/:id', (req, res) => {
+    db.getCardpack(req.params.id)
+    .then((cardpack) => {
+      res.json(cardpack);
+    })
+    .catch((error) => {
+      res.status(500).send(error);
+    });
+  });
   // Returns array of all cardpacks owned by the specified user
-  router.get('/cardpacks/:user', (req, res) => {
+  router.get('/cardpacks/user/:user', (req, res) => {
     db.getCardpacks(req.params.user)
     .then((cardpacks) => {
       res.json(cardpacks);
