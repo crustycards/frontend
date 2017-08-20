@@ -24,7 +24,7 @@ class Cardpack extends React.Component {
           subtitle={'Created ' + time.parse(this.props.cardpack.createdAt, true)}
         />
         <CardActions>
-        <FlatButton label='Edit' onClick={() => {window.location.href = '/cardpack?id=' + this.props.cardpack.id}} />
+          <FlatButton label='Edit' onClick={() => {window.location.href = '/cardpack?id=' + this.props.cardpack.id}} />
           <FlatButton label='Delete' onClick={this.delete} />
         </CardActions>
       </Card>
