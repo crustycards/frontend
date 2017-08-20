@@ -27,9 +27,13 @@ class Navbar extends React.Component {
   }
 
   redirectTo (url) {
-    if (window.location.pathname !== url) {
+    if (!this.isCurrentUrl(url)) {
       window.location.replace(url);
     }
+  }
+
+  isCurrentUrl (url) {
+    return (window.location.pathname === url);
   }
 
   render () {
@@ -40,8 +44,8 @@ class Navbar extends React.Component {
           onLeftIconButtonTouchTap={this.handleToggle}
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
-          <MenuItem onClick={this.redirectTo.bind(null, '/')}>Home</MenuItem>
-          <MenuItem onClick={this.redirectTo.bind(null, '/logout')}>Logout</MenuItem>
+          <MenuItem onClick={this.redirectTo.bind(this, '/')}>Home</MenuItem>
+          <MenuItem onClick={this.redirectTo.bind(this, '/logout')}>Logout</MenuItem>
         </Drawer>
       </div>
     )
