@@ -28,8 +28,8 @@ class CardpackViewer extends React.Component {
       newCardType: 'white',
       cardpack: undefined
     };
-    if (this.props.liveUpdateTime === true) {
-      setInterval(this.forceUpdate.bind(this), 1000);
+    if (props.liveUpdateTime === true) {
+      setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
     }
     axios.get('/api/currentuser')
     .then((response) => {

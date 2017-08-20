@@ -116,7 +116,7 @@ class Home extends React.Component {
           <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
           </div>
           <div className='col-wide'>
-            <CardpackManager socket={this.socket} />
+            <CardpackManager liveUpdateTime={true} socket={this.socket} />
           </div>
         </div>
       </div>
