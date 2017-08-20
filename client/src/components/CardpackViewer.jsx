@@ -16,7 +16,8 @@ class CardpackViewer extends React.Component {
     this.state = {
       currentUser: null,
       cards: [],
-      newCardName: ''
+      newCardName: '',
+      cardpackExists: true
     };
     axios.get('/api/currentuser')
     .then((response) => {
@@ -43,6 +44,9 @@ class CardpackViewer extends React.Component {
       .then((response) => {
         let cards = response.data;
         this.setState({cards});
+      })
+      .catch((error) => {
+        this.setState({cardpackExists: false});
       });
     }
   }
@@ -66,31 +70,37 @@ class CardpackViewer extends React.Component {
       <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCard} />
     </div>);
     let cards = [];
-    if (this.state.currentUser) {
-      for (let i = 0; i < this.state.cards.length; i++) {
-        cards.push(
-          <Card className='card' key={i}>
-            <CardHeader
-              title={this.state.cards[i].text}
-              subtitle={this.state.cards[i].type}
-            />
-            <CardActions>
-              <FlatButton label='Delete' onClick={this.removeCard.bind(this, this.state.cards[i])} />
-            </CardActions>
-          </Card>
-        );
+    if (this.state.cardpackExists) {
+      if (this.state.currentUser) {
+        for (let i = 0; i < this.state.cards.length; i++) {
+          cards.push(
+            <Card className='card' key={i}>
+              <CardHeader
+                title={this.state.cards[i].text}
+                subtitle={this.state.cards[i].type}
+              />
+              <CardActions>
+                <FlatButton label='Delete' onClick={this.removeCard.bind(this, this.state.cards[i])} />
+              </CardActions>
+            </Card>
+          );
+        }
+      } else {
+        for (let i = 0; i < this.state.cards.length; i++) {
+          cards.push(
+            <Card className='card' key={i}>
+              <CardHeader
+                title={this.state.cards[i].text}
+                subtitle={this.state.cards[i].type}
+              />
+            </Card>
+          );
+        }
       }
     } else {
-      for (let i = 0; i < this.state.cards.length; i++) {
-        cards.push(
-          <Card className='card' key={i}>
-            <CardHeader
-              title={this.state.cards[i].text}
-              subtitle={this.state.cards[i].type}
-            />
-          </Card>
-        );
-      }
+      return (
+        <div className='panel'>Cardpack does not exist</div>
+      );
     }
     /*<Card className='card'>
         <CardHeader
