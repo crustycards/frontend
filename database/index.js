@@ -312,6 +312,26 @@ module.exports.getCardpacks = (userEmail) => {
   });
 };
 
+module.exports.getCardpack = (cardpackId) => {
+  return models.cardpacks.findOne({
+    where: {
+      id: cardpackId
+    }
+  })
+  .then((cardpack) => {
+    if (cardpack) {
+      return replaceForeignKeys([cardpack], 'owner_user_id', models.users, 'owner')
+      .then((cardpackArray) => {
+        return cardpackArray[0];
+      });
+    } else {
+      return new Promise((resolve, reject) => {
+        reject('Cardpack ID does not map to an existing cardpack');
+      });
+    }
+  });
+};
+
 // Returns a promise that will resolve with no
 // data once the cardpack and all associated cards
 // have been removed from the database

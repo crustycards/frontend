@@ -358,6 +358,26 @@ module.exports.run = () => {
       });
     });
 
+    describe('getCardpack()', () => {
+      it('Should exist', () => {
+        expect(dbExports.getCardpack).to.exist;
+      });
+      it('Should be a function', () => {
+        expect(dbExports.getCardpack).to.be.a('function');
+      });
+      it('Should retrieve cardpack properly when using a valid cardpack ID', () => {
+        return dbExports.getCardpack(2)
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.owner_user_id).to.not.exist;
+          expect(cardpack.owner).to.exist;
+        });
+      });
+      it('Should retrieve cardpack properly when using a valid cardpack ID', () => {
+        return expect(dbExports.getCardpack(1234)).to.be.rejected;
+      });
+    });
+
     describe('deleteCardpack()', () => {
       it('Should exist', () => {
         expect(dbExports.deleteCardpack).to.exist;
