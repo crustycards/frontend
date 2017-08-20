@@ -1,9 +1,14 @@
 import React from 'react';
 import axios from 'axios';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import DropDownMenu from 'material-ui/DropDownMenu';
+import MenuItem from 'material-ui/MenuItem';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -11,12 +16,14 @@ class CardpackViewer extends React.Component {
     this.socket = this.props.socket;
     this.cardpackId = this.props.cardpackId;
     this.addCard = this.addCard.bind(this);
+    this.handleNewSelect = this.handleNewSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.state = {
       currentUser: null,
       cards: [],
       newCardName: '',
+      newCardType: 'white',
       cardpack: undefined
     };
     axios.get('/api/currentuser')
@@ -37,6 +44,9 @@ class CardpackViewer extends React.Component {
     });
   }
 
+  handleNewSelect (e, index, newCardType) {
+    this.setState({newCardType});
+  }
   handleInputChange (property, e) {
     let stateChange = {};
     stateChange[property] = e.target.value;
@@ -84,7 +94,7 @@ class CardpackViewer extends React.Component {
     if (this.state.newCardName) {
       axios.post('/api/cards/' + this.cardpackId, {
         cardText: this.state.newCardName,
-        cardType: 'white'
+        cardType: this.state.newCardType
       });
       this.setState({newCardName: ''});
     }
@@ -101,38 +111,52 @@ class CardpackViewer extends React.Component {
     }
 
     let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
-    let cardAdder = (<div>
-      <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} /><br/>
-      <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCard} />
-    </div>);
+    let cardAdder;
+    if (isOwner) {
+      cardAdder = (<div>
+        <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} /><br/>
+        <DropDownMenu value={this.state.newCardType} onChange={this.handleNewSelect}>
+          <MenuItem value={'white'} primaryText='White' />
+          <MenuItem value={'black'} primaryText='Black' />
+        </DropDownMenu>
+        <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCard} />
+      </div>);
+    }
     let cards = [];
 
-    if (isOwner) {
-      for (let i = 0; i < this.state.cards.length; i++) {
-        cards.push(
-          <Card className='card' key={i}>
-            <CardHeader
-              title={this.state.cards[i].text}
-              subtitle={this.state.cards[i].type}
-            />
-            <CardActions>
-              <FlatButton label='Delete' onClick={this.removeCard.bind(this, this.state.cards[i])} />
-            </CardActions>
-          </Card>
+    this.state.cards.forEach((card, index) => {
+      let cardElements = [];
+      cardElements.push(
+        <CardHeader
+          title={card.text}
+          subtitle={card.type}
+          key={0}
+        />
+      );
+
+      if (isOwner) {
+        cardElements.push(
+          <CardActions key={1}>
+            <FlatButton label='Delete' onClick={this.removeCard.bind(this, card)} />
+          </CardActions>
         );
       }
-    } else {
-      for (let i = 0; i < this.state.cards.length; i++) {
-        cards.push(
-          <Card className='card' key={i}>
-            <CardHeader
-              title={this.state.cards[i].text}
-              subtitle={this.state.cards[i].type}
-            />
+
+      let cardWrapper = card.type === 'black' ? (
+        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+          <Card className='card'>;
+            {cardElements}
           </Card>
-        );
-      }
-    }
+        </MuiThemeProvider>
+      ) : (
+        <Card className='card'>;
+          {cardElements}
+        </Card>
+      );
+
+      cards.push(<div key={index}>{cardWrapper}</div>);
+    });
+
     return (
       <div className='panel'>
         <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
