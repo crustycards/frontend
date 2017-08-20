@@ -26,6 +26,15 @@ class CardpackViewer extends React.Component {
     });
     this.fetchCurrentCardpack();
     this.fetchCards();
+
+    this.socket.on('cardcreate', (cardString) => {
+      let card = JSON.parse(cardString).card;
+      this.renderNewCard(card);
+    });
+    this.socket.on('carddelete', (cardString) => {
+      let card = JSON.parse(cardString).card;
+      this.unrenderOldCard(card);
+    });
   }
 
   handleInputChange (property, e) {
@@ -37,6 +46,15 @@ class CardpackViewer extends React.Component {
     if (e.key === 'Enter') {
       this.addCard();
     }
+  }
+
+  renderNewCard (card) {
+    this.setState({cards: [...this.state.cards, card]});
+  }
+  unrenderOldCard (card) {
+    this.setState({cards: this.state.cards.filter((cardCurrent) => {
+      return card.id !== cardCurrent.id;
+    })});
   }
 
   fetchCurrentCardpack () {

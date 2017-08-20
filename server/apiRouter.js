@@ -169,9 +169,9 @@ module.exports = (socketHandler) => {
   });
   router.post('/cards/:cardpackId', (req, res) => {
     db.createCard(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
-    .then(() => {
+    .then((card) => {
       res.json('success');
-      // socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id}); // TODO - Implement this
+      socketHandler.respondToUsers([req.user], 'cardcreate', {card});
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -179,8 +179,9 @@ module.exports = (socketHandler) => {
   });
   router.delete('/cards/:cardId', (req, res) => {
     db.deleteCard(req.user.email, req.params.cardId)
-    .then(() => {
+    .then((card) => {
       res.json('success');
+      socketHandler.respondToUsers([req.user], 'carddelete', {card});
     })
     .catch((error) => {
       res.status(500).send(error);
