@@ -336,7 +336,7 @@ module.exports.run = () => {
           let cardpack = res.body;
           expect(cardpack).to.be.a('object');
           expect(cardpack.name).to.equal('test cardpack');
-          done()
+          done();
         });
       });
       it('Should return an error when retrieving a cardpack by an ID that does not map to an existing cardpack', (done) => {
