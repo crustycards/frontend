@@ -307,7 +307,6 @@ module.exports.getCardpacks = (userEmail) => {
     });
   })
   .then((cardpacks) => {
-    console.log(cardpacks);
     return replaceForeignKeys(cardpacks, 'owner_user_id', models.users, 'owner');
   });
 };
@@ -358,7 +357,22 @@ module.exports.deleteCardpack = (userEmail, cardpackId) => {
           reject(`Cannot delete someone else's cardpack`);
         });
       }
-      return cardpack.destroy()
+
+      return models.cards.findAll({
+        where: {cardpack_id: cardpackId}
+      })
+      .then((cards) => {
+        let cardDestructionPromises = [];
+        cards.forEach((card) => {
+          cardDestructionPromises.push(
+            card.destroy()
+          );
+        });
+        return Promise.all(cardDestructionPromises);
+      })
+      .then(() => {
+        return cardpack.destroy()
+      })
       .then(() => {
         return true;
       });

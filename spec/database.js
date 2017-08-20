@@ -248,6 +248,7 @@ module.exports.run = () => {
           expect(friendData.requestsReceived).to.exist;
 
           // TODO - Add more extensive testing for friend-related functions
+          // TODO - Add test to make sure that when deleting a cardpack, all linked cards are deleted as well
           expect(friendData.friends[0].id).to.equal(db.users[1].id);
           expect(friendData.friends[0].email).to.equal(db.users[1].email);
           expect(friendData.friends[0].firstname).to.equal(db.users[1].firstname);
