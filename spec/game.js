@@ -53,6 +53,8 @@ module.exports.run = () => {
       expect(users.playCard).to.be.a('function');
       expect(users.drawCard).to.be.a('function');
       expect(users.getHand).to.be.a('function');
+      expect(users.getScore).to.be.a('function');
+      expect(users.incrementScore).to.be.a('function');
       expect(users.cycleJudge).to.be.a('function');
       expect(users.sendDataToAllPlayers).to.be.a('function');
       expect(users.sendDataToPlayer).to.be.a('function');
@@ -165,6 +167,19 @@ module.exports.run = () => {
       users.drawCard(userOne, newCard);
       let userHand = users.getHand(userOne);
       expect(userHand[userHand.length - 1]).to.eql(newCard);
+    });
+    it(`Should return a user's hand when removing that user`, () => {
+      users.addUser(userOne, cards);
+      expect(users.removeUser(userOne)).to.equal(cards);
+    });
+
+    it(`Should manage user's score`, () => {
+      users.addUser(userOne);
+      expect(users.getScore(userOne)).to.equal(0);
+      users.incrementScore(userOne);
+      expect(users.getScore(userOne)).to.equal(1);
+      users.incrementScore(userOne);
+      expect(users.getScore(userOne)).to.equal(2);
     });
   });
 };

@@ -91,6 +91,13 @@ class Users {
     return this.userTable[user.email].hand;
   }
 
+  getScore (user) {
+    return this.userTable[user.email].score;
+  }
+  incrementScore (user) {
+    this.userTable[user.email].score++;
+  }
+
   cycleJudge () {
     this.judge = this.judge.next || this.head;
   }
@@ -114,6 +121,7 @@ class Node {
   constructor (user, cards, prev = null, next = null) {
     this.user = user;
     this.hand = cards;
+    this.score = 0;
     this.prev = prev;
     this.next = next;
   }
