@@ -1,71 +1,97 @@
+let socketHandler = require('../server/socketHandler.js');
+
 class Users {
   constructor () {
     this.head = null;
     this.tail = null;
     this.judge = null;
     this.owner = null;
-    this.userTable = {};
-    this.size = 0;
+    this.userTable = {}; // Maps user emails to their respective linked-list nodes
+    this.numPlayers = 0;
+  }
+
+  size () {
+    return this.numPlayers;
   }
 
   addUser (user) {
     // If the user is already registered in this Users object, don't do anything
     if (!this.userTable[user.email]) {
-      let userNode = new Node(user.email);
-      this.size++;
+      this.numPlayers++;
+      let userNode = new Node(user);
       this.userTable[user.email] = userNode;
+      // If there are no users in the game
       if (this.head === null) {
         this.head = this.tail = this.owner = this.judge = userNode;
       } else {
-        userNode.next = this.head;
         this.tail.next = userNode;
+        userNode.prev = this.tail;
         this.tail = userNode;
       }
     }
   }
   removeUser (user) {
+    let userNode = this.userTable[user.email];
     // If the user doesn't exist in this Users object, don't do anything
-    if (this.userTable[user.email]) {
-      this.size--;
+    if (userNode) {
       if (this.head === this.tail) {
         this.head = this.tail = this.judge = this.owner = null;
       } else {
-        if (this.userTable[user.email].prev) {
-          this.userTable[user.email].prev.next = this.userTable[user.email].next;
+        if (userNode.prev) {
+          userNode.prev.next = userNode.next;
         }
-        if (this.userTable[user.email].next) {
-          this.userTable[user.email].next.prev = this.userTable[user.email].prev;
+        if (userNode.next) {
+          userNode.next.prev = userNode.prev;
         }
-        if (this.owner === this.userTable[user.email]) {
-          this.owner = this.userTable[user.email].next || this.head;
+        if (this.owner === userNode) {
+          this.owner = userNode.next || this.head;
         }
-        if (this.judge === this.userTable[user.email]) {
-          this.judge = this.userTable[user.email].next || this.head;
+        if (this.judge === userNode) {
+          this.judge = userNode.next || this.head;
         }
       }
+      this.numPlayers--;
       delete this.userTable[user.email];
     }
   }
-  containsUser () {
-    return !!this.userTable[user.email];
+
+  getJudge () {
+    if (this.size() > 0) {
+      return this.judge.user;
+    } else {
+      return undefined
+    }
   }
+  getOwner () {
+    if (this.size() > 0) {
+      return this.owner.user;
+    } else {
+      return undefined
+    }
+  }
+
   cycleJudge () {
     this.judge = this.judge.next || this.head;
   }
-  getEmailsOfCurrentUsers () {
+  sendDataToAllPlayers (dataType, data) {
     let currentNode = this.head;
-    let emailArray = [];
-    while(currentNode.next) {
-      emailArray.push(currentNode.email);
+    let userEmails = [];
+    while(currentNode) {
+      userEmails.push(currentNode.user.email);
       currentNode = currentNode.next;
     }
-    return emailArray;
+    socketHandler.respondToUsersByEmail(userEmails, dataType, data);
+  }
+  sendDataToPlayer (email, dataType, data) {
+    if (userTable[email]) {
+      socketHandler.respondToUsersByEmail([email], dataType, data);
+    }
   }
 }
 
 class Node {
-  constructor (email, prev = null, next = null) {
-    this.email = email;
+  constructor (user, prev = null, next = null) {
+    this.user = user;
     this.prev = prev;
     this.next = next;
   }
