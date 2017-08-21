@@ -14,11 +14,11 @@ class Users {
     return this.numPlayers;
   }
 
-  addUser (user) {
+  addUser (user, cards) {
     // If the user is already registered in this Users object, don't do anything
     if (!this.userTable[user.email]) {
       this.numPlayers++;
-      let userNode = new Node(user);
+      let userNode = new Node(user, cards);
       this.userTable[user.email] = userNode;
       // If there are no users in the game
       if (this.head === null) {
@@ -52,6 +52,7 @@ class Users {
       }
       this.numPlayers--;
       delete this.userTable[user.email];
+      return userNode.hand;
     }
   }
 
@@ -90,8 +91,9 @@ class Users {
 }
 
 class Node {
-  constructor (user, prev = null, next = null) {
+  constructor (user, cards, prev = null, next = null) {
     this.user = user;
+    this.hand = cards;
     this.prev = prev;
     this.next = next;
   }
