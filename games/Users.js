@@ -18,7 +18,7 @@ class Users {
     // If the user is already registered in this Users object, don't do anything
     if (!this.userTable[user.email]) {
       this.numPlayers++;
-      let userNode = new Node(user, cards);
+      let userNode = new Node(user, cards || []);
       this.userTable[user.email] = userNode;
       // If there are no users in the game
       if (this.head === null) {
@@ -28,7 +28,9 @@ class Users {
         userNode.prev = this.tail;
         this.tail = userNode;
       }
+      return true;
     }
+    return false;
   }
   removeUser (user) {
     let userNode = this.userTable[user.email];

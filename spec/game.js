@@ -85,6 +85,16 @@ module.exports.run = () => {
       users.addUser(userFour);
       expect(users.size()).to.equal(4);
     });
+    it('Should return true when adding a user that is not in the game and false when adding a user that is already in the game', () => {
+      expect(users.addUser(userOne)).to.equal(true);
+      expect(users.addUser(userOne)).to.equal(false);
+      expect(users.addUser(userTwo)).to.equal(true);
+      expect(users.addUser(userTwo)).to.equal(false);
+      expect(users.addUser(userThree)).to.equal(true);
+      expect(users.addUser(userThree)).to.equal(false);
+      expect(users.addUser(userFour)).to.equal(true);
+      expect(users.addUser(userFour)).to.equal(false);
+    });
     it('Should keep track of size when removing users', () => {
       users.addUser(userOne);
       users.removeUser(userTwo);
