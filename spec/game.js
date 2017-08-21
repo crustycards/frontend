@@ -19,6 +19,25 @@ let userFour = {
   email: 'userFour@gmail.com'
 };
 
+let cards = [
+  {
+    id: 1,
+    name: 'cardZero'
+  },
+  {
+    id: 2,
+    name: 'cardOne'
+  },
+  {
+    id: 3,
+    name: 'cardTwo'
+  },
+  {
+    id: 4,
+    name: 'cardThree'
+  }
+];
+
 module.exports.run = () => {
   describe('Users', () => {
     let users;
@@ -31,6 +50,9 @@ module.exports.run = () => {
       expect(users.removeUser).to.be.a('function');
       expect(users.getJudge).to.be.a('function');
       expect(users.getOwner).to.be.a('function');
+      expect(users.playCard).to.be.a('function');
+      expect(users.drawCard).to.be.a('function');
+      expect(users.getHand).to.be.a('function');
       expect(users.cycleJudge).to.be.a('function');
       expect(users.sendDataToAllPlayers).to.be.a('function');
       expect(users.sendDataToPlayer).to.be.a('function');
@@ -117,6 +139,32 @@ module.exports.run = () => {
       users.addUser(userTwo);
       users.removeUser(userOne);
       expect(users.getJudge().email).to.equal(userTwo.email);
+    });
+
+    it(`Should save a player's hand if passed in when adding a user`, () => {
+      users.addUser(userOne, cards);
+      expect(users.getHand(userOne)).to.equal(cards);
+    });
+    it(`Should be able to play a card that exists in a player's hand and return it`, () => {
+      let hand = JSON.parse(JSON.stringify(cards));
+      users.addUser(userOne, hand);
+      expect(users.playCard(userOne, cards[0])).to.eql(cards[0]);
+      expect(users.getHand(userOne).length).to.equal(3);
+    });
+    it(`Should return undefined when attempting to play a card from a user's hand that does not exist`, () => {
+      let hand = JSON.parse(JSON.stringify(cards));
+      let fakeCard = {id: 4321, name: 'fakecard'};
+      users.addUser(userOne, hand);
+      expect(users.playCard(userOne, fakeCard)).to.not.exist;
+      expect(users.getHand(userOne).length).to.equal(4);
+    });
+    it(`Should be able to draw a card for a user`, () => {
+      let hand = JSON.parse(JSON.stringify(cards));
+      let newCard = {id: 1234, name: 'thisisatestcard'};
+      users.addUser(userOne, hand);
+      users.drawCard(userOne, newCard);
+      let userHand = users.getHand(userOne);
+      expect(userHand[userHand.length - 1]).to.eql(newCard);
     });
   });
 };

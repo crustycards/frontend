@@ -71,6 +71,26 @@ class Users {
     }
   }
 
+  // Returns the card if the user has it in their hand, or undefined if it is not
+  playCard (user, cardToPlay) {
+    let playerHand = this.userTable[user.email].hand;
+    let returnCard = undefined;
+    playerHand.forEach((card, index) => {
+      if (card.id === cardToPlay.id) {
+        returnCard = playerHand.splice(index, 1)[0];
+      }
+    });
+    return returnCard;
+  }
+
+  drawCard (user, card) {
+    this.userTable[user.email].hand.push(card);
+  }
+
+  getHand (user) {
+    return this.userTable[user.email].hand;
+  }
+
   cycleJudge () {
     this.judge = this.judge.next || this.head;
   }
