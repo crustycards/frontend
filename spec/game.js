@@ -225,4 +225,77 @@ module.exports.run = () => {
       expect(users.getScore(userOne)).to.equal(2);
     });
   });
+
+  describe('Game', () => {
+    let game;
+    beforeEach(() => {
+      game = new Game(userOne, blackCards, cards, 100, 3);
+    });
+
+    it('Should contain all functions', () => {
+      expect(game.getState).to.be.a('function');
+      expect(game.addUser).to.be.a('function');
+      expect(game.removeUser).to.be.a('function');
+      expect(game.start).to.be.a('function');
+      expect(game.stop).to.be.a('function');
+      expect(game.pause).to.be.a('function');
+      expect(game.isRunning).to.be.a('function');
+      expect(game.playCard).to.be.a('function');
+      expect(game.forceContinue).to.be.a('function');
+      expect(game.setRandomBlackCard).to.be.a('function');
+      expect(game.drawForUser).to.be.a('function');
+      expect(game.discardCurrentWhiteCards).to.be.a('function');
+      expect(game.continue).to.be.a('function');
+      expect(game.sendDataToUsers).to.be.a('function');
+    });
+
+    describe('getState()', () => {
+      it('Should return all keys when getting state of basic game', () => {
+        let state = game.getState(userOne);
+        expect(state.hand).to.be.a('array');
+        expect(state.currentBlackCard).to.be.a('object');
+        expect(state.currentWhiteCardByUser).to.be.a('object');
+        expect(state.numOtherWhiteCardsPlayed).to.be.a('number');
+        expect(state.currentJudge).to.be.a('object');
+        expect(state.currentOwner).to.be.a('object');
+        expect(state.otherPlayers).to.be.a('array');
+        expect(Object.keys(state).length).to.equal(7);
+      });
+    });
+
+    describe('addUser()', () => {
+      it('Should add users to games', () => {
+        game.addUser(userTwo);
+        expect(game.getState(userOne).otherPlayers).to.eql([userTwo]);
+        expect(game.getState(userTwo).otherPlayers).to.eql([userOne]);
+        game.addUser(userThree);
+        expect(game.getState(userOne).otherPlayers).to.eql([userTwo, userThree]);
+        expect(game.getState(userTwo).otherPlayers).to.eql([userOne, userThree]);
+        expect(game.getState(userThree).otherPlayers).to.eql([userOne, userTwo]);
+      });
+      it('Should not add a user if the game is full', () => {
+        expect(game.addUser(userTwo)).to.equal(true);
+        expect(game.addUser(userThree)).to.equal(true);
+        expect(game.addUser(userFour)).to.equal(false);
+        expect(game.getState(userOne).otherPlayers).to.eql([userTwo, userThree]);
+        expect(game.getState(userTwo).otherPlayers).to.eql([userOne, userThree]);
+        expect(game.getState(userThree).otherPlayers).to.eql([userOne, userTwo]);
+        expect(game.getState(userFour).otherPlayers).to.throw;
+      });
+    });
+
+    describe('removeUser()', () => {
+      it('Should remove existing users from games and return true to indicate that the removal was successful', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        expect(game.removeUser(userOne)).to.equal(true);
+        expect(game.removeUser(userTwo)).to.equal(true);
+        expect(game.removeUser(userThree)).to.equal(true);
+        // Not adding user four because game limit is three
+      });
+      it('Should return false when removing a user that is not in the game', () => {
+        expect(game.removeUser(userTwo)).to.equal(false);
+      });
+    });
+  });
 };

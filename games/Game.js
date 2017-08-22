@@ -1,5 +1,4 @@
 let Users = require('./Users.js');
-let socketHandler = require('../server/socketHandler.js');
 
 const ROUND_STAGES = {
   playBlackCard: 1,
@@ -18,45 +17,90 @@ const getRandomInt = (min, max) => {
 
 class Game {
   constructor (creator, blackCards, whiteCards, timeout, maxPlayers) {
+    this.maxPlayers = maxPlayers;
     this.users = new Users();
     this.addUser(creator);
-    this.timeoutId;
+    this.timeoutId; // Saved to allow pausing and stopping of games
     this.roundStage;
-    this.maxPlayers = maxPlayers;
     this.timeout = timeout;
-    this.blackCardPool = blackCards;
-    this.whiteCardPool = whiteCards;
+
+    this.blackCardDraw = blackCards;
+    this.whiteCardDraw = whiteCards;
     this.blackCardDiscard = [];
     this.whiteCardDiscard = [];
-    this.blackCardCurrent;
-    this.whiteCardsCurrent = {}; // 
-    this.playerHands = {}; // Maps user emails to an array of cards in their hand
-    this.playerScores = {};
+    this.currentBlackCard;
+    this.currentWhiteCards = {};
+    this.setRandomBlackCard();
+
     this.continue = this.continue.bind(this);
   }
 
+  getState (currentUser) {
+    let otherPlayers = this.users.getAllUsers().filter((user) => {
+      return user.email !== currentUser.email;
+    });
+
+    return {
+      hand: [],
+      currentBlackCard: this.currentBlackCard,
+      currentWhiteCardByUser: {},
+      numOtherWhiteCardsPlayed: 1,
+      currentJudge: {},
+      currentOwner: {},
+      otherPlayers
+    };
+  }
+
   addUser (user) {
-    if (this.users.size <= this.maxPlayers) {
+    if (this.users.size() < this.maxPlayers) {
       this.users.addUser(user);
-      this.playerHands[user.email] = [];
-      for (let i = 0; i < handSize; i++) {
-        drawForUser(user);
-      }
+      // for (let i = 0; i < handSize; i++) {
+      //   drawForUser(user);
+      // }
+      return true;
     }
+    return false;
   }
   removeUser (user) {
-    this.users.removeUser(user);
-    while (this.playerHands[user.email].length) {
-      this.whiteCardDiscard.push(this.playerHands[user.email].pop());
+    let userHand = this.users.removeUser(user);
+    if (userHand) {
+      // while (this.playerHands[user.email].length) {
+      //   this.whiteCardDiscard.push(this.playerHands[user.email].pop());
+      // }
+      // delete this.playerHands[user.email];
+      return true;
+    } else {
+      return false;
     }
-    delete this.playerHands[user.email];
+  }
+
+  setRandomBlackCard () {
+    // 'Shuffle' discard pile if draw pile is empty
+    if (this.blackCardDraw.length === 0) {
+      this.blackCardDraw = this.blackCardDiscard;
+      this.blackCardDiscard = [];
+    }
+    let cardIndex = getRandomInt(0, this.blackCardDraw.length);
+    this.blackCardDiscard.push(this.currentBlackCard);
+    this.currentBlackCard = this.blackCardDraw.splice(cardIndex, 1)[0];
+  }
+  drawForUser (user) {
+    let cardIndex = getRandomInt(0, this.whiteCardPool.length);
+    this.playerHands[user.email].push(this.whiteCardPool.splice(cardIndex, 1)[0]);
+  }
+  discardCurrentWhiteCards () {
+    Object.keys(this.currentWhiteCards).forEach((key, index) => {
+      let card = this.currentWhiteCards[key];
+      delete this.currentWhiteCards[key];
+      this.whiteCardDiscard.push(card);
+    });
   }
 
   start () {
     if (this.roundStage) {
       // Game is paused
       this.continue();
-    } else if (this.users.size >= minPlayerCount) {
+    } else if (this.users.size() >= minPlayerCount) {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, this.timeout);
     }
@@ -82,48 +126,23 @@ class Game {
     // If it is a valid time to play a card
     if (this.isRunning && this.roundStage === ROUND_STAGES.playWhiteCards) {
       // If the user has not already played a card this round and is not the judge
-      if (!this.whiteCardsCurrent[user.email] && this.users.judge.email !== user.email) {
+      if (!this.currentWhiteCards[user.email] && this.users.getJudge().email !== user.email) {
         for (let i = 0; i < this.playerHands[user.email]; i++) {
           if (card.id === this.playerHands[user.email][i].id) {
             this.playerHands[user.email].splice(i, 1);
           }
         }
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
-        if (Object.keys(this.whiteCardsCurrent).length === this.users.size) {
+        if (Object.keys(this.currentWhiteCards).length === this.users.size()) {
           this.forceContinue();
         }
       }
     }
   }
 
-
-
   forceContinue () {
     clearTimeout(this.timeoutId);
     this.continue();
-  }
-  setRandomBlackCard () {
-    // 'Shuffle' discard pile if draw pile is empty
-    if (this.blackCardPool.length === 0) {
-      this.blackCardPool = this.blackCardDiscard;
-      this.blackCardDiscard = [];
-    }
-    let cardIndex = getRandomInt(0, this.blackCardPool.length);
-    this.blackCardDiscard.push(blackCardCurrent);
-    this.blackCardCurrent = this.blackCardPool.splice(cardIndex, 1)[0];
-  }
-  drawForUser (user) {
-    if (this.users.containsUser(user)) {
-      let cardIndex = getRandomInt(0, this.whiteCardPool.length);
-      this.playerHands[user.email].push(this.whiteCardPool.splice(cardIndex, 1)[0]);
-    }
-  }
-  discardCurrentWhiteCards () {
-    Object.keys(this.whiteCardsCurrent).forEach((key, index) => {
-      let card = this.whiteCardsCurrent[key];
-      delete this.whiteCardsCurrent[key];
-      this.whiteCardDiscard.push(card);
-    });
   }
 
   continue () {
@@ -139,7 +158,6 @@ class Game {
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, this.timeout);
     } else if (this.roundStage === ROUND_STAGES.incrementScore) {
-      // TODO - Implement scores
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, roundEndDelay);
     }

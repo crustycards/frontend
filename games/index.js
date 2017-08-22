@@ -1,51 +1,46 @@
-const db = require('../database');
+let helpers = require('./helpers.js');
 
-let games = {}; // Maps game names to their respective games
-let playerGame = {}; // Maps users to the game they are in
+let gamesByName = {}; // Maps game names to their respective games
+let gamesByPlayerId = {}; // Maps user IDs to the game they are in
+let gamesByPlayerEmail = {}; // Maps user emails to the game they are in
 
 // Returns a promise that will resolve to the new game
-module.exports.createGame = (creator, gameName, cardpacks, timeout = 20, maxPlayers = 8) => {
+module.exports.createGame = (creator, gameName, cardpackIds, timeout = 20, maxPlayers = 8) => {
   if (!gameName || gameName.constructor !== String || gameName === '') {
     return new Promise((resolve, reject) => {
-      reject(`Expected a non-empty string as game name, but instead got '${gameName}'`);
+      reject(`Game name should be a non-empty string`);
     });
   }
-  if (games[gameName]) {
+  if (gamesByName[gameName]) {
     return new Promise((resolve, reject) => {
       reject(`Game with name '${gameName}' already exist`);
     });
   }
 
-  let cardpackPromises = [];
-  let blackCards = [];
-  let whiteCards = [];
-  // Fetch all cards from cardpacks
-  for (let i = 0; i < cardpacks.length; i++) {
-    cardpackPromises.push(
-      db.getCards(cardpacks[i].id)
-      .then((cards) => {
-        for (let j = 0; j < cards.length; j++) {
-          if (cards[i].type === 'white') {
-            whiteCards.push(cards[i]);
-          } else {
-            blackCards.push(cards[i]);
-          }
-        }
-      })
-    );
-  }
-  return Promise.all(cardpackPromises)
   // Create game
-  .then(() => {
-    let game = new Game(creator, blackCards, whiteCards, timeout, maxPlayers);
-    playerGame[creator.email] = game;
-    games[gameName] = game;
+  helpers.getCardsFromCardpackIds(cardpackIds)
+  .then((cards) => {
+    let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers);
+    gamesByName[gameName] = game;
+    gamesByPlayerId[creator.id] = game;
+    gamesByPlayerEmail[creator.email] = game;
     return game;
   })
 };
 
-module.exports.getGameUserIsIn = (user) => {
-  return playerGame[user.email] || null;
+module.exports.getUserGame = (user) => {
+  if (user) {
+    if (user.constructor === Object) {
+      return gamesByPlayerId[user.id];
+    }
+    if (user.constructor === Number) {
+      return gamesByPlayerId[user];
+    }
+    if (user.constructor === String) {
+      return gamesByPlayerEmail[user];
+    }
+  }
+  return null; // Returns this if user is invalid or if user is not in any game
 };
 
 module.exports.joinGame = (user, gameName) => {
@@ -54,19 +49,26 @@ module.exports.joinGame = (user, gameName) => {
       // Player is already in a game
       module.exports.leaveGame(user);
     }
-    playerGame[user.email] = games[gameName];
+    gamesByPlayerId[user.id] = games[gameName];
+    gamesByPlayerEmail[user.email] = games[gameName];
     games[gameName].users.addUser(user);
+    return {message: 'success'};
   } else {
     return {error: 'Game does not exist'};
   }
 };
 module.exports.leaveGame = (user) => {
-  delete playerGame[user.email];
+  gamesByPlayerId[user.id].users.removeUser(user);
+  if (gamesByPlayerId[user.id].users.size === 0) {
+    delete gamesByName[gamesByPlayerId[user.id].name];
+  }
+  delete gamesByPlayerId[user.id];
+  delete gamesByPlayerEmail[user.email];
 };
 
-module.exports.getGameStateFor = (user) => {
-  let game = module.exports.getGameUserIsIn(user);
-  if (game) {
-  }
-  return getGameStateFor(user);
-};
+// module.exports.getGameStateFor = (user) => {
+//   let game = module.exports.getGameUserIsIn(user);
+//   if (game) {
+//   }
+//   return getGameStateFor(user);
+// };
