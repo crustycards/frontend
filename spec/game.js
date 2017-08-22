@@ -301,6 +301,43 @@ module.exports.run = () => {
 
     describe('setRandomBlackCard()', () => {
       it('Should set a black card as the current black card upon game creation', () => {
+        let currentBlackCard = game.getState(userOne).currentBlackCard;
+        expect(currentBlackCard.id).to.exist;
+      });
+      it('Should cycle through black cards', () => {
+        for (let i = 0; i < 100; i++) {
+          let currentBlackCard = game.getState(userOne).currentBlackCard;
+          let blackCard = blackCards.filter((card) => {
+            return card.id === currentBlackCard.id;
+          })[0];
+          expect(currentBlackCard.id).to.exist;
+          expect(currentBlackCard).to.eql(blackCard);
+          game.setRandomBlackCard();
+        }
+      });
+      it('Should properly store black cards in the black card discard pile', () => {
+        for (let i = 0; i < 100; i++) {
+          let discardPile = game.blackCardDiscard;
+          discardPile.forEach((card) => {
+            expect(card.id).to.exist;
+          });
+          game.setRandomBlackCard();
+        }
+      });
+      it('Should retain deck size over time', () => {
+        for (let i = 0; i < 100; i++) {
+          let draw = game.blackCardDraw;
+          let discard = game.blackCardDiscard;
+          let currentCard = game.currentBlackCard;
+          let deck = [...draw, ...discard, currentCard];
+          expect(deck.length).to.equal(blackCards.length);
+          deck.forEach((card) => {
+            expect(card.id).to.exist;
+          });
+          game.setRandomBlackCard();
+        }
+      });
+      it('Should reshuffle cards when attempting to draw from an empty draw pile, and should not loose any cards in the process', () => {
         expect(game.blackCardDraw.length).to.equal(blackCards.length - 1);
         // Goes to blackCards.length - 1 because the first max length of the array is one minus the length of the inpur array of cards
         for (let i = 0; i < blackCards.length - 1; i++) {
@@ -309,7 +346,8 @@ module.exports.run = () => {
         }
         expect(game.blackCardDraw.length).to.equal(0); // Redundant, but here for clarification
         game.setRandomBlackCard();
-        expect(game.blackCardDraw.length).to.equal(blackCards.length - 1);
+        // -2 because at this point, one card is in the discard and one card is in play
+        expect(game.blackCardDraw.length).to.equal(blackCards.length - 2);
       });
     });
   });

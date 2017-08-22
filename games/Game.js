@@ -80,8 +80,11 @@ class Game {
       this.blackCardDraw = this.blackCardDiscard;
       this.blackCardDiscard = [];
     }
+    // Useful when creating a new game and no current black card is set
+    if (this.currentBlackCard) {
+      this.blackCardDiscard.push(this.currentBlackCard);
+    }
     let cardIndex = getRandomInt(0, this.blackCardDraw.length - 1);
-    this.blackCardDiscard.push(this.currentBlackCard);
     this.currentBlackCard = this.blackCardDraw.splice(cardIndex, 1)[0];
   }
   drawForUser (user) {
