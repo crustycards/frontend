@@ -229,7 +229,8 @@ module.exports.run = () => {
   describe('Game', () => {
     let game;
     beforeEach(() => {
-      game = new Game(userOne, blackCards, cards, 100, 3);
+      let blackCardsNonref = JSON.parse(JSON.stringify(blackCards));
+      game = new Game(userOne, blackCardsNonref, cards, 100, 3);
     });
 
     it('Should contain all functions', () => {
@@ -295,6 +296,20 @@ module.exports.run = () => {
       });
       it('Should return false when removing a user that is not in the game', () => {
         expect(game.removeUser(userTwo)).to.equal(false);
+      });
+    });
+
+    describe('setRandomBlackCard()', () => {
+      it('Should set a black card as the current black card upon game creation', () => {
+        expect(game.blackCardDraw.length).to.equal(blackCards.length - 1);
+        // Goes to blackCards.length - 1 because the first max length of the array is one minus the length of the inpur array of cards
+        for (let i = 0; i < blackCards.length - 1; i++) {
+          game.setRandomBlackCard();
+          expect(game.blackCardDraw.length).to.equal(blackCards.length - i - 2);
+        }
+        expect(game.blackCardDraw.length).to.equal(0); // Redundant, but here for clarification
+        game.setRandomBlackCard();
+        expect(game.blackCardDraw.length).to.equal(blackCards.length - 1);
       });
     });
   });

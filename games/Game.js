@@ -80,7 +80,7 @@ class Game {
       this.blackCardDraw = this.blackCardDiscard;
       this.blackCardDiscard = [];
     }
-    let cardIndex = getRandomInt(0, this.blackCardDraw.length);
+    let cardIndex = getRandomInt(0, this.blackCardDraw.length - 1);
     this.blackCardDiscard.push(this.currentBlackCard);
     this.currentBlackCard = this.blackCardDraw.splice(cardIndex, 1)[0];
   }
