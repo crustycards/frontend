@@ -37,6 +37,24 @@ let cards = [
     name: 'cardThree'
   }
 ];
+let blackCards = [
+  {
+    id: 1,
+    name: 'blackCardZero'
+  },
+  {
+    id: 2,
+    name: 'blackCardOne'
+  },
+  {
+    id: 3,
+    name: 'blackCardTwo'
+  },
+  {
+    id: 4,
+    name: 'blackCardThree'
+  }
+];
 
 module.exports.run = () => {
   describe('Users', () => {
@@ -47,9 +65,11 @@ module.exports.run = () => {
 
     it('Should contain all functions', () => {
       expect(users.size).to.be.a('function');
+      expect(users.addUser).to.be.a('function');
       expect(users.removeUser).to.be.a('function');
       expect(users.getJudge).to.be.a('function');
       expect(users.getOwner).to.be.a('function');
+      expect(users.getAllUsers).to.be.a('function');
       expect(users.playCard).to.be.a('function');
       expect(users.drawCard).to.be.a('function');
       expect(users.getHand).to.be.a('function');
@@ -139,6 +159,19 @@ module.exports.run = () => {
       expect(users.getJudge().email).to.equal(userFour.email);
       users.cycleJudge();
       expect(users.getJudge().email).to.equal(userOne.email);
+    });
+    it('Should return all users when calling getAllUsers()', () => {
+      expect(users.getAllUsers()).to.eql([]);
+      users.addUser(userOne);
+      expect(users.getAllUsers()).to.eql([userOne]);
+      users.addUser(userTwo);
+      expect(users.getAllUsers()).to.eql([userOne, userTwo]);
+      users.addUser(userThree);
+      expect(users.getAllUsers()).to.eql([userOne, userTwo, userThree]);
+      users.addUser(userFour);
+      expect(users.getAllUsers()).to.eql([userOne, userTwo, userThree, userFour]);
+      users.addUser(userOne);
+      expect(users.getAllUsers()).to.eql([userOne, userTwo, userThree, userFour]);
     });
     it('Should reassign owner if current owner leaves', () => {
       users.addUser(userOne);

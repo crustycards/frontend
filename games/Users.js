@@ -73,6 +73,14 @@ class Users {
     }
   }
 
+  getAllUsers () {
+    let users = [];
+    for (let userEmail in this.userTable) {
+      users.push(this.userTable[userEmail].user);
+    }
+    return users;
+  }
+
   // Returns the card if the user has it in their hand, or undefined if it is not
   playCard (user, cardToPlay) {
     let playerHand = this.userTable[user.email].hand;
