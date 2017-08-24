@@ -7,7 +7,7 @@
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js",
     "start": "node server/index.js",
-    "test": "mocha spec/index.js"
+    "test": "mocha ./spec --recursive"
   },
   "author": "Thomas Volk",
   "license": "BOII",
