@@ -5,6 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const passport = require('passport');
 const session = require('express-session');
+const Store = require('connect-session-sequelize')(session.Store);
 const db = require('../database');
 const url = require('url');
 const env = require('dotenv').load();
@@ -12,12 +13,11 @@ const path = require('path');
 const apiRouter = require('./apiRouter.js');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
-const SessionStore = require('sessionstore');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 
 // Create session store
-let sessionStore = SessionStore.createSessionStore();
+let store = new Store({db: db.sequelize});
 
 // Initialize passport strategies
 require('./auth')(passport, db.models.users);
@@ -43,10 +43,10 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 // Passport and sessions
 app.use(session({
-  store: sessionStore,
+  store,
   secret: 'thisisasecret',
   resave: true,
-  saveUninitialized: true
+  saveUninitialized: false
 }));
 app.use(passport.initialize());
 app.use(passport.session());
@@ -79,7 +79,7 @@ if (module.parent) {
 io.use(passportSocketIo.authorize({
   key: 'connect.sid',
   secret: 'thisisasecret',
-  store: sessionStore,
+  store,
   passport: passport,
   cookieParser: cookieParser
 }));
