@@ -20,7 +20,7 @@ const socketHandler = require('./socketHandler.js');
 let sessionStore = SessionStore.createSessionStore();
 
 // Initialize passport strategies
-require('../auth')(passport, db.models.users);
+require('./auth')(passport, db.models.users);
 
 // Sync database
 db.sequelize.sync().then(() => {
