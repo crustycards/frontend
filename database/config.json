@@ -4,20 +4,23 @@
         "password": "student",
         "database": "cards",
         "host": "localhost",
-        "dialect": "mysql"
+        "dialect": "mysql",
+        "logging": false
     },
     "test": {
         "username": "root",
         "password": null,
         "database": "cards",
         "host": "localhost",
-        "dialect": "mysql"
+        "dialect": "mysql",
+        "logging": false
     },
     "production": {
         "username": "server",
         "password": "serverpass",
         "database": "cards",
         "host": "localhost",
-        "dialect": "mysql"
+        "dialect": "mysql",
+        "logging": false
     }
 }
