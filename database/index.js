@@ -1,6 +1,6 @@
 const Card = require('./models/card');
 const Cardpack = require('./models/cardpack');
-const CardpackSubscribe = require('./models/cardpacksubscribe');
+const CardpackSubscribe = require('./models/cardpackSubscribe');
 const Friend = require('./models/friend');
 const Message = require('./models/message');
 const User = require('./models/user');
