@@ -17,13 +17,13 @@ const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 
 // Create session store
-let store = new Store({db: db.sequelize});
+let store = new Store({db: db.connection});
 
 // Initialize passport strategies
-require('./auth')(passport, db.models.users);
+require('./auth')(passport, db.User.model);
 
 // Sync database
-db.sequelize.sync().then(() => {
+db.connection.sync().then(() => {
   console.log('Nice! Database looks fine.');
 }).catch((err) => {
   console.log('Uh oh. something went wrong when updating the database.');

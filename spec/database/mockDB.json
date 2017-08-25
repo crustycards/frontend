@@ -31,8 +31,8 @@
   ],
   "messages": [
     {
-      "sender_id": 1234,
-      "receiver_id": 123456789,
+      "senderEmail": "hello@world.com",
+      "receiverEmail": "test@person.com",
       "text": "this is a test message"
     }
   ]

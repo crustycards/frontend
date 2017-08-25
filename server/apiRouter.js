@@ -18,7 +18,7 @@ module.exports = (socketHandler) => {
   router.route('/messages')
     .get((req, res) => {
       // Get a list of messages with a particular user
-      db.getMessages(req.user.email, req.body.user)
+      db.Message.getBetweenUsers(req.user.email, req.body.user)
       .then((messages) => {
         res.json(messages);
       })
@@ -27,8 +27,7 @@ module.exports = (socketHandler) => {
       });
     })
     .post((req, res) => {
-      console.log(req.body);
-      db.addMessage(req.user.email, req.body.user, req.body.text)
+      db.Message.create(req.user.email, req.body.user, req.body.text)
       .then((message) => {
         res.json(message);
       })
@@ -40,16 +39,16 @@ module.exports = (socketHandler) => {
   router.route('/friends')
     .get((req, res) => {
       // Get a list of all friends and pending friend requests
-      db.getFriendData(req.user.email)
+      db.Friend.get(req.user.email)
       .then((data) => {
         res.json(data);
       });
     })
     .post((req, res) => {
       if (req.body.type === 'request') {
-        db.sendFriendRequest(req.user.email, req.body.user)
+        db.Friend.sendRequest(req.user.email, req.body.user)
         .then(() => {
-          return db.getUser(req.body.user)
+          return db.User.getByEmail(req.body.user)
           .then((friendee) => {
             return {friender: req.user, friendee};
           });
@@ -65,9 +64,9 @@ module.exports = (socketHandler) => {
           res.status(500).send(error);
         });
       } else if (req.body.type === 'accept') {
-        db.acceptFriendRequest(req.user.email, req.body.user)
+        db.Friend.acceptRequest(req.user.email, req.body.user)
         .then(() => {
-          return db.getUser(req.body.user)
+          return db.User.getByEmail(req.body.user)
           .then((acceptee) => {
             return {acceptor: req.user, acceptee};
           });
@@ -87,9 +86,9 @@ module.exports = (socketHandler) => {
       }
     })
     .delete((req, res) => {
-      db.removeFriend(req.user.email, req.body.user)
+      db.Friend.remove(req.user.email, req.body.user)
       .then(() => {
-        return db.getUser(req.body.user)
+        return db.User.getByEmail(req.body.user)
         .then((unfriendee) => {
           return {unfriender: req.user, unfriendee};
         });
@@ -108,7 +107,7 @@ module.exports = (socketHandler) => {
   
   // Returns array of all cardpacks owned by the requestor
   router.get('/cardpacks', (req, res) => {
-    db.getCardpacks(req.user.email)
+    db.Cardpack.getByUserEmail(req.user.email)
     .then((cardpacks) => {
       res.json(cardpacks);
     })
@@ -118,7 +117,7 @@ module.exports = (socketHandler) => {
   });
   // Returns the cardpack referenced by the specified ID
   router.get('/cardpacks/:id', (req, res) => {
-    db.getCardpack(req.params.id)
+    db.Cardpack.getById(req.params.id)
     .then((cardpack) => {
       res.json(cardpack);
     })
@@ -128,7 +127,7 @@ module.exports = (socketHandler) => {
   });
   // Returns array of all cardpacks owned by the specified user
   router.get('/cardpacks/user/:user', (req, res) => {
-    db.getCardpacks(req.params.user)
+    db.Cardpack.getByUserEmail(req.params.user)
     .then((cardpacks) => {
       res.json(cardpacks);
     })
@@ -138,7 +137,7 @@ module.exports = (socketHandler) => {
   });
   // Creates a cardpack and sets the owner as the current user
   router.post('/cardpacks', (req, res) => {
-    db.createCardpack(req.user.email, req.body.name)
+    db.Cardpack.create(req.user.email, req.body.name)
     .then((cardpack) => {
       res.json('success');
       socketHandler.respondToUsers([req.user], 'cardpackcreate', cardpack);
@@ -148,7 +147,7 @@ module.exports = (socketHandler) => {
     });
   });
   router.delete('/cardpacks', (req, res) => {
-    db.deleteCardpack(req.user.email, req.body.id)
+    db.Cardpack.delete(req.user.email, req.body.id)
     .then(() => {
       res.json('success');
       socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id});
@@ -159,7 +158,7 @@ module.exports = (socketHandler) => {
   });
 
   router.get('/cards/:cardpackId', (req, res) => {
-    db.getCards(req.params.cardpackId)
+    db.Card.getByCardpackId(req.params.cardpackId)
     .then((cards) => {
       res.json(cards);
     })
@@ -168,7 +167,7 @@ module.exports = (socketHandler) => {
     });
   });
   router.post('/cards/:cardpackId', (req, res) => {
-    db.createCard(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
+    db.Card.create(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
     .then((card) => {
       res.json('success');
       socketHandler.respondToUsers([req.user], 'cardcreate', {card});
@@ -178,7 +177,7 @@ module.exports = (socketHandler) => {
     });
   });
   router.delete('/cards/:cardId', (req, res) => {
-    db.deleteCard(req.user.email, req.params.cardId)
+    db.Card.delete(req.user.email, req.params.cardId)
     .then((card) => {
       res.json('success');
       socketHandler.respondToUsers([req.user], 'carddelete', {card});

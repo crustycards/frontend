@@ -1,6 +1,7 @@
 const chai = require('chai').use(require('chai-as-promised')).use(require('chai-http'));
 const expect = chai.expect;
 const app = require('../server').listen(8080);
+const db = require('../database');
 const request = chai.request(app);
 const sinon = require('sinon');
 const agent = chai.request.agent(app);
@@ -8,10 +9,13 @@ const agent2 = chai.request.agent(app);
 
 describe('API Router', () => {
   before(() => {
-    return agent2.post('/signup')
-    .send({firstname: 'Test', lastname: 'Person', email: 'test@person.com', password: 'test'})
-    .then((res) => {
-      expect(res).to.have.cookie;
+    return db.connection.clear()
+    .then(() => {
+      return agent2.post('/signup')
+      .send({firstname: 'Test', lastname: 'Person', email: 'test@person.com', password: 'test'})
+      .then((res) => {
+        expect(res).to.have.cookie;
+      });
     });
   });
 
