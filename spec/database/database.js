@@ -1,16 +1,12 @@
 const expect = require('chai').use(require('chai-as-promised')).expect;
 const mockDB = require('./mockDB.json');
 const db = require('../../database');
+const mockDBHelpers = require('./mockDBHelpers');
 const connection = db.connection;
 
 // TODO - Break this file up into many smaller ones
 
 describe('Models', () => {
-  describe('Users', () => {
-    it('Should exist', () => {
-      expect(db.User).to.exist;
-    });
-  });
   describe('Cardpack', () => {
     it('Should exist', () => {
       expect(db.Cardpack).to.exist;
@@ -43,13 +39,7 @@ describe('Functions', () => {
   before((done) => {
     db.connection.clear()
       .then(() => {
-        let promises = [];
-        for (let i = 0; i < mockDB.users.length; i++) {
-          promises.push(
-            db.User.model.create(mockDB.users[i])
-          );
-        }
-        return Promise.all(promises);
+        return mockDBHelpers.createUsers();
       })
       .then(() => {
         let promises = [];
@@ -65,39 +55,14 @@ describe('Functions', () => {
       });
   });
 
-  // after((done) => {
-  //   db.connection.clear()
-  //   .then(() => {
-  //     done();
-  //   });
-  // });
+  after((done) => {
+    db.connection.clear()
+    .then(() => {
+      done();
+    });
+  });
 
   describe('Export Functions', () => {
-    describe('User getByEmail()', () => {
-      it('Should exist', () => {
-        expect(db.User.getByEmail).to.exist;
-      });
-      it('Should be a function', () => {
-        expect(db.User.getByEmail).to.be.a('function');
-      });
-      it('Should retrieve a user if they exist', () => {
-        let promise = db.User.getByEmail(mockDB.users[0].email)
-          .then((user) => {
-            expect(user.createdAt).to.exist;
-            expect(user.updatedAt).to.exist;
-            expect(user.password).to.not.exist;
-            delete user.createdAt;
-            delete user.updatedAt;
-            return user;
-          });
-        return expect(promise).to.eventually.deep.equal(mockDB.users[0]);
-      });
-      it('Should reject if a user does not exist', () => {
-        let fakeEmail = 'thisisafakeemail';
-        return expect(db.User.getByEmail(fakeEmail)).to.be.rejectedWith('No user is registered under ' + fakeEmail);
-      });
-    });
-
     describe('Message create()', () => {
       it('Should exist', () => {
         expect(db.Message.create).to.exist;

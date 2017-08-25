@@ -1,8 +1,11 @@
-module.exports.createModels = (model, array) => {
+const mockDB = require('./mockDB.json');
+const {User} = require('../../database');
+
+module.exports.createUsers = () => {
   let promises = [];
-  array.forEach((item) => {
+  mockDB.users.forEach((user) => {
     promises.push(
-      model.create(item)
+      User.model.create(user)
     );
   });
   return Promise.all(promises);

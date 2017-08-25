@@ -31,6 +31,7 @@
   ],
   "messages": [
     {
+      "id": 1,
       "senderEmail": "hello@world.com",
       "receiverEmail": "test@person.com",
       "text": "this is a test message"
