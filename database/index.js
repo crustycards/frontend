@@ -14,7 +14,7 @@ Friend.model.belongsTo(User.model, {as: 'friendee'});
 Message.model.belongsTo(User.model, {as: 'sender'});
 Message.model.belongsTo(User.model, {as: 'receiver'});
 User.model.belongsToMany(Cardpack.model, {through: CardpackSubscribe.model, as: 'subscriber'});
-Cardpack.model.belongsToMany(User.model, {through: CardpackSubscribe.model, as: 'subscription'});
+Cardpack.model.belongsToMany(User.model, {through: CardpackSubscribe.model, as: 'cardpack'});
 
 module.exports = {
   Card,

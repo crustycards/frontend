@@ -1,6 +1,7 @@
 const db = require('../connection');
 const Sequelize = require('sequelize');
 const User = require('./user');
+const CardpackSubscribe = require('./cardpackSubscribe');
 
 const CardpackModel = db.define('cardpacks', {
   id: {
@@ -135,6 +136,30 @@ Cardpack.delete = (userEmail, cardpackId) => {
               return true;
             });
         });
+    });
+};
+
+Cardpack.subscribe = (userEmail, cardpackId) => {
+  return User.getByEmail(userEmail)
+    .then((user) => {
+      return CardpackSubscribe.model.findOrCreate({
+        where: {
+          subscriberId: user.id,
+          cardpack: cardpackId
+        }
+      });
+    });
+};
+
+Cardpack.unsubscribe = (userEmail, cardpackId) => {
+  return User.getByEmail(userEmail)
+    .then((user) => {
+      return CardpackSubscribe.model.destroy({
+        where: {
+          subscriberId: user.id,
+          cardpack: cardpackId
+        }
+      });
     });
 };
 
