@@ -42,27 +42,27 @@ describe('Functions', () => {
   // Forcefully sync database before testing
   before((done) => {
     db.connection.clear()
-    .then(() => {
-      let promises = [];
-      for (let i = 0; i < mockDB.users.length; i++) {
-        promises.push(
-          db.User.model.create(mockDB.users[i])
-        );
-      }
-      return Promise.all(promises);
-    })
-    .then(() => {
-      let promises = [];
-      for (let i = 0; i < mockDB.messages.length; i++) {
-        promises.push(
-          db.Message.create(mockDB.messages[i].senderEmail, mockDB.messages[i].receiverEmail, mockDB.messages[i].text)
-        );
-      }
-      return Promise.all(promises);
-    })
-    .then(() => {
-      done();
-    });
+      .then(() => {
+        let promises = [];
+        for (let i = 0; i < mockDB.users.length; i++) {
+          promises.push(
+            db.User.model.create(mockDB.users[i])
+          );
+        }
+        return Promise.all(promises);
+      })
+      .then(() => {
+        let promises = [];
+        for (let i = 0; i < mockDB.messages.length; i++) {
+          promises.push(
+            db.Message.create(mockDB.messages[i].senderEmail, mockDB.messages[i].receiverEmail, mockDB.messages[i].text)
+          );
+        }
+        return Promise.all(promises);
+      })
+      .then(() => {
+        done();
+      });
   });
 
   // after((done) => {
@@ -82,18 +82,18 @@ describe('Functions', () => {
       });
       it('Should retrieve a user if they exist', () => {
         let promise = db.User.getByEmail(mockDB.users[0].email)
-        .then((user) => {
-          expect(user.createdAt).to.exist;
-          expect(user.updatedAt).to.exist;
-          expect(user.password).to.not.exist;
-          delete user.createdAt;
-          delete user.updatedAt;
-          return user;
-        });
+          .then((user) => {
+            expect(user.createdAt).to.exist;
+            expect(user.updatedAt).to.exist;
+            expect(user.password).to.not.exist;
+            delete user.createdAt;
+            delete user.updatedAt;
+            return user;
+          });
         return expect(promise).to.eventually.deep.equal(mockDB.users[0]);
       });
       it('Should reject if a user does not exist', () => {
-        let fakeEmail = 'thisisafakeemail'
+        let fakeEmail = 'thisisafakeemail';
         return expect(db.User.getByEmail(fakeEmail)).to.be.rejectedWith('No user is registered under ' + fakeEmail);
       });
     });
@@ -108,18 +108,18 @@ describe('Functions', () => {
       it('Should add messages', () => {
         let messageText = 'thisisamessage';
         return db.Message.create(mockDB.users[0].email, mockDB.users[1].email, messageText)
-        .then((message) => {
-          expect(message.createdAt).to.exist;
-          expect(message.updatedAt).to.exist;
-          expect(message.senderId).to.not.exist;
-          expect(message.receiverId).to.not.exist;
-          expect(message.sender).to.exist;
-          expect(message.receiver).to.exist;
-          expect(message.sender.id).to.equal(mockDB.users[0].id);
-          expect(message.receiver.id).to.equal(mockDB.users[1].id);
-          expect(message.id).to.exist;
-          expect(message.text).to.equal(messageText);
-        });
+          .then((message) => {
+            expect(message.createdAt).to.exist;
+            expect(message.updatedAt).to.exist;
+            expect(message.senderId).to.not.exist;
+            expect(message.receiverId).to.not.exist;
+            expect(message.sender).to.exist;
+            expect(message.receiver).to.exist;
+            expect(message.sender.id).to.equal(mockDB.users[0].id);
+            expect(message.receiver.id).to.equal(mockDB.users[1].id);
+            expect(message.id).to.exist;
+            expect(message.text).to.equal(messageText);
+          });
       });
       it('Should reject if message text is anything but a non-empty string', () => {
         return expect(db.Message.create(mockDB.users[0].email, mockDB.users[1].email, '')).to.be.rejectedWith('Expected message text to be a non-empty string');
@@ -135,21 +135,21 @@ describe('Functions', () => {
       });
       it('Should retrieve messages between users', () => {
         return db.Message.getBetweenUsers(mockDB.users[0].email, mockDB.users[1].email)
-        .then((messages) => {
-          expect(messages.length).to.equal(mockDB.messages.length + 1); // +1 because of the addMessage() tests adding a message
-          for (let i = 0; i < mockDB.messages.length; i++) {
-            expect(messages[i].text).to.exist;
-            expect(messages[i].senderId).to.not.exist;
-            expect(messages[i].receiverId).to.not.exist;
-            expect(messages[i].sender).to.exist;
-            expect(messages[i].receiver).to.exist;
-            expect(messages[i].sender.id).to.exist;
-            expect(messages[i].receiver.id).to.exist;
-            expect(messages[i].text).to.equal(mockDB.messages[i].text);
-            expect(messages[i].sender.email).to.equal(mockDB.messages[i].senderEmail);
-            expect(messages[i].receiver.email).to.equal(mockDB.messages[i].receiverEmail);
-          }
-        });
+          .then((messages) => {
+            expect(messages.length).to.equal(mockDB.messages.length + 1); // +1 because of the addMessage() tests adding a message
+            for (let i = 0; i < mockDB.messages.length; i++) {
+              expect(messages[i].text).to.exist;
+              expect(messages[i].senderId).to.not.exist;
+              expect(messages[i].receiverId).to.not.exist;
+              expect(messages[i].sender).to.exist;
+              expect(messages[i].receiver).to.exist;
+              expect(messages[i].sender.id).to.exist;
+              expect(messages[i].receiver.id).to.exist;
+              expect(messages[i].text).to.equal(mockDB.messages[i].text);
+              expect(messages[i].sender.email).to.equal(mockDB.messages[i].senderEmail);
+              expect(messages[i].receiver.email).to.equal(mockDB.messages[i].receiverEmail);
+            }
+          });
       });
     });
   });
@@ -163,23 +163,23 @@ describe('Functions', () => {
     });
     it('Should add a friend request when there is no open request/friendship with another user', () => {
       return db.Friend.sendRequest(mockDB.users[0].email, mockDB.users[1].email)
-      .then((friendshipStatus) => {
-        expect(friendshipStatus.id).to.exist;
-        expect(friendshipStatus.friender).to.exist;
-        expect(friendshipStatus.friendee).to.exist;
-        expect(friendshipStatus.frienderId).to.not.exist;
-        expect(friendshipStatus.friendeeId).to.not.exist;
+        .then((friendshipStatus) => {
+          expect(friendshipStatus.id).to.exist;
+          expect(friendshipStatus.friender).to.exist;
+          expect(friendshipStatus.friendee).to.exist;
+          expect(friendshipStatus.frienderId).to.not.exist;
+          expect(friendshipStatus.friendeeId).to.not.exist;
 
-        expect(friendshipStatus.friender.id).to.equal(mockDB.users[0].id);
-        expect(friendshipStatus.friendee.id).to.equal(mockDB.users[1].id);
-        expect(friendshipStatus.friender.email).to.equal(mockDB.users[0].email);
-        expect(friendshipStatus.friendee.email).to.equal(mockDB.users[1].email);
-        expect(friendshipStatus.friender.firstname).to.equal(mockDB.users[0].firstname);
-        expect(friendshipStatus.friendee.firstname).to.equal(mockDB.users[1].firstname);
-        expect(friendshipStatus.friender.lastname).to.equal(mockDB.users[0].lastname);
-        expect(friendshipStatus.friendee.lastname).to.equal(mockDB.users[1].lastname);
-        expect(friendshipStatus.accepted).to.equal(false);
-      });
+          expect(friendshipStatus.friender.id).to.equal(mockDB.users[0].id);
+          expect(friendshipStatus.friendee.id).to.equal(mockDB.users[1].id);
+          expect(friendshipStatus.friender.email).to.equal(mockDB.users[0].email);
+          expect(friendshipStatus.friendee.email).to.equal(mockDB.users[1].email);
+          expect(friendshipStatus.friender.firstname).to.equal(mockDB.users[0].firstname);
+          expect(friendshipStatus.friendee.firstname).to.equal(mockDB.users[1].firstname);
+          expect(friendshipStatus.friender.lastname).to.equal(mockDB.users[0].lastname);
+          expect(friendshipStatus.friendee.lastname).to.equal(mockDB.users[1].lastname);
+          expect(friendshipStatus.accepted).to.equal(false);
+        });
     });
     it('Should not add a duplicate friend request and reject when attempted', () => {
       return expect(db.Friend.sendRequest(mockDB.users[0].email, mockDB.users[1].email)).to.be.rejected;
@@ -204,23 +204,23 @@ describe('Functions', () => {
     });
     it('Should accept friend requests from other users', () => {
       return db.Friend.acceptRequest(mockDB.users[1].email, mockDB.users[0].email)
-      .then((friendshipStatus) => {
-        expect(friendshipStatus).to.exist;
-        expect(friendshipStatus.friender).to.exist;
-        expect(friendshipStatus.friendee).to.exist;
-        expect(friendshipStatus.frienderId).to.not.exist;
-        expect(friendshipStatus.friendeeId).to.not.exist;
+        .then((friendshipStatus) => {
+          expect(friendshipStatus).to.exist;
+          expect(friendshipStatus.friender).to.exist;
+          expect(friendshipStatus.friendee).to.exist;
+          expect(friendshipStatus.frienderId).to.not.exist;
+          expect(friendshipStatus.friendeeId).to.not.exist;
 
-        expect(friendshipStatus.friender.id).to.equal(mockDB.users[1].id);
-        expect(friendshipStatus.friendee.id).to.equal(mockDB.users[0].id);
-        expect(friendshipStatus.friender.email).to.equal(mockDB.users[1].email);
-        expect(friendshipStatus.friendee.email).to.equal(mockDB.users[0].email);
-        expect(friendshipStatus.friender.firstname).to.equal(mockDB.users[1].firstname);
-        expect(friendshipStatus.friendee.firstname).to.equal(mockDB.users[0].firstname);
-        expect(friendshipStatus.friender.lastname).to.equal(mockDB.users[1].lastname);
-        expect(friendshipStatus.friendee.lastname).to.equal(mockDB.users[0].lastname);
-        expect(friendshipStatus.accepted).to.equal(true);
-      });
+          expect(friendshipStatus.friender.id).to.equal(mockDB.users[1].id);
+          expect(friendshipStatus.friendee.id).to.equal(mockDB.users[0].id);
+          expect(friendshipStatus.friender.email).to.equal(mockDB.users[1].email);
+          expect(friendshipStatus.friendee.email).to.equal(mockDB.users[0].email);
+          expect(friendshipStatus.friender.firstname).to.equal(mockDB.users[1].firstname);
+          expect(friendshipStatus.friendee.firstname).to.equal(mockDB.users[0].firstname);
+          expect(friendshipStatus.friender.lastname).to.equal(mockDB.users[1].lastname);
+          expect(friendshipStatus.friendee.lastname).to.equal(mockDB.users[0].lastname);
+          expect(friendshipStatus.accepted).to.equal(true);
+        });
     });
   });
 
@@ -233,19 +233,19 @@ describe('Functions', () => {
     });
     it('Should return correct data', () => {
       return db.Friend.get('hello@world.com')
-      .then((friendData) => {
-        expect(friendData).to.exist;
-        expect(friendData.friends).to.exist;
-        expect(friendData.requestsSent).to.exist;
-        expect(friendData.requestsReceived).to.exist;
+        .then((friendData) => {
+          expect(friendData).to.exist;
+          expect(friendData.friends).to.exist;
+          expect(friendData.requestsSent).to.exist;
+          expect(friendData.requestsReceived).to.exist;
 
-        // TODO - Add more extensive testing for friend-related functions
-        // TODO - Add test to make sure that when deleting a cardpack, all linked cards are deleted as well
-        expect(friendData.friends[0].id).to.equal(mockDB.users[1].id);
-        expect(friendData.friends[0].email).to.equal(mockDB.users[1].email);
-        expect(friendData.friends[0].firstname).to.equal(mockDB.users[1].firstname);
-        expect(friendData.friends[0].lastname).to.equal(mockDB.users[1].lastname);
-      });
+          // TODO - Add more extensive testing for friend-related functions
+          // TODO - Add test to make sure that when deleting a cardpack, all linked cards are deleted as well
+          expect(friendData.friends[0].id).to.equal(mockDB.users[1].id);
+          expect(friendData.friends[0].email).to.equal(mockDB.users[1].email);
+          expect(friendData.friends[0].firstname).to.equal(mockDB.users[1].firstname);
+          expect(friendData.friends[0].lastname).to.equal(mockDB.users[1].lastname);
+        });
     });
   });
 
@@ -261,10 +261,10 @@ describe('Functions', () => {
     });
     it('Should remove a friendship', () => {
       return db.Friend.remove(mockDB.users[0].email, mockDB.users[1].email)
-      .then((response) => {
-        expect(response).to.exist;
-        expect(response).to.equal(true);
-      });
+        .then((response) => {
+          expect(response).to.exist;
+          expect(response).to.equal(true);
+        });
     });
     // it('Should remove a sent friend request', () => {
     //   //
@@ -285,31 +285,31 @@ describe('Functions', () => {
       let cardpackName = 'testcardpack';
       let ownerEmail = mockDB.users[0].email;
       return db.Cardpack.create(ownerEmail, cardpackName)
-      .then((cardpack) => {
-        expect(cardpack).to.exist;
-        expect(cardpack.createdAt).to.exist;
-        expect(cardpack.updatedAt).to.exist;
-        expect(cardpack.ownerId).to.not.exist;
-        expect(cardpack.owner).to.exist;
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.createdAt).to.exist;
+          expect(cardpack.updatedAt).to.exist;
+          expect(cardpack.ownerId).to.not.exist;
+          expect(cardpack.owner).to.exist;
 
-        expect(cardpack.owner.email).to.equal(ownerEmail);
-        expect(cardpack.name).to.equal(cardpackName);
-      });
+          expect(cardpack.owner.email).to.equal(ownerEmail);
+          expect(cardpack.name).to.equal(cardpackName);
+        });
     });
     it('Should create a cardpack of the same name as a previous cardpack and the same user', () => {
       let cardpackName = 'testcardpack';
       let ownerEmail = mockDB.users[0].email;
       return db.Cardpack.create(ownerEmail, cardpackName)
-      .then((cardpack) => {
-        expect(cardpack).to.exist;
-        expect(cardpack.createdAt).to.exist;
-        expect(cardpack.updatedAt).to.exist;
-        expect(cardpack.ownerId).to.not.exist;
-        expect(cardpack.owner).to.exist;
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.createdAt).to.exist;
+          expect(cardpack.updatedAt).to.exist;
+          expect(cardpack.ownerId).to.not.exist;
+          expect(cardpack.owner).to.exist;
 
-        expect(cardpack.owner.email).to.equal(ownerEmail);
-        expect(cardpack.name).to.equal(cardpackName);
-      });
+          expect(cardpack.owner.email).to.equal(ownerEmail);
+          expect(cardpack.name).to.equal(cardpackName);
+        });
     });
     it('Should not create a cardpack when given a non-existing user', () => {
       let cardpackName = 'testcardpack';
@@ -335,19 +335,19 @@ describe('Functions', () => {
     });
     it('Should resolve to an array of cardpacks for users that have cardpacks', () => {
       return db.Cardpack.getByUserEmail(mockDB.users[0].email)
-      .then((cardpacks) => {
-        expect(cardpacks).to.exist;
-        expect(cardpacks.constructor).to.equal(Array);
-        expect(cardpacks.length).to.equal(2);
-        expect(cardpacks[0].name).to.equal('testcardpack');
-        expect(cardpacks[1].name).to.equal('testcardpack');
-        expect(cardpacks[0].ownerId).to.not.exist;
-        expect(cardpacks[1].ownerId).to.not.exist;
-        expect(cardpacks[0].owner).to.exist;
-        expect(cardpacks[1].owner).to.exist;
-        expect(cardpacks[0].owner.email).to.equal(mockDB.users[0].email);
-        expect(cardpacks[1].owner.email).to.equal(mockDB.users[0].email);
-      });
+        .then((cardpacks) => {
+          expect(cardpacks).to.exist;
+          expect(cardpacks.constructor).to.equal(Array);
+          expect(cardpacks.length).to.equal(2);
+          expect(cardpacks[0].name).to.equal('testcardpack');
+          expect(cardpacks[1].name).to.equal('testcardpack');
+          expect(cardpacks[0].ownerId).to.not.exist;
+          expect(cardpacks[1].ownerId).to.not.exist;
+          expect(cardpacks[0].owner).to.exist;
+          expect(cardpacks[1].owner).to.exist;
+          expect(cardpacks[0].owner.email).to.equal(mockDB.users[0].email);
+          expect(cardpacks[1].owner.email).to.equal(mockDB.users[0].email);
+        });
     });
   });
 
@@ -360,11 +360,11 @@ describe('Functions', () => {
     });
     it('Should retrieve cardpack properly when using a valid cardpack ID', () => {
       return db.Cardpack.getById(2)
-      .then((cardpack) => {
-        expect(cardpack).to.exist;
-        expect(cardpack.ownerId).to.not.exist;
-        expect(cardpack.owner).to.exist;
-      });
+        .then((cardpack) => {
+          expect(cardpack).to.exist;
+          expect(cardpack.ownerId).to.not.exist;
+          expect(cardpack.owner).to.exist;
+        });
     });
     it('Should retrieve cardpack properly when using a valid cardpack ID', () => {
       return expect(db.Cardpack.getById(1234)).to.be.rejected;
@@ -395,37 +395,37 @@ describe('Functions', () => {
     let cardpackId;
     before(() => {
       return db.Cardpack.create(cardOwnerEmail, 'Cardpack')
-      .then((cardpack) => {
-        cardpackId = cardpack.id;
-      });
+        .then((cardpack) => {
+          cardpackId = cardpack.id;
+        });
     });
 
     it('Should create a black card', () => {
       return db.Card.create(cardOwnerEmail, cardpackId, 'test card', 'black')
-      .then((card) => {
-        cardId = card.id;
-        expect(card).to.exist;
-        expect(card.createdAt).to.exist;
-        expect(card.updatedAt).to.exist;
-        expect(card.cardpackId).to.not.exist;
-        expect(card.cardpack).to.exist;
-        expect(card.cardpack.id).to.equal(cardpackId);
-        expect(card.text).to.equal('test card');
-        expect(card.type).to.equal('black');
-      });
+        .then((card) => {
+          cardId = card.id;
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.cardpackId).to.not.exist;
+          expect(card.cardpack).to.exist;
+          expect(card.cardpack.id).to.equal(cardpackId);
+          expect(card.text).to.equal('test card');
+          expect(card.type).to.equal('black');
+        });
     });
     it('Should create a white card', () => {
       return db.Card.create(cardOwnerEmail, cardpackId, 'test card 2', 'white')
-      .then((card) => {
-        expect(card).to.exist;
-        expect(card.createdAt).to.exist;
-        expect(card.updatedAt).to.exist;
-        expect(card.cardpackId).to.not.exist;
-        expect(card.cardpack).to.exist;
-        expect(card.cardpack.id).to.equal(cardpackId);
-        expect(card.text).to.equal('test card 2');
-        expect(card.type).to.equal('white');
-      });
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.cardpackId).to.not.exist;
+          expect(card.cardpack).to.exist;
+          expect(card.cardpack.id).to.equal(cardpackId);
+          expect(card.text).to.equal('test card 2');
+          expect(card.type).to.equal('white');
+        });
     });
     it('Should not create a card if the card type is invalid', () => {
       return expect(db.Cardpack.create(cardOwnerEmail, cardpackId, 'test', 'invalidcardtype')).to.be.rejected;
@@ -444,23 +444,23 @@ describe('Functions', () => {
   describe('Card update()', () => {
     it('Should modify an existing card', () => {
       return db.Card.update(cardOwnerEmail, cardId, 'updated card name')
-      .then((card) => {
-        expect(card).to.exist;
-        expect(card.createdAt).to.exist;
-        expect(card.updatedAt).to.exist;
-        expect(card.id).to.equal(cardId);
-        expect(card.text).to.equal('updated card name');
-      });
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.id).to.equal(cardId);
+          expect(card.text).to.equal('updated card name');
+        });
     });
     it('Should modify a previously modified card', () => {
       return db.Card.update(cardOwnerEmail, cardId, 'twice updated card name')
-      .then((card) => {
-        expect(card).to.exist;
-        expect(card.createdAt).to.exist;
-        expect(card.updatedAt).to.exist;
-        expect(card.id).to.equal(cardId);
-        expect(card.text).to.equal('twice updated card name');
-      });
+        .then((card) => {
+          expect(card).to.exist;
+          expect(card.createdAt).to.exist;
+          expect(card.updatedAt).to.exist;
+          expect(card.id).to.equal(cardId);
+          expect(card.text).to.equal('twice updated card name');
+        });
     });
     it('Should reject when modifying a card using an email that is not tied to a user', () => {
       return expect(db.Card.update('thisisafake@email.com', cardId, 'thrice updated card name')).to.be.rejected;
@@ -485,29 +485,29 @@ describe('Functions', () => {
     });
     it('Should delete a card when all parameters are valid', () => {
       return db.Card.delete(cardOwnerEmail, cardId)
-      .then((deletedCard) => {
-        expect(deletedCard).to.exist;
-      });
+        .then((deletedCard) => {
+          expect(deletedCard).to.exist;
+        });
     });
   });
 
   describe('Cardpack create()', () => {
     before(() => {
       return db.Cardpack.create(mockDB.users[2].email, 'testcardpack')
-      .then((cardpack) => {
-        cardpackId = cardpack.id;
-        return db.Card.create(mockDB.users[2].email, cardpackId, 'testcard', 'white');
-      })
-      .then(() => {
-        return db.Card.create(mockDB.users[2].email, cardpackId, 'testcard2', 'black');
-      });
+        .then((cardpack) => {
+          cardpackId = cardpack.id;
+          return db.Card.create(mockDB.users[2].email, cardpackId, 'testcard', 'white');
+        })
+        .then(() => {
+          return db.Card.create(mockDB.users[2].email, cardpackId, 'testcard2', 'black');
+        });
     });
 
     it('Should get cards for a cardpack', () => {
       return db.Card.getByCardpackId(cardpackId)
-      .then((cards) => {
-        expect(cards.length).to.equal(2);
-      });
+        .then((cards) => {
+          expect(cards.length).to.equal(2);
+        });
     });
   });
 });

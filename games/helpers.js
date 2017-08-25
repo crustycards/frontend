@@ -9,19 +9,19 @@ module.exports.getCardsFromCardpackIds = (cardpackIds) => {
   cardpackIds.forEach((packId) => {
     promises.push(
       db.getCards(packId)
-      .then((cards) => {
-        cards.forEach((card) => {
-          if (card.type === 'black') {
-            blackCards.push(card);
-          } else if (card.type === 'white') {
-            whiteCards.push(card);
-          }
-        });
-      })
+        .then((cards) => {
+          cards.forEach((card) => {
+            if (card.type === 'black') {
+              blackCards.push(card);
+            } else if (card.type === 'white') {
+              whiteCards.push(card);
+            }
+          });
+        })
     );
   });
   return Promise.all(promises)
-  .then(() => {
-    return {blackCards, whiteCards};
-  });
+    .then(() => {
+      return {blackCards, whiteCards};
+    });
 };

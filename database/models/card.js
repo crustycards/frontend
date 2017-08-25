@@ -39,42 +39,42 @@ Card.create = (userEmail, cardpackId, cardText, cardType) => {
   if (!cardText || cardText.constructor !== String || cardText === '') {
     return new Promise((resolve, reject) => {
       reject('Expected card text to be a non-empty string, but instead received ' + cardText);
-    })
+    });
   }
 
   return Cardpack.model.findOne({
     where: {id: cardpackId}
   })
-  .then((cardpack) => {
-    return User.getByEmail(userEmail)
-    .then((user) => {
-      if (user.id === cardpack.ownerId) {
-        return Card.model.create({
-          cardpackId: cardpackId,
-          text: cardText,
-          type: cardType
-        });
-      } else {
-        return new Promise((resolve, reject) => {
-          reject('Cannot create cards in a cardpack that you do not own');
-        });
-      }
-    });
-  })
-  .then((cardImmutable) => {
-    let card = JSON.parse(JSON.stringify(cardImmutable)); // TODO - Fix it so a restringification isn't needed here
-    return Cardpack.model.findOne({
-      where: {
-        id: card.cardpackId
-      }
-    })
     .then((cardpack) => {
+      return User.getByEmail(userEmail)
+        .then((user) => {
+          if (user.id === cardpack.ownerId) {
+            return Card.model.create({
+              cardpackId: cardpackId,
+              text: cardText,
+              type: cardType
+            });
+          } else {
+            return new Promise((resolve, reject) => {
+              reject('Cannot create cards in a cardpack that you do not own');
+            });
+          }
+        });
+    })
+    .then((cardImmutable) => {
+      let card = JSON.parse(JSON.stringify(cardImmutable)); // TODO - Fix it so a restringification isn't needed here
+      return Cardpack.model.findOne({
+        where: {
+          id: card.cardpackId
+        }
+      })
+        .then((cardpack) => {
 
-      delete card.cardpackId;
-      card.cardpack = cardpack;
-      return card;
+          delete card.cardpackId;
+          card.cardpack = cardpack;
+          return card;
+        });
     });
-  });
 };
 
 // Returns a promise that will resolve
@@ -91,31 +91,31 @@ Card.update = (userEmail, cardId, cardText) => {
   }
 
   return User.getByEmail(userEmail)
-  .then((user) => {
-    return Card.model.findOne({
-      where: {id: cardId}
-    })
-    .then((card) => {
-      if (!card) {
-        return new Promise((resolve, reject) => {
-          reject('Card ID does not map to an existing card');
-        });
-      }
-      return Cardpack.model.findOne({
-        where: {id: card.cardpackId}
+    .then((user) => {
+      return Card.model.findOne({
+        where: {id: cardId}
       })
-      .then((cardpack) => {
-        if (cardpack.ownerId !== user.id) {
-          return new Promise((resolve, reject) => {
-            reject('User does not own the cardpack that this card belongs to');
-          });
-        }
-        return card.update({
-          text: cardText
+        .then((card) => {
+          if (!card) {
+            return new Promise((resolve, reject) => {
+              reject('Card ID does not map to an existing card');
+            });
+          }
+          return Cardpack.model.findOne({
+            where: {id: card.cardpackId}
+          })
+            .then((cardpack) => {
+              if (cardpack.ownerId !== user.id) {
+                return new Promise((resolve, reject) => {
+                  reject('User does not own the cardpack that this card belongs to');
+                });
+              }
+              return card.update({
+                text: cardText
+              });
+            });
         });
-      });
     });
-  });
 };
 
 // Returns a promise that will resolve
@@ -126,29 +126,29 @@ Card.update = (userEmail, cardId, cardText) => {
 // 1. cardId does not map to an existing card
 Card.delete = (userEmail, cardId) => {
   return User.getByEmail(userEmail)
-  .then((user) => {
-    return Card.model.findOne({
-      where: {id: cardId}
-    })
-    .then((card) => {
-      if (!card) {
-        return new Promise((resolve, reject) => {
-          reject('Card ID does not map to an existing card');
-        });
-      }
-      return Cardpack.model.findOne({
-        where: {id: card.cardpackId}
+    .then((user) => {
+      return Card.model.findOne({
+        where: {id: cardId}
       })
-      .then((cardpack) => {
-        if (cardpack.ownerId !== user.id) {
-          return new Promise((resolve, reject) => {
-            reject('User does not own this card');
-          });
-        }
-        return card.destroy();
-      });
+        .then((card) => {
+          if (!card) {
+            return new Promise((resolve, reject) => {
+              reject('Card ID does not map to an existing card');
+            });
+          }
+          return Cardpack.model.findOne({
+            where: {id: card.cardpackId}
+          })
+            .then((cardpack) => {
+              if (cardpack.ownerId !== user.id) {
+                return new Promise((resolve, reject) => {
+                  reject('User does not own this card');
+                });
+              }
+              return card.destroy();
+            });
+        });
     });
-  });
 };
 
 // Returns a promise that will resolve
@@ -160,16 +160,16 @@ Card.getByCardpackId = (cardpackId) => {
   return Cardpack.model.findOne({
     where: {id: cardpackId}
   })
-  .then((cardpack) => {
-    if (!cardpack) {
-      return new Promise((resolve, reject) => {
-        reject('Cardpack ID does not map to an existing cardpack');
+    .then((cardpack) => {
+      if (!cardpack) {
+        return new Promise((resolve, reject) => {
+          reject('Cardpack ID does not map to an existing cardpack');
+        });
+      }
+      return Card.model.findAll({
+        where: {cardpackId: cardpackId}
       });
-    }
-    return Card.model.findAll({
-      where: {cardpackId: cardpackId}
     });
-  });
 };
 
 module.exports = Card;

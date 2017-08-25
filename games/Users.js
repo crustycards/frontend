@@ -62,14 +62,14 @@ class Users {
     if (this.size() > 0) {
       return this.judge.user;
     } else {
-      return undefined
+      return undefined;
     }
   }
   getOwner () {
     if (this.size() > 0) {
       return this.owner.user;
     } else {
-      return undefined
+      return undefined;
     }
   }
 
@@ -114,7 +114,7 @@ class Users {
   sendDataToAllPlayers (dataType, data) {
     let currentNode = this.head;
     let userEmails = [];
-    while(currentNode) {
+    while (currentNode) {
       userEmails.push(currentNode.user.email);
       currentNode = currentNode.next;
     }

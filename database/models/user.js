@@ -7,7 +7,7 @@ const UserModel = db.define('users', {
     autoIncrement: true,
     primaryKey: true
   },
-  google_id: {
+  googleId: {
     type: Sequelize.STRING,
     unique: true
   },
@@ -45,16 +45,16 @@ User.getByEmail = (userEmail) => {
       email: userEmail
     }
   })
-  .then((userData) => {
-    if (!userData) {
-      return new Promise((resolve, reject) => {
-        reject('No user is registered under ' + userEmail);
-      });
-    } else {
-      delete userData.dataValues.password; // Prevents password from being sent over http/sockets
-      return userData.dataValues;
-    }
-  });
+    .then((userData) => {
+      if (!userData) {
+        return new Promise((resolve, reject) => {
+          reject('No user is registered under ' + userEmail);
+        });
+      } else {
+        delete userData.dataValues.password; // Prevents password from being sent over http/sockets
+        return userData.dataValues;
+      }
+    });
 };
 
 User.getById = (userId) => {
@@ -63,16 +63,16 @@ User.getById = (userId) => {
       id: userId
     }
   })
-  .then((userData) => {
-    if (!userData) {
-      return new Promise((resolve, reject) => {
-        reject('No user has ID ' + userId);
-      });
-    } else {
-      delete userData.dataValues.password;
-      return userData.dataValues;
-    }
-  });
+    .then((userData) => {
+      if (!userData) {
+        return new Promise((resolve, reject) => {
+          reject('No user has ID ' + userId);
+        });
+      } else {
+        delete userData.dataValues.password;
+        return userData.dataValues;
+      }
+    });
 };
 
 module.exports = User;

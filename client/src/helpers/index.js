@@ -6,7 +6,7 @@ module.exports.isEmail = (emailString) => {
 
   split = split[1].split('.');
   if (!split[1]) {
-    return false
+    return false;
   }
 
   return true;

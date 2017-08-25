@@ -185,24 +185,24 @@ describe('Users', () => {
     expect(users.getJudge().email).to.equal(userTwo.email);
   });
 
-  it(`Should save a player's hand if passed in when adding a user`, () => {
+  it('Should save a player\'s hand if passed in when adding a user', () => {
     users.addUser(userOne, cards);
     expect(users.getHand(userOne)).to.equal(cards);
   });
-  it(`Should be able to play a card that exists in a player's hand and return it`, () => {
+  it('Should be able to play a card that exists in a player\'s hand and return it', () => {
     let hand = JSON.parse(JSON.stringify(cards));
     users.addUser(userOne, hand);
     expect(users.playCard(userOne, cards[0])).to.eql(cards[0]);
     expect(users.getHand(userOne).length).to.equal(3);
   });
-  it(`Should return undefined when attempting to play a card from a user's hand that does not exist`, () => {
+  it('Should return undefined when attempting to play a card from a user\'s hand that does not exist', () => {
     let hand = JSON.parse(JSON.stringify(cards));
     let fakeCard = {id: 4321, name: 'fakecard'};
     users.addUser(userOne, hand);
     expect(users.playCard(userOne, fakeCard)).to.not.exist;
     expect(users.getHand(userOne).length).to.equal(4);
   });
-  it(`Should be able to draw a card for a user`, () => {
+  it('Should be able to draw a card for a user', () => {
     let hand = JSON.parse(JSON.stringify(cards));
     let newCard = {id: 1234, name: 'thisisatestcard'};
     users.addUser(userOne, hand);
@@ -210,12 +210,12 @@ describe('Users', () => {
     let userHand = users.getHand(userOne);
     expect(userHand[userHand.length - 1]).to.eql(newCard);
   });
-  it(`Should return a user's hand when removing that user`, () => {
+  it('Should return a user\'s hand when removing that user', () => {
     users.addUser(userOne, cards);
     expect(users.removeUser(userOne)).to.equal(cards);
   });
 
-  it(`Should manage user's score`, () => {
+  it('Should manage user\'s score', () => {
     users.addUser(userOne);
     expect(users.getScore(userOne)).to.equal(0);
     users.incrementScore(userOne);

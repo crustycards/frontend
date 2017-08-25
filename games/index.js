@@ -8,7 +8,7 @@ let gamesByPlayerEmail = {}; // Maps user emails to the game they are in
 module.exports.createGame = (creator, gameName, cardpackIds, timeout = 20, maxPlayers = 8) => {
   if (!gameName || gameName.constructor !== String || gameName === '') {
     return new Promise((resolve, reject) => {
-      reject(`Game name should be a non-empty string`);
+      reject('Game name should be a non-empty string');
     });
   }
   if (gamesByName[gameName]) {
@@ -19,13 +19,13 @@ module.exports.createGame = (creator, gameName, cardpackIds, timeout = 20, maxPl
 
   // Create game
   helpers.getCardsFromCardpackIds(cardpackIds)
-  .then((cards) => {
-    let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers);
-    gamesByName[gameName] = game;
-    gamesByPlayerId[creator.id] = game;
-    gamesByPlayerEmail[creator.email] = game;
-    return game;
-  })
+    .then((cards) => {
+      let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers);
+      gamesByName[gameName] = game;
+      gamesByPlayerId[creator.id] = game;
+      gamesByPlayerEmail[creator.email] = game;
+      return game;
+    });
 };
 
 module.exports.getUserGame = (user) => {

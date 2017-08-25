@@ -7,6 +7,9 @@
     "react-dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js",
     "start": "node server/index.js",
+    "lint": "eslint .",
+    "lint-clean": "eslint . --fix",
+    "lint-init": "eslint --init",
     "test": "mocha ./spec --recursive"
   },
   "author": "Thomas Volk",
@@ -16,6 +19,9 @@
     "babel-loader": "^6.3.2",
     "babel-preset-es2015": "^6.22.0",
     "babel-preset-react": "^6.23.0",
+    "eslint": "^4.5.0",
+    "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git",
+    "eslint-plugin-react": "^7.2.0",
     "webpack": "^2.2.1"
   },
   "dependencies": {

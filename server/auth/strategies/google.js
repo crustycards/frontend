@@ -25,28 +25,28 @@ module.exports = (passport, userModel) => {
       process.nextTick(() => {
         User.findOne({
           where: {
-            google_id: profile.id
+            googleId: profile.id
           }
         })
-        .then((user) => {
-          if (user) {
-            return done(null, user);
-          } else {
-            User.create({
-              google_id: profile.id,
-              token: token,
-              firstname: profile.name.givenName,
-              lastname: profile.name.familyName,
-              email: profile.emails[0].value
-            })
-            .then((newUser) => {
-              return done(null, newUser);
-            });
-          }
-        })
-        .catch((err) => {
-          return done(err);
-        });
+          .then((user) => {
+            if (user) {
+              return done(null, user);
+            } else {
+              User.create({
+                googleId: profile.id,
+                token: token,
+                firstname: profile.name.givenName,
+                lastname: profile.name.familyName,
+                email: profile.emails[0].value
+              })
+                .then((newUser) => {
+                  return done(null, newUser);
+                });
+            }
+          })
+          .catch((err) => {
+            return done(err);
+          });
       });
     }
   ));

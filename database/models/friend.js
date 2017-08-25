@@ -35,82 +35,82 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
   }
 
   return User.getByEmail(frienderEmail)
-  .then((friender) => {
-    return User.getByEmail(friendeeEmail)
-    .then((friendee) => {
-      return {friender, friendee};
-    });
-  })
-  .then((friends) => {
-    return Friend.model.findOne({
-      where: {
-        $or: [
-          {
-            frienderId: friends.friender.id,
-            friendeeId: friends.friendee.id
-          },
-          {
-            frienderId: friends.friendee.id,
-            friendeeId: friends.friender.id
-          }
-        ]
-      }
-    })
-    .then((friendData) => {
-      let friendStatus = null;
-      if (friendData) {
-        friendStatus = friendData;
-      }
-      return {friends, friendStatus};
-    });
-  })
-  .then((friendshipData) => {
-    if (addType === 'create' && !friendshipData.friendStatus) {
-      // Create friend request
-      return Friend.model.create({
-        frienderId: friendshipData.friends.friender.id,
-        friendeeId: friendshipData.friends.friendee.id,
-        accepted: false
-      })
-      .then((friendshipData) => {
-        return friendshipData.dataValues;
-      })
-      .then((friendship) => {
-        delete friendship.frienderId;
-        delete friendship.friendeeId;
-        friendship.friender = friendshipData.friends.friender;
-        friendship.friendee = friendshipData.friends.friendee;
-        return friendship;
-      });
-    } else if (addType === 'accept' && friendshipData.friendStatus) {
-      // Set friend request to accepted only if you are the receiver of the request
-      if (friendshipData.friends.friender.id === friendshipData.friendStatus.dataValues.friendeeId) {
-        // If the request recipient accepts the request, change the request to the accepted state and return it
-        return friendshipData.friendStatus.update({
-          accepted: true
-        })
-        .then((newFriendshipStatus) => {
-          return newFriendshipStatus.dataValues;
-        })
-        .then((friendship) => {
-          delete friendship.frienderId;
-          delete friendship.friendeeId;
-          friendship.friender = friendshipData.friends.friender;
-          friendship.friendee = friendshipData.friends.friendee;
-          return friendship;
+    .then((friender) => {
+      return User.getByEmail(friendeeEmail)
+        .then((friendee) => {
+          return {friender, friendee};
         });
+    })
+    .then((friends) => {
+      return Friend.model.findOne({
+        where: {
+          $or: [
+            {
+              frienderId: friends.friender.id,
+              friendeeId: friends.friendee.id
+            },
+            {
+              frienderId: friends.friendee.id,
+              friendeeId: friends.friender.id
+            }
+          ]
+        }
+      })
+        .then((friendData) => {
+          let friendStatus = null;
+          if (friendData) {
+            friendStatus = friendData;
+          }
+          return {friends, friendStatus};
+        });
+    })
+    .then((friendshipData) => {
+      if (addType === 'create' && !friendshipData.friendStatus) {
+      // Create friend request
+        return Friend.model.create({
+          frienderId: friendshipData.friends.friender.id,
+          friendeeId: friendshipData.friends.friendee.id,
+          accepted: false
+        })
+          .then((friendshipData) => {
+            return friendshipData.dataValues;
+          })
+          .then((friendship) => {
+            delete friendship.frienderId;
+            delete friendship.friendeeId;
+            friendship.friender = friendshipData.friends.friender;
+            friendship.friendee = friendshipData.friends.friendee;
+            return friendship;
+          });
+      } else if (addType === 'accept' && friendshipData.friendStatus) {
+      // Set friend request to accepted only if you are the receiver of the request
+        if (friendshipData.friends.friender.id === friendshipData.friendStatus.dataValues.friendeeId) {
+        // If the request recipient accepts the request, change the request to the accepted state and return it
+          return friendshipData.friendStatus.update({
+            accepted: true
+          })
+            .then((newFriendshipStatus) => {
+              return newFriendshipStatus.dataValues;
+            })
+            .then((friendship) => {
+              delete friendship.frienderId;
+              delete friendship.friendeeId;
+              friendship.friender = friendshipData.friends.friender;
+              friendship.friendee = friendshipData.friends.friendee;
+              return friendship;
+            });
+        } else {
+          return new Promise((resolve, reject) => {
+            reject('There is already an open friend request with this person');
+          });
+        }
       } else {
+      // If the original request sender tries to accept, return the current request status without modifying it
         return new Promise((resolve, reject) => {
           reject('There is already an open friend request with this person');
         });
       }
-    } else {
-      // If the original request sender tries to accept, return the current request status without modifying it
-      return new Promise((resolve, reject) => {
-        reject('There is already an open friend request with this person');
-      });
-    }
-  });
+    });
 };
 
 Friend.sendRequest = (frienderEmail, friendeeEmail) => {
@@ -135,39 +135,39 @@ Friend.acceptRequest = (acceptorEmail, accepteeEmail) => {
 // 2. unfriendeeEmail does not map to an existing user
 Friend.remove = (unfrienderEmail, unfriendeeEmail) => {
   return User.getByEmail(unfrienderEmail)
-  .then((unfriender) => {
-    return User.getByEmail(unfriendeeEmail)
-    .then((unfriendee) => {
-      return {unfriender, unfriendee};
-    });
-  }).then((friends) => {
-    return Friend.model.findOne({
-      where: {
-        $or: [
-          {
-            frienderId: friends.unfriender.id,
-            friendeeId: friends.unfriendee.id
-          },
-          {
-            frienderId: friends.unfriendee.id,
-            friendeeId: friends.unfriender.id
-          }
-        ]
+    .then((unfriender) => {
+      return User.getByEmail(unfriendeeEmail)
+        .then((unfriendee) => {
+          return {unfriender, unfriendee};
+        });
+    }).then((friends) => {
+      return Friend.model.findOne({
+        where: {
+          $or: [
+            {
+              frienderId: friends.unfriender.id,
+              friendeeId: friends.unfriendee.id
+            },
+            {
+              frienderId: friends.unfriendee.id,
+              friendeeId: friends.unfriender.id
+            }
+          ]
+        }
+      });
+    })
+    .then((friendship) => {
+      if (friendship) {
+        return friendship.destroy()
+          .then(() => {
+            return true;
+          });
+      } else {
+        return new Promise((resolve, reject) => {
+          reject('You are not friends with this person');
+        });
       }
     });
-  })
-  .then((friendship) => {
-    if (friendship) {
-      return friendship.destroy()
-      .then(() => {
-        return true;
-      });
-    } else {
-      return new Promise((resolve, reject) => {
-        reject('You are not friends with this person');
-      });
-    }
-  });
 };
 
 // Returns a promise containing an object that has data about friends and open friend requests
@@ -182,68 +182,68 @@ Friend.remove = (unfrienderEmail, unfriendeeEmail) => {
 // 1. userEmail does not map to an existing user
 Friend.get = (userEmail) => {
   return User.getByEmail(userEmail)
-  .then((user) => {
-    return Friend.model.findAll({
-      where: {
-        $or: [
-          {
-            frienderId: user.id
-          },
-          {
-            friendeeId: user.id
-          }
-        ]
-      }
-    })
-    .then((userRelationsData) => {
-      let getUserPromises = [];
-      for (let i = 0; i < userRelationsData.length; i++) {
-        getUserPromises.push(
-          User.getById(userRelationsData[i].dataValues.frienderId)
-          .then((friender) => {
-            userRelationsData[i].dataValues.friender = friender;
-            delete userRelationsData[i].dataValues.frienderId;
-          })
-        );
-        getUserPromises.push(
-          User.getById(userRelationsData[i].dataValues.friendeeId)
-          .then((friendee) => {
-            userRelationsData[i].dataValues.friendee = friendee;
-            delete userRelationsData[i].dataValues.friendeeId;
-          })
-        );
-      }
-      return Promise.all(getUserPromises)
-      .then(() => {
-        return userRelationsData;
-      });
-    })
-    .then((userRelationsData) => {
-      let friends = [];
-      let requestsSent = [];
-      let requestsReceived = [];
-
-      for (let i = 0; i < userRelationsData.length; i++) {
-        if (userRelationsData[i].dataValues.friender.email === userEmail) {
-          // User is friender
-          if (userRelationsData[i].dataValues.accepted ===  true) {
-            friends.push(userRelationsData[i].dataValues.friendee);
-          } else {
-            requestsSent.push(userRelationsData[i].dataValues.friendee);
-          }
-        } else {
-          // User is friendee
-          if (userRelationsData[i].dataValues.accepted ===  true) {
-            friends.push(userRelationsData[i].dataValues.friender);
-          } else {
-            requestsReceived.push(userRelationsData[i].dataValues.friender);
-          }
+    .then((user) => {
+      return Friend.model.findAll({
+        where: {
+          $or: [
+            {
+              frienderId: user.id
+            },
+            {
+              friendeeId: user.id
+            }
+          ]
         }
-      }
+      })
+        .then((userRelationsData) => {
+          let getUserPromises = [];
+          for (let i = 0; i < userRelationsData.length; i++) {
+            getUserPromises.push(
+              User.getById(userRelationsData[i].dataValues.frienderId)
+                .then((friender) => {
+                  userRelationsData[i].dataValues.friender = friender;
+                  delete userRelationsData[i].dataValues.frienderId;
+                })
+            );
+            getUserPromises.push(
+              User.getById(userRelationsData[i].dataValues.friendeeId)
+                .then((friendee) => {
+                  userRelationsData[i].dataValues.friendee = friendee;
+                  delete userRelationsData[i].dataValues.friendeeId;
+                })
+            );
+          }
+          return Promise.all(getUserPromises)
+            .then(() => {
+              return userRelationsData;
+            });
+        })
+        .then((userRelationsData) => {
+          let friends = [];
+          let requestsSent = [];
+          let requestsReceived = [];
 
-      return {friends, requestsSent, requestsReceived};
+          for (let i = 0; i < userRelationsData.length; i++) {
+            if (userRelationsData[i].dataValues.friender.email === userEmail) {
+              // User is friender
+              if (userRelationsData[i].dataValues.accepted === true) {
+                friends.push(userRelationsData[i].dataValues.friendee);
+              } else {
+                requestsSent.push(userRelationsData[i].dataValues.friendee);
+              }
+            } else {
+              // User is friendee
+              if (userRelationsData[i].dataValues.accepted === true) {
+                friends.push(userRelationsData[i].dataValues.friender);
+              } else {
+                requestsReceived.push(userRelationsData[i].dataValues.friender);
+              }
+            }
+          }
+
+          return {friends, requestsSent, requestsReceived};
+        });
     });
-  });
 };
 
 module.exports = Friend;

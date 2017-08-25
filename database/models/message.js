@@ -32,37 +32,37 @@ Message.create = (senderEmail, receiverEmail, text) => {
   }
 
   return User.getByEmail(senderEmail)
-  .then((sender) => {
-    return User.getByEmail(receiverEmail)
-    .then((receiver) => {
-      return {sender, receiver};
-    });
-  })
-  .then((users) => {
-    return Message.model.create({
-      senderId: users.sender.id,
-      receiverId: users.receiver.id,
-      text: text
-    }, {
-      include: [{
-        model: User.model,
-        as: 'sender'
+    .then((sender) => {
+      return User.getByEmail(receiverEmail)
+        .then((receiver) => {
+          return {sender, receiver};
+        });
+    })
+    .then((users) => {
+      return Message.model.create({
+        senderId: users.sender.id,
+        receiverId: users.receiver.id,
+        text: text
       }, {
-        model: User.model,
-        as: 'receiver'
-      }]
-    })
-    .then((messageData) => {
-      return messageData.dataValues;
-    })
-    .then((message) => {
-      delete message.senderId;
-      delete message.receiverId;
-      message.sender = users.sender;
-      message.receiver = users.receiver;
-      return message;
+        include: [{
+          model: User.model,
+          as: 'sender'
+        }, {
+          model: User.model,
+          as: 'receiver'
+        }]
+      })
+        .then((messageData) => {
+          return messageData.dataValues;
+        })
+        .then((message) => {
+          delete message.senderId;
+          delete message.receiverId;
+          message.sender = users.sender;
+          message.receiver = users.receiver;
+          return message;
+        });
     });
-  });
 };
 
 // Returns a promise that will resolve with an array
@@ -73,43 +73,43 @@ Message.create = (senderEmail, receiverEmail, text) => {
 // 2. receiverEmail does not map to an existing user
 Message.getBetweenUsers = (senderEmail, receiverEmail) => {
   return User.getByEmail(senderEmail)
-  .then((sender) => {
-    return User.getByEmail(receiverEmail)
-    .then((receiver) => {
-      return {sender, receiver};
+    .then((sender) => {
+      return User.getByEmail(receiverEmail)
+        .then((receiver) => {
+          return {sender, receiver};
+        });
     })
-  })
-  .then((users) => {
-    return Message.model.findAll({
-      where: {
-        $or: [
-          {
-            senderId: users.sender.id,
-            receiverId: users.receiver.id
-          },
-          {
-            senderId: users.receiver.id,
-            receiverId: users.sender.id
-          }
-        ]
-      },
-      include: [{
-        model: User.model,
-        as: 'sender'
-      }, {
-        model: User.model,
-        as: 'receiver'
-      }]
-    })
-    .then((messagesImm) => {
-      let messages = JSON.parse(JSON.stringify(messagesImm)); // TODO - FIX THIS
-      messages.forEach((message) => {
-        delete message.senderId;
-        delete message.receiverId;
-      });
-      return messages;
+    .then((users) => {
+      return Message.model.findAll({
+        where: {
+          $or: [
+            {
+              senderId: users.sender.id,
+              receiverId: users.receiver.id
+            },
+            {
+              senderId: users.receiver.id,
+              receiverId: users.sender.id
+            }
+          ]
+        },
+        include: [{
+          model: User.model,
+          as: 'sender'
+        }, {
+          model: User.model,
+          as: 'receiver'
+        }]
+      })
+        .then((messagesImm) => {
+          let messages = JSON.parse(JSON.stringify(messagesImm)); // TODO - FIX THIS
+          messages.forEach((message) => {
+            delete message.senderId;
+            delete message.receiverId;
+          });
+          return messages;
+        });
     });
-  });
 };
 
 module.exports = Message;
