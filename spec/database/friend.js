@@ -11,6 +11,9 @@ describe('Friend', () => {
       });
   });
 
+  it('Should exist', () => {
+    expect(Friend.model).to.exist;
+  });
   describe('sendRequest()', () => {
     it('Should exist', () => {
       expect(Friend.sendRequest).to.exist;
