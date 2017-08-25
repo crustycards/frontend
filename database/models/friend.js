@@ -33,6 +33,11 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
       reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
     });
   }
+  if (frienderEmail === friendeeEmail) {
+    return new Promise((resolve, reject) => {
+      reject('Cannot friend yourself');
+    });
+  }
 
   return User.getByEmail(frienderEmail)
     .then((friender) => {
@@ -114,11 +119,6 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
 };
 
 Friend.sendRequest = (frienderEmail, friendeeEmail) => {
-  if (frienderEmail === friendeeEmail) {
-    return new Promise((resolve, reject) => {
-      reject('Cannot friend yourself');
-    });
-  }
   return addFriend(frienderEmail, friendeeEmail, 'create');
 };
 
