@@ -36,5 +36,15 @@
       "receiverEmail": "test@person.com",
       "text": "this is a test message"
     }
+  ],
+  "cardpacks": [
+    {
+      "name": "test_cardpack",
+      "ownerId": 1234
+    },
+    {
+      "name": "test_cardpack_two",
+      "ownerId": 12345
+    }
   ]
 }
