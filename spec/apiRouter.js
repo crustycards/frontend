@@ -270,7 +270,7 @@ describe('API Router', () => {
         .send({user: 'test@person.com'})
         .end((err, res) => {
           expect(err).to.not.exist;
-          // TODO
+          // TODO - Break this file into many based on the API endpoints
           done();
         });
     });

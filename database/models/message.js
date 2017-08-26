@@ -99,16 +99,11 @@ Message.getBetweenUsers = (senderEmail, receiverEmail) => {
         }, {
           model: User.model,
           as: 'receiver'
-        }]
-      })
-        .then((messagesImm) => {
-          let messages = JSON.parse(JSON.stringify(messagesImm)); // TODO - FIX THIS
-          messages.forEach((message) => {
-            delete message.senderId;
-            delete message.receiverId;
-          });
-          return messages;
-        });
+        }],
+        attributes: {
+          exclude: ['senderId', 'receiverId']
+        }
+      });
     });
 };
 

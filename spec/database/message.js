@@ -31,7 +31,6 @@ describe('Message', () => {
           expect(message.updatedAt).to.exist;
           expect(message.senderId).to.not.exist;
           expect(message.receiverId).to.not.exist;
-          // TODO - Fix so sender and receiver SHOULD exist
           expect(message.sender).to.exist;
           expect(message.receiver).to.exist;
           expect(message.sender.id).to.equal(userOne.id);

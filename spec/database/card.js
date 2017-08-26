@@ -104,12 +104,27 @@ describe('Card', () => {
             });
         });
     });
-    // TODO - Add rejectedWith() to these tests (the tests aren't even testing anything right now)
-    it('Should reject when modifying a card using an email that is not tied to a user', () => {
-      return expect(Card.update('thisisafake@email.com', cardId, 'thrice updated card name')).to.be.rejected;
-    });
     it('Should reject when modifying a card that is not owned by the user modifying the card', () => {
-      return expect(Card.update(mockDB.users[1].email, cardId, 'thrice updated card name')).to.be.rejected;
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black')
+            .then((card) => {
+              let fakeEmail = 'thisisafake@email.com';
+              return expect(Card.update(fakeEmail, card.id, 'updated card name')).to.be.rejectedWith('No user is registered under ' + fakeEmail);
+            });
+        });
+    });
+    it('Should reject when modifying a card using an email that is not tied to a user', () => {
+      let user = mockDB.users[0];
+      let otherUser = mockDB.users[1];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black')
+            .then((card) => {
+              return expect(Card.update(otherUser.email, card.id, 'updated card name')).to.be.rejectedWith('User does not own the cardpack that this card belongs to');
+            });
+        });
     });
     it('Should reject when passing in a card ID that does not map to an existing card', () => {
       let user = mockDB.users[0];
@@ -117,7 +132,7 @@ describe('Card', () => {
       let cardpack = mockDB.cardpacks[0];
       return Cardpack.create(user.email, cardpack.name)
         .then(() => {
-          return expect(Card.update(user.email, 123456789, 'thrice updated card name')).to.be.rejectedWith('Card ID does not map to an existing card');
+          return expect(Card.update(user.email, 123456789, 'updated card name')).to.be.rejectedWith('Card ID does not map to an existing card');
         });
     });
     it('Should reject when changing card text to a blank string', () => {

@@ -161,7 +161,6 @@ Card.getByCardpackId = (cardpackId) => {
     });
 };
 
-// TODO - Write tests for this
 Card.getById = (cardId) => {
   return Card.model.findOne({
     where: {
