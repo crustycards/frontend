@@ -53,7 +53,7 @@ describe('Card', () => {
     });
     it('Should not create a card if the card type is invalid', () => {
       let user = mockDB.users[0];
-      let fakeCardType = 'fakeType'
+      let fakeCardType = 'fakeType';
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
           return expect(Card.create(user.email, cardpack.id, 'test card', fakeCardType)).to.be.rejectedWith('Expected card type to be white or black, but instead received ' + fakeCardType);

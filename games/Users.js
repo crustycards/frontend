@@ -1,5 +1,15 @@
 let socketHandler = require('../server/socketHandler.js');
 
+class Node {
+  constructor (user, cards, prev = null, next = null) {
+    this.user = user;
+    this.hand = cards;
+    this.score = 0;
+    this.prev = prev;
+    this.next = next;
+  }
+}
+
 class Users {
   constructor () {
     this.head = null;
@@ -124,16 +134,6 @@ class Users {
     if (userTable[email]) {
       socketHandler.respondToUsersByEmail([email], dataType, data);
     }
-  }
-}
-
-class Node {
-  constructor (user, cards, prev = null, next = null) {
-    this.user = user;
-    this.hand = cards;
-    this.score = 0;
-    this.prev = prev;
-    this.next = next;
   }
 }
 

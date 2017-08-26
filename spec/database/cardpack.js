@@ -85,7 +85,7 @@ describe('Cardpack', () => {
       let cardpackTwoName = mockDB.cardpacks[1].name;
       return Cardpack.create(ownerEmail, cardpackOneName)
         .then(() => {
-          return Cardpack.create(ownerEmail, cardpackTwoName)
+          return Cardpack.create(ownerEmail, cardpackTwoName);
         })
         .then(() => {
           return Cardpack.getByUserEmail(ownerEmail)
@@ -119,7 +119,7 @@ describe('Cardpack', () => {
       let cardpackTwoName = mockDB.cardpacks[1].name;
       return Cardpack.create(ownerEmail, cardpackOneName)
         .then(() => {
-          return Cardpack.create(ownerEmail, cardpackTwoName)
+          return Cardpack.create(ownerEmail, cardpackTwoName);
         })
         .then(() => {
           return Cardpack.getById(2)

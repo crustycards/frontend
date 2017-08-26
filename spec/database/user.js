@@ -47,14 +47,14 @@ describe('User', () => {
     });
     it('Should get a user by their ID', () => {
       let promise = User.getById(mockDB.users[2].id)
-      .then((user) => {
-        expect(user.createdAt).to.exist;
-        expect(user.updatedAt).to.exist;
-        expect(user.password).to.not.exist;
-        delete user.createdAt;
-        delete user.updatedAt;
-        return user;
-      });
+        .then((user) => {
+          expect(user.createdAt).to.exist;
+          expect(user.updatedAt).to.exist;
+          expect(user.password).to.not.exist;
+          delete user.createdAt;
+          delete user.updatedAt;
+          return user;
+        });
       return expect(promise).to.eventually.deep.equal(mockDB.users[2]);
     });
     it('Should throw an error when passed in an invalid ID', () => {

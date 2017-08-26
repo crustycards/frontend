@@ -119,7 +119,7 @@ describe('Friend', () => {
       let userThree = mockDB.users[2];
       return Friend.sendRequest(userOne.email, userTwo.email)
         .then(() => {
-          return Friend.acceptRequest(userTwo.email, userOne.email)
+          return Friend.acceptRequest(userTwo.email, userOne.email);
         })
         .then(() => {
           return Friend.sendRequest(userOne.email, userThree.email);
@@ -158,7 +158,7 @@ describe('Friend', () => {
       let userTwo = mockDB.users[1];
       return Friend.sendRequest(userOne.email, userTwo.email)
         .then(() => {
-          return Friend.acceptRequest(userTwo.email, userOne.email)
+          return Friend.acceptRequest(userTwo.email, userOne.email);
         })
         .then(() => {
           return Friend.remove(userOne.email, userTwo.email)
