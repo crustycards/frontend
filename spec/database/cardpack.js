@@ -3,13 +3,6 @@ const {Cardpack, connection} = require('../../database');
 const mockDB = require('./mockDB.json');
 const mockDBHelpers = require('./mockDBHelpers');
 
-// TODO - Implement tests for cardpacksubscribe inside of this file
-// describe('CardpackSubscribe', () => {
-//   it('Should exist', () => {
-//     expect(db.CardpackSubscribe).to.exist;
-//   });
-// });
-
 describe('Cardpack', () => {
   beforeEach(() => {
     return connection.clear()
@@ -163,6 +156,63 @@ describe('Cardpack', () => {
         .then((cardpack) => {
           return expect(Cardpack.delete(ownerEmail, cardpack.id)).to.eventually.equal(true);
         });
+    });
+  });
+
+  describe('subscribe()', () => {
+    it('Should allow for subscribing to cardpacks', () => {
+      let user = mockDB.users[0];
+      let userTwo = mockDB.users[1];
+      return Cardpack.create(user.email, 'cardpack')
+        .then((cardpack) => {
+          return expect(Cardpack.subscribe(userTwo.email, cardpack.id)).to.eventually.eql(true);
+        });
+    });
+    it('Should reject when attempting to subscribe to a cardpack that you own', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack')
+        .then((cardpack) => {
+          return expect(Cardpack.subscribe(user.email, cardpack.id)).to.be.rejectedWith('Cannot subscribe to your own cardpack');
+        });
+    });
+    it('Should reject when attempting to subscribe to a cardpack that does not exist', () => {
+      let user = mockDB.users[0];
+      return expect(Cardpack.subscribe(user.email, 1234)).to.be.rejectedWith('Cardpack does not exist');
+    });
+    it('Should resolve to true when attempting to subscribe to a cardpack that you are already subscribed to', () => {
+      let user = mockDB.users[0];
+      let userTwo = mockDB.users[1];
+      return Cardpack.create(user.email, 'cardpack')
+        .then((cardpack) => {
+          return Cardpack.subscribe(userTwo.email, cardpack.id)
+            .then(() => {
+              return expect(Cardpack.subscribe(userTwo.email, cardpack.id)).to.eventually.eql(true);
+            });
+        });
+    });
+    it('Should reject when attempting to subscribe from a non-existent user', () => {
+      let user = mockDB.users[0];
+      let fakeUserEmail = 'fake@user.com';
+      return Cardpack.create(user.email, 'cardpack')
+        .then((cardpack) => {
+          return expect(Cardpack.subscribe(fakeUserEmail, cardpack.id)).to.be.rejectedWith('No user is registered under fake@user.com');
+        });
+    });
+  });
+  describe('unsubscribe()', () => {
+    it('Should allow for unsubscribing from cardpacks', () => {
+    });
+    it('Should reject when attempting to unsubscribe from a cardpack that you are not subscribed to', () => {
+    });
+    it('Should reject when attempting to unsubscribe from a cardpack that does not exist', () => {
+    });
+    it('Should reject when attempting to unsubscribe from a non-existent user', () => {
+    });
+  });
+  describe('getSubscriptions()', () => {
+    it('Should retrieve subscriptions properly', () => {
+    });
+    it('Should reject when attempting to get subscriptions from a non-existent user', () => {
     });
   });
 });

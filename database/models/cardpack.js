@@ -36,11 +36,8 @@ Cardpack.create = (userEmail, cardpackName) => {
         name: cardpackName,
         ownerId: user.id
       })
-        .then((cardpackImmutable) => {
-          let cardpack = JSON.parse(JSON.stringify(cardpackImmutable)); // TODO - Fix this
-          delete cardpack.ownerId;
-          cardpack.owner = user;
-          return cardpack;
+        .then((cardpack) => {
+          return Cardpack.getById(cardpack.id);
         });
     });
 };
@@ -142,13 +139,29 @@ Cardpack.delete = (userEmail, cardpackId) => {
 Cardpack.subscribe = (userEmail, cardpackId) => {
   return User.getByEmail(userEmail)
     .then((user) => {
-      return CardpackSubscribe.model.findOrCreate({
-        where: {
-          subscriberId: user.id,
-          cardpack: cardpackId
-        }
-      });
-    });
+      return Cardpack.getById(cardpackId)
+        .catch(() => {
+          throw new Error('Cardpack does not exist');
+        })
+        .then((cardpack) => {
+          // TODO - Use bare sequelize cardpack.model.findone so that we can use cardpack.ownerId instead of cardpack.owner.id
+          if (cardpack.owner.id === user.id) {
+            throw new Error('Cannot subscribe to your own cardpack');
+          }
+          return CardpackSubscribe.model.findOrCreate({
+            where: {
+              userId: user.id,
+              cardpackId
+            }
+          })
+          .spread((subscription, created) => {
+            if (created) {
+              // TODO - handle socket events here
+            }
+            return true;
+          });
+        });
+    })
 };
 
 Cardpack.unsubscribe = (userEmail, cardpackId) => {
@@ -156,8 +169,27 @@ Cardpack.unsubscribe = (userEmail, cardpackId) => {
     .then((user) => {
       return CardpackSubscribe.model.destroy({
         where: {
-          subscriberId: user.id,
-          cardpack: cardpackId
+          userId: user.id,
+          cardpackId
+        }
+      });
+    });
+};
+
+Cardpack.getSubscriptions = (userEmail) => {
+  return User.findByEmail(userEmail)
+    .then((user) => {
+      return CardpackSubscribe.model.findAll({
+        where: {subscriberId: user.id},
+        include: [{
+          model: User.model,
+          as: 'subscriber'
+        }, {
+          model: Cardpack.model,
+          as: 'cardpack'
+        }],
+        attributes: {
+          exclude: ['subscriberId']
         }
       });
     });
