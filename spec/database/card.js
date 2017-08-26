@@ -162,6 +162,7 @@ describe('Card', () => {
 });
 
 // TODO - Add this test to cardpack tests
+// TODO - Add tests for Card.getByCardpackId
 // describe('Functions', () => {
   
 //   it('Should get cards for a cardpack', () => {

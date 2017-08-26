@@ -61,19 +61,8 @@ Card.create = (userEmail, cardpackId, cardText, cardType) => {
           }
         });
     })
-    .then((cardImmutable) => {
-      let card = JSON.parse(JSON.stringify(cardImmutable)); // TODO - Fix it so a restringification isn't needed here
-      return Cardpack.model.findOne({
-        where: {
-          id: card.cardpackId
-        }
-      })
-        .then((cardpack) => {
-
-          delete card.cardpackId;
-          card.cardpack = cardpack;
-          return card;
-        });
+    .then((card) => {
+      return Card.getById(card.id);
     });
 };
 
@@ -170,6 +159,22 @@ Card.getByCardpackId = (cardpackId) => {
         where: {cardpackId: cardpackId}
       });
     });
+};
+
+// TODO - Write tests for this
+Card.getById = (cardId) => {
+  return Card.model.findOne({
+    where: {
+      id: cardId
+    },
+    include: [{
+      model: Cardpack.model,
+      as: 'cardpack'
+    }],
+    attributes: {
+      exclude: ['cardpackId']
+    }
+  });
 };
 
 module.exports = Card;
