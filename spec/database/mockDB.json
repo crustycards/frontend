@@ -39,10 +39,12 @@
   ],
   "cardpacks": [
     {
+      "id": 1,
       "name": "test_cardpack",
       "ownerId": 1234
     },
     {
+      "id": 2,
       "name": "test_cardpack_two",
       "ownerId": 12345
     }

@@ -3,6 +3,13 @@ const {Cardpack, connection} = require('../../database');
 const mockDB = require('./mockDB.json');
 const mockDBHelpers = require('./mockDBHelpers');
 
+// TODO - Implement tests for cardpacksubscribe inside of this file
+// describe('CardpackSubscribe', () => {
+//   it('Should exist', () => {
+//     expect(db.CardpackSubscribe).to.exist;
+//   });
+// });
+
 describe('Cardpack', () => {
   beforeEach(() => {
     return connection.clear()
