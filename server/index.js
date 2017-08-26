@@ -85,7 +85,6 @@ io.use(passportSocketIo.authorize({
 }));
 
 // Setup socket event handlers
-// TODO - Allow for any user to have multiple open sockets
 io.on('connection', (socket) => {
   socketHandler.openSocket(socket);
   socket.on('disconnect', () => {

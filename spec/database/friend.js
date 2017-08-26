@@ -42,13 +42,12 @@ describe('Friend', () => {
           expect(friendshipStatus.accepted).to.equal(false);
         });
     });
-    // TODO - Check these two tests below
     it('Should reject when adding a duplicate friend request', () => {
       let userOne = mockDB.users[0];
       let userTwo = mockDB.users[1];
       return Friend.sendRequest(userOne.email, userTwo.email)
         .then(() => {
-          return expect(Friend.sendRequest(userOne.email, userTwo.email)).to.be.rejected;
+          return expect(Friend.sendRequest(userOne.email, userTwo.email)).to.be.rejectedWith('There is already an open friend request between you and this person');
         });
     });
     it('Should not allow sending friend requests to users who have sent friend requests to you', () => {
@@ -56,7 +55,7 @@ describe('Friend', () => {
       let userTwo = mockDB.users[1];
       return Friend.sendRequest(userOne.email, userTwo.email)
         .then(() => {
-          return expect(Friend.sendRequest(userTwo.email, userOne.email)).to.be.rejected;
+          return expect(Friend.sendRequest(userTwo.email, userOne.email)).to.be.rejectedWith('There is already an open friend request between you and this person');
         });
     });
   });

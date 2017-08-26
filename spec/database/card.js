@@ -130,6 +130,36 @@ describe('Card', () => {
     });
   });
 
+  describe('getById', () => {
+    it('Should get by ID for a valid card', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black')
+            .then((card) => {
+              return Card.getById(card.id)
+                .then(() => {
+                  expect(card).to.exist;
+                  expect(card.createdAt).to.exist;
+                  expect(card.updatedAt).to.exist;
+                  expect(card.cardpackId).to.not.exist;
+                  expect(card.cardpack).to.exist;
+                  expect(card.cardpack.id).to.equal(cardpack.id);
+                  expect(card.text).to.equal('test card');
+                  expect(card.type).to.equal('black');
+                });
+            });
+        });
+    });
+    it('Should reject when getting a card using an invalid ID', () => {
+      let cardId = 1;
+      return expect(Card.getById(cardId)).to.be.rejectedWith('Card does not exist with ID ' + cardId);
+    });
+  });
+
+  describe('getByCardpackId', () => {
+  });
+
   describe('delete()', () => {
     let user = mockDB.users[0];
     let otherUser = mockDB.users[1];

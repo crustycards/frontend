@@ -1,4 +1,5 @@
 let Users = require('./Users.js');
+// TODO - Rename Users.js to Players.js
 
 const ROUND_STAGES = {
   playBlackCard: 1,

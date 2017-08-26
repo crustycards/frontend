@@ -105,21 +105,21 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
               return friendship;
             });
         } else {
-          if (addType === 'accept') {
-            return new Promise((resolve, reject) => {
-              reject('Cannot accept a friend request that does not exist');
-            });
-          } else {
-            return new Promise((resolve, reject) => {
-              reject('You have already sent a friend request to this person');
-            });
-          }
+          return new Promise((resolve, reject) => {
+            reject('Cannot accept a friend request that does not exist');
+          });
         }
       } else {
       // If the original request sender tries to accept, return the current request status without modifying it
-        return new Promise((resolve, reject) => {
-          reject('There is already an open friend request with this person');
-        });
+        if (addType === 'create') {
+          return new Promise((resolve, reject) => {
+            reject('There is already an open friend request between you and this person');
+          });
+        } else {
+          return new Promise((resolve, reject) => {
+            reject('Cannot send a friend request to a person that has already sent you a request');
+          });
+        }
       }
     });
 };

@@ -174,7 +174,14 @@ Card.getById = (cardId) => {
     attributes: {
       exclude: ['cardpackId']
     }
-  });
+  })
+    .then((card) => {
+      if (card) {
+        return card;
+      } else {
+        throw new Error('Card does not exist with ID ' + cardId);
+      }
+    });
 };
 
 module.exports = Card;
