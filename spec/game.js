@@ -19,24 +19,13 @@ let userFour = {
   email: 'userFour@gmail.com'
 };
 
-let cards = [
-  {
-    id: 1,
-    name: 'cardZero'
-  },
-  {
-    id: 2,
-    name: 'cardOne'
-  },
-  {
-    id: 3,
-    name: 'cardTwo'
-  },
-  {
-    id: 4,
-    name: 'cardThree'
-  }
-];
+let cards = [];
+for (let i = 0; i < 50; i++) {
+  cards.push({
+    id: i + 1,
+    name: 'card ' + i
+  });
+}
 let blackCards = [
   {
     id: 1,
@@ -193,14 +182,14 @@ describe('Users', () => {
     let hand = JSON.parse(JSON.stringify(cards));
     users.addUser(userOne, hand);
     expect(users.playCard(userOne, cards[0])).to.eql(cards[0]);
-    expect(users.getHand(userOne).length).to.equal(3);
+    expect(users.getHand(userOne).length).to.equal(cards.length - 1);
   });
   it('Should return undefined when attempting to play a card from a user\'s hand that does not exist', () => {
     let hand = JSON.parse(JSON.stringify(cards));
     let fakeCard = {id: 4321, name: 'fakecard'};
     users.addUser(userOne, hand);
     expect(users.playCard(userOne, fakeCard)).to.not.exist;
-    expect(users.getHand(userOne).length).to.equal(4);
+    expect(users.getHand(userOne).length).to.equal(cards.length);
   });
   it('Should be able to draw a card for a user', () => {
     let hand = JSON.parse(JSON.stringify(cards));
@@ -229,7 +218,8 @@ describe('Game', () => {
   let game;
   beforeEach(() => {
     let blackCardsNonref = JSON.parse(JSON.stringify(blackCards));
-    game = new Game(userOne, blackCardsNonref, cards, 100, 3);
+    let whiteCardsNonref = JSON.parse(JSON.stringify(cards));
+    game = new Game(userOne, blackCardsNonref, whiteCardsNonref, 100, 3);
   });
 
   it('Should contain all functions', () => {
@@ -299,6 +289,9 @@ describe('Game', () => {
       // Not adding user four because game limit is three
     });
     it('Should return false when removing a user that is not in the game', () => {
+      expect(game.removeUser(userTwo)).to.equal(false);
+      game.addUser(userTwo);
+      expect(game.removeUser(userTwo)).to.equal(true);
       expect(game.removeUser(userTwo)).to.equal(false);
     });
   });
