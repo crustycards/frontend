@@ -282,6 +282,11 @@ describe('Game', () => {
       expect(game.getState(userThree).otherPlayers).to.eql([userOne, userTwo]);
       expect(game.getState(userFour).otherPlayers).to.throw;
     });
+    it('Should not add a user if they are already in the game', () => {
+      expect(game.addUser(userTwo)).to.equal(true);
+      expect(game.addUser(userTwo)).to.equal(false);
+      expect(game.getState(userOne).otherPlayers).to.eql([userTwo]);
+    });
   });
 
   describe('removeUser()', () => {

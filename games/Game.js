@@ -53,7 +53,7 @@ class Game {
   }
 
   addUser (user) {
-    if (this.users.size() < this.maxPlayers) {
+    if (this.users.size() < this.maxPlayers && !this.users.userTable[user.email]) {
       this.users.addUser(user);
       // for (let i = 0; i < handSize; i++) {
       //   drawForUser(user);
