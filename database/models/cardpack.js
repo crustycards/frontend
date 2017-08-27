@@ -154,14 +154,14 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
               cardpackId
             }
           })
-          .spread((subscription, created) => {
-            if (created) {
+            .spread((subscription, created) => {
+              if (created) {
               // TODO - handle socket events here
-            }
-            return true;
-          });
+              }
+              return true;
+            });
         });
-    })
+    });
 };
 
 Cardpack.unsubscribe = (userEmail, cardpackId) => {
@@ -173,14 +173,14 @@ Cardpack.unsubscribe = (userEmail, cardpackId) => {
           cardpackId
         }
       })
-      .then((affectedRows) => {
-        if (affectedRows) {
+        .then((affectedRows) => {
+          if (affectedRows) {
           // TODO - Add socket events here
-          return true;
-        } else {
-          throw new Error('Cannot unsubscribe from a cardpack that you are not subscribed to');
-        }
-      });
+            return true;
+          } else {
+            throw new Error('Cannot unsubscribe from a cardpack that you are not subscribed to');
+          }
+        });
     });
 };
 
