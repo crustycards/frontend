@@ -72,6 +72,9 @@ Card.create = (userEmail, cardpackId, cardText, cardType) => {
 // Exceptions:
 // 1. cardId does not map to an existing card
 // 2. cardData is uninterpretable
+/**
+ * @todo eslint
+ */
 Card.update = (userEmail, cardId, cardText) => {
   if (!cardText || cardText.constructor !== String || cardText === '') {
     return new Promise((resolve, reject) => {

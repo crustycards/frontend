@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "react-dev": "webpack -d --watch",
+    "dev": "webpack -d --watch",
     "server-dev": "nodemon server/index.js",
     "start": "node server/index.js",
     "lint": "eslint .",
@@ -51,7 +52,9 @@
     "react-google-button": "^0.3.0",
     "react-redux": "^5.0.6",
     "react-router": "^3.0.5",
+    "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
+    "redux-thunk": "^2.2.0",
     "sequelize": "^4.4.2",
     "sinon": "^3.2.0",
     "socket.io": "^2.0.3",

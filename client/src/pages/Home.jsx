@@ -1,6 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { connect } from 'react-redux';
+
 import FriendsList from '../components/FriendsList.jsx';
 import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
@@ -8,10 +10,19 @@ import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
 import Navbar from '../components/Navbar.jsx';
 
-class Home extends React.Component {
+class Home extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      currentUser: null,
+      friends: [],
+      requestsSent: [],
+      requestsReceived: []
+    };
+
     this.socket = io();
+
     this.socket.on('friendrequestsend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -23,6 +34,7 @@ class Home extends React.Component {
         this.addFriendRequestReceived(otherUser);
       }
     });
+
     this.socket.on('friendrequestaccept', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -35,6 +47,7 @@ class Home extends React.Component {
       this.removeFriendRequestReceived(otherUser);
       this.addFriend(otherUser);
     });
+
     this.socket.on('unfriend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
@@ -47,30 +60,28 @@ class Home extends React.Component {
       this.removeFriendRequestReceived(otherUser);
       this.removeFriend(otherUser);
     });
-    this.state = {
-      currentUser: null,
-      friends: [],
-      requestsSent: [],
-      requestsReceived: []
-    };
+
     axios.get('/api/currentuser')
-    .then((response) => {
-      let currentUser = response.data;
-      this.setState({currentUser});
-    });
+      .then((response) => {
+        let currentUser = response.data;
+        this.setState({currentUser});
+      });
+
     axios.get('/api/friends')
-    .then((response) => {
-      let friendData = response.data;
-      this.setState({friends: friendData.friends});
-      this.setState({requestsSent: friendData.requestsSent});
-      this.setState({requestsReceived: friendData.requestsReceived});
-    });
+      .then((response) => {
+        let friendData = response.data;
+        this.setState({friends: friendData.friends});
+        this.setState({requestsSent: friendData.requestsSent});
+        this.setState({requestsReceived: friendData.requestsReceived});
+      });
+
   }
 
   addFriend (friend) {
     this.state.friends.push(friend);
     this.forceUpdate();
   }
+
   removeFriend (friend) {
     for (let i = 0; i < this.state.friends.length; i++) {
       if (this.state.friends[i].email === friend.email) {
@@ -79,10 +90,12 @@ class Home extends React.Component {
       }
     }
   }
+
   addFriendRequestSent (friend) {
     this.state.requestsSent.push(friend);
     this.forceUpdate();
   }
+
   removeFriendRequestSent (friend) {
     for (let i = 0; i < this.state.requestsSent.length; i++) {
       if (this.state.requestsSent[i].email === friend.email) {
@@ -91,10 +104,13 @@ class Home extends React.Component {
       }
     }
   }
+
   addFriendRequestReceived (friend) {
-    this.state.requestsReceived.push(friend);
-    this.forceUpdate();
+    this.setState({
+      friends: Object.assign(this.state.friends, {friends: this.state.push(friend)}) 
+    });
   }
+
   removeFriendRequestReceived (friend) {
     for (let i = 0; i < this.state.requestsReceived.length; i++) {
       if (this.state.requestsReceived[i].email === friend.email) {
@@ -110,18 +126,29 @@ class Home extends React.Component {
         <Navbar/>
         <div className='content-wrap'>
           <div className='col-narrow'>
-          <FrienderPanel />
-          <FriendsList friends={this.state.friends} />
-          <FriendRequestsSent requestsSent={this.state.requestsSent} />
-          <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
+            <FrienderPanel />
+            <FriendsList friends={this.state.friends} />
+            <FriendRequestsSent requestsSent={this.state.requestsSent} />
+            <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
           </div>
           <div className='col-wide'>
             <CardpackManager liveUpdateTime={true} socket={this.socket} />
           </div>
         </div>
       </div>
-    ) 
+    ); 
   }
 }
 
-export default Home;
+const mapStateToProps = ({}) => {
+
+};
+
+const mapDispatchToProps = (dispatch) => {
+
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Home);
