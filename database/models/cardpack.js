@@ -150,7 +150,7 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
           }
           return CardpackSubscribe.model.findOrCreate({
             where: {
-              userId: user.id,
+              subscriberId: user.id,
               cardpackId
             }
           })
@@ -169,29 +169,48 @@ Cardpack.unsubscribe = (userEmail, cardpackId) => {
     .then((user) => {
       return CardpackSubscribe.model.destroy({
         where: {
-          userId: user.id,
+          subscriberId: user.id,
           cardpackId
+        }
+      })
+      .then((affectedRows) => {
+        if (affectedRows) {
+          // TODO - Add socket events here
+          return true;
+        } else {
+          throw new Error('Cannot unsubscribe from a cardpack that you are not subscribed to');
         }
       });
     });
 };
 
 Cardpack.getSubscriptions = (userEmail) => {
-  return User.findByEmail(userEmail)
-    .then((user) => {
-      return CardpackSubscribe.model.findAll({
-        where: {subscriberId: user.id},
-        include: [{
-          model: User.model,
-          as: 'subscriber'
-        }, {
-          model: Cardpack.model,
-          as: 'cardpack'
-        }],
+  // TODO - Stop cardpacksubscriptions key from being added
+  return User.model.findOne({
+    where: {
+      email: userEmail
+    },
+    include: [{
+      model: Cardpack.model,
+      as: 'cardpack',
+      include: [{
+        model: User.model,
+        as: 'owner',
         attributes: {
-          exclude: ['subscriberId']
+          exclude: ['password']
         }
-      });
+      }],
+      attributes: {
+        exclude: ['ownerId']
+      }
+    }]
+  })
+    .then((data) => {
+      if (data) {
+        return data.cardpack;
+      } else {
+        throw new Error('User does not exist');
+      }
     });
 };
 

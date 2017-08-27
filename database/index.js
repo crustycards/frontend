@@ -13,8 +13,8 @@ Friend.model.belongsTo(User.model, {as: 'friender'});
 Friend.model.belongsTo(User.model, {as: 'friendee'});
 Message.model.belongsTo(User.model, {as: 'sender'});
 Message.model.belongsTo(User.model, {as: 'receiver'});
-User.model.belongsToMany(Cardpack.model, {through: CardpackSubscribe.model, as: 'subscriber'});
-Cardpack.model.belongsToMany(User.model, {through: CardpackSubscribe.model, as: 'cardpack'});
+User.model.belongsToMany(Cardpack.model, {through: CardpackSubscribe.model, as: 'cardpack', foreignKey: 'subscriberId'});
+Cardpack.model.belongsToMany(User.model, {through: CardpackSubscribe.model, as: 'subscriber', foreignKey: 'cardpackId'});
 
 module.exports = {
   Card,
