@@ -350,7 +350,43 @@ describe('Game', () => {
   });
 
   describe('playCard()', () => {
-    it('');
+    it('Should allow playing cards if the game is running', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      game.continue();
+      let card = game.users.userTable[userTwo.email].hand[0];
+      expect(game.playCard(userTwo, card)).to.equal(true);
+    });
+    it('Should throw error when attempting to play a card while the game is not running', () => {
+      game.addUser(userTwo);
+      let card = game.users.userTable[userOne.email].hand[0];
+      expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Game is not running');
+    });
+    it('Should throw error when attempting to play a card during the wrong round phase', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      let card = game.users.userTable[userOne.email].hand[0];
+      expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play cards during');
+    });
+    it('Should throw error when attempting to play a card after already playing one', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      game.continue();
+      let card = game.users.userTable[userTwo.email].hand[0];
+      game.playCard(userTwo, card);
+      expect(() => {game.playCard(userTwo, card)}).to.throw(Error, 'You have already played a card for this round');
+    });
+    it('Should throw error when judge attempts to play a card', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      game.continue();
+      let card = game.users.userTable[userOne.email].hand[0];
+      expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play a card when you are the judge');
+    });
   });
 
   describe('discardCurrentWhiteCards()', () => {

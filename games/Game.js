@@ -8,6 +8,13 @@ const ROUND_STAGES = {
   incrementScore: 4
 };
 
+const ROUND_NAMES = {
+  1: 'round setup',
+  2: 'card play phase',
+  3: 'round judging',
+  4: 'round end'
+};
+
 const minPlayerCount = 3;
 const roundEndDelay = 8; // Number of seconds after the round has ended before moving to the next
 
@@ -83,21 +90,31 @@ class Game {
   }
 
   playCard (user, card) {
-    // If it is a valid time to play a card
-    if (this.isRunning && this.roundStage === ROUND_STAGES.playWhiteCards) {
-      // If the user has not already played a card this round and is not the judge
-      if (!this.currentWhiteCards[user.email] && this.users.getJudge().email !== user.email) {
-        for (let i = 0; i < this.playerHands[user.email]; i++) {
-          if (card.id === this.playerHands[user.email][i].id) {
-            this.playerHands[user.email].splice(i, 1);
-          }
-        }
+    if (!this.isRunning()) {
+      throw new Error('Game is not running');
+    }
+    if (this.roundStage !== ROUND_STAGES.playWhiteCards) {
+      throw new Error('Cannot play cards during ' + ROUND_NAMES[this.roundStage]);
+    }
+    if (this.currentWhiteCards[user.email]) {
+      throw new Error('You have already played a card for this round');
+    }
+    if (this.users.getJudge().email === user.email) {
+      throw new Error('Cannot play a card when you are the judge');
+    }
+
+    let hand = this.users.getHand(user);
+    for (let i = 0; i < hand.length; i++) {
+      if (card.id === hand[i].id) {
+        this.currentWhiteCards[user.email] = hand.splice(i, 1);
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
         if (Object.keys(this.currentWhiteCards).length === this.users.size()) {
           this.continue();
         }
+        return true;
       }
     }
+    throw new Error('User does not have that card in their hand');
   }
 
   discardCurrentWhiteCards () {
