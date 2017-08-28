@@ -18,7 +18,7 @@ module.exports.createGame = (creator, gameName, cardpackIds, timeout = 20, maxPl
   }
 
   // Create game
-  helpers.getCardsFromCardpackIds(cardpackIds)
+  return helpers.getCardsFromCardpackIds(cardpackIds)
     .then((cards) => {
       let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers);
       gamesByName[gameName] = game;
@@ -40,7 +40,6 @@ module.exports.getUserGame = (user) => {
       return gamesByPlayerEmail[user];
     }
   }
-  return null; // Returns this if user is invalid or if user is not in any game
 };
 
 module.exports.joinGame = (user, gameName) => {
@@ -66,9 +65,10 @@ module.exports.leaveGame = (user) => {
   delete gamesByPlayerEmail[user.email];
 };
 
-// module.exports.getGameStateFor = (user) => {
-//   let game = module.exports.getGameUserIsIn(user);
-//   if (game) {
-//   }
-//   return getGameStateFor(user);
-// };
+module.exports.getGameStateFor = (user) => {
+  let game = module.exports.getGameUserIsIn(user);
+  if (!game) {
+    throw new Error('You are not in a game');
+  }
+  return game.getState(user);
+};
