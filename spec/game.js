@@ -390,7 +390,19 @@ describe('Game', () => {
   });
 
   describe('discardCurrentWhiteCards()', () => {
-    it('');
+    it('Should place all current cards in the white card discard pile', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      game.continue();
+      let card = game.users.userTable[userTwo.email].hand[0];
+      expect(Object.keys(game.currentWhiteCards).length).to.equal(0);
+      game.playCard(userTwo, card);
+      expect(Object.keys(game.currentWhiteCards).length).to.equal(1);
+      game.discardCurrentWhiteCards();
+      expect(Object.keys(game.currentWhiteCards).length).to.equal(0);
+      expect(game.whiteCardDiscard.length).to.equal(1);
+    });
   });
 
   describe('start()', () => {
