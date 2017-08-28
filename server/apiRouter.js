@@ -6,6 +6,7 @@ module.exports = (socketHandler) => {
 
   router.use('/messages', require('./apiRoutes/messages')(socketHandler));
   router.use('/cardpacks', require('./apiRoutes/cardpacks')(socketHandler));
+  router.use('/cards', require('./apiRoutes/cards')(socketHandler));
 
   // Returns data about the user who sent this request
   router.get('/currentuser', (req, res) => {
@@ -86,36 +87,6 @@ module.exports = (socketHandler) => {
           res.status(500).send(error);
         });
     });
-
-  router.get('/cards/:cardpackId', (req, res) => {
-    db.Card.getByCardpackId(req.params.cardpackId)
-      .then((cards) => {
-        res.json(cards);
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  router.post('/cards/:cardpackId', (req, res) => {
-    db.Card.create(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
-      .then((card) => {
-        res.json('success');
-        socketHandler.respondToUsers([req.user], 'cardcreate', {card});
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  router.delete('/cards/:cardId', (req, res) => {
-    db.Card.delete(req.user.email, req.params.cardId)
-      .then((card) => {
-        res.json('success');
-        socketHandler.respondToUsers([req.user], 'carddelete', {card});
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
 
   router.get('/*', (req, res) => {
     res.status(500).send('Invalid api request');
