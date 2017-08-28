@@ -226,7 +226,6 @@ describe('Game', () => {
   it('Should contain all functions', () => {
     expect(game.addUser).to.be.a('function');
     expect(game.removeUser).to.be.a('function');
-    expect(game.setRandomBlackCard).to.be.a('function');
     expect(game.drawForUser).to.be.a('function');
     expect(game.playCard).to.be.a('function');
     expect(game.start).to.be.a('function');
@@ -279,58 +278,6 @@ describe('Game', () => {
       game.addUser(userTwo);
       expect(game.removeUser(userTwo)).to.equal(true);
       expect(game.removeUser(userTwo)).to.equal(false);
-    });
-  });
-
-  describe('setRandomBlackCard()', () => {
-    it('Should set a black card as the current black card upon game creation', () => {
-      let currentBlackCard = game.getState(userOne).currentBlackCard;
-      expect(currentBlackCard.id).to.exist;
-    });
-    it('Should cycle through black cards', () => {
-      for (let i = 0; i < 100; i++) {
-        let currentBlackCard = game.getState(userOne).currentBlackCard;
-        let blackCard = blackCards.filter((card) => {
-          return card.id === currentBlackCard.id;
-        })[0];
-        expect(currentBlackCard.id).to.exist;
-        expect(currentBlackCard).to.eql(blackCard);
-        game.setRandomBlackCard();
-      }
-    });
-    it('Should properly store black cards in the black card discard pile', () => {
-      for (let i = 0; i < 100; i++) {
-        let discardPile = game.blackCardDiscard;
-        discardPile.forEach((card) => {
-          expect(card.id).to.exist;
-        });
-        game.setRandomBlackCard();
-      }
-    });
-    it('Should retain deck size over time', () => {
-      for (let i = 0; i < 100; i++) {
-        let draw = game.blackCardDraw;
-        let discard = game.blackCardDiscard;
-        let currentCard = game.currentBlackCard;
-        let deck = [...draw, ...discard, currentCard];
-        expect(deck.length).to.equal(blackCards.length);
-        deck.forEach((card) => {
-          expect(card.id).to.exist;
-        });
-        game.setRandomBlackCard();
-      }
-    });
-    it('Should reshuffle cards when attempting to draw from an empty draw pile, and should not loose any cards in the process', () => {
-      expect(game.blackCardDraw.length).to.equal(blackCards.length - 1);
-      // Goes to blackCards.length - 1 because the first max length of the array is one minus the length of the inpur array of cards
-      for (let i = 0; i < blackCards.length - 1; i++) {
-        game.setRandomBlackCard();
-        expect(game.blackCardDraw.length).to.equal(blackCards.length - i - 2);
-      }
-      expect(game.blackCardDraw.length).to.equal(0); // Redundant, but here for clarification
-      game.setRandomBlackCard();
-      // -2 because at this point, one card is in the discard and one card is in play
-      expect(game.blackCardDraw.length).to.equal(blackCards.length - 2);
     });
   });
 

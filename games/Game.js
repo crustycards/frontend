@@ -1,4 +1,5 @@
-let Users = require('./Users.js');
+const BlackCardDeck = require('./blackCardDeck');
+const Users = require('./Users.js');
 // TODO - Rename Users.js to Players.js
 
 const ROUND_STAGES = {
@@ -25,13 +26,10 @@ const getRandomInt = (min, max) => {
 class Game {
   constructor (creator, blackCards, whiteCards, timeout, maxPlayers, handSize) {
     this.handSize = handSize;
-    this.blackCardDraw = blackCards;
+    this.blackCardDeck = new BlackCardDeck(blackCards);
     this.whiteCardDraw = whiteCards;
-    this.blackCardDiscard = [];
     this.whiteCardDiscard = [];
-    this.currentBlackCard;
     this.currentWhiteCards = {};
-    this.setRandomBlackCard();
 
     this.maxPlayers = maxPlayers;
     this.users = new Users();
@@ -67,19 +65,6 @@ class Game {
     }
   }
 
-  setRandomBlackCard () {
-    // 'Shuffle' discard pile if draw pile is empty
-    if (this.blackCardDraw.length === 0) {
-      this.blackCardDraw = this.blackCardDiscard;
-      this.blackCardDiscard = [];
-    }
-    // Useful when creating a new game and no current black card is set
-    if (this.currentBlackCard) {
-      this.blackCardDiscard.push(this.currentBlackCard);
-    }
-    let cardIndex = getRandomInt(0, this.blackCardDraw.length - 1);
-    this.currentBlackCard = this.blackCardDraw.splice(cardIndex, 1)[0];
-  }
   drawForUser (user) {
     if (this.whiteCardDraw.length === 0) {
       this.whiteCardDraw = this.whiteCardDiscard;
@@ -163,7 +148,7 @@ class Game {
   continue () {
     if (this.roundStage === ROUND_STAGES.playBlackCard) {
       this.discardCurrentWhiteCards();
-      this.setRandomBlackCard();
+      this.blackCardDeck.cycleCard();
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, 0);
     } else if (this.roundStage === ROUND_STAGES.playWhiteCards) {
@@ -189,7 +174,7 @@ class Game {
 
     return {
       hand: [],
-      currentBlackCard: this.currentBlackCard,
+      currentBlackCard: this.blackCardDeck.currentCard,
       currentWhiteCardByUser: {},
       numOtherWhiteCardsPlayed: 1,
       currentJudge: {},
