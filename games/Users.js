@@ -113,7 +113,7 @@ class Users {
   }
 
   getHand (user) {
-    return this.userTable[user.email].hand;
+    return this.userTable[user.email] ? this.userTable[user.email].hand : null;
   }
 
   getScore (user) {

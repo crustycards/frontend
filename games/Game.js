@@ -148,18 +148,25 @@ class Game {
   }
 
   getState (currentUser) {
+    let playerCurrentWhiteCard = this.whiteCardDeck.currentCards[currentUser.email] || null;
+    let numOtherWhiteCardsPlayed = Object.keys(this.whiteCardDeck.currentCards).length;
+    if (playerCurrentWhiteCard) {
+      numOtherWhiteCardsPlayed--;
+    }
+
     let otherPlayers = this.users.getAllUsers().filter((user) => {
       return user.email !== currentUser.email;
     });
 
     return {
-      hand: [],
+      hand: this.users.getHand(currentUser),
       currentBlackCard: this.blackCardDeck.currentCard,
-      currentWhiteCardByUser: {},
-      numOtherWhiteCardsPlayed: 1,
-      currentJudge: {},
-      currentOwner: {},
-      otherPlayers
+      playerCurrentWhiteCard,
+      numOtherWhiteCardsPlayed,
+      currentJudge: this.users.getJudge(),
+      currentOwner: this.users.getOwner(),
+      otherPlayers,
+      roundStage: ROUND_NAMES[this.roundStage] || 'Not running'
     };
   }
 }
