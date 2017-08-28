@@ -1,6 +1,6 @@
 const expect = require('chai').use(require('chai-as-promised')).expect;
-const Game = require('../games/Game.js');
-const Users = require('../games/Users.js');
+const Game = require('../../games/Game.js');
+const Users = require('../../games/Users.js');
 
 let userOne = {
   id: 1,
