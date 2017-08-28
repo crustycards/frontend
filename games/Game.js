@@ -1,4 +1,5 @@
 const BlackCardDeck = require('./blackCardDeck');
+const WhiteCardDeck = require('./whiteCardDeck');
 const Users = require('./Users.js');
 // TODO - Rename Users.js to Players.js
 
@@ -27,9 +28,7 @@ class Game {
   constructor (creator, blackCards, whiteCards, timeout, maxPlayers, handSize) {
     this.handSize = handSize;
     this.blackCardDeck = new BlackCardDeck(blackCards);
-    this.whiteCardDraw = whiteCards;
-    this.whiteCardDiscard = [];
-    this.currentWhiteCards = {};
+    this.whiteCardDeck = new WhiteCardDeck(whiteCards);
     this.users = new Users(maxPlayers);
     this.addUser(creator);
     this.timeoutId; // Saved to allow pausing and stopping of games
@@ -41,14 +40,11 @@ class Game {
 
   addUser (user) {
     // TODO - Add function to Users that allows for searching its userTable and remove the manual lookup of that property right below
-    if (this.users.size() < this.maxPlayers && !this.users.userTable[user.email]) {
-      this.users.addUser(user);
-      for (let i = 0; i < this.handSize; i++) {
-        this.drawForUser(user);
-      }
-      return true;
+    this.users.addUser(user);
+    for (let i = 0; i < this.handSize; i++) {
+      this.drawForUser(user);
     }
-    return false;
+    return true;
   }
   removeUser (user) {
     let userHand = this.users.removeUser(user);
@@ -64,12 +60,7 @@ class Game {
   }
 
   drawForUser (user) {
-    if (this.whiteCardDraw.length === 0) {
-      this.whiteCardDraw = this.whiteCardDiscard;
-      this.whiteCardDiscard = [];
-    }
-    let cardIndex = getRandomInt(0, this.whiteCardDraw.length - 1);
-    this.users.drawCard(user, this.whiteCardDraw.splice(cardIndex, 1)[0]);
+    this.users.drawCard(user, this.whiteCardDeck.popCard());
   }
 
   playCard (user, card) {
@@ -79,7 +70,7 @@ class Game {
     if (this.roundStage !== ROUND_STAGES.playWhiteCards) {
       throw new Error('Cannot play cards during ' + ROUND_NAMES[this.roundStage]);
     }
-    if (this.currentWhiteCards[user.email]) {
+    if (this.whiteCardDeck.currentCards[user.email]) {
       throw new Error('You have already played a card for this round');
     }
     if (this.users.getJudge().email === user.email) {
@@ -89,23 +80,15 @@ class Game {
     let hand = this.users.getHand(user);
     for (let i = 0; i < hand.length; i++) {
       if (card.id === hand[i].id) {
-        this.currentWhiteCards[user.email] = hand.splice(i, 1);
+        this.whiteCardDeck.playCard(user, hand.splice(i, 1));
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
-        if (Object.keys(this.currentWhiteCards).length === this.users.size()) {
+        if (Object.keys(this.whiteCardDeck.currentCards).length === this.users.size()) {
           this.continue();
         }
         return true;
       }
     }
     throw new Error('User does not have that card in their hand');
-  }
-
-  discardCurrentWhiteCards () {
-    Object.keys(this.currentWhiteCards).forEach((key, index) => {
-      let card = this.currentWhiteCards[key];
-      delete this.currentWhiteCards[key];
-      this.whiteCardDiscard.push(card);
-    });
   }
 
   start () {
@@ -122,14 +105,13 @@ class Game {
   }
   stop () {
     // TODO - Reset all game variables
-    this.discardCurrentWhiteCards();
-    this.whiteCardDraw = this.whiteCardDiscard;
-    this.whiteCardDiscard = [];
+    this.whiteCardDeck.resetCurrentCards();
+    // TODO - Add whiteCardDeck resetAll() method and use it here
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = undefined;
     }
-    this.discardCurrentWhiteCards();
+    this.whiteCardDeck.resetCurrentCards();
   }
   pause () {
     if (!this.timeoutId) {
@@ -145,7 +127,7 @@ class Game {
 
   continue () {
     if (this.roundStage === ROUND_STAGES.playBlackCard) {
-      this.discardCurrentWhiteCards();
+      this.whiteCardDeck.resetCurrentCards();
       this.blackCardDeck.cycleCard();
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, 0);
