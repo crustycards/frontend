@@ -216,41 +216,27 @@ describe('Users', () => {
 
 describe('Game', () => {
   let game;
+  let handSize = 5;
   beforeEach(() => {
     let blackCardsNonref = JSON.parse(JSON.stringify(blackCards));
     let whiteCardsNonref = JSON.parse(JSON.stringify(cards));
-    game = new Game(userOne, blackCardsNonref, whiteCardsNonref, 100, 3);
+    game = new Game(userOne, blackCardsNonref, whiteCardsNonref, 100, 3, handSize);
   });
 
   it('Should contain all functions', () => {
-    expect(game.getState).to.be.a('function');
     expect(game.addUser).to.be.a('function');
     expect(game.removeUser).to.be.a('function');
+    expect(game.setRandomBlackCard).to.be.a('function');
+    expect(game.drawForUser).to.be.a('function');
+    expect(game.playCard).to.be.a('function');
     expect(game.start).to.be.a('function');
     expect(game.stop).to.be.a('function');
     expect(game.pause).to.be.a('function');
     expect(game.isRunning).to.be.a('function');
-    expect(game.playCard).to.be.a('function');
-    expect(game.forceContinue).to.be.a('function');
-    expect(game.setRandomBlackCard).to.be.a('function');
-    expect(game.drawForUser).to.be.a('function');
     expect(game.discardCurrentWhiteCards).to.be.a('function');
     expect(game.continue).to.be.a('function');
     expect(game.sendDataToUsers).to.be.a('function');
-  });
-
-  describe('getState()', () => {
-    it('Should return all keys when getting state of basic game', () => {
-      let state = game.getState(userOne);
-      expect(state.hand).to.be.a('array');
-      expect(state.currentBlackCard).to.be.a('object');
-      expect(state.currentWhiteCardByUser).to.be.a('object');
-      expect(state.numOtherWhiteCardsPlayed).to.be.a('number');
-      expect(state.currentJudge).to.be.a('object');
-      expect(state.currentOwner).to.be.a('object');
-      expect(state.otherPlayers).to.be.a('array');
-      expect(Object.keys(state).length).to.equal(7);
-    });
+    expect(game.getState).to.be.a('function');
   });
 
   describe('addUser()', () => {
@@ -345,6 +331,67 @@ describe('Game', () => {
       game.setRandomBlackCard();
       // -2 because at this point, one card is in the discard and one card is in play
       expect(game.blackCardDraw.length).to.equal(blackCards.length - 2);
+    });
+  });
+
+  describe('drawForUser()', () => {
+    it('Should be called upon game creation for the game creator', () => {
+      expect(game.whiteCardDraw.length).to.equal(cards.length - handSize);
+    });
+    it('Should be called when adding users', () => {
+      game.addUser(userTwo);
+      expect(game.whiteCardDraw.length).to.equal(cards.length - (handSize * 2));
+    });
+    it('Should not called when adding duplicate users', () => {
+      game.addUser(userTwo);
+      game.addUser(userTwo);
+      expect(game.whiteCardDraw.length).to.equal(cards.length - (handSize * 2));
+    });
+  });
+
+  describe('playCard()', () => {
+    it('');
+  });
+
+  describe('discardCurrentWhiteCards()', () => {
+    it('');
+  });
+
+  describe('start()', () => {
+    it('');
+  });
+
+  describe('stop()', () => {
+    it('');
+  });
+
+  describe('pause()', () => {
+    it('');
+  });
+
+  describe('isRunning()', () => {
+    it('');
+  });
+
+  describe('continue()', () => {
+    it('');
+  });
+
+  describe('sendDataToUsers()', () => {
+    it('');
+  });
+
+  describe('getState()', () => {
+    it('Should return all keys when getting state of basic game', () => {
+      let state = game.getState(userOne);
+      expect(state.hand).to.be.a('array');
+      expect(state.currentBlackCard).to.be.a('object');
+      expect(state.currentWhiteCardByUser).to.be.a('object');
+      expect(state.numOtherWhiteCardsPlayed).to.be.a('number');
+      expect(state.currentJudge).to.be.a('object');
+      expect(state.currentOwner).to.be.a('object');
+      expect(state.otherPlayers).to.be.a('array');
+      expect(Object.keys(state).length).to.equal(7);
     });
   });
 });

@@ -10,21 +10,14 @@ const ROUND_STAGES = {
 
 const minPlayerCount = 3;
 const roundEndDelay = 8; // Number of seconds after the round has ended before moving to the next
-const handSize = 5;
 
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 class Game {
-  constructor (creator, blackCards, whiteCards, timeout, maxPlayers) {
-    this.maxPlayers = maxPlayers;
-    this.users = new Users();
-    this.addUser(creator);
-    this.timeoutId; // Saved to allow pausing and stopping of games
-    this.roundStage;
-    this.timeout = timeout;
-
+  constructor (creator, blackCards, whiteCards, timeout, maxPlayers, handSize) {
+    this.handSize = handSize;
     this.blackCardDraw = blackCards;
     this.whiteCardDraw = whiteCards;
     this.blackCardDiscard = [];
@@ -33,31 +26,23 @@ class Game {
     this.currentWhiteCards = {};
     this.setRandomBlackCard();
 
+    this.maxPlayers = maxPlayers;
+    this.users = new Users();
+    this.addUser(creator);
+    this.timeoutId; // Saved to allow pausing and stopping of games
+    this.roundStage;
+    this.timeout = timeout;
+
     this.continue = this.continue.bind(this);
   }
 
-  getState (currentUser) {
-    let otherPlayers = this.users.getAllUsers().filter((user) => {
-      return user.email !== currentUser.email;
-    });
-
-    return {
-      hand: [],
-      currentBlackCard: this.currentBlackCard,
-      currentWhiteCardByUser: {},
-      numOtherWhiteCardsPlayed: 1,
-      currentJudge: {},
-      currentOwner: {},
-      otherPlayers
-    };
-  }
-
   addUser (user) {
+    // TODO - Add function to Users that allows for searching its userTable and remove the manual lookup of that property right below
     if (this.users.size() < this.maxPlayers && !this.users.userTable[user.email]) {
       this.users.addUser(user);
-      // for (let i = 0; i < handSize; i++) {
-      //   drawForUser(user);
-      // }
+      for (let i = 0; i < this.handSize; i++) {
+        this.drawForUser(user);
+      }
       return true;
     }
     return false;
@@ -89,9 +74,32 @@ class Game {
     this.currentBlackCard = this.blackCardDraw.splice(cardIndex, 1)[0];
   }
   drawForUser (user) {
-    let cardIndex = getRandomInt(0, this.whiteCardPool.length);
-    this.playerHands[user.email].push(this.whiteCardPool.splice(cardIndex, 1)[0]);
+    if (this.whiteCardDraw.length === 0) {
+      this.whiteCardDraw = this.whiteCardDiscard;
+      this.whiteCardDiscard = [];
+    }
+    let cardIndex = getRandomInt(0, this.whiteCardDraw.length - 1);
+    this.users.drawCard(user, this.whiteCardDraw.splice(cardIndex, 1)[0]);
   }
+
+  playCard (user, card) {
+    // If it is a valid time to play a card
+    if (this.isRunning && this.roundStage === ROUND_STAGES.playWhiteCards) {
+      // If the user has not already played a card this round and is not the judge
+      if (!this.currentWhiteCards[user.email] && this.users.getJudge().email !== user.email) {
+        for (let i = 0; i < this.playerHands[user.email]; i++) {
+          if (card.id === this.playerHands[user.email][i].id) {
+            this.playerHands[user.email].splice(i, 1);
+          }
+        }
+        // If this is the last user to play a card, then stop waiting and move on to the next step of the round
+        if (Object.keys(this.currentWhiteCards).length === this.users.size()) {
+          this.continue();
+        }
+      }
+    }
+  }
+
   discardCurrentWhiteCards () {
     Object.keys(this.currentWhiteCards).forEach((key, index) => {
       let card = this.currentWhiteCards[key];
@@ -126,29 +134,6 @@ class Game {
     return !!this.timeoutId;
   }
 
-  playCard (user, card) {
-    // If it is a valid time to play a card
-    if (this.isRunning && this.roundStage === ROUND_STAGES.playWhiteCards) {
-      // If the user has not already played a card this round and is not the judge
-      if (!this.currentWhiteCards[user.email] && this.users.getJudge().email !== user.email) {
-        for (let i = 0; i < this.playerHands[user.email]; i++) {
-          if (card.id === this.playerHands[user.email][i].id) {
-            this.playerHands[user.email].splice(i, 1);
-          }
-        }
-        // If this is the last user to play a card, then stop waiting and move on to the next step of the round
-        if (Object.keys(this.currentWhiteCards).length === this.users.size()) {
-          this.forceContinue();
-        }
-      }
-    }
-  }
-
-  forceContinue () {
-    clearTimeout(this.timeoutId);
-    this.continue();
-  }
-
   continue () {
     if (this.roundStage === ROUND_STAGES.playBlackCard) {
       this.discardCurrentWhiteCards();
@@ -169,6 +154,22 @@ class Game {
 
   sendDataToUsers (dataType, data) {
     socketHandler.respondToUsersByEmail(this.users.getCurrentUsers(), dataType, data);
+  }
+
+  getState (currentUser) {
+    let otherPlayers = this.users.getAllUsers().filter((user) => {
+      return user.email !== currentUser.email;
+    });
+
+    return {
+      hand: [],
+      currentBlackCard: this.currentBlackCard,
+      currentWhiteCardByUser: {},
+      numOtherWhiteCardsPlayed: 1,
+      currentJudge: {},
+      currentOwner: {},
+      otherPlayers
+    };
   }
 }
 
