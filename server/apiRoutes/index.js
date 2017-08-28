@@ -1,13 +1,10 @@
-const passport = require('passport');
-const db = require('../database');
-
 module.exports = (socketHandler) => {
   let router = require('express').Router();
 
-  router.use('/messages', require('./apiRoutes/messages')(socketHandler));
-  router.use('/cardpacks', require('./apiRoutes/cardpacks')(socketHandler));
-  router.use('/cards', require('./apiRoutes/cards')(socketHandler));
-  router.use('/friends', require('./apiRoutes/friends')(socketHandler));
+  router.use('/messages', require('./messages')(socketHandler));
+  router.use('/cardpacks', require('./cardpacks')(socketHandler));
+  router.use('/cards', require('./cards')(socketHandler));
+  router.use('/friends', require('./friends')(socketHandler));
 
   // Returns data about the user who sent this request
   router.get('/currentuser', (req, res) => {
