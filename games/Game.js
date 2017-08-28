@@ -30,9 +30,7 @@ class Game {
     this.whiteCardDraw = whiteCards;
     this.whiteCardDiscard = [];
     this.currentWhiteCards = {};
-
-    this.maxPlayers = maxPlayers;
-    this.users = new Users();
+    this.users = new Users(maxPlayers);
     this.addUser(creator);
     this.timeoutId; // Saved to allow pausing and stopping of games
     this.roundStage;

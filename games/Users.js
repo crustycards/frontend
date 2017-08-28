@@ -11,13 +11,14 @@ class Node {
 }
 
 class Users {
-  constructor () {
+  constructor (playerLimit) {
     this.head = null;
     this.tail = null;
     this.judge = null;
     this.owner = null;
     this.userTable = {}; // Maps user emails to their respective linked-list nodes
     this.numPlayers = 0;
+    this.playerLimit = playerLimit;
   }
 
   size () {
@@ -26,21 +27,25 @@ class Users {
 
   addUser (user, cards) {
     // If the user is already registered in this Users object, don't do anything
-    if (!this.userTable[user.email]) {
-      this.numPlayers++;
-      let userNode = new Node(user, cards || []);
-      this.userTable[user.email] = userNode;
-      // If there are no users in the game
-      if (this.head === null) {
-        this.head = this.tail = this.owner = this.judge = userNode;
-      } else {
-        this.tail.next = userNode;
-        userNode.prev = this.tail;
-        this.tail = userNode;
-      }
-      return true;
+    if (this.userTable[user.email]) {
+      throw new Error('You are already in this game');
     }
-    return false;
+    if (this.size() >= this.playerLimit) {
+      throw new Error('Game is full');
+    }
+
+    this.numPlayers++;
+    let userNode = new Node(user, cards || []);
+    this.userTable[user.email] = userNode;
+    // If there are no users in the game
+    if (this.head === null) {
+      this.head = this.tail = this.owner = this.judge = userNode;
+    } else {
+      this.tail.next = userNode;
+      userNode.prev = this.tail;
+      this.tail = userNode;
+    }
+    return true;
   }
   removeUser (user) {
     let userNode = this.userTable[user.email];
