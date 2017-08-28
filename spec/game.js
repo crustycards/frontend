@@ -427,7 +427,6 @@ describe('Game', () => {
   });
 
   describe('isRunning()', () => {
-    it('');
   });
 
   describe('continue()', () => {

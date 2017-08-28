@@ -139,6 +139,9 @@ class Game {
   }
   stop () {
     // TODO - Reset all game variables
+    this.discardCurrentWhiteCards();
+    this.whiteCardDraw = this.whiteCardDiscard;
+    this.whiteCardDiscard = [];
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = undefined;
@@ -146,6 +149,9 @@ class Game {
     this.discardCurrentWhiteCards();
   }
   pause () {
+    if (!this.timeoutId) {
+      throw new Error('Game is not running');
+    }
     clearTimeout(this.timeoutId);
     this.timeoutId = undefined;
   }
