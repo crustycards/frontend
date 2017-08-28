@@ -126,10 +126,13 @@ class Game {
   }
 
   start () {
+    if (this.users.size() < minPlayerCount) {
+      throw new Error('Not enough players to start game');
+    }
     if (this.roundStage) {
       // Game is paused
       this.continue();
-    } else if (this.users.size() >= minPlayerCount) {
+    } else {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, this.timeout);
     }

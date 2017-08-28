@@ -406,7 +406,16 @@ describe('Game', () => {
   });
 
   describe('start()', () => {
-    it('');
+    it('Should start game when appropriate', () => {
+      game.addUser(userTwo);
+      game.addUser(userThree);
+      game.start();
+      expect(game.isRunning()).to.equal(true);
+    });
+    it('Should throw error when not enough users are in the game', () => {
+      expect(() => {game.start()}).to.throw(Error, 'Not enough players to start game');
+      expect(game.isRunning()).to.equal(false);
+    });
   });
 
   describe('stop()', () => {
