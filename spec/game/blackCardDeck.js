@@ -19,7 +19,7 @@ describe('BlackCardDeck', () => {
     expect(deck.currentCard).to.exist;
     expect(deck.currentCard).to.be.a('object');
   });
-  it('Should cycle through black cards and always have a current card', () => {
+  it('Should cycle through cards and always have a current card', () => {
     for (let i = 0; i < 100; i++) {
       let card = cards.filter((card) => {
         return card.id === deck.currentCard.id;
@@ -28,7 +28,7 @@ describe('BlackCardDeck', () => {
       deck.cycleCard();
     }
   });
-  it('Should properly store black cards in the black card draw/discard pile', () => {
+  it('Should properly store cards in the card draw/discard pile', () => {
     for (let i = 0; i < 100; i++) {
       deck.drawPile.forEach((card) => {
         expect(card.id).to.exist;
@@ -47,7 +47,7 @@ describe('BlackCardDeck', () => {
   });
   it('Should reshuffle cards when attempting to draw from an empty draw pile, and should not loose any cards in the process', () => {
     expect(deck.drawPile.length).to.equal(cards.length - 1);
-    // Goes to blackCards.length - 1 because the first max length of the array is one minus the length of the inpur array of cards
+    // Goes to cards.length - 1 because the first max length of the array is one minus the length of the inpur array of cards
     for (let i = 0; i < cards.length - 1; i++) {
       deck.cycleCard();
       expect(deck.drawPile.length).to.equal(cards.length - i - 2);
