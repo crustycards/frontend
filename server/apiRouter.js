@@ -1,8 +1,11 @@
-module.exports = (socketHandler) => {
-  const passport = require('passport');
+const passport = require('passport');
+const db = require('../database');
 
+module.exports = (socketHandler) => {
   let router = require('express').Router();
-  let db = require('../database');
+
+  router.use('/messages', require('./apiRoutes/messages')(socketHandler));
+  router.use('/cardpacks', require('./apiRoutes/cardpacks')(socketHandler));
 
   // Returns data about the user who sent this request
   router.get('/currentuser', (req, res) => {
@@ -14,27 +17,6 @@ module.exports = (socketHandler) => {
       res.status(500).send('Not logged in');
     }
   });
-
-  router.route('/messages')
-    .get((req, res) => {
-      // Get a list of messages with a particular user
-      db.Message.getBetweenUsers(req.user.email, req.body.user)
-        .then((messages) => {
-          res.json(messages);
-        })
-        .catch((error) => {
-          res.status(500).send(error);
-        });
-    })
-    .post((req, res) => {
-      db.Message.create(req.user.email, req.body.user, req.body.text)
-        .then((message) => {
-          res.json(message);
-        })
-        .catch((error) => {
-          res.status(500).send(error);
-        });
-    });
 
   router.route('/friends')
     .get((req, res) => {
@@ -104,58 +86,6 @@ module.exports = (socketHandler) => {
           res.status(500).send(error);
         });
     });
-  
-  // Returns array of all cardpacks owned by the requestor
-  router.get('/cardpacks', (req, res) => {
-    db.Cardpack.getByUserEmail(req.user.email)
-      .then((cardpacks) => {
-        res.json(cardpacks);
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  // Returns the cardpack referenced by the specified ID
-  router.get('/cardpacks/:id', (req, res) => {
-    db.Cardpack.getById(req.params.id)
-      .then((cardpack) => {
-        res.json(cardpack);
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  // Returns array of all cardpacks owned by the specified user
-  router.get('/cardpacks/user/:user', (req, res) => {
-    db.Cardpack.getByUserEmail(req.params.user)
-      .then((cardpacks) => {
-        res.json(cardpacks);
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  // Creates a cardpack and sets the owner as the current user
-  router.post('/cardpacks', (req, res) => {
-    db.Cardpack.create(req.user.email, req.body.name)
-      .then((cardpack) => {
-        res.json('success');
-        socketHandler.respondToUsers([req.user], 'cardpackcreate', cardpack);
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
-  router.delete('/cardpacks', (req, res) => {
-    db.Cardpack.delete(req.user.email, req.body.id)
-      .then(() => {
-        res.json('success');
-        socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id});
-      })
-      .catch((error) => {
-        res.status(500).send(error);
-      });
-  });
 
   router.get('/cards/:cardpackId', (req, res) => {
     db.Card.getByCardpackId(req.params.cardpackId)
