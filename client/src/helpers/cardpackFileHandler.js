@@ -29,5 +29,14 @@ module.exports.parse = (string) => {
   return cards;
 };
 
+// TODO - Write tests for this
 module.exports.stringify = (cards) => {
+  let cardString = '';
+  cards.forEach((card, i) => {
+    cardString += card.text + ', ' + card.type;
+    if (i + 1 < cards.length) {
+      cardString += '\r\n';
+    }
+  });
+  return cardString;
 };

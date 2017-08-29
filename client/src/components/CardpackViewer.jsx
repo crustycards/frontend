@@ -11,6 +11,7 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {GridList, GridTile} from 'material-ui/GridList';
 import time from 'time-converter';
+import cardpackFileHandler from '../helpers/cardpackFileHandler';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -21,6 +22,7 @@ class CardpackViewer extends React.Component {
     this.handleNewSelect = this.handleNewSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.state = {
       currentUser: null,
       cards: [],
@@ -108,6 +110,20 @@ class CardpackViewer extends React.Component {
     axios.delete('/api/cards/' + card.id);
   }
 
+  downloadStringifiedCards () {
+    let download = (filename, text) => {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+    // Start file download.
+    download(this.state.cardpack.name, cardpackFileHandler.stringify(this.state.cards));
+  }
+
   render () {
     const styles = {
       root: {
@@ -179,6 +195,7 @@ class CardpackViewer extends React.Component {
       <div className='panel'>
         <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
         {isOwner ? cardAdder : null}
+        <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
         <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
       </div>
     );
