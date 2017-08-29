@@ -10,7 +10,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import {GridList, GridTile} from 'material-ui/GridList';
-import time from '../helpers/time.js';
+import time from 'time-converter';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -147,7 +147,7 @@ class CardpackViewer extends React.Component {
       cardElements.push(
         <CardHeader
           title={card.text}
-          subtitle={'Created ' + time.parse(card.createdAt, true)}
+          subtitle={'Created ' + time.stringify(card.createdAt, {relativeTime: true})}
           key={0}
         />
       );
