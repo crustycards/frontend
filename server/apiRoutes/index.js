@@ -5,6 +5,7 @@ module.exports = (socketHandler) => {
   router.use('/cardpacks', require('./cardpacks')(socketHandler));
   router.use('/cards', require('./cards')(socketHandler));
   router.use('/friends', require('./friends')(socketHandler));
+  router.use('/games', require('./games')(socketHandler));
 
   // Returns data about the user who sent this request
   router.get('/currentuser', (req, res) => {
