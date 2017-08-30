@@ -16,7 +16,7 @@ module.exports = (socketHandler) => {
     let cards = req.body;
     cards.forEach((card) => {
       promises.push(
-        db.Card.create(req.user.email, req.params.cardpackId, card.text, card.type)
+        db.Card.create(req.user.email, req.params.cardpackId, card.text, card.type, card.answerFields)
           .then((card) => {
             socketHandler.respondToUsers([req.user], 'cardcreate', {card});
           })

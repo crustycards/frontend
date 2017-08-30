@@ -441,6 +441,30 @@ describe('API Router', () => {
           });
       });
     });
+    it('Should succeed when setting answerFields for a new black card', (done) => {
+      agent.post('/api/cards/' + cardpackId)
+        .send([{
+          text: 'testcard',
+          type: 'black',
+          answerFields: 3
+        }])
+        .end((err, res) => {
+          expect(err).to.not.exist;
+          done();
+        });
+    });
+    it('Should return error when setting answerFields to a value greater than three when creating a card', (done) => {
+      agent.post('/api/cards/' + cardpackId)
+        .send([{
+          text: 'testcard',
+          type: 'black',
+          answerFields: 4
+        }])
+        .end((err, res) => {
+          expect(err).to.exist;
+          done();
+        });
+    });
 
     describe('GET', () => {
       it('Should retrieve cards from a cardpack when logged in as the cardpack owner', (done) => {
@@ -449,7 +473,7 @@ describe('API Router', () => {
             expect(err).to.not.exist;
             let cards = res.body;
             expect(cards).to.be.a('array');
-            expect(cards.length).to.equal(1); // Since we only added one card in the previous tests
+            expect(cards.length).to.equal(2); // Since we only added two card in the previous tests
             expect(cards[0].text).to.equal('testcard');
             done();
           });
@@ -460,7 +484,7 @@ describe('API Router', () => {
             expect(err).to.not.exist;
             let cards = res.body;
             expect(cards).to.be.a('array');
-            expect(cards.length).to.equal(1); // Since we only added one card in the previous tests
+            expect(cards.length).to.equal(2); // Since we only added one card in the previous tests
             expect(cards[0].text).to.equal('testcard');
             done();
           });

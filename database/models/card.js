@@ -46,6 +46,16 @@ Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
       reject('Expected card text to be a non-empty string, but instead received ' + cardText);
     });
   }
+  if (answerFields === null || answerFields === undefined || answerFields.constructor !== Number) {
+    return new Promise((resolve, reject) => {
+      reject('Expected answerFields to be a number, but instead received ' + answerFields);
+    });
+  }
+  if (answerFields < 1 || answerFields > 3) {
+    return new Promise((resolve, reject) => {
+      reject('Expected answerFields to be 1, 2, or 3 but it received ' + answerFields);
+    });
+  }
 
   return Cardpack.model.findOne({
     where: {id: cardpackId}

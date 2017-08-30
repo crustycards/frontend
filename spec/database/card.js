@@ -57,7 +57,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'white', 4)
+          return Card.create(user.email, cardpack.id, 'test card', 'white', 3)
             .then((card) => {
               expect(card.answerFields).to.not.exist;
             });
@@ -67,13 +67,27 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black', 4)
+          return Card.create(user.email, cardpack.id, 'test card', 'black', 3)
             .then((card) => {
-              expect(card.answerFields).to.equal(4);
+              expect(card.answerFields).to.equal(3);
             });
         });
     });
-    it('Shouldset  card answerFields to one if no value is provided', () => {
+    it('Should throw error when setting answerFields to a value greater than three', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return expect(Card.create(user.email, cardpack.id, 'test card', 'black', 4)).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
+        });
+    });
+    it('Should throw error when setting answerFields to a value less than one', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return expect(Card.create(user.email, cardpack.id, 'test card', 'black', 0)).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
+        });
+    });
+    it('Should set card answerFields to one if no value is provided', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {

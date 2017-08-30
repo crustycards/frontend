@@ -3,7 +3,7 @@ import axios from 'axios';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import { TextField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
+import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
 import time from 'time-converter';
@@ -24,6 +24,7 @@ class CardpackViewer extends React.Component {
       cards: [],
       newCardName: '',
       newCardType: 'white',
+      newCardAnswerFields: 1,
       cardpack: undefined
     };
     if (props.liveUpdateTime === true) {
@@ -54,6 +55,9 @@ class CardpackViewer extends React.Component {
     let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
+  }
+  changeAnswerField = (event, index, value) => {
+    this.setState({newCardAnswerFields: value});
   }
   handleKeyPress (e) {
     if (e.key === 'Enter') {
@@ -97,7 +101,8 @@ class CardpackViewer extends React.Component {
     if (this.state.newCardName) {
       axios.post('/api/cards/' + this.cardpackId, [{
         text: this.state.newCardName,
-        type: this.state.newCardType
+        type: this.state.newCardType,
+        answerFields: this.state.newCardAnswerFields
       }]);
       this.setState({newCardName: ''});
     }
@@ -149,6 +154,15 @@ class CardpackViewer extends React.Component {
           <MenuItem value={'white'} primaryText='White' />
           <MenuItem value={'black'} primaryText='Black' />
         </DropDownMenu>
+        <SelectField
+          floatingLabelText="Answer Fields"
+          value={this.state.newCardAnswerFields}
+          onChange={this.changeAnswerField}
+        >
+          <MenuItem value={1} primaryText="One" />
+          <MenuItem value={2} primaryText="Two" />
+          <MenuItem value={3} primaryText="Three" />
+        </SelectField>
         <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCard} />
       </div>);
     }
@@ -158,7 +172,7 @@ class CardpackViewer extends React.Component {
       let cardElements = [];
       cardElements.push(
         <CardHeader
-          title={card.text}
+          title={card.text + (card.answerFields && card.answerFields > 1 ? ' - ' + card.answerFields + ' card answer' : '')}
           subtitle={'Created ' + time.stringify(card.createdAt, {relativeTime: true})}
           key={0}
         />
