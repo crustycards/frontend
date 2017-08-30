@@ -34,8 +34,9 @@ class Home extends Component {
     super(props);
     this.socket = io();
 
-    this.socket.on('', (data) => {
+    this.socket.on('friendrequestsend', (data) => {
       let users = JSON.parse(data);
+      console.log('friend request', users);
       let otherUser;
       if (users.friender.id === this.props.currentUser.id) {
         otherUser = users.friendee;
@@ -87,7 +88,9 @@ class Home extends Component {
         <Navbar/>
         <div className='content-wrap'>
           <div className='col-narrow'>
-            <FrienderPanel />
+            <FrienderPanel
+              requestFriends={this.props.requestFriends} 
+            />
             <FriendsList friends={this.props.friends} />
             <FriendRequestsSent 
               requestsSent={this.props.requestsSent} 
@@ -95,7 +98,9 @@ class Home extends Component {
             <FriendRequestsReceived 
               requestsReceived={this.props.requestsReceived} 
             />
-            <h1>{'test' + this.props.currentUser + this.props.requestsSent}</h1>
+          </div>
+          <div className='col-wide'>
+            <CardpackManager liveUpdateTime={true} socket={this.socket} />
           </div>
         </div>
       </div>
@@ -117,7 +122,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addFriendRequestReceived,
   removeSentFriendRequest,
   removeReceivedFriendRequest,
-  requestsReceived,
   setCurrentUser,
   requestCurrentUser,
   requestFriends

@@ -20,8 +20,10 @@ class FrienderPanel extends React.Component {
       axios.post('/api/friends', {
         type: 'request',
         user: this.state.requestEmail
-      });
-      this.setState({requestEmail: ''});
+      })
+        .then(() => {
+          this.setState({requestEmail: ''});
+        });
     }
   }
 

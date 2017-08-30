@@ -23,7 +23,6 @@ const initialState = {
  * TODO: split up
  */
 export default (state = initialState, {type, payload}) => {
-  console.log('reducer', type, payload);
   switch (type) {
   case SET_CURRENT_USER: 
     return {
@@ -34,10 +33,7 @@ export default (state = initialState, {type, payload}) => {
   case ADD_FRIEND: 
     return {
       ...state,
-      friends: Object.assign(
-        state.friends, 
-        {friends: state.friends.concat(payload)}
-      ) 
+      friends: state.friends.concat([payload])
     };
 
   case SET_FRIENDS: 
@@ -60,21 +56,21 @@ export default (state = initialState, {type, payload}) => {
     };
 
   case REMOVE_FRIEND:
-    const newFriends = state.friends.filter(f => f !== payload);
+    const newFriends = state.friends.filter(f => f.id !== payload.id);
     return {
       ...state,
       friends: newFriends
     };
 
   case REMOVE_SENT_FRIEND_REQUEST:
-    const requestsSent = state.requestsSent.filter(f => f !== payload);
+    const requestsSent = state.requestsSent.filter(f => f.id !== payload.id);
     return {
       ...state,
       requestsSent
     };
 
   case REMOVE_RECEIVED_FRIEND_REQUEST:
-    const requestsReceived = state.requestsReceived.filter(f => f !== payload);
+    const requestsReceived = state.requestsReceived.filter(f => f.id !== payload.id);
     return {
       ...state,
       requestsReceived
