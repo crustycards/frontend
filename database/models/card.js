@@ -20,7 +20,7 @@ let CardModel = db.define('cards', {
     allowNull: false
   },
   answerFields: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.INTEGER(1),
     notEmpty: true,
     allowNull: true
   }
