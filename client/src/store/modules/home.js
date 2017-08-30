@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 
-const ADD_FRIEND = 'home/ADD_FRIEND';
-const REMOVE_FRIEND = 'home/REMOVE_FRIEND';
-const ADD_SENT_FRIEND_REQUEST = 'home/ADD_SENT_FRIEND_REQUEST';
-const ADD_RECEIVED_FRIEND_REQUEST = 'home/ADD_RECEIVED_FRIEND_REQUEST';
-const REMOVE_SENT_FRIEND_REQUEST = 'home/REMOVE_SENT_FRIEND_REQUEST';
-const REMOVE_RECEIVED_FRIEND_REQUEST = 'home/REMOVE_RECEIVED_FRIEND_REQUEST';
-const SET_CURRENT_USER = 'home/SET_CURRENT_USER';
-const SET_FRIENDS = 'home/SET_FRIENDS';
+export const ADD_FRIEND = 'home/ADD_FRIEND';
+export const REMOVE_FRIEND = 'home/REMOVE_FRIEND';
+export const ADD_SENT_FRIEND_REQUEST = 'home/ADD_SENT_FRIEND_REQUEST';
+export const ADD_RECEIVED_FRIEND_REQUEST = 'home/ADD_RECEIVED_FRIEND_REQUEST';
+export const REMOVE_SENT_FRIEND_REQUEST = 'home/REMOVE_SENT_FRIEND_REQUEST';
+export const REMOVE_RECEIVED_FRIEND_REQUEST = 'home/REMOVE_RECEIVED_FRIEND_REQUEST';
+export const SET_CURRENT_USER = 'home/SET_CURRENT_USER';
+export const SET_FRIENDS = 'home/SET_FRIENDS';
 
 const initialState = {
   currentUser: null,
@@ -154,14 +154,4 @@ export const requestFriends = () => {
         });
       });
   };
-};
-
-
-//
-//
-// SOCKET Dispatchers
-//
-//
-export const requestDispatcher = action$ => {
-  console.log('action', action$);
 };

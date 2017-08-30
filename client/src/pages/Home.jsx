@@ -13,7 +13,7 @@ import Navbar from '../components/Navbar.jsx';
 
 import {
   SET_CURRENT_USER
-} from '../store/actions';
+} from '../store/modules/home';
 
 import {
   addFriend,

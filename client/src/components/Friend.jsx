@@ -30,11 +30,4 @@ class Friend extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-
-});
-
-export default connect(
-  null,
-  mapDispatchToProps 
-)(Friend);
+export default Friend;
