@@ -36,7 +36,6 @@ class Home extends Component {
 
     this.socket.on('friendrequestsend', (data) => {
       let users = JSON.parse(data);
-      console.log('friend request', users);
       let otherUser;
       if (users.friender.id === this.props.currentUser.id) {
         otherUser = users.friendee;
@@ -48,7 +47,6 @@ class Home extends Component {
     });
 
     this.socket.on('friendrequestaccept', (data) => {
-      console.log('accepted!');
       let users = JSON.parse(data);
       let otherUser;
       if (users.acceptor.id === this.props.currentUser.id) {
@@ -62,7 +60,6 @@ class Home extends Component {
     });
 
     this.socket.on('unfriend', (data) => {
-      console.log('unfriended!');
       let users = JSON.parse(data);
       let otherUser;
       if (users.unfriender.id === this.props.currentUser.id) {

@@ -37,7 +37,6 @@ export default (state = initialState, {type, payload}) => {
     };
 
   case SET_FRIENDS: 
-    console.log(payload);
     return {
       ...state,
       friends: payload
