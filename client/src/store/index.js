@@ -1,14 +1,8 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
-// import createHistory from 'history/createBrowserHistory';
 import thunk from 'redux-thunk';
 import rootReducer from './modules';
 
-import { createEpicMiddleware } from 'redux-observable';
-
-const pingEpic = () => {};
-
-const epicMiddleware = createEpicMiddleware(pingEpic);
 
 const initialState = {};
 const enhancers = [];

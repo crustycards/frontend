@@ -28,7 +28,6 @@ import {
   requestFriends
 } from '../store/modules/home.js';
 
-
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -75,7 +74,6 @@ class Home extends Component {
 
   componentDidMount() {
     this.props.requestCurrentUser();
-    // one is the loneliest number
     this.props.requestFriends(); 
   }
 
@@ -85,16 +83,10 @@ class Home extends Component {
         <Navbar/>
         <div className='content-wrap'>
           <div className='col-narrow'>
-            <FrienderPanel
-              requestFriends={this.props.requestFriends} 
-            />
-            <FriendsList friends={this.props.friends} />
-            <FriendRequestsSent 
-              requestsSent={this.props.requestsSent} 
-            />
-            <FriendRequestsReceived 
-              requestsReceived={this.props.requestsReceived} 
-            />
+            <FrienderPanel />
+            <FriendsList />
+            <FriendRequestsSent />
+            <FriendRequestsReceived />
           </div>
           <div className='col-wide'>
             <CardpackManager liveUpdateTime={true} socket={this.socket} />
