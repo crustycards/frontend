@@ -386,10 +386,10 @@ describe('API Router', () => {
     describe('POST', () => {
       it('Should be able to add cards to existing cardpacks', (done) => {
         agent.post('/api/cards/' + cardpackId)
-          .send({
-            cardText: 'testcard',
-            cardType: 'white'
-          })
+          .send([{
+            text: 'testcard',
+            type: 'white'
+          }])
           .end((err, res) => {
             expect(err).to.not.exist;
             expect(res.body).to.equal('success');
@@ -398,10 +398,10 @@ describe('API Router', () => {
       });
       it('Should return error when adding cards to cardpack owned by another user', (done) => {
         agent2.post('/api/cards/' + cardpackId)
-          .send({
-            cardText: 'testcard',
-            cardType: 'white'
-          })
+          .send([{
+            text: 'testcard',
+            type: 'white'
+          }])
           .end((err, res) => {
             expect(err).to.exist;
             done();
@@ -409,10 +409,10 @@ describe('API Router', () => {
       });
       it('Should return error when adding cards to cardpack that does not exist', (done) => {
         agent.post('/api/cards/' + 123456789)
-          .send({
-            cardText: 'testcard',
-            cardType: 'white'
-          })
+          .send([{
+            text: 'testcard',
+            type: 'white'
+          }])
           .end((err, res) => {
             expect(err).to.exist;
             done();
@@ -420,10 +420,10 @@ describe('API Router', () => {
       });
       it('Should return error when adding cards using no cardpack ID in the url', (done) => {
         agent.post('/api/cards')
-          .send({
-            cardText: 'testcard',
-            cardType: 'white'
-          })
+          .send([{
+            text: 'testcard',
+            type: 'white'
+          }])
           .end((err, res) => {
             expect(err).to.exist;
             done();
@@ -431,10 +431,10 @@ describe('API Router', () => {
       });
       it('Should return error when adding a card with an invalid card type', (done) => {
         agent.post('/api/cards/' + cardpackId)
-          .send({
-            cardText: 'testcard',
-            cardType: 'asdf'
-          })
+          .send([{
+            text: 'testcard',
+            type: 'asdf'
+          }])
           .end((err, res) => {
             expect(err).to.exist;
             done();

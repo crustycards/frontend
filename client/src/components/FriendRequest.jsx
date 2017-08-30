@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+import { FlatButton } from 'material-ui';
 
 class FriendRequest extends React.Component {
   constructor (props) {

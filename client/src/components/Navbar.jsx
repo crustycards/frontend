@@ -1,7 +1,5 @@
 import React from 'react';
-import Drawer from 'material-ui/Drawer';
-import MenuItem from 'material-ui/MenuItem';
-import AppBar from 'material-ui/AppBar';
+import { Drawer, MenuItem, AppBar } from 'material-ui';
 
 class Navbar extends React.Component {
   constructor (props) {

@@ -3,14 +3,11 @@ import axios from 'axios';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
-import FlatButton from 'material-ui/FlatButton';
+import { TextField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import DropDownMenu from 'material-ui/DropDownMenu';
-import MenuItem from 'material-ui/MenuItem';
 import {GridList, GridTile} from 'material-ui/GridList';
-import time from '../helpers/time.js';
+import time from 'time-converter';
+import cardpackFileHandler from '../helpers/cardpackFileHandler';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -21,6 +18,7 @@ class CardpackViewer extends React.Component {
     this.handleNewSelect = this.handleNewSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.state = {
       currentUser: null,
       cards: [],
@@ -97,15 +95,29 @@ class CardpackViewer extends React.Component {
 
   addCard () {
     if (this.state.newCardName) {
-      axios.post('/api/cards/' + this.cardpackId, {
-        cardText: this.state.newCardName,
-        cardType: this.state.newCardType
-      });
+      axios.post('/api/cards/' + this.cardpackId, [{
+        text: this.state.newCardName,
+        type: this.state.newCardType
+      }]);
       this.setState({newCardName: ''});
     }
   }
   removeCard (card) {
     axios.delete('/api/cards/' + card.id);
+  }
+
+  downloadStringifiedCards () {
+    let download = (filename, text) => {
+      var element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+    // Start file download.
+    download(this.state.cardpack.name, cardpackFileHandler.stringify(this.state.cards));
   }
 
   render () {
@@ -147,7 +159,7 @@ class CardpackViewer extends React.Component {
       cardElements.push(
         <CardHeader
           title={card.text}
-          subtitle={'Created ' + time.parse(card.createdAt, true)}
+          subtitle={'Created ' + time.stringify(card.createdAt, {relativeTime: true})}
           key={0}
         />
       );
@@ -179,6 +191,7 @@ class CardpackViewer extends React.Component {
       <div className='panel'>
         <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
         {isOwner ? cardAdder : null}
+        <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
         <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
       </div>
     );

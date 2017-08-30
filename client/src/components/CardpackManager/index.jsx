@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import { TextField, RaisedButton } from 'material-ui';
 import Cardpack from './Cardpack.jsx';
 
 class CardpackManager extends React.Component {

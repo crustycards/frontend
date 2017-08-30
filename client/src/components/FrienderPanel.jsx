@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import { TextField, RaisedButton } from 'material-ui';
 import helpers from '../helpers';
 
 class FrienderPanel extends React.Component {
