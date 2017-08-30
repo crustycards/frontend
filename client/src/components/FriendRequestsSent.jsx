@@ -1,5 +1,6 @@
 import React from 'react';
 import FriendRequest from './FriendRequest.jsx';
+import { connect } from 'react-redux';
 
 class FriendRequestsSent extends React.Component {
   constructor (props) {
@@ -11,11 +12,13 @@ class FriendRequestsSent extends React.Component {
       <div className="panel">
         <div>Friend Requests Sent</div>
         {this.props.requestsSent.map((user, index) => {
-          return <FriendRequest user={user} type="sent" key={index} />
+          return <FriendRequest user={user} type="sent" key={index} />;
         })}
       </div>
     );
   }
 }
 
-export default FriendRequestsSent;
+export default connect(
+  ({home}) => ({requestsSent: home.requestsSent})
+)(FriendRequestsSent);

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { render} from 'react-dom';
 import { Provider } from 'react-redux';
-import store from './store';
+import store from './store/index.js';
 
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';

@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Friend from './Friend.jsx';
+import { connect } from 'react-redux';
 
-class FriendsList extends React.Component {
+class FriendsList extends Component {
   constructor (props) {
     super(props);
   }
@@ -10,8 +11,8 @@ class FriendsList extends React.Component {
     return (
       <div className="panel">
         <div>Friends</div>
-        {this.props.friends.map((friend, index) => {
-          return <Friend user={friend} key={index} />
+        {(this.props.friends || []).map((friend, index) => {
+          return <Friend user={friend} key={index} />;
         })}
       </div>
     );

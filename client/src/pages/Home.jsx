@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
 import FriendsList from '../components/FriendsList.jsx';
@@ -10,114 +11,74 @@ import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
 import Navbar from '../components/Navbar.jsx';
 
+import {
+  SET_CURRENT_USER
+} from '../store/actions';
+
+import {
+  addFriend,
+  addFriendRequestSent,
+  addFriendRequestReceived,
+  removeSentFriendRequest,
+  removeFriend,
+  removeReceivedFriendRequest,
+  requestsReceived,
+  setCurrentUser,
+  requestCurrentUser,
+  requestFriends
+} from '../store/modules/home.js';
+
+
 class Home extends Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      currentUser: null,
-      friends: [],
-      requestsSent: [],
-      requestsReceived: []
-    };
-
     this.socket = io();
 
-    this.socket.on('friendrequestsend', (data) => {
+    this.socket.on('', (data) => {
       let users = JSON.parse(data);
       let otherUser;
-      if (users.friender.id === this.state.currentUser.id) {
+      if (users.friender.id === this.props.currentUser.id) {
         otherUser = users.friendee;
-        this.addFriendRequestSent(otherUser);
+        this.props.addFriendRequestSent(otherUser);
       } else {
         otherUser = users.friender;
-        this.addFriendRequestReceived(otherUser);
+        this.props.addFriendRequestReceived(otherUser);
       }
     });
 
     this.socket.on('friendrequestaccept', (data) => {
+      console.log('accepted!');
       let users = JSON.parse(data);
       let otherUser;
-      if (users.acceptor.id === this.state.currentUser.id) {
+      if (users.acceptor.id === this.props.currentUser.id) {
         otherUser = users.acceptee;
       } else {
         otherUser = users.acceptor;
       }
-      this.removeFriendRequestSent(otherUser);
-      this.removeFriendRequestReceived(otherUser);
-      this.addFriend(otherUser);
+      this.props.removeSentFriendRequest(otherUser);
+      this.props.removeReceivedFriendRequest(otherUser);
+      this.props.addFriend(otherUser);
     });
 
     this.socket.on('unfriend', (data) => {
+      console.log('unfriended!');
       let users = JSON.parse(data);
       let otherUser;
-      if (users.unfriender.id === this.state.currentUser.id) {
+      if (users.unfriender.id === this.props.currentUser.id) {
         otherUser = users.unfriendee;
       } else {
         otherUser = users.unfriender;
       }
-      this.removeFriendRequestSent(otherUser);
-      this.removeFriendRequestReceived(otherUser);
-      this.removeFriend(otherUser);
-    });
-
-    axios.get('/api/currentuser')
-      .then((response) => {
-        let currentUser = response.data;
-        this.setState({currentUser});
-      });
-
-    axios.get('/api/friends')
-      .then((response) => {
-        let friendData = response.data;
-        this.setState({friends: friendData.friends});
-        this.setState({requestsSent: friendData.requestsSent});
-        this.setState({requestsReceived: friendData.requestsReceived});
-      });
-
-  }
-
-  addFriend (friend) {
-    this.state.friends.push(friend);
-    this.forceUpdate();
-  }
-
-  removeFriend (friend) {
-    for (let i = 0; i < this.state.friends.length; i++) {
-      if (this.state.friends[i].email === friend.email) {
-        this.state.friends.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
-  }
-
-  addFriendRequestSent (friend) {
-    this.state.requestsSent.push(friend);
-    this.forceUpdate();
-  }
-
-  removeFriendRequestSent (friend) {
-    for (let i = 0; i < this.state.requestsSent.length; i++) {
-      if (this.state.requestsSent[i].email === friend.email) {
-        this.state.requestsSent.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
-  }
-
-  addFriendRequestReceived (friend) {
-    this.setState({
-      friends: Object.assign(this.state.friends, {friends: this.state.push(friend)}) 
+      this.props.removeSentFriendRequest(otherUser);
+      this.props.removeReceivedFriendRequest(otherUser);
+      this.props.removeFriend(otherUser);
     });
   }
 
-  removeFriendRequestReceived (friend) {
-    for (let i = 0; i < this.state.requestsReceived.length; i++) {
-      if (this.state.requestsReceived[i].email === friend.email) {
-        this.state.requestsReceived.splice(i, 1);
-        this.forceUpdate();
-      }
-    }
+  componentDidMount() {
+    this.props.requestCurrentUser();
+    // one is the loneliest number
+    this.props.requestFriends(); 
   }
 
   render() {
@@ -127,12 +88,14 @@ class Home extends Component {
         <div className='content-wrap'>
           <div className='col-narrow'>
             <FrienderPanel />
-            <FriendsList friends={this.state.friends} />
-            <FriendRequestsSent requestsSent={this.state.requestsSent} />
-            <FriendRequestsReceived requestsReceived={this.state.requestsReceived} />
-          </div>
-          <div className='col-wide'>
-            <CardpackManager liveUpdateTime={true} socket={this.socket} />
+            <FriendsList friends={this.props.friends} />
+            <FriendRequestsSent 
+              requestsSent={this.props.requestsSent} 
+            />
+            <FriendRequestsReceived 
+              requestsReceived={this.props.requestsReceived} 
+            />
+            <h1>{'test' + this.props.currentUser + this.props.requestsSent}</h1>
           </div>
         </div>
       </div>
@@ -140,13 +103,25 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = ({}) => {
+const mapStateToProps = ({home}) => ({
+  currentUser: home.currentUser,
+  friends: home.friends, 
+  requestsSent: home.requestsSent, 
+  requestsReceived: home.requestsReceived
+});
 
-};
-
-const mapDispatchToProps = (dispatch) => {
-
-};
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  addFriend,
+  removeFriend,
+  addFriendRequestSent,
+  addFriendRequestReceived,
+  removeSentFriendRequest,
+  removeReceivedFriendRequest,
+  requestsReceived,
+  setCurrentUser,
+  requestCurrentUser,
+  requestFriends
+}, dispatch);
 
 export default connect(
   mapStateToProps,

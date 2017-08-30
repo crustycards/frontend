@@ -2,6 +2,8 @@ import React from 'react';
 import axios from 'axios';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class Friend extends React.Component {
   constructor (props) {
@@ -28,4 +30,11 @@ class Friend extends React.Component {
   }
 }
 
-export default Friend;
+const mapDispatchToProps = dispatch => bindActionCreators({
+
+});
+
+export default connect(
+  null,
+  mapDispatchToProps 
+)(Friend);
