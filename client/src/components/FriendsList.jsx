@@ -1,21 +1,16 @@
 import React from 'react';
 import Friend from './Friend.jsx';
+import { connect } from 'react-redux';
 
-class FriendsList extends React.Component {
-  constructor (props) {
-    super(props);
-  }
+const FriendsList = ({friends}) => (
+  <div className="panel">
+    <div>Friends</div>
+    {(friends || []).map((friend, index) => {
+      return <Friend user={friend} key={index} />;
+    })}
+  </div>
+);
 
-  render () {
-    return (
-      <div className="panel">
-        <div>Friends</div>
-        {this.props.friends.map((friend, index) => {
-          return <Friend user={friend} key={index} />
-        })}
-      </div>
-    );
-  }
-}
-
-export default FriendsList;
+export default connect(
+  ({home}) => ({friends: home.friends})
+)(FriendsList);

@@ -1,5 +1,9 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+
+import { render} from 'react-dom';
+import { Provider } from 'react-redux';
+import store from './store/index.js';
+
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -11,14 +15,17 @@ import NotFound from './pages/NotFound.jsx';
 import './styles.css';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
-ReactDOM.render(
-<MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-  <Router history={browserHistory}>
-    <Route path='/' component={Home}/>
-    <Route path='/cardpack' component={Cardpack}/>
-    <Route path='/login' component={Login}/>
-    <Route path='/signup' component={Signup}/>
-    <Route path='*' component={NotFound}/>
-  </Router>
-</MuiThemeProvider>
-, document.getElementById('app'));
+
+render(
+  <Provider store={store}> 
+    <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+      <Router history={browserHistory}>
+        <Route path='/' component={Home}/>
+        <Route path='/cardpack' component={Cardpack}/>
+        <Route path='/login' component={Login}/>
+        <Route path='/signup' component={Signup}/>
+        <Route path='*' component={NotFound}/>
+      </Router>
+    </MuiThemeProvider>
+  </Provider>
+  , document.getElementById('app'));

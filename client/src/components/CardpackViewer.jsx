@@ -31,10 +31,10 @@ class CardpackViewer extends React.Component {
       setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
     }
     axios.get('/api/currentuser')
-    .then((response) => {
-      let currentUser = response.data;
-      this.setState({currentUser});
-    });
+      .then((response) => {
+        let currentUser = response.data;
+        this.setState({currentUser});
+      });
     this.fetchCurrentCardpack();
     this.fetchCards();
 
@@ -76,24 +76,24 @@ class CardpackViewer extends React.Component {
 
   fetchCurrentCardpack () {
     axios.get('/api/cardpacks/' + this.cardpackId)
-    .then((response) => {
-      let cardpack = response.data;
-      this.setState({cardpack});
-    })
-    .catch(() => {
-      this.setState({cardpack: null});
-    });
+      .then((response) => {
+        let cardpack = response.data;
+        this.setState({cardpack});
+      })
+      .catch(() => {
+        this.setState({cardpack: null});
+      });
   }
   fetchCards () {
     if (this.cardpackId) {
       axios.get('/api/cards/' + this.cardpackId)
-      .then((response) => {
-        let cards = response.data;
-        this.setState({cards});
-      })
-      .catch((error) => {
-        this.setState({cardpack: null});
-      });
+        .then((response) => {
+          let cards = response.data;
+          this.setState({cards});
+        })
+        .catch((error) => {
+          this.setState({cardpack: null});
+        });
     }
   }
 

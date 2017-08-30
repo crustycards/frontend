@@ -3,3 +3,14 @@ node_modules
 
 /client/dist/bundle.js
 /server/auth/googleConfig.json
+
+# VS Code
+.vscode/
+
+package-lock.json
+.DS_Store
+
+dist/
+docs/
+package-lock.json
+server/config.js
