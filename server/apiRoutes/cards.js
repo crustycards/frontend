@@ -12,14 +12,23 @@ module.exports = (socketHandler) => {
     });
   });
   router.post('/:cardpackId', (req, res) => {
-    db.Card.create(req.user.email, req.params.cardpackId, req.body.cardText, req.body.cardType)
-    .then((card) => {
-      res.json('success');
-      socketHandler.respondToUsers([req.user], 'cardcreate', {card});
-    })
-    .catch((error) => {
-      res.status(500).send(error);
+    let promises = [];
+    let cards = req.body;
+    cards.forEach((card) => {
+      promises.push(
+        db.Card.create(req.user.email, req.params.cardpackId, card.text, card.type)
+          .then((card) => {
+            socketHandler.respondToUsers([req.user], 'cardcreate', {card});
+          })
+      );
     });
+    Promise.all(promises)
+      .then(() => {
+        res.json('success');
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
   });
   router.delete('/:cardId', (req, res) => {
     db.Card.delete(req.user.email, req.params.cardId)

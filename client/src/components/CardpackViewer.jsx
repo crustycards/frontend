@@ -95,10 +95,10 @@ class CardpackViewer extends React.Component {
 
   addCard () {
     if (this.state.newCardName) {
-      axios.post('/api/cards/' + this.cardpackId, {
-        cardText: this.state.newCardName,
-        cardType: this.state.newCardType
-      });
+      axios.post('/api/cards/' + this.cardpackId, [{
+        text: this.state.newCardName,
+        type: this.state.newCardType
+      }]);
       this.setState({newCardName: ''});
     }
   }
