@@ -30,6 +30,7 @@ describe('Card', () => {
               expect(card.cardpack.id).to.equal(cardpack.id);
               expect(card.text).to.equal('test card');
               expect(card.type).to.equal('black');
+              expect(card.answerFields).to.equal(1);
             });
         });
     });
@@ -48,6 +49,37 @@ describe('Card', () => {
               expect(card.cardpack.id).to.equal(cardpack.id);
               expect(card.text).to.equal('test card');
               expect(card.type).to.equal('white');
+              expect(card.answerFields).to.not.exist;
+            });
+        });
+    });
+    it('Should always set card answerFields to null for white cards, even if a value for it is provided', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'white', 4)
+            .then((card) => {
+              expect(card.answerFields).to.not.exist;
+            });
+        });
+    });
+    it('Should set card answerFields to input value if a value for it is provided', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black', 4)
+            .then((card) => {
+              expect(card.answerFields).to.equal(4);
+            });
+        });
+    });
+    it('Shouldset  card answerFields to one if no value is provided', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black')
+            .then((card) => {
+              expect(card.answerFields).to.equal(1);
             });
         });
     });
@@ -101,6 +133,26 @@ describe('Card', () => {
               expect(card.updatedAt).to.exist;
               expect(card.id).to.equal(cardId);
               expect(card.text).to.equal(cardName);
+            });
+        });
+    });
+    it('Should contain answerFields property for black cards', () => {
+      return Card.create(user.email, cardpack.id, 'test card', 'black')
+        .then((card) => {
+          let cardName = 'updated card name';
+          return Card.update(user.email, cardId, cardName)
+            .then((card) => {
+              expect(card.answerFields).to.equal(1);
+            });
+        });
+    });
+    it('Should not contain answerFields property for white cards', () => {
+      return Card.create(user.email, cardpack.id, 'test card', 'white')
+        .then((card) => {
+          let cardName = 'updated card name';
+          return Card.update(user.email, cardId, cardName)
+            .then((card) => {
+              expect(card.answerFields).to.not.exist;
             });
         });
     });
@@ -169,6 +221,32 @@ describe('Card', () => {
     it('Should reject when getting a card using an invalid ID', () => {
       let cardId = 1;
       return expect(Card.getById(cardId)).to.be.rejectedWith('Card does not exist with ID ' + cardId);
+    });
+    it('Should have answerFields property for black cards', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'black')
+            .then((card) => {
+              return Card.getById(card.id)
+                .then(() => {
+                  expect(card.answerFields).to.equal(1);
+                });
+            });
+        });
+    });
+    it('Should not have answerFields property for white cards', () => {
+      let user = mockDB.users[0];
+      return Cardpack.create(user.email, 'cardpack_name')
+        .then((cardpack) => {
+          return Card.create(user.email, cardpack.id, 'test card', 'white')
+            .then((card) => {
+              return Card.getById(card.id)
+                .then(() => {
+                  expect(card.answerFields).to.not.exist;
+                });
+            });
+        });
     });
   });
 

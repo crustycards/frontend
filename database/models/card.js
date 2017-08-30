@@ -18,6 +18,11 @@ let CardModel = db.define('cards', {
     type: Sequelize.STRING,
     notEmpty: true,
     allowNull: false
+  },
+  answerFields: {
+    type: Sequelize.INTEGER,
+    notEmpty: true,
+    allowNull: true
   }
 });
 
@@ -30,7 +35,7 @@ let Card = {model: CardModel};
 // 1. cardpackId does not map to an existing cardpack
 // 2. cardText is null/undefined/emptystring/notastring
 // 3. cardType is not either 'black' or 'white'
-Card.create = (userEmail, cardpackId, cardText, cardType) => {
+Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
   if (!cardType || (cardType !== 'black' && cardType !== 'white')) {
     return new Promise((resolve, reject) => {
       reject('Expected card type to be white or black, but instead received ' + cardType);
@@ -52,7 +57,8 @@ Card.create = (userEmail, cardpackId, cardText, cardType) => {
             return Card.model.create({
               cardpackId: cardpackId,
               text: cardText,
-              type: cardType
+              type: cardType,
+              answerFields: cardType === 'black' ? answerFields : null
             });
           } else {
             return new Promise((resolve, reject) => {
