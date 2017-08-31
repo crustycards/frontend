@@ -128,6 +128,15 @@ describe('Card', () => {
           return expect(Card.create('fake@email.com', cardpack.id, 'test', 'white')).to.be.rejectedWith('No user is registered under fake@email.com');
         });
     });
+    it('Should not throw an error when creating a white card that has answerFields set to null instead of undefined', () => {
+      let user = mockDB.users[0];
+      let otherUser = mockDB.users[1];
+      let cardpack = mockDB.cardpacks[0];
+      return Cardpack.create(user.email, cardpack.name)
+        .then(() => {
+          return Card.create(user.email, cardpack.id, 'test', 'white', null);
+        });
+    });
   });
 
   describe('update()', () => {
