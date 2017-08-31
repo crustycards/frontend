@@ -2,9 +2,9 @@
 
 module.exports.parse = (string) => {
   let cards = [];
-  let cardRows = string.split(/\n/);
-  cardRows.forEach((row, i) => {
-    let cardParts = row.split(`,`);
+  let cardStrings = string.split(/\r\n\r\n/);
+  cardStrings.forEach((row, i) => {
+    let cardParts = row.split(/\r\n/);
     let cardText = cardParts[0];
     cardText = cardText ? cardText.trim() : null;
     let cardType = cardParts[1];
@@ -16,15 +16,17 @@ module.exports.parse = (string) => {
     } else if (cardParts.length !== 2) {
       throw new Error('Expected two parameters on line ' + (i + 1) + ' but got ' + cardParts.length);
     }
-    let card = {cardText, cardType};
-    if (card.cardType === 'black') {
-      let cardPlayCount = cardParts[2] || '1';
-      cardPlayCount = cardPlayCount.trim();
-      cardPlayCount = parseInt(cardPlayCount);
-      card.cardPlayCount = cardPlayCount;
+    let card = {text: cardText, type: cardType};
+    if (card.type === 'black') {
+      let answerFields = cardParts[2] || '1';
+      answerFields = answerFields.trim();
+      answerFields = parseInt(answerFields);
+      card.answerFields = answerFields;
+    } else {
+      card.answerFields = null;
     }
-    if (!(card.cardType === 'black' || card.cardType === 'white')) {
-      throw new Error('Line ' + (i + 1) + ': card type must be either black or white, not ' + card.cardType);
+    if (!(card.type === 'black' || card.type === 'white')) {
+      throw new Error('Line ' + (i + 1) + ': card type must be either black or white, not ' + card.type);
     }
     cards.push(card);
   });
@@ -35,9 +37,9 @@ module.exports.parse = (string) => {
 module.exports.stringify = (cards) => {
   let cardString = '';
   cards.forEach((card, i) => {
-    cardString += card.text + ', ' + card.type;
+    cardString += card.text + '\r\n' + card.type + (card.answerFields ? '\r\n' + card.answerFields : '');
     if (i + 1 < cards.length) {
-      cardString += '\r\n';
+      cardString += '\r\n\r\n';
     }
   });
   return cardString;
