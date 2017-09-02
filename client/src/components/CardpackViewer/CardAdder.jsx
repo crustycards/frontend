@@ -55,7 +55,9 @@ class CardAdder extends Component {
           <MenuItem value={'white'} primaryText='White' />
           <MenuItem value={'black'} primaryText='Black' />
         </DropDownMenu>
+        {this.state.newCardType === 'black' ? 
         <SelectField
+          disabled={this.state.newCardType !== 'black'}
           floatingLabelText="Answer Fields"
           value={this.state.newCardAnswerFields}
           onChange={this.changeAnswerField}
@@ -64,6 +66,7 @@ class CardAdder extends Component {
           <MenuItem value={2} primaryText="Two" />
           <MenuItem value={3} primaryText="Three" />
         </SelectField>
+        : null}
         <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCurrentCard} />
       </div>
     );
