@@ -100,14 +100,14 @@ class CardpackViewer extends React.Component {
         multiple: false
       })
         .then((textFile) => {
-          console.log('textFile', textFile);
-          let reader = new FileReader();
-          reader.onload = (result) => {
-            let text = result.currentTarget.result;
-            console.log(cardpackFileHandler.parse(text));
-            this.addCards(cardpackFileHandler.parse(text));
-          };
-          reader.readAsText(textFile);
+          if (textFile) {
+            let reader = new FileReader();
+            reader.onload = (result) => {
+              let text = result.currentTarget.result;
+              this.addCards(cardpackFileHandler.parse(text));
+            };
+            reader.readAsText(textFile);
+          }
         });
     } else {
       // TODO - Handle properly if browser does not support file uploading
