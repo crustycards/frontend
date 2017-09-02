@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import { FlatButton } from 'material-ui';
+import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
 import CardAdder from './CardAdder.jsx';
 import COHCard from '../COHCard.jsx';
@@ -18,6 +18,7 @@ class CardpackViewer extends React.Component {
     this.state = {
       currentUser: null,
       cards: [],
+      cardsFetched: false,
       newCardName: '',
       newCardType: 'white',
       newCardAnswerFields: 1,
@@ -68,7 +69,7 @@ class CardpackViewer extends React.Component {
       axios.get('/api/cards/' + this.cardpackId)
         .then((response) => {
           let cards = response.data;
-          this.setState({cards});
+          this.setState({cards, cardsFetched: true});
         })
         .catch((error) => {
           this.setState({cardpack: null});
@@ -138,11 +139,15 @@ class CardpackViewer extends React.Component {
 
     return (
       <div className='panel'>
-        <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
-        {isOwner ? <CardAdder addCards={this.addCards} /> : null}
-        <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-        <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} />
-        <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
+        <div>{this.state.cardpack && this.state.cardsFetched ? this.state.cardpack.name : <LinearProgress/>}</div>
+        {isOwner && this.state.cardsFetched ? <CardAdder addCards={this.addCards} /> : null}
+        {this.state.cardsFetched ?
+          <div>
+            <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
+            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} />
+            <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
+          </div>
+        : null}
       </div>
     );
   }
