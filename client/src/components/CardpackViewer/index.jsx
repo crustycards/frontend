@@ -44,10 +44,6 @@ class CardpackViewer extends React.Component {
     });
   }
 
-  changeAnswerField (event, index, value) {
-    this.setState({newCardAnswerFields: value});
-  }
-
   renderNewCard (card) {
     this.setState({cards: [...this.state.cards, card]});
   }

@@ -7,6 +7,7 @@ class CardAdder extends Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleNewSelect = this.handleNewSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
+    this.changeAnswerField = this.changeAnswerField.bind(this);
     this.addCurrentCard = this.addCurrentCard.bind(this);
     this.state = {
       newCardName: '',
@@ -29,6 +30,10 @@ class CardAdder extends Component {
     let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
+  }
+
+  changeAnswerField (event, index, value) {
+    this.setState({newCardAnswerFields: value});
   }
 
   addCurrentCard () {
