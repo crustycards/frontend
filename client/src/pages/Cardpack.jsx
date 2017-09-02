@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import Navbar from '../components/Navbar.jsx';
-import CardpackViewer from '../components/CardpackViewer.jsx';
+import CardpackViewer from '../components/CardpackViewer/index.jsx';
 
 class Cardpack extends React.Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Cardpack extends React.Component {
       <div>
         <Navbar/>
         <div className='content-wrap'>
-          <CardpackViewer liveUpdateTime={true} cardpackId={this.state.id} socket={this.socket} />
+          <CardpackViewer cardpackId={this.state.id} socket={this.socket} />
         </div>
       </div>
     );

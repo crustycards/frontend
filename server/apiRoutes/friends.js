@@ -71,5 +71,14 @@ module.exports = (socketHandler) => {
         });
     });
 
+  // TODO - Write tests for this endpoint
+  router.get('/online', (req, res) => {
+    db.Friend.get(req.user.email)
+      .then((friendData) => {
+        let usersOnline = socketHandler.getUsersOnline();
+        res.json(friendData.friends.filter((friend) => usersOnline.includes(friend.email)));
+      });
+  });
+
   return router;
 };

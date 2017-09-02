@@ -6,7 +6,7 @@ module.exports.openSocket = (socket) => {
     sockets[socket.request.user.email] = sockets[socket.request.user.email] || [];
     sockets[socket.request.user.email].push(socket);
   }
-  // Add event listeners here
+  // TODO - Add event listeners here
 };
 
 module.exports.closeSocket = (socket) => {
@@ -15,7 +15,10 @@ module.exports.closeSocket = (socket) => {
     for (let i = 0; i < sockets[socket.request.user.email].length; i++) {
       if (sockets[socket.request.user.email][i] === socket) {
         sockets[socket.request.user.email].splice(i, 1);
-        console.log('Deleted a socket');
+        if (sockets[socket.request.user.email].length === 0) {
+          delete sockets[socket.request.user.email];
+          break;
+        }
       }
     }
   }
@@ -41,4 +44,8 @@ module.exports.respondToUsersByEmail = (userEmails, dataType, data) => {
       }
     }
   }
+};
+
+module.exports.getUsersOnline = () => {
+  return Object.keys(sockets);
 };
