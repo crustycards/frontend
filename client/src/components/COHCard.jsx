@@ -10,6 +10,26 @@ class COHCard extends Component {
   constructor (props) {
     super(props);
     this.removeCard = this.removeCard.bind(this);
+    this.state = {
+      time: this.getTime()
+    };
+  }
+
+  componentDidMount () {
+    this.intervalId = setInterval(() => {
+      let time = this.getTime();
+      if (time !== this.state.time) {
+        this.setState({time});
+      }
+    }, 100);
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.intervalId);
+  }
+
+  getTime () {
+    return 'Created at ' + time.stringify(this.props.card.createdAt, {relativeTime: true});
   }
 
   removeCard (card) {
@@ -21,7 +41,7 @@ class COHCard extends Component {
     cardElements.push(
       <CardHeader
         title={this.props.card.text + (this.props.card.answerFields && this.props.card.answerFields > 1 ? ' - ' + this.props.card.answerFields + ' card answer' : '')}
-        subtitle={'Created ' + time.stringify(this.props.card.createdAt, {relativeTime: true})}
+        subtitle={this.state.time}
         key={0}
       />
     );

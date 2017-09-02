@@ -18,7 +18,7 @@ class Cardpack extends React.Component {
       <div>
         <Navbar/>
         <div className='content-wrap'>
-          <CardpackViewer liveUpdateTime={true} cardpackId={this.state.id} socket={this.socket} />
+          <CardpackViewer cardpackId={this.state.id} socket={this.socket} />
         </div>
       </div>
     );

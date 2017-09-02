@@ -24,9 +24,6 @@ class CardpackViewer extends React.Component {
       newCardAnswerFields: 1,
       cardpack: undefined
     };
-    if (props.liveUpdateTime === true) {
-      setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
-    }
     axios.get('/api/currentuser')
       .then((response) => {
         let currentUser = response.data;
