@@ -14,16 +14,18 @@ module.exports = (socketHandler) => {
   router.post('/:cardpackId', (req, res) => {
     let promises = [];
     let cards = req.body;
+    let socketCards = [];
     cards.forEach((card) => {
       promises.push(
         db.Card.create(req.user.email, req.params.cardpackId, card.text, card.type, card.answerFields)
           .then((card) => {
-            socketHandler.respondToUsers([req.user], 'cardcreate', {card});
+            socketCards.push(card);
           })
       );
     });
     Promise.all(promises)
       .then(() => {
+        socketHandler.respondToUsers([req.user], 'cardcreate', {cards: socketCards});
         res.json('success');
       })
       .catch((error) => {

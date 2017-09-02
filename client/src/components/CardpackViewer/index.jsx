@@ -37,8 +37,8 @@ class CardpackViewer extends React.Component {
     this.fetchCards();
 
     this.socket.on('cardcreate', (cardString) => {
-      let card = JSON.parse(cardString).card;
-      this.renderNewCard(card);
+      let cards = JSON.parse(cardString).cards;
+      this.renderNewCards(cards);
     });
     this.socket.on('carddelete', (cardString) => {
       let card = JSON.parse(cardString).card;
@@ -46,8 +46,8 @@ class CardpackViewer extends React.Component {
     });
   }
 
-  renderNewCard (card) {
-    this.setState({cards: [...this.state.cards, card]});
+  renderNewCards (cards) {
+    this.setState({cards: [...this.state.cards, ...cards]});
   }
   unrenderOldCard (card) {
     this.setState({cards: this.state.cards.filter((cardCurrent) => {
