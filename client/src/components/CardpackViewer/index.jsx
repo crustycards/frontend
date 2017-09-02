@@ -3,11 +3,12 @@ import axios from 'axios';
 import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import CardAdder from './CardAdder.jsx';
 import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import {GridList, GridTile} from 'material-ui/GridList';
 import time from 'time-converter';
-import cardpackFileHandler from '../helpers/cardpackFileHandler';
+import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 import fileSelect from 'file-select';
 
 class CardpackViewer extends React.Component {
@@ -16,10 +17,6 @@ class CardpackViewer extends React.Component {
     this.socket = this.props.socket;
     this.cardpackId = this.props.cardpackId;
     this.addCards = this.addCards.bind(this);
-    this.addCurrentCard = this.addCurrentCard.bind(this);
-    this.handleNewSelect = this.handleNewSelect.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-    this.handleKeyPress = this.handleKeyPress.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.uploadStringifiedCards = this.uploadStringifiedCards.bind(this);
     this.state = {
@@ -51,21 +48,8 @@ class CardpackViewer extends React.Component {
     });
   }
 
-  handleNewSelect (e, index, newCardType) {
-    this.setState({newCardType});
-  }
-  handleInputChange (property, e) {
-    let stateChange = {};
-    stateChange[property] = e.target.value;
-    this.setState(stateChange);
-  }
-  changeAnswerField = (event, index, value) => {
+  changeAnswerField (event, index, value) {
     this.setState({newCardAnswerFields: value});
-  }
-  handleKeyPress (e) {
-    if (e.key === 'Enter') {
-      this.addCurrentCard();
-    }
   }
 
   renderNewCard (card) {
@@ -100,16 +84,6 @@ class CardpackViewer extends React.Component {
     }
   }
 
-  addCurrentCard () {
-    if (this.state.newCardName) {
-      this.addCards([{
-        text: this.state.newCardName,
-        type: this.state.newCardType,
-        answerFields: this.state.newCardAnswerFields
-      }]);
-      this.setState({newCardName: ''});
-    }
-  }
   addCards (cards) {
     return axios.post('/api/cards/' + this.cardpackId, cards);
   }
@@ -153,11 +127,6 @@ class CardpackViewer extends React.Component {
 
   render () {
     const styles = {
-      root: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        justifyContent: 'space-around',
-      },
       gridList: {
         width: 'auto',
         height: 500,
@@ -172,26 +141,6 @@ class CardpackViewer extends React.Component {
     }
 
     let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
-    let cardAdder;
-    if (isOwner) {
-      cardAdder = (<div className='panel'>
-        <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} /><br/>
-        <DropDownMenu value={this.state.newCardType} onChange={this.handleNewSelect}>
-          <MenuItem value={'white'} primaryText='White' />
-          <MenuItem value={'black'} primaryText='Black' />
-        </DropDownMenu>
-        <SelectField
-          floatingLabelText="Answer Fields"
-          value={this.state.newCardAnswerFields}
-          onChange={this.changeAnswerField}
-        >
-          <MenuItem value={1} primaryText="One" />
-          <MenuItem value={2} primaryText="Two" />
-          <MenuItem value={3} primaryText="Three" />
-        </SelectField>
-        <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCurrentCard} />
-      </div>);
-    }
     let cards = [];
 
     this.state.cards.forEach((card, index) => {
@@ -230,7 +179,7 @@ class CardpackViewer extends React.Component {
     return (
       <div className='panel'>
         <div>{this.state.cardpack ? this.state.cardpack.name : 'Loading...'}</div>
-        {isOwner ? cardAdder : null}
+        {isOwner ? <CardAdder addCards={this.addCards} /> : null}
         <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
         <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} />
         <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />

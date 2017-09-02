@@ -2,7 +2,7 @@ import React from 'react';
 import axios from 'axios';
 import io from 'socket.io-client';
 import Navbar from '../components/Navbar.jsx';
-import CardpackViewer from '../components/CardpackViewer.jsx';
+import CardpackViewer from '../components/CardpackViewer/index.jsx';
 
 class Cardpack extends React.Component {
   constructor(props) {
