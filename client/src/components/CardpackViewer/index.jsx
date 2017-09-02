@@ -4,12 +4,10 @@ import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import CardAdder from './CardAdder.jsx';
+import COHCard from '../COHCard.jsx';
 import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import {GridList, GridTile} from 'material-ui/GridList';
-import time from 'time-converter';
-import cardpackFileHandler from '../../helpers/cardpackFileHandler';
-import fileSelect from 'file-select';
+import { GridList, GridTile } from 'material-ui/GridList';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
@@ -87,9 +85,6 @@ class CardpackViewer extends React.Component {
   addCards (cards) {
     return axios.post('/api/cards/' + this.cardpackId, cards);
   }
-  removeCard (card) {
-    axios.delete('/api/cards/' + card.id);
-  }
 
   downloadStringifiedCards () {
     let download = (filename, text) => {
@@ -144,36 +139,7 @@ class CardpackViewer extends React.Component {
     let cards = [];
 
     this.state.cards.forEach((card, index) => {
-      let cardElements = [];
-      cardElements.push(
-        <CardHeader
-          title={card.text + (card.answerFields && card.answerFields > 1 ? ' - ' + card.answerFields + ' card answer' : '')}
-          subtitle={'Created ' + time.stringify(card.createdAt, {relativeTime: true})}
-          key={0}
-        />
-      );
-
-      if (isOwner) {
-        cardElements.push(
-          <CardActions key={1}>
-            <FlatButton label='Delete' onClick={this.removeCard.bind(this, card)} />
-          </CardActions>
-        );
-      }
-
-      let cardWrapper = card.type === 'black' ? (
-        <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
-          <Card className='card'>;
-            {cardElements}
-          </Card>
-        </MuiThemeProvider>
-      ) : (
-        <Card className='card'>;
-          {cardElements}
-        </Card>
-      );
-
-      cards.push(<GridTile key={index}>{cardWrapper}</GridTile>);
+      cards.push(<GridTile key={index}><COHCard card={card} isOwner={isOwner} /></GridTile>);
     });
 
     return (
