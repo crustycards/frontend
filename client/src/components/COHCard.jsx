@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
+import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
+import { FlatButton } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import time from 'time-converter';
-import cardpackFileHandler from '../helpers/cardpackFileHandler';
-import fileSelect from 'file-select';
 import axios from 'axios';
 
 class COHCard extends Component {

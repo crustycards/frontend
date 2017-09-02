@@ -1,13 +1,11 @@
 import React from 'react';
 import axios from 'axios';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { FlatButton } from 'material-ui';
+import { GridList, GridTile } from 'material-ui/GridList';
 import CardAdder from './CardAdder.jsx';
 import COHCard from '../COHCard.jsx';
-import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import { GridList, GridTile } from 'material-ui/GridList';
+import fileSelect from 'file-select';
+import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 
 class CardpackViewer extends React.Component {
   constructor (props) {
