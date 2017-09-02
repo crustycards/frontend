@@ -10,11 +10,14 @@ import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 class CardpackViewer extends React.Component {
   constructor (props) {
     super(props);
+    this.numCardsOnTab = 20;
     this.socket = this.props.socket;
     this.cardpackId = this.props.cardpackId;
     this.addCards = this.addCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.uploadStringifiedCards = this.uploadStringifiedCards.bind(this);
+    this.nextTab = this.nextTab.bind(this);
+    this.previousTab = this.previousTab.bind(this);
     this.state = {
       currentUser: null,
       cards: [],
@@ -22,7 +25,8 @@ class CardpackViewer extends React.Component {
       newCardName: '',
       newCardType: 'white',
       newCardAnswerFields: 1,
-      cardpack: undefined
+      cardpack: undefined,
+      tab: 0
     };
     axios.get('/api/currentuser')
       .then((response) => {
@@ -49,6 +53,10 @@ class CardpackViewer extends React.Component {
     this.setState({cards: this.state.cards.filter((cardCurrent) => {
       return card.id !== cardCurrent.id;
     })});
+    // Switches to last tab if the last card on the current tab has been deleted
+    if ((this.state.tab * this.numCardsOnTab >= this.state.cards.length) && this.state.tab > 0) {
+      this.setState({tab: this.state.tab - 1});
+    }
   }
 
   fetchCurrentCardpack () {
@@ -112,6 +120,14 @@ class CardpackViewer extends React.Component {
     }
   }
 
+  nextTab () {
+    this.setState({tab: this.state.tab + 1});
+  }
+
+  previousTab () {
+    this.setState({tab: this.state.tab - 1});
+  }
+
   render () {
     const styles = {
       gridList: {
@@ -130,9 +146,15 @@ class CardpackViewer extends React.Component {
     let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
     let cards = [];
 
-    this.state.cards.forEach((card, index) => {
-      cards.push(<GridTile key={index}><COHCard card={card} isOwner={isOwner} /></GridTile>);
-    });
+    let tabStart = this.state.tab * this.numCardsOnTab;
+    let tabEnd = tabStart + this.numCardsOnTab;
+    for (let i = tabStart; i < tabEnd; i++) {
+      let card = this.state.cards[i];
+      if (!card) {
+        break;
+      }
+      cards.push(<GridTile key={i}><COHCard card={card} isOwner={isOwner} /></GridTile>);
+    }
 
     return (
       <div className='panel'>
@@ -141,7 +163,9 @@ class CardpackViewer extends React.Component {
         {this.state.cardsFetched ?
           <div>
             <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} />
+            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /><br/>
+            <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
+            <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
             <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
           </div>
         : null}
