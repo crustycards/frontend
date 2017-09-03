@@ -6,8 +6,8 @@ export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
 
 const generateMockCard = isWhite => ({
   id: Math.round(Math.random() * 100),
-  text: TEXTS[Math.round(Math.random() * TEXTS.length)],
-  type: isWhite ? 'WHITE' : 'BLACK',
+  text: TEXTS[Math.trunc(Math.random() * TEXTS.length)],
+  type: isWhite ? 'white' : 'black',
   answerFields: Math.round(Math.random() * 3)
 });
 
