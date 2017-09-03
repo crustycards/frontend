@@ -1,5 +1,6 @@
 const db = require('../connection');
 const Sequelize = require('sequelize');
+const maxThemeId = 4; // Defines number of client-side themes that exist
 
 const UserModel = db.define('users', {
   id: {
@@ -29,6 +30,10 @@ const UserModel = db.define('users', {
   },
   password: {
     type: Sequelize.STRING
+  },
+  themeId: {
+    type: Sequelize.INTEGER(2),
+    defaultValue: 1
   }
 });
 
@@ -55,15 +60,20 @@ User.getByEmail = (userEmail) => {
     });
 };
 
+User.changeTheme = (userId, themeId) => {
+  if (!themeId || themeId.constructor !== Number || themeId < 0 || themeId > maxThemeId) {
+    return Promise.reject('Theme ID must be a number between zero and ' + maxThemeId);
+  }
+  return User.getById(userId)
+    .then((user) => {
+      return user.update({themeId});
+    });
+};
+
 User.getById = (userId) => {
   return User.model.findById(userId)
-    .then((userData) => {
-      if (!userData) {
-        return Promise.reject('No user has ID ' + userId);
-      } else {
-        delete userData.dataValues.password;
-        return userData.dataValues;
-      }
+    .then((user) => {
+      return user ? user : Promise.reject('User does not exist');
     });
 };
 

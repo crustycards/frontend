@@ -52,7 +52,16 @@ describe('API Router', () => {
             expect(user.firstname).to.equal('Hello');
             expect(user.lastname).to.equal('World');
             expect(user.email).to.equal('hello@world.com');
-            expect(Object.keys(user).length).to.equal(7); // All keys listed above that should exist
+            expect(user.themeId).to.exist;
+            expect(Object.keys(user).length).to.equal(8); // All keys listed above that should exist
+            done();
+          });
+      });
+      it('Should set user theme to zero by default', (done) => {
+        agent.get('/api/currentuser')
+          .end((err, res) => {
+            user = res.body;
+            expect(user.themeId).to.equal(1);
             done();
           });
       });
