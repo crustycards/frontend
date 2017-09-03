@@ -78,10 +78,10 @@ h1 {
   .col-narrow{
     width: 40%;
     float: left;
-    min-height: 175px;
+    min-height: 125px;
 }
   .col-wide{
     width: 60%;
     float: right;
-    min-height: 175px;
+    min-height: 125px;
 }

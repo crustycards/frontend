@@ -129,14 +129,6 @@ class CardpackViewer extends React.Component {
   }
 
   render () {
-    const styles = {
-      gridList: {
-        width: 'auto',
-        height: 500,
-        overflowY: 'auto'
-      }
-    };
-
     if (this.state.cardpack === null) {
       return (
         <div className='panel'>Cardpack does not exist</div>
@@ -158,15 +150,17 @@ class CardpackViewer extends React.Component {
 
     return (
       <div className='panel'>
-        <div>{this.state.cardpack && this.state.cardsFetched ? this.state.cardpack.name : <LinearProgress/>}</div>
+        <div>{this.state.cardpack && this.state.cardsFetched ? <div className='center'>{this.state.cardpack.name}</div> : <LinearProgress/>}</div>
         {isOwner && this.state.cardsFetched ? <CardAdder addCards={this.addCards} /> : null}
         {this.state.cardsFetched ?
           <div>
             <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /><br/>
-            <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-            <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
-            <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
+            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} />
+            <div className='center'>
+              <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
+              <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
+            </div>
+            <GridList children={cards} cols={4} cellHeight='auto' />
           </div>
         : null}
       </div>
