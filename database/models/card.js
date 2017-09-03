@@ -132,9 +132,7 @@ Card.update = (userEmail, cardId, cardText) => {
 Card.delete = (userEmail, cardId) => {
   return User.getByEmail(userEmail)
     .then((user) => {
-      return Card.model.findOne({
-        where: {id: cardId}
-      })
+      return Card.getById(cardId)
         .then((card) => {
           if (!card) {
             return new Promise((resolve, reject) => {
@@ -142,7 +140,7 @@ Card.delete = (userEmail, cardId) => {
             });
           }
           return Cardpack.model.findOne({
-            where: {id: card.cardpackId}
+            where: {id: card.cardpack.id}
           })
             .then((cardpack) => {
               if (cardpack.ownerId !== user.id) {
@@ -178,10 +176,7 @@ Card.getByCardpackId = (cardpackId) => {
 };
 
 Card.getById = (cardId) => {
-  return Card.model.findOne({
-    where: {
-      id: cardId
-    },
+  return Card.model.findById(cardId, {
     include: [{
       model: Cardpack.model,
       as: 'cardpack'
@@ -191,11 +186,10 @@ Card.getById = (cardId) => {
     }
   })
     .then((card) => {
-      if (card) {
-        return card;
-      } else {
-        throw new Error('Card does not exist with ID ' + cardId);
+      if (!card) {
+        throw new Error('Card ID does not map to an existing card');
       }
+      return card;
     });
 };
 

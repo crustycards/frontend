@@ -243,7 +243,7 @@ describe('Card', () => {
     });
     it('Should reject when getting a card using an invalid ID', () => {
       let cardId = 1;
-      return expect(Card.getById(cardId)).to.be.rejectedWith('Card does not exist with ID ' + cardId);
+      return expect(Card.getById(cardId)).to.be.rejectedWith('Card ID does not map to an existing card');
     });
     it('Should have answerFields property for black cards', () => {
       let user = mockDB.users[0];
