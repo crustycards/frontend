@@ -70,9 +70,9 @@ describe('Game', () => {
   describe('addUser()', () => {
     it('Should add users to games', () => {
       game.addUser(userTwo);
-      expect(game.users.size()).to.equal(2);
+      expect(game.players.size()).to.equal(2);
       game.addUser(userThree);
-      expect(game.users.size()).to.equal(3);
+      expect(game.players.size()).to.equal(3);
     });
     it('Should not add a user if the game is full', () => {
       expect(game.addUser(userTwo)).to.equal(true);
@@ -82,7 +82,7 @@ describe('Game', () => {
     it('Should not add a user if they are already in the game', () => {
       expect(game.addUser(userTwo)).to.equal(true);
       expect(() => {game.addUser(userTwo)}).to.throw(Error, 'You are already in this game');
-      expect(game.users.size()).to.eql(2);
+      expect(game.players.size()).to.eql(2);
     });
   });
 
@@ -124,19 +124,19 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       expect(game.playCard(userTwo, card)).to.equal(true);
     });
     it('Should throw error when attempting to play a card while the game is not running', () => {
       game.addUser(userTwo);
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Game is not running');
     });
     it('Should throw error when attempting to play a card during the wrong round phase', () => {
       game.addUser(userTwo);
       game.addUser(userThree);
       game.start();
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play cards during');
     });
     it('Should throw error when attempting to play a card after already playing one', () => {
@@ -144,7 +144,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       game.playCard(userTwo, card);
       expect(() => {game.playCard(userTwo, card)}).to.throw(Error, 'You have already played a card for this round');
     });
@@ -153,7 +153,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play a card when you are the judge');
     });
   });
@@ -164,7 +164,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       expect(Object.keys(game.whiteCardDeck.currentCards).length).to.equal(0);
       game.playCard(userTwo, card);
       expect(Object.keys(game.whiteCardDeck.currentCards).length).to.equal(1);
@@ -254,7 +254,7 @@ describe('Game', () => {
         game.start();
         game.continue();
         expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(0);
-        let card = game.users.userTable[userTwo.email].hand[0];
+        let card = game.players.userTable[userTwo.email].hand[0];
         game.playCard(userTwo, card);
         expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(1);
       });
@@ -263,7 +263,7 @@ describe('Game', () => {
         game.addUser(userThree);
         game.start();
         game.continue();
-        let card = game.users.userTable[userTwo.email].hand[0];
+        let card = game.players.userTable[userTwo.email].hand[0];
         game.playCard(userTwo, card);
         expect(game.getState(userTwo).numOtherWhiteCardsPlayed).to.equal(0);
       });

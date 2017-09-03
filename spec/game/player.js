@@ -1,5 +1,5 @@
 const expect = require('chai').use(require('chai-as-promised')).expect;
-const Users = require('../../games/Users.js');
+const Users = require('../../games/Players.js');
 
 let userOne = {
   id: 1,

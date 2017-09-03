@@ -1,7 +1,6 @@
 const BlackCardDeck = require('./blackCardDeck');
 const WhiteCardDeck = require('./whiteCardDeck');
-const Users = require('./Users.js');
-// TODO - Rename Users.js to Players.js
+const Players = require('./Players.js');
 
 const ROUND_STAGES = {
   playBlackCard: 1,
@@ -29,7 +28,7 @@ class Game {
     this.handSize = handSize;
     this.blackCardDeck = new BlackCardDeck(blackCards);
     this.whiteCardDeck = new WhiteCardDeck(whiteCards);
-    this.users = new Users(maxPlayers);
+    this.players = new Players(maxPlayers);
     this.addUser(creator);
     this.timeoutId; // Saved to allow pausing and stopping of games
     this.roundStage;
@@ -40,14 +39,14 @@ class Game {
 
   addUser (user) {
     // TODO - Add function to Users that allows for searching its userTable and remove the manual lookup of that property right below
-    this.users.addUser(user);
+    this.players.addUser(user);
     for (let i = 0; i < this.handSize; i++) {
       this.drawForUser(user);
     }
     return true;
   }
   removeUser (user) {
-    let userHand = this.users.removeUser(user);
+    let userHand = this.players.removeUser(user);
     if (userHand) {
       // while (this.playerHands[user.email].length) {
       //   this.whiteCardDiscard.push(this.playerHands[user.email].pop());
@@ -60,7 +59,7 @@ class Game {
   }
 
   drawForUser (user) {
-    this.users.drawCard(user, this.whiteCardDeck.popCard());
+    this.players.drawCard(user, this.whiteCardDeck.popCard());
   }
 
   playCard (user, card) {
@@ -73,16 +72,16 @@ class Game {
     if (this.whiteCardDeck.currentCards[user.email]) {
       throw new Error('You have already played a card for this round');
     }
-    if (this.users.getJudge().email === user.email) {
+    if (this.players.getJudge().email === user.email) {
       throw new Error('Cannot play a card when you are the judge');
     }
 
-    let hand = this.users.getHand(user);
+    let hand = this.players.getHand(user);
     for (let i = 0; i < hand.length; i++) {
       if (card.id === hand[i].id) {
         this.whiteCardDeck.playCard(user, hand.splice(i, 1));
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
-        if (Object.keys(this.whiteCardDeck.currentCards).length === this.users.size()) {
+        if (Object.keys(this.whiteCardDeck.currentCards).length === this.players.size()) {
           this.continue();
         }
         return true;
@@ -92,7 +91,7 @@ class Game {
   }
 
   start () {
-    if (this.users.size() < minPlayerCount) {
+    if (this.players.size() < minPlayerCount) {
       throw new Error('Not enough players to start game');
     }
     if (this.roundStage) {
@@ -144,7 +143,7 @@ class Game {
   }
 
   sendDataToUsers (dataType, data) {
-    socketHandler.respondToUsersByEmail(this.users.getCurrentUsers(), dataType, data);
+    socketHandler.respondToUsersByEmail(this.players.getCurrentUsers(), dataType, data);
   }
 
   getState (currentUser) {
@@ -154,17 +153,17 @@ class Game {
       numOtherWhiteCardsPlayed--;
     }
 
-    let otherPlayers = this.users.getAllUsers().filter((user) => {
+    let otherPlayers = this.players.getAllUsers().filter((user) => {
       return user.email !== currentUser.email;
     });
 
     return {
-      hand: this.users.getHand(currentUser),
+      hand: this.players.getHand(currentUser),
       currentBlackCard: this.blackCardDeck.currentCard,
       playerCurrentWhiteCard,
       numOtherWhiteCardsPlayed,
-      currentJudge: this.users.getJudge(),
-      currentOwner: this.users.getOwner(),
+      currentJudge: this.players.getJudge(),
+      currentOwner: this.players.getOwner(),
       otherPlayers,
       roundStage: ROUND_NAMES[this.roundStage] || 'Not running'
     };
