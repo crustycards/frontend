@@ -1,7 +1,8 @@
-let router = require('express').Router();
-let db = require('../../database');
+const router = require('express').Router();
+const db = require('../../database');
 
-let games = require('../../games');
+const Games = require('../../games');
+let games = new Games();
 
 let isLoggedIn = (req, res, next) => {
   if (req.isAuthenticated()) {

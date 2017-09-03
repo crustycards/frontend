@@ -55,8 +55,9 @@ class Games {
 
   getAll () {
     let games = [];
-    this.gamesByName.forEach((game) => {
-      games.push(game);
+    // TODO - User object.values
+    Object.keys(this.gamesByName).forEach((key) => {
+      games.push(gamesByName[key]);
     });
     return games;
   }
