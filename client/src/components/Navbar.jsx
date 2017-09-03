@@ -40,7 +40,13 @@ class Navbar extends React.Component {
         <AppBar
           title="Title"
           onLeftIconButtonTouchTap={this.handleToggle}
-          iconElementRight={<FlatButton onClick={this.redirectTo.bind(this, '/game')} label="My Game" />}
+          iconElementRight={
+            <FlatButton 
+              labelStyle={{ fontSize: '21px' }}
+              onClick={this.redirectTo.bind(this, '/game')} 
+              label="Game" 
+            />
+          }
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <MenuItem onClick={this.redirectTo.bind(this, '/')}>Home</MenuItem>
