@@ -126,7 +126,7 @@ describe('Cardpack', () => {
         });
     });
     it('Should reject when trying to retrieve a cardpack that does not exist', () => {
-      return expect(Cardpack.getById(-1)).to.be.rejectedWith('Cardpack ID does not map to an existing cardpack');
+      return expect(Cardpack.getById(-1)).to.be.rejectedWith('Cardpack does not exist');
     });
   });
 

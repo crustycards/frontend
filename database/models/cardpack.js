@@ -67,10 +67,7 @@ Cardpack.getByUserEmail = (userEmail) => {
 };
 
 Cardpack.getById = (cardpackId) => {
-  return Cardpack.model.findOne({
-    where: {
-      id: cardpackId
-    },
+  return Cardpack.model.findById(cardpackId, {
     include: [{
       model: User.model,
       as: 'owner'
@@ -81,7 +78,7 @@ Cardpack.getById = (cardpackId) => {
   })
     .then((cardpack) => {
       if (!cardpack) {
-        throw new Error('Cardpack ID does not map to an existing cardpack');
+        throw new Error('Cardpack does not exist');
       }
       return cardpack;
     });
@@ -97,18 +94,9 @@ Cardpack.getById = (cardpackId) => {
 Cardpack.delete = (userEmail, cardpackId) => {
   return User.getByEmail(userEmail)
     .then((owner) => {
-      return Cardpack.model.findOne({
-        where: {
-          id: cardpackId
-        }
-      })
+      return Cardpack.getById(cardpackId)
         .then((cardpack) => {
-          if (!cardpack) {
-            return new Promise((resolve, reject) => {
-              reject('Cardpack does not exist');
-            });
-          }
-          if (cardpack.ownerId !== owner.id) {
+          if (cardpack.owner.id !== owner.id) {
             return new Promise((resolve, reject) => {
               reject('Cannot delete someone else\'s cardpack');
             });
