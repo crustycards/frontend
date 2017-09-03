@@ -12,19 +12,13 @@ class Games {
   // Returns a promise that will resolve to the new game
   createGame ({creator, gameName, cardpackIds, timeout = 20, maxPlayers = 8}) {
     if (gameName === '') {
-      return new Promise((resolve, reject) => {
-        reject('Game name cannot be blank');
-      });
+      return Promise.reject('Game name cannot be blank');
     }
     if (!gameName || gameName.constructor !== String) {
-      return new Promise((resolve, reject) => {
-        reject('Game name must be a string');
-      });
+      return Promise.reject('Game name must be a string');
     }
     if (this.gamesByName[gameName]) {
-      return new Promise((resolve, reject) => {
-        reject('A game with this name already exists');
-      });
+      return Promise.reject('A game with this name already exists');
     }
 
     return helpers.getCardsFromCardpackIds(cardpackIds)

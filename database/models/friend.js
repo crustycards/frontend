@@ -29,14 +29,10 @@ let Friend = {model: FriendModel};
 // 3. addType is not either 'create' or 'accept'
 const addFriend = (frienderEmail, friendeeEmail, addType) => {
   if (!addType || addType.constructor !== String && (addType !== 'create' || addType !== 'accept')) {
-    return new Promise((resolve, reject) => {
-      reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
-    });
+    return Promise.reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
   }
   if (frienderEmail === friendeeEmail) {
-    return new Promise((resolve, reject) => {
-      reject('Cannot friend yourself');
-    });
+    return Promise.reject('Cannot friend yourself');
   }
 
   return User.getByEmail(frienderEmail)
@@ -105,20 +101,14 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
               return friendship;
             });
         } else {
-          return new Promise((resolve, reject) => {
-            reject('Cannot accept a friend request that does not exist');
-          });
+          return Promise.reject('Cannot accept a friend request that does not exist');
         }
       } else {
       // If the original request sender tries to accept, return the current request status without modifying it
         if (addType === 'create') {
-          return new Promise((resolve, reject) => {
-            reject('There is already an open friend request between you and this person');
-          });
+          return Promise.reject('There is already an open friend request between you and this person');
         } else {
-          return new Promise((resolve, reject) => {
-            reject('Cannot send a friend request to a person that has already sent you a request');
-          });
+          return Promise.reject('Cannot send a friend request to a person that has already sent you a request');
         }
       }
     });
@@ -169,9 +159,7 @@ Friend.remove = (unfrienderEmail, unfriendeeEmail) => {
             return true;
           });
       } else {
-        return new Promise((resolve, reject) => {
-          reject('You are not friends with this person');
-        });
+        return Promise.reject('You are not friends with this person');
       }
     });
 };

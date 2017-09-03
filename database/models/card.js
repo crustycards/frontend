@@ -37,24 +37,16 @@ let Card = {model: CardModel};
 // 3. cardType is not either 'black' or 'white'
 Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
   if (!cardType || (cardType !== 'black' && cardType !== 'white')) {
-    return new Promise((resolve, reject) => {
-      reject('Expected card type to be white or black, but instead received ' + cardType);
-    });
+    return Promise.reject('Expected card type to be white or black, but instead received ' + cardType);
   }
   if (!cardText || cardText.constructor !== String || cardText === '') {
-    return new Promise((resolve, reject) => {
-      reject('Expected card text to be a non-empty string, but instead received ' + cardText);
-    });
+    return Promise.reject('Expected card text to be a non-empty string, but instead received ' + cardText);
   }
   if (cardType === 'black' && (answerFields === null || answerFields === undefined || answerFields.constructor !== Number)) {
-    return new Promise((resolve, reject) => {
-      reject('Expected answerFields to be a number, but instead received ' + answerFields);
-    });
+    return Promise.reject('Expected answerFields to be a number, but instead received ' + answerFields);
   }
   if (cardType === 'black' && (answerFields < 1 || answerFields > 3)) {
-    return new Promise((resolve, reject) => {
-      reject('Expected answerFields to be 1, 2, or 3 but it received ' + answerFields);
-    });
+    return Promise.reject('Expected answerFields to be 1, 2, or 3 but it received ' + answerFields);
   }
 
   return Cardpack.model.findOne({
@@ -71,9 +63,7 @@ Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
               answerFields: cardType === 'black' ? answerFields : null
             });
           } else {
-            return new Promise((resolve, reject) => {
-              reject('Cannot create cards in a cardpack that you do not own');
-            });
+            return Promise.reject('Cannot create cards in a cardpack that you do not own');
           }
         });
     })
@@ -90,9 +80,7 @@ Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
 // 2. cardData is uninterpretable
 Card.update = (userEmail, cardId, cardText) => {
   if (!cardText || cardText.constructor !== String || cardText === '') {
-    return new Promise((resolve, reject) => {
-      reject('Card should be a non-empty string');
-    });
+    return Promise.reject('Card should be a non-empty string');
   }
 
   return User.getByEmail(userEmail)
@@ -102,18 +90,14 @@ Card.update = (userEmail, cardId, cardText) => {
       })
         .then((card) => {
           if (!card) {
-            return new Promise((resolve, reject) => {
-              reject('Card ID does not map to an existing card');
-            });
+            return Promise.reject('Card ID does not map to an existing card');
           }
           return Cardpack.model.findOne({
             where: {id: card.cardpackId}
           })
             .then((cardpack) => {
               if (cardpack.ownerId !== user.id) {
-                return new Promise((resolve, reject) => {
-                  reject('User does not own the cardpack that this card belongs to');
-                });
+                return Promise.reject('User does not own the cardpack that this card belongs to');
               }
               return card.update({
                 text: cardText
@@ -135,14 +119,10 @@ Card.delete = (userEmail, cardId) => {
       return Card.getById(cardId)
         .then((card) => {
           if (!card) {
-            return new Promise((resolve, reject) => {
-              reject('Card ID does not map to an existing card');
-            });
+            return Promise.reject('Card ID does not map to an existing card');
           }
           if (card.cardpack.ownerId !== user.id) {
-            return new Promise((resolve, reject) => {
-              reject('User does not own this card');
-            });
+            return Promise.reject('User does not own this card');
           }
           return card.destroy();
         });
@@ -160,9 +140,7 @@ Card.getByCardpackId = (cardpackId) => {
   })
     .then((cardpack) => {
       if (!cardpack) {
-        return new Promise((resolve, reject) => {
-          reject('Cardpack ID does not map to an existing cardpack');
-        });
+        return Promise.reject('Cardpack ID does not map to an existing cardpack');
       }
       return Card.model.findAll({
         where: {cardpackId: cardpackId}

@@ -47,9 +47,7 @@ User.getByEmail = (userEmail) => {
   })
     .then((userData) => {
       if (!userData) {
-        return new Promise((resolve, reject) => {
-          reject('No user is registered under ' + userEmail);
-        });
+        return Promise.reject('No user is registered under ' + userEmail);
       } else {
         delete userData.dataValues.password; // Prevents password from being sent over http/sockets
         return userData.dataValues;
@@ -65,9 +63,7 @@ User.getById = (userId) => {
   })
     .then((userData) => {
       if (!userData) {
-        return new Promise((resolve, reject) => {
-          reject('No user has ID ' + userId);
-        });
+        return Promise.reject('No user has ID ' + userId);
       } else {
         delete userData.dataValues.password;
         return userData.dataValues;

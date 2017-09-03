@@ -25,9 +25,7 @@ let Cardpack = {model: CardpackModel};
 // 2. cardpackName is null/undefined/emptystring/notastring
 Cardpack.create = (userEmail, cardpackName) => {
   if (!cardpackName || cardpackName.constructor !== String) {
-    return new Promise((resolve, reject) => {
-      reject('Cardpack name is invalid - name must be a non-empty string');
-    });
+    return Promise.reject('Cardpack name is invalid - name must be a non-empty string');
   }
 
   return User.getByEmail(userEmail)
@@ -97,9 +95,7 @@ Cardpack.delete = (userEmail, cardpackId) => {
       return Cardpack.getById(cardpackId)
         .then((cardpack) => {
           if (cardpack.owner.id !== owner.id) {
-            return new Promise((resolve, reject) => {
-              reject('Cannot delete someone else\'s cardpack');
-            });
+            return Promise.reject('Cannot delete someone else\'s cardpack');
           }
 
           return Cardpack.model.findAll({
