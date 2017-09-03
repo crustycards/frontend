@@ -49,15 +49,13 @@ Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
     return Promise.reject('Expected answerFields to be 1, 2, or 3 but it received ' + answerFields);
   }
 
-  return Cardpack.model.findOne({
-    where: {id: cardpackId}
-  })
+  return Cardpack.getById(cardpackId)
     .then((cardpack) => {
       return User.getByEmail(userEmail)
         .then((user) => {
-          if (user.id === cardpack.ownerId) {
+          if (user.id === cardpack.owner.id) {
             return Card.model.create({
-              cardpackId: cardpackId,
+              cardpackId,
               text: cardText,
               type: cardType,
               answerFields: cardType === 'black' ? answerFields : null

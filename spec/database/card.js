@@ -116,7 +116,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, -1, 'card_name', 'white')).to.be.rejectedWith('Cannot read property \'ownerId\' of null'); // TODO - Refactor to make this return a more intuitive error message
+          return expect(Card.create(user.email, -1, 'card_name', 'white')).to.be.rejectedWith('Cardpack does not exist');
         });
     });
     it('Should not create a card if the card creator is not the cardpack owner', () => {

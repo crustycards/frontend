@@ -56,11 +56,7 @@ User.getByEmail = (userEmail) => {
 };
 
 User.getById = (userId) => {
-  return User.model.findOne({
-    where: {
-      id: userId
-    }
-  })
+  return User.model.findById(userId)
     .then((userData) => {
       if (!userData) {
         return Promise.reject('No user has ID ' + userId);
