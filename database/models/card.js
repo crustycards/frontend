@@ -139,17 +139,12 @@ Card.delete = (userEmail, cardId) => {
               reject('Card ID does not map to an existing card');
             });
           }
-          return Cardpack.model.findOne({
-            where: {id: card.cardpack.id}
-          })
-            .then((cardpack) => {
-              if (cardpack.ownerId !== user.id) {
-                return new Promise((resolve, reject) => {
-                  reject('User does not own this card');
-                });
-              }
-              return card.destroy();
+          if (card.cardpack.ownerId !== user.id) {
+            return new Promise((resolve, reject) => {
+              reject('User does not own this card');
             });
+          }
+          return card.destroy();
         });
     });
 };
