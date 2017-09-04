@@ -55,6 +55,7 @@
     "react-router-redux": "^4.0.8",
     "redux": "^3.7.2",
     "redux-observable": "^0.16.0",
+    "redux-socket.io": "^1.4.0",
     "redux-thunk": "^2.2.0",
     "sequelize": "^4.4.2",
     "sinon": "^3.2.0",
