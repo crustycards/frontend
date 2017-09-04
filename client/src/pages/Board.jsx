@@ -5,6 +5,7 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import COHCard from '../components/COHCard.jsx';
+import Tray from '../components/Tray.jsx';
 
 const styles = {
   root: {
@@ -33,6 +34,7 @@ const Board = ({blackCard, whiteCards, gameName, players}) => (
             <COHCard card={card} key={i} />
           ))}
       </GridList>
+      <Tray />
     </div>
   </div>
 );
