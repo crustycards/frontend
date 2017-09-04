@@ -31,6 +31,7 @@ class Game {
     this.players = new Players(maxPlayers);
     this.addUser(creator);
     this.timeoutId; // Saved to allow pausing and stopping of games
+    this.nextStageStart;
     this.roundStage;
     this.timeout = timeout;
 
@@ -100,6 +101,7 @@ class Game {
     } else {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = new Date().getTime() + this.timeout;
     }
   }
   stop () {
@@ -109,6 +111,7 @@ class Game {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = undefined;
+      this.nextStageStart = undefined;
     }
     this.whiteCardDeck.resetCurrentCards();
   }
@@ -118,6 +121,7 @@ class Game {
     }
     clearTimeout(this.timeoutId);
     this.timeoutId = undefined;
+    this.nextStageStart = undefined;
   }
 
   isRunning () {
@@ -130,15 +134,19 @@ class Game {
       this.blackCardDeck.cycleCard();
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, 0);
+      this.nextStageStart = this.nextStageStart = new Date().getTime() + 0;
     } else if (this.roundStage === ROUND_STAGES.playWhiteCards) {
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = this.nextStageStart = new Date().getTime() + this.timeout;
     } else if (this.roundStage === ROUND_STAGES.judgeRound) {
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = new Date().getTime() + this.timeout;
     } else if (this.roundStage === ROUND_STAGES.incrementScore) {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, roundEndDelay);
+      this.nextStageStart = new Date().getTime() + roundEndDelay;
     }
   }
 
@@ -165,7 +173,8 @@ class Game {
       currentJudge: this.players.getJudge(),
       currentOwner: this.players.getOwner(),
       otherPlayers,
-      roundStage: ROUND_NAMES[this.roundStage] || 'Not running'
+      roundStage: ROUND_NAMES[this.roundStage],
+      nextStageStart: this.nextStageStart
     };
   }
 }

@@ -217,8 +217,9 @@ describe('Game', () => {
       expect(state.currentJudge).to.be.a('object');
       expect(state.currentOwner).to.be.a('object');
       expect(state.otherPlayers).to.be.a('array');
-      expect(state.roundStage).to.be.a('string');
-      expect(Object.keys(state).length).to.equal(8);
+      expect(state.roundStage).to.equal(undefined);
+      expect(state.nextStageStart).to.equal(undefined);
+      expect(Object.keys(state).length).to.equal(9);
     });
     it('Should throw when getting state for a user that is not in the game', () => {
       expect(game.getState(userFour).otherPlayers).to.throw;
@@ -292,7 +293,26 @@ describe('Game', () => {
       });
     });
     describe('roundStage', () => {
-      it('');
+      it('Should be undefined before game is started', () => {
+        expect(game.getState(userOne).roundStage).to.equal(undefined);
+      });
+      it('Should exist after the game is started', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        expect(game.getState(userOne).roundStage).to.be.a('string');
+      });
+    });
+    describe('nextStageStart', () => {
+      it('Should be undefined before game is started', () => {
+        expect(game.getState(userOne).nextStageStart).to.equal(undefined);
+      });
+      it('Should exist after the game is started', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        expect(game.getState(userOne).nextStageStart).to.be.a('number');
+      });
     });
   });
 });
