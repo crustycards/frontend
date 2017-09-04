@@ -273,9 +273,6 @@ describe('Card', () => {
     });
   });
 
-  describe('getByCardpackId', () => {
-  });
-
   describe('delete()', () => {
     let user = mockDB.users[0];
     let otherUser = mockDB.users[1];

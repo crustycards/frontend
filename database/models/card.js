@@ -133,16 +133,9 @@ Card.delete = (userEmail, cardId) => {
 // Exceptions:
 // 1. cardpackId does not map to an existing cardpack
 Card.getByCardpackId = (cardpackId) => {
-  return Cardpack.model.findOne({
-    where: {id: cardpackId}
-  })
+  return Cardpack.getById(cardpackId)
     .then((cardpack) => {
-      if (!cardpack) {
-        return Promise.reject('Cardpack ID does not map to an existing cardpack');
-      }
-      return Card.model.findAll({
-        where: {cardpackId: cardpackId}
-      });
+      return Card.model.findAll({ where: { cardpackId } });
     });
 };
 
