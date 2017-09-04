@@ -35,30 +35,30 @@ let Card = {model: CardModel};
 // 1. cardpackId does not map to an existing cardpack
 // 2. cardText is null/undefined/emptystring/notastring
 // 3. cardType is not either 'black' or 'white'
-Card.create = (userEmail, cardpackId, cardText, cardType, answerFields = 1) => {
-  if (!cardType || (cardType !== 'black' && cardType !== 'white')) {
-    return Promise.reject('Expected card type to be white or black, but instead received ' + cardType);
+Card.create = ({userId, cardpackId, text, type, answerFields = 1}) => {
+  if (!type || (type !== 'black' && type !== 'white')) {
+    return Promise.reject('Expected card type to be white or black, but instead received ' + type);
   }
-  if (!cardText || cardText.constructor !== String || cardText === '') {
-    return Promise.reject('Expected card text to be a non-empty string, but instead received ' + cardText);
+  if (!text || text.constructor !== String || text === '') {
+    return Promise.reject('Expected card text to be a non-empty string, but instead received ' + text);
   }
-  if (cardType === 'black' && (answerFields === null || answerFields === undefined || answerFields.constructor !== Number)) {
+  if (type === 'black' && (answerFields === null || answerFields === undefined || answerFields.constructor !== Number)) {
     return Promise.reject('Expected answerFields to be a number, but instead received ' + answerFields);
   }
-  if (cardType === 'black' && (answerFields < 1 || answerFields > 3)) {
+  if (type === 'black' && (answerFields < 1 || answerFields > 3)) {
     return Promise.reject('Expected answerFields to be 1, 2, or 3 but it received ' + answerFields);
   }
 
   return Cardpack.getById(cardpackId)
     .then((cardpack) => {
-      return User.getByEmail(userEmail)
+      return User.getById(userId)
         .then((user) => {
           if (user.id === cardpack.owner.id) {
             return Card.model.create({
               cardpackId,
-              text: cardText,
-              type: cardType,
-              answerFields: cardType === 'black' ? answerFields : null
+              text,
+              type,
+              answerFields: type === 'black' ? answerFields : null
             });
           } else {
             return Promise.reject('Cannot create cards in a cardpack that you do not own');

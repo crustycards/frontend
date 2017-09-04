@@ -2,6 +2,8 @@ const db = require('../database');
 
 // Accepts an array of cardpack IDs and returns a promise resolving to an object in the format...
 // {blackCards: [], whiteCards: []}
+
+// TODO - Add tests for this function
 module.exports.getCardsFromCardpackIds = (cardpackIds) => {
   let promises = [];
   let blackCards = [];

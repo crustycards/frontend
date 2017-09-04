@@ -19,7 +19,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               cardId = card.id;
               expect(card).to.exist;
@@ -38,7 +38,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'white')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
             .then((card) => {
               cardId = card.id;
               expect(card).to.exist;
@@ -57,7 +57,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'white', 3)
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white', answerFields: 3})
             .then((card) => {
               expect(card.answerFields).to.not.exist;
             });
@@ -67,7 +67,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black', 3)
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black', answerFields: 3})
             .then((card) => {
               expect(card.answerFields).to.equal(3);
             });
@@ -77,21 +77,21 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, cardpack.id, 'test card', 'black', 4)).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
+          return expect(Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black', answerFields: 4})).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
         });
     });
     it('Should throw error when setting answerFields to a value less than one', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, cardpack.id, 'test card', 'black', 0)).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
+          return expect(Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black', answerFields: 0})).to.be.rejectedWith('Expected answerFields to be 1, 2, or 3 but it received');
         });
     });
     it('Should set card answerFields to one if no value is provided', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               expect(card.answerFields).to.equal(1);
             });
@@ -102,21 +102,21 @@ describe('Card', () => {
       let fakeCardType = 'fakeType';
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, cardpack.id, 'test card', fakeCardType)).to.be.rejectedWith('Expected card type to be white or black, but instead received ' + fakeCardType);
+          return expect(Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: fakeCardType})).to.be.rejectedWith('Expected card type to be white or black, but instead received ' + fakeCardType);
         });
     });
     it('Should not create a card if the card text is blank', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, cardpack.id, '', 'white')).to.be.rejectedWith('Expected card text to be a non-empty string, but instead received '); // Received nothing because we used an empty string
+          return expect(Card.create({userId: user.id, cardpackId: cardpack.id, text: '', type: 'white'})).to.be.rejectedWith('Expected card text to be a non-empty string, but instead received '); // Received nothing because we used an empty string
         });
     });
     it('Should not create a card if the cardpack ID doesn\'t map to an existing cardpack', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return expect(Card.create(user.email, -1, 'card_name', 'white')).to.be.rejectedWith('Cardpack does not exist');
+          return expect(Card.create({userId: user.id, cardpackId: -1, text: 'card_name', type: 'white'})).to.be.rejectedWith('Cardpack does not exist');
         });
     });
     it('Should not create a card if the card creator is not the cardpack owner', () => {
@@ -125,7 +125,7 @@ describe('Card', () => {
       let cardpack = mockDB.cardpacks[0];
       return Cardpack.create(user.email, cardpack.name)
         .then(() => {
-          return expect(Card.create('fake@email.com', cardpack.id, 'test', 'white')).to.be.rejectedWith('No user is registered under fake@email.com');
+          return expect(Card.create({userId: otherUser.id, cardpackId: cardpack.id, text: 'test', type: 'white'})).to.be.rejectedWith('Cannot create cards in a cardpack that you do not own');
         });
     });
     it('Should not throw an error when creating a white card that has answerFields set to null instead of undefined', () => {
@@ -134,7 +134,7 @@ describe('Card', () => {
       let cardpack = mockDB.cardpacks[0];
       return Cardpack.create(user.email, cardpack.name)
         .then(() => {
-          return Card.create(user.email, cardpack.id, 'test', 'white', null);
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test', type: 'white', answerFields: null});
         });
     });
   });
@@ -146,7 +146,7 @@ describe('Card', () => {
       return Cardpack.create(user.email, cardpack.name);
     });
     it('Should modify an existing card', () => {
-      return Card.create(user.email, cardpack.id, 'test card', 'white')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
         .then((card) => {
           let cardName = 'updated card name';
           return Card.update(user.email, cardId, cardName)
@@ -160,7 +160,7 @@ describe('Card', () => {
         });
     });
     it('Should contain answerFields property for black cards', () => {
-      return Card.create(user.email, cardpack.id, 'test card', 'black')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
         .then((card) => {
           let cardName = 'updated card name';
           return Card.update(user.email, cardId, cardName)
@@ -170,7 +170,7 @@ describe('Card', () => {
         });
     });
     it('Should not contain answerFields property for white cards', () => {
-      return Card.create(user.email, cardpack.id, 'test card', 'white')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
         .then((card) => {
           let cardName = 'updated card name';
           return Card.update(user.email, cardId, cardName)
@@ -183,7 +183,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               let fakeEmail = 'thisisafake@email.com';
               return expect(Card.update(fakeEmail, card.id, 'updated card name')).to.be.rejectedWith('No user is registered under ' + fakeEmail);
@@ -195,7 +195,7 @@ describe('Card', () => {
       let otherUser = mockDB.users[1];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               return expect(Card.update(otherUser.email, card.id, 'updated card name')).to.be.rejectedWith('User does not own the cardpack that this card belongs to');
             });
@@ -213,7 +213,7 @@ describe('Card', () => {
     it('Should reject when changing card text to a blank string', () => {
       let user = mockDB.users[0];
       let cardpack = mockDB.cardpacks[0];
-      return Card.create(user.email, cardpack.id, 'test card', 'white')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
         .then((card) => {
           return expect(Card.update(user.email, cardId, '')).to.be.rejectedWith('Card should be a non-empty string');
         });
@@ -225,7 +225,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               return Card.getById(card.id)
                 .then(() => {
@@ -249,7 +249,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'black')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               return Card.getById(card.id)
                 .then(() => {
@@ -262,7 +262,7 @@ describe('Card', () => {
       let user = mockDB.users[0];
       return Cardpack.create(user.email, 'cardpack_name')
         .then((cardpack) => {
-          return Card.create(user.email, cardpack.id, 'test card', 'white')
+          return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
             .then((card) => {
               return Card.getById(card.id)
                 .then(() => {
@@ -284,7 +284,7 @@ describe('Card', () => {
       return Cardpack.create(user.email, cardpack.name);
     });
     it('Should reject when deleting a card you do not own', () => {
-      return Card.create(user.email, cardpack.id, 'test card', 'white')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
         .then(() => {
           return expect(Card.delete(otherUser.email, cardId)).to.be.rejectedWith('User does not own this card');
         });
@@ -296,7 +296,7 @@ describe('Card', () => {
     it('Should delete a card when all parameters are valid', () => {
       let user = mockDB.users[0];
       let cardpack = mockDB.cardpacks[0];
-      return Card.create(user.email, cardpack.id, 'test card', 'white')
+      return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'white'})
         .then(() => {
           return Card.delete(user.email, cardId);
         })

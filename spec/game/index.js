@@ -42,12 +42,12 @@ describe('Games', () => {
             let promises = [];
             whiteCards.forEach((card) => {
               promises.push(
-                Card.create(users[0].email, cardpack.id, card.text, card.type)
+                Card.create({userId: users[0].id, cardpackId: cardpack.id, text: card.text, type: card.type})
               );
             });
             blackCards.forEach((card) => {
               promises.push(
-                Card.create(users[0].email, cardpack.id, card.text, card.type)
+                Card.create({userId: users[0].id, cardpackId: cardpack.id, text: card.text, type: card.type})
               );
             });
             return Promise.all(promises);
