@@ -9,13 +9,17 @@ import axios from 'axios';
 class COHCard extends Component {
   constructor (props) {
     super(props);
-    this.removeCard = this.removeCard.bind(this);
     this.state = {
       time: this.getTime()
     };
+
+    this.removeCard = this.removeCard.bind(this);
+    // If we have no playhandler register console.error to 
+    // report the error if invoked
+    this.playHandler = (this.props.playHandler || console.error).bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.intervalId = setInterval(() => {
       let time = this.getTime();
       if (time !== this.state.time) {
@@ -24,19 +28,19 @@ class COHCard extends Component {
     }, 100);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.intervalId);
   }
 
-  getTime () {
+  getTime() {
     return 'Created at ' + time.stringify(this.props.card.createdAt, {relativeTime: true});
   }
 
-  removeCard (card) {
+  removeCard() {
     axios.delete('/api/cards/' + this.props.card.id);
   }
 
-  render () {
+  render() {
     let cardElements = [];
     cardElements.push(
       <CardHeader
@@ -50,6 +54,14 @@ class COHCard extends Component {
       cardElements.push(
         <CardActions key={1}>
           <FlatButton label='Delete' onClick={this.removeCard} />
+        </CardActions>
+      );
+    }
+
+    if (this.props.playHandler) {
+      cardElements.push(
+        <CardActions key={2}>
+          <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} />
         </CardActions>
       );
     }
