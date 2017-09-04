@@ -1,12 +1,12 @@
 import React from 'react';
-import { Drawer, MenuItem, AppBar } from 'material-ui';
+import { Drawer, MenuItem, AppBar, FlatButton } from 'material-ui';
 
 class Navbar extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
       open: false
-    }
+    };
     this.handleToggle = this.handleToggle.bind(this);
     this.handleClose = this.handleClose.bind(this);
     if (this.props.setToggle) {
@@ -40,13 +40,20 @@ class Navbar extends React.Component {
         <AppBar
           title="Title"
           onLeftIconButtonTouchTap={this.handleToggle}
+          iconElementRight={
+            <FlatButton 
+              labelStyle={{ fontSize: '21px' }}
+              onClick={this.redirectTo.bind(this, '/game')} 
+              label="Game" 
+            />
+          }
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <MenuItem onClick={this.redirectTo.bind(this, '/')}>Home</MenuItem>
           <MenuItem onClick={this.redirectTo.bind(this, '/logout')}>Logout</MenuItem>
         </Drawer>
       </div>
-    )
+    );
   }
 }
 
