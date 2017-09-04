@@ -1,7 +1,6 @@
 const db = require('../connection');
 const Sequelize = require('sequelize');
 const User = require('./user');
-const CardpackSubscribe = require('./cardpackSubscribe');
 
 const CardpackModel = db.define('cardpacks', {
   id: {
@@ -132,13 +131,8 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
           if (cardpack.owner.id === user.id) {
             throw new Error('Cannot subscribe to your own cardpack');
           }
-          return CardpackSubscribe.model.findOrCreate({
-            where: {
-              subscriberId: user.id,
-              cardpackId
-            }
-          })
-            .spread((subscription, created) => {
+          return cardpack.addSubscriber(user)
+            .then((created) => {
               if (created) {
               // TODO - handle socket events here
               }
@@ -151,15 +145,13 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
 Cardpack.unsubscribe = (userEmail, cardpackId) => {
   return User.getByEmail(userEmail)
     .then((user) => {
-      return CardpackSubscribe.model.destroy({
-        where: {
-          subscriberId: user.id,
-          cardpackId
-        }
-      })
-        .then((affectedRows) => {
-          if (affectedRows) {
-          // TODO - Add socket events here
+      return Cardpack.getById(cardpackId)
+        .then((cardpack) => {
+          return cardpack.removeSubscriber(user);
+        })
+        .then((destroyed) => {
+          if (destroyed) {
+            // TODO - Add socket events here
             return true;
           } else {
             throw new Error('Cannot unsubscribe from a cardpack that you are not subscribed to');

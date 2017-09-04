@@ -48,15 +48,16 @@ User.getByEmail = (userEmail) => {
   return User.model.findOne({
     where: {
       email: userEmail
+    },
+    attributes: {
+      exclude: ['password']
     }
   })
-    .then((userData) => {
-      if (!userData) {
+    .then((user) => {
+      if (!user) {
         return Promise.reject('No user is registered under ' + userEmail);
-      } else {
-        delete userData.dataValues.password; // Prevents password from being sent over http/sockets
-        return userData.dataValues;
       }
+      return user;
     });
 };
 
@@ -70,6 +71,7 @@ User.changeTheme = (userId, themeId) => {
     });
 };
 
+// TODO - Purge password here
 User.getById = (userId) => {
   return User.model.findById(userId)
     .then((user) => {

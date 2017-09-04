@@ -225,7 +225,7 @@ describe('Cardpack', () => {
     });
     it('Should reject when attempting to unsubscribe from a cardpack that does not exist', () => {
       let user = mockDB.users[0];
-      return expect(Cardpack.unsubscribe(user.email, 1234)).to.be.rejectedWith('Cannot unsubscribe from a cardpack that you are not subscribed to');
+      return expect(Cardpack.unsubscribe(user.email, 1234)).to.be.rejectedWith('Cardpack does not exist');
     });
     it('Should reject when attempting to unsubscribe from a non-existent user', () => {
       return expect(Cardpack.unsubscribe('fake@email.com', 1234)).to.be.rejectedWith('No user is registered under fake@email.com');
