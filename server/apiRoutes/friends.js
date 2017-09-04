@@ -33,8 +33,8 @@ module.exports = (socketHandler) => {
         db.Friend.acceptRequest(req.user.email, req.body.user)
           .then(() => {
             return db.User.getByEmail(req.body.user)
-              .then((acceptee) => {
-                return {acceptor: req.user, acceptee};
+              .then((acceptor) => {
+                return {acceptor, acceptee: req.user};
               });
           })
           .then((users) => {

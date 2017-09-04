@@ -58,11 +58,7 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
         }
       })
         .then((friendData) => {
-          let friendStatus = null;
-          if (friendData) {
-            friendStatus = friendData;
-          }
-          return {friends, friendStatus};
+          return {friends, friendStatus: friendData || null};
         });
     })
     .then((friendshipData) => {
@@ -73,15 +69,19 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
           friendeeId: friendshipData.friends.friendee.id,
           accepted: false
         })
-          .then((friendshipData) => {
-            return friendshipData.dataValues;
-          })
-          .then((friendship) => {
-            delete friendship.frienderId;
-            delete friendship.friendeeId;
-            friendship.friender = friendshipData.friends.friender;
-            friendship.friendee = friendshipData.friends.friendee;
-            return friendship;
+          .then((friendshipStatus) => {
+            return Friend.model.findById(friendshipStatus.id, {
+              include: [{
+                model: User.model,
+                as: 'friender'
+              }, {
+                model: User.model,
+                as: 'friendee'
+              }],
+              attributes: {
+                exclude: ['frienderId', 'friendeeId']
+              }
+            });
           });
       } else if (addType === 'accept' && friendshipData.friendStatus) {
       // Set friend request to accepted only if you are the receiver of the request
@@ -91,14 +91,18 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
             accepted: true
           })
             .then((newFriendshipStatus) => {
-              return newFriendshipStatus.dataValues;
-            })
-            .then((friendship) => {
-              delete friendship.frienderId;
-              delete friendship.friendeeId;
-              friendship.friender = friendshipData.friends.friender;
-              friendship.friendee = friendshipData.friends.friendee;
-              return friendship;
+              return Friend.model.findById(newFriendshipStatus.id, {
+                include: [{
+                  model: User.model,
+                  as: 'friender'
+                }, {
+                  model: User.model,
+                  as: 'friendee'
+                }],
+                attributes: {
+                  exclude: ['frienderId', 'friendeeId']
+                }
+              });
             });
         } else {
           return Promise.reject('Cannot accept a friend request that does not exist');

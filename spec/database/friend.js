@@ -91,14 +91,14 @@ describe('Friend', () => {
               expect(friendshipStatus.frienderId).to.not.exist;
               expect(friendshipStatus.friendeeId).to.not.exist;
       
-              expect(friendshipStatus.friender.id).to.equal(userTwo.id);
-              expect(friendshipStatus.friendee.id).to.equal(userOne.id);
-              expect(friendshipStatus.friender.email).to.equal(userTwo.email);
-              expect(friendshipStatus.friendee.email).to.equal(userOne.email);
-              expect(friendshipStatus.friender.firstname).to.equal(userTwo.firstname);
-              expect(friendshipStatus.friendee.firstname).to.equal(userOne.firstname);
-              expect(friendshipStatus.friender.lastname).to.equal(userTwo.lastname);
-              expect(friendshipStatus.friendee.lastname).to.equal(userOne.lastname);
+              expect(friendshipStatus.friender.id).to.equal(userOne.id);
+              expect(friendshipStatus.friendee.id).to.equal(userTwo.id);
+              expect(friendshipStatus.friender.email).to.equal(userOne.email);
+              expect(friendshipStatus.friendee.email).to.equal(userTwo.email);
+              expect(friendshipStatus.friender.firstname).to.equal(userOne.firstname);
+              expect(friendshipStatus.friendee.firstname).to.equal(userTwo.firstname);
+              expect(friendshipStatus.friender.lastname).to.equal(userOne.lastname);
+              expect(friendshipStatus.friendee.lastname).to.equal(userTwo.lastname);
               expect(friendshipStatus.accepted).to.equal(true);
             });
         });
