@@ -50,9 +50,8 @@ class Games {
 
   getAll () {
     let games = [];
-    // TODO - Use object.values instead of object.keys
-    Object.keys(this.gamesByName).forEach((key) => {
-      games.push(this.gamesByName[key]);
+    Object.values(this.gamesByName).forEach((value) => {
+      games.push(value);
     });
     return games;
   }

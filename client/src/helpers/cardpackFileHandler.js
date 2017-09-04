@@ -31,7 +31,6 @@ module.exports.parse = (string) => {
   return cards;
 };
 
-// TODO - Write tests for this
 module.exports.stringify = (cards) => {
   if (!cards || cards.constructor !== Array) {
     throw new Error('Cards must be an array');
