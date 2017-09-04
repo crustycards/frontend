@@ -1,3 +1,6 @@
+/**
+ * DELETE MOCK DATA
+ */
 const TEXTS = ['foo', 'bar', 'example', 'ipsum'];
 
 export const SET_BLACK_CARD = 'game/SET_BLACK_CARD';

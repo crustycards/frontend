@@ -49,7 +49,7 @@ class COHCard extends Component {
         key={0}
       />
     );
-    // TODO - change cardActions to not be hard coded
+    // TODO - Combine card actions 
     if (this.props.isOwner) {
       cardElements.push(
         <CardActions key={1}>
@@ -74,7 +74,7 @@ class COHCard extends Component {
       </MuiThemeProvider>
     ) : (
       <Card className='card'>;
-        {}
+        {cardElements}
       </Card>
     );
 

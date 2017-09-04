@@ -1,9 +1,9 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {GridList, GridTile} from 'material-ui/GridList';
-import Card from './COHCard.jsx';
-import {playCard} from '../store/modules/game';
+import {playCard} from '../../store/modules/game';
 import { bindActionCreators } from 'redux';
+import Card from '../COHCard.jsx';
 
 const Tray = ({hand, playCard}) => (
   <div> 
