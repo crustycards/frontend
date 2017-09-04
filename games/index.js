@@ -10,7 +10,7 @@ class Games {
   }
 
   // Returns a promise that will resolve to the new game
-  createGame ({creator, gameName, cardpackIds, timeout = 20, maxPlayers = 8}) {
+  createGame ({creator, gameName, cardpackIds, timeout = 20, maxPlayers = 8, handSize = 5}) {
     if (gameName === '') {
       return Promise.reject('Game name cannot be blank');
     }
@@ -21,9 +21,10 @@ class Games {
       return Promise.reject('A game with this name already exists');
     }
 
+    // TODO - Write tests to check if hand size defaults to 5
     return helpers.getCardsFromCardpackIds(cardpackIds)
       .then((cards) => {
-        let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers);
+        let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers, handSize);
         game.name = gameName;
         this.gamesByName[gameName] = game;
         this.namesByGame[game] = gameName;
@@ -49,31 +50,40 @@ class Games {
 
   getAll () {
     let games = [];
-    // TODO - User object.values
+    // TODO - Use object.values instead of object.keys
     Object.keys(this.gamesByName).forEach((key) => {
-      games.push(gamesByName[key]);
+      games.push(this.gamesByName[key]);
     });
     return games;
   }
 
   joinGame (user, gameName) {
-    if (!this.games[gameName]) {
+    if (!this.gamesByName[gameName]) {
       throw new Error('Game does not exist');
     }
     if (this.gamesByPlayerEmail[user.email]) {
       throw new Error('You are already in a game');
     }
-    this.gamesByPlayerId[user.id] = games[gameName];
-    this.gamesByPlayerEmail[user.email] = games[gameName];
-    this.games[gameName].addUser(user);
+    if (!user || user.constructor !== Object || !user.email || !user.id) {
+      throw new Error('User is invalid');
+    }
+    this.gamesByPlayerId[user.id] = this.gamesByName[gameName];
+    this.gamesByPlayerEmail[user.email] = this.gamesByName[gameName];
+    this.gamesByName[gameName].addUser(user);
     return {message: 'success'};
   }
 
   leaveGame (user) {
+    if (!user || user.constructor !== Object || !user.email || !user.id) {
+      throw new Error('User is invalid');
+    }
+    if (!this.gamesByPlayerId[user.id]) {
+      throw new Error('User is not in a game');
+    }
     this.gamesByPlayerId[user.id].removeUser(user);
-    if (this.gamesByPlayerId[user.id].users.size() === 0) {
+    if (this.gamesByPlayerId[user.id].players.size() === 0) {
       let gameName = this.gamesByPlayerId[user.id].name;
-      delete this.namesByGame[gamesByName[gameName]];
+      delete this.namesByGame[this.gamesByName[gameName]];
       delete this.gamesByName[gameName];
     }
     delete this.gamesByPlayerId[user.id];
@@ -81,6 +91,9 @@ class Games {
   }
 
   getStateFor (user) {
+    if (!user || user.constructor !== Object || !user.email || !user.id) {
+      throw new Error('User is invalid');
+    }
     let game = this.getUserGame(user);
     if (!game) {
       throw new Error('You are not in a game');

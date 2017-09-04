@@ -8,7 +8,7 @@ module.exports.getCardsFromCardpackIds = (cardpackIds) => {
   let whiteCards = [];
   cardpackIds.forEach((packId) => {
     promises.push(
-      db.getCards(packId)
+      db.Card.getByCardpackId(packId)
         .then((cards) => {
           cards.forEach((card) => {
             if (card.type === 'black') {
