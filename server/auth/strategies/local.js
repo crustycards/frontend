@@ -18,33 +18,35 @@ module.exports = (passport, userModel) => {
         where: {
           email: email
         }
-      }).then((user) => {
-        if (user) {
-          return done(null, false, {
-            message: 'Email is already in use'
-          });
-        } else {
-          let userPassword = generateHash(password);
-          let data = {
-            email: email,
-            password: userPassword,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname
-          };
-          User.create(data).then((newUser, created) => {
-            if (!newUser) {
-              return done(null, false);
-            } else {
-              return done(null, newUser);
-            }
-          })
-            .catch((err) => {
-              return done(null, false, {
-                message: 'Email is invalid'
-              });
+      })
+        .then((user) => {
+          if (user) {
+            return done(null, false, {
+              message: 'Email is already in use'
             });
-        }
-      });
+          } else {
+            let userPassword = generateHash(password);
+            let data = {
+              email: email,
+              password: userPassword,
+              firstname: req.body.firstname,
+              lastname: req.body.lastname
+            };
+            User.create(data)
+              .then((newUser, created) => {
+                if (!newUser) {
+                  return done(null, false);
+                } else {
+                  return done(null, newUser);
+                }
+              })
+              .catch((err) => {
+                return done(null, false, {
+                  message: 'Email is invalid'
+                });
+              });
+          }
+        });
     }
   ));
 
@@ -77,7 +79,8 @@ module.exports = (passport, userModel) => {
           }
           let userInfo = user.get();
           return done(null, userInfo);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log('Error: ' + err);
           return done(null, false, {
             message: 'Something went wrong with your sign-in'
