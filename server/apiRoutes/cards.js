@@ -14,6 +14,9 @@ module.exports = (socketHandler) => {
   router.post('/:cardpackId', (req, res) => {
     let promises = [];
     let cards = req.body;
+    if (cards.length > 100) {
+      return res.status(500).send('Exceeded the limit of 100 cards per request');
+    }
     let socketCards = [];
     cards.forEach((card) => {
       promises.push(

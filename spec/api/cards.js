@@ -37,6 +37,22 @@ describe('/api/cards', () => {
             });
         });
     });
+    it('Should return error when adding more than 100 cards in one request', (done) => {
+      let cards = [];
+      for (let i = 0; i < 101; i++) {
+        cards.push({text: 'card' + i, type: 'white'});
+      }
+      agent.post('/api/cardpacks')
+        .send({name: 'test cardpack'})
+        .then(() => {
+          agent.post('/api/cards/' + 1)
+            .send(cards)
+            .end((err, res) => {
+              expect(err).to.exist;
+              done();
+            });
+        });
+    });
     it('Should return error when adding cards to cardpack owned by another user', (done) => {
       agent.post('/api/cardpacks')
         .send({name: 'test cardpack'})
