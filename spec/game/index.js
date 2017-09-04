@@ -13,7 +13,7 @@ for (let i = 0; i < 50; i++) {
   });
 }
 let whiteCards = [];
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 25; i++) {
   whiteCards.push({
     id: i + 1,
     text: 'white card ' + i,
@@ -21,7 +21,7 @@ for (let i = 0; i < 50; i++) {
   });
 }
 let blackCards = [];
-for (let i = 0; i < 50; i++) {
+for (let i = 0; i < 25; i++) {
   blackCards.push({
     id: i + 1,
     text: 'black card ' + i,

@@ -44,18 +44,16 @@ let User = {model: UserModel};
 //
 // Exceptions:
 // 1. userEmail does not map to any existing users
-User.getByEmail = (userEmail) => {
+User.getByEmail = (email) => {
   return User.model.findOne({
-    where: {
-      email: userEmail
-    },
+    where: {email},
     attributes: {
       exclude: ['password']
     }
   })
     .then((user) => {
       if (!user) {
-        return Promise.reject('No user is registered under ' + userEmail);
+        return Promise.reject('No user is registered under ' + email);
       }
       return user;
     });
@@ -71,9 +69,12 @@ User.changeTheme = (userId, themeId) => {
     });
 };
 
-// TODO - Purge password here
 User.getById = (userId) => {
-  return User.model.findById(userId)
+  return User.model.findById(userId, {
+    attributes: {
+      exclude: ['password']
+    }
+  })
     .then((user) => {
       return user ? user : Promise.reject('User does not exist');
     });

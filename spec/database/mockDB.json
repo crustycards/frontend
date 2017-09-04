@@ -5,28 +5,32 @@
       "googleId": null,
       "firstname": "Hello",
       "lastname": "World",
-      "email": "hello@world.com"
+      "email": "hello@world.com",
+      "password": "test"
     },
     {
       "id": 123456789,
       "googleId": null,
       "firstname": "Test",
       "lastname": "Person",
-      "email": "test@person.com"
+      "email": "test@person.com",
+      "password": "test"
     },
     {
       "id": 12345,
       "googleId": null,
       "firstname": "Test",
       "lastname": "Person",
-      "email": "example@gmail.com"
+      "email": "example@gmail.com",
+      "password": "test"
     },
     {
       "id": 12344445,
       "googleId": null,
       "firstname": "Test",
       "lastname": "Person",
-      "email": "exampleeeeeee@gmail.com"
+      "email": "exampleeeeeee@gmail.com",
+      "password": "test"
     }
   ],
   "messages": [

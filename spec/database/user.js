@@ -50,6 +50,13 @@ describe('User', () => {
           expect(user.themeId).to.equal(3);
         });
     });
+    it('Should not return user password', () => {
+      let user = mockDB.users[0];
+      return User.changeTheme(user.id, 3)
+        .then((user) => {
+          expect(user.password).to.not.exist;
+        });
+    });
     it('Should reject when userId does not map to an existing user', () => {
       return expect(User.changeTheme(13542, 4)).to.be.rejectedWith('User does not exist');
     });
@@ -66,13 +73,18 @@ describe('User', () => {
       expect(User.getById).to.be.a('function');
     });
     it('Should get a user by their ID', () => {
-      let promise = User.getById(mockDB.users[2].id)
+      return User.getById(mockDB.users[2].id)
         .then((user) => {
           expect(user.createdAt).to.exist;
           expect(user.updatedAt).to.exist;
-          expect(user.password).to.not.exist;
           expect(user.themeId).to.exist;
           expect(user.email).to.equal(mockDB.users[2].email);
+        });
+    });
+    it('Should not retrieve user password', () => {
+      return User.getById(mockDB.users[2].id)
+        .then((user) => {
+          expect(user.password).to.not.exist;
         });
     });
     it('Should throw an error when passed in an invalid ID', () => {
