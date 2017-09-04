@@ -186,7 +186,7 @@ describe('Card', () => {
           return Card.create({userId: user.id, cardpackId: cardpack.id, text: 'test card', type: 'black'})
             .then((card) => {
               let fakeEmail = 'thisisafake@email.com';
-              return expect(Card.update(fakeEmail, card.id, 'updated card name')).to.be.rejectedWith('No user is registered under ' + fakeEmail);
+              return expect(Card.update(fakeEmail, card.id, 'updated card name')).to.be.rejectedWith('User does not exist');
             });
         });
     });

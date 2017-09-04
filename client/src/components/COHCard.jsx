@@ -49,22 +49,13 @@ class COHCard extends Component {
         key={0}
       />
     );
-    // TODO - Combine card actions 
-    if (this.props.isOwner) {
-      cardElements.push(
-        <CardActions key={1}>
-          <FlatButton label='Delete' onClick={this.removeCard} />
-        </CardActions>
-      );
-    }
 
-    if (this.props.playHandler) {
-      cardElements.push(
-        <CardActions key={2}>
-          <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} />
-        </CardActions>
-      );
-    }
+    cardElements.push(
+      <CardActions key={1}>
+        {this.props.isOwner ? <FlatButton label='Delete' onClick={this.removeCard} /> : null}
+        {this.props.playHandler ? <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} /> : null}
+      </CardActions>
+    );
 
     let cardWrapper = this.props.card.type === 'black' ? (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>

@@ -127,7 +127,6 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
           throw new Error('Cardpack does not exist');
         })
         .then((cardpack) => {
-          // TODO - Use bare sequelize cardpack.model.findone so that we can use cardpack.ownerId instead of cardpack.owner.id
           if (cardpack.owner.id === user.id) {
             throw new Error('Cannot subscribe to your own cardpack');
           }

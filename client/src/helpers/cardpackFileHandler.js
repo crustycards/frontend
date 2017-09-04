@@ -1,5 +1,3 @@
-// TODO - Handle cards that have commas in the card text
-
 module.exports.parse = (string) => {
   let cards = [];
   let cardStrings = string.split(/\r\n\r\n/);

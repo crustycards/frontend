@@ -39,7 +39,7 @@ describe('User', () => {
     });
     it('Should reject if a user does not exist', () => {
       let fakeEmail = 'thisisafakeemail';
-      return expect(User.getByEmail(fakeEmail)).to.be.rejectedWith('No user is registered under ' + fakeEmail);
+      return expect(User.getByEmail(fakeEmail)).to.be.rejectedWith('User does not exist');
     });
   });
   describe('changeTheme()', () => {

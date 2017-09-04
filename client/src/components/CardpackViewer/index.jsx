@@ -116,7 +116,7 @@ class CardpackViewer extends React.Component {
           }
         });
     } else {
-      // TODO - Handle properly if browser does not support file uploading
+      alert('Your browser does not support file uploading');
     }
   }
 

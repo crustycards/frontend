@@ -53,7 +53,7 @@ User.getByEmail = (email) => {
   })
     .then((user) => {
       if (!user) {
-        return Promise.reject('No user is registered under ' + email);
+        return Promise.reject('User does not exist');
       }
       return user;
     });
