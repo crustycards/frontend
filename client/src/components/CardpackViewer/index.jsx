@@ -83,7 +83,17 @@ class CardpackViewer extends React.Component {
   }
 
   addCards (cards) {
-    return axios.post('/api/cards/' + this.cardpackId, cards);
+    if (cards.length <= 100) {
+      return axios.post('/api/cards/' + this.cardpackId, cards);
+    }
+    let tempCards = [];
+    cards.forEach((card, index) => {
+      tempCards.push(card);
+      if (tempCards.length === 100 || index === cards.length - 1) {
+        axios.post('/api/cards/' + this.cardpackId, tempCards);
+        tempCards = [];
+      }
+    });
   }
 
   downloadStringifiedCards () {
