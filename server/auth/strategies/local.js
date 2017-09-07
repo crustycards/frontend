@@ -15,9 +15,7 @@ module.exports = (passport, userModel) => {
       };
 
       User.findOne({
-        where: {
-          email: email
-        }
+        where: {email}
       })
         .then((user) => {
           if (user) {
@@ -25,10 +23,9 @@ module.exports = (passport, userModel) => {
               message: 'Email is already in use'
             });
           } else {
-            let userPassword = generateHash(password);
             let data = {
-              email: email,
-              password: userPassword,
+              email,
+              password: generateHash(password),
               firstname: req.body.firstname,
               lastname: req.body.lastname
             };
@@ -67,6 +64,7 @@ module.exports = (passport, userModel) => {
         }
       })
         .then((user) => {
+          // TODO - Lines 73 and 78, make then have the same message
           if (!user) {
             return done(null, false, {
               message: 'Email does not exist'
@@ -81,7 +79,7 @@ module.exports = (passport, userModel) => {
           return done(null, userInfo);
         })
         .catch((err) => {
-          console.log('Error: ' + err);
+          console.error('Error: ' + err);
           return done(null, false, {
             message: 'Something went wrong with your sign-in'
           });
