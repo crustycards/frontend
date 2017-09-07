@@ -22,6 +22,7 @@ describe('/signup', () => {
     let tempAgentTwo = chai.request.agent(app);
     tempAgentOne.post('/signup')
       .send({firstname: 'Hello', lastname: 'World', email: 'temp@agent.com', password: 'test'})
+      // Either remove the second account creation below, or reset database after each test
       .then(() => {
         return tempAgentTwo.post('/signup')
           .send({firstname: 'Hello', lastname: 'World', email: 'temp@agent.com', password: 'test'});
