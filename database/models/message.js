@@ -10,6 +10,7 @@ const MessageModel = db.define('messages', {
   },
   text: {
     type: Sequelize.STRING,
+    notEmpty: true,
     allowNull: false
   }
 });
