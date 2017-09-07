@@ -1,5 +1,6 @@
 const Card = require('./models/card');
 const Cardpack = require('./models/cardpack');
+const Chatroom = require('./models/chatroom');
 const Friend = require('./models/friend');
 const Message = require('./models/message');
 const User = require('./models/user');
@@ -18,6 +19,7 @@ Cardpack.model.belongsToMany(User.model, {through: 'cardpackSubscriptions', as: 
 module.exports = {
   Card,
   Cardpack,
+  Chatroom,
   Friend,
   Message,
   User,
