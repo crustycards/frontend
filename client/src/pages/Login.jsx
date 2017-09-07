@@ -5,6 +5,7 @@ import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
+import helpers from '../helpers';
 
 class Login extends React.Component {
   constructor(props) {
@@ -84,7 +85,7 @@ class Login extends React.Component {
 
   render() {
     return (
-      <div className='login center'>
+      <div className='login center' style={{zoom: helpers.isMobile() ? '180%' : '100%'}}>
         <h1>Login</h1>
         <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
