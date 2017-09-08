@@ -37,7 +37,7 @@ class NewGame extends Component {
   handleSubmit(e) {
     axios.post('/api/games', {
       gameName: this.state.gameName,
-      cardPackIds: this.state.cardpacksSelected
+      cardpackIds: this.state.cardpacksSelected
     })
       .then(console.log)
       .catch(console.error);
