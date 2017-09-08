@@ -20,12 +20,15 @@ module.exports = (socketHandler) => {
     })
     .post(isLoggedIn, (req, res) => {
       // Create new game
-      games.createGame({creator: db.User.getById(req.user.id), gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
-        .then((game) => {
-          res.json(game);
-        })
-        .catch((err) => {
-          res.status(500).json(err);
+      db.User.getById(req.user.id)
+        .then((user) => {
+          games.createGame({creator: user, gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
+            .then((game) => {
+              res.json(game);
+            })
+            .catch((err) => {
+              res.status(500).json(err);
+            });
         });
     });
   

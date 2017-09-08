@@ -28,6 +28,7 @@ class Games {
     return helpers.getCardsFromCardpackIds(cardpackIds)
       .then((cards) => {
         let game = new Game(creator, cards.blackCards, cards.whiteCards, timeout, maxPlayers, handSize);
+        // TODO - Push gamename to game constructor
         game.name = gameName;
         this.gamesByName[gameName] = game;
         this.namesByGame[game] = gameName;
@@ -53,8 +54,11 @@ class Games {
 
   getAll () {
     let games = [];
-    Object.values(this.gamesByName).forEach((value) => {
-      games.push(value);
+    Object.values(this.gamesByName).forEach((currentGame) => {
+      games.push({
+        name: currentGame.name,
+        owner: currentGame.players.getOwner()
+      });
     });
     return games;
   }
