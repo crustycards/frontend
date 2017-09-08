@@ -5,12 +5,11 @@ import { connect } from 'react-redux';
 import { RaisedButton, TextField, Checkbox } from 'material-ui';
 import axios from 'axios';
 
-class NewGame extends Component {
+class GameCreator extends Component {
   constructor(props) {
     super(props);
     this.state = {
       gameName: '',
-      selectedValue: 1,
       cardpacksSelected: []
     };
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
@@ -45,9 +44,6 @@ class NewGame extends Component {
 
   render() {
     const styles = {
-      block: {
-        maxWidth: 250,
-      },
       checkbox: {
         marginBottom: 16,
       }
@@ -85,4 +81,4 @@ const mapDispatchToProps = dispatch => bindActionCreators({
   fetchCardPacks  
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewGame);
+export default connect(mapStateToProps, mapDispatchToProps)(GameCreator);

@@ -12,7 +12,8 @@ import Cardpack from './pages/Cardpack.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import NotFound from './pages/NotFound.jsx';
-import GameFinder from './pages/GameFinder.jsx';
+import Game from './pages/Game.jsx';
+import GameList from './pages/GameList.jsx';
 import './styles.css';
 import { Router, Route, browserHistory, IndexRoute } from 'react-router';
 
@@ -25,7 +26,8 @@ render(
         <Route path='/cardpack' component={Cardpack}/>
         <Route path='/login' component={Login}/>
         <Route path='/signup' component={Signup}/>
-        <Route path='/game' component={GameFinder}/>
+        <Route path='/game' component={Game}/>
+        <Route path='/gamelist' component={GameList}/>
         <Route path='*' component={NotFound}/>
       </Router>
     </MuiThemeProvider>
