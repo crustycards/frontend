@@ -1,8 +1,6 @@
 /**
- * DELETE MOCK DATA
+ * TYPES
  */
-const TEXTS = ['foo', 'bar', 'example', 'ipsum'];
-
 export const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
 export const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
 export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
@@ -12,21 +10,17 @@ export const ADD_PLAYER = 'game/ADD_PLAYER';
 export const SET_PLAYERS = 'game/SET_PLAYERS';
 export const PLAY_CARD = 'game/PLAY_CARD';
 
-const generateMockCard = isWhite => ({
-  id: Math.round(Math.random() * 100),
-  text: TEXTS[Math.trunc(Math.random() * TEXTS.length)],
-  type: isWhite ? 'white' : 'black',
-  answerFields: Math.round(Math.random() * 3)
-});
-
 const initialState = {
-  blackCard: generateMockCard(false),
-  whiteCards: [...new Array(4)].map(e => generateMockCard(true)),
-  gameName: 'test_game_name_please_ignore',
+  blackCard: null,
+  whiteCards: [],
+  gameName: undefined,
   players: [],
-  hand: [...new Array(4)].map(e => generateMockCard(true))
+  hand: []
 };
 
+/**
+ * Reducer
+ */
 export default (state = initialState, {type, payload}) => {
   switch (type) {
   case SET_BLACK_CARD:
@@ -80,6 +74,11 @@ export default (state = initialState, {type, payload}) => {
   }
 };
 
+
+/**
+ * Dispatcher 
+ * @param {any} payload 
+ */
 export const setBlackCard = payload => ({
   type: SET_BLACK_CARD,
   payload
