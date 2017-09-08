@@ -176,6 +176,17 @@ class Game {
       nextStageStart: this.nextStageStart
     };
   }
+
+  // Returns basic game state with no card info or player-specific data
+  // TODO - Write tests for this function
+  get () {
+    return {
+      name: this.name,
+      owner: this.players.getOwner(),
+      judge: this.players.getJudge(),
+      players: this.players.getAllUsers()
+    }
+  }
 }
 
 module.exports = Game;

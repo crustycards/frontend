@@ -53,12 +53,10 @@ class Games {
   }
 
   getAll () {
+    // TODO - Write more thorough tests for this function
     let games = [];
     Object.values(this.gamesByName).forEach((currentGame) => {
-      games.push({
-        name: currentGame.name,
-        owner: currentGame.players.getOwner()
-      });
+      games.push(currentGame.get());
     });
     return games;
   }
