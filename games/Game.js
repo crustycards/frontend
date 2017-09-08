@@ -80,7 +80,7 @@ class Game {
     let hand = this.players.getHand(user);
     for (let i = 0; i < hand.length; i++) {
       if (card.id === hand[i].id) {
-        this.whiteCardDeck.playCard(user, hand.splice(i, 1));
+        this.whiteCardDeck.playCard(user, hand.splice(i, 1)[0]);
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
         if (Object.keys(this.whiteCardDeck.currentCards).length === this.players.size()) {
           this.continue();
@@ -154,12 +154,12 @@ class Game {
     socketHandler.respondToUsersByEmail(this.players.getCurrentUsers(), dataType, data);
   }
 
+  // TODO - Return actual cards that others have played
   getState (currentUser) {
-    let playerCurrentWhiteCard = this.whiteCardDeck.currentCards[currentUser.email] || null;
-    let numOtherWhiteCardsPlayed = Object.keys(this.whiteCardDeck.currentCards).length;
-    if (playerCurrentWhiteCard) {
-      numOtherWhiteCardsPlayed--;
-    }
+    let whiteCardsPlayed = {};
+    Object.keys(this.whiteCardDeck.currentCards).forEach((email) => {
+      whiteCardsPlayed[email] = email === currentUser.email || this.roundStage !== ROUND_STAGES.playWhiteCards ? this.whiteCardDeck.currentCards[email] : true;
+    });
 
     let otherPlayers = this.players.getAllUsers().filter((user) => {
       return user.email !== currentUser.email;
@@ -168,8 +168,7 @@ class Game {
     return {
       hand: this.players.getHand(currentUser),
       currentBlackCard: this.blackCardDeck.currentCard,
-      playerCurrentWhiteCard,
-      numOtherWhiteCardsPlayed,
+      whiteCardsPlayed,
       currentJudge: this.players.getJudge(),
       currentOwner: this.players.getOwner(),
       otherPlayers,

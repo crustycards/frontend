@@ -212,14 +212,13 @@ describe('Game', () => {
       let state = game.getState(userOne);
       expect(state.hand).to.be.a('array');
       expect(state.currentBlackCard).to.be.a('object');
-      expect(state.playerCurrentWhiteCard).to.equal(null);
-      expect(state.numOtherWhiteCardsPlayed).to.be.a('number');
+      expect(state.whiteCardsPlayed).to.be.a('object');
       expect(state.currentJudge).to.be.a('object');
       expect(state.currentOwner).to.be.a('object');
       expect(state.otherPlayers).to.be.a('array');
       expect(state.roundStage).to.equal(undefined);
       expect(state.nextStageStart).to.equal(undefined);
-      expect(Object.keys(state).length).to.equal(9);
+      expect(Object.keys(state).length).to.equal(8);
     });
     it('Should throw when getting state for a user that is not in the game', () => {
       expect(game.getState(userFour).otherPlayers).to.throw;
@@ -240,33 +239,40 @@ describe('Game', () => {
         expect(game.getState(userOne).currentBlackCard.id).to.exist;
       });
     });
-    describe('playerCurrentWhiteCard', () => {
-      it('Should be null before any card is played', () => {
-        expect(game.getState(userOne).playerCurrentWhiteCard).to.equal(null);
+    describe('whiteCardsPlayed', () => {
+      it('Should be an empty object upon game creation', () => {
+        expect(game.getState(userOne).whiteCardsPlayed).to.eql({});
       });
-      it('Should return a card object once the user has played a card', () => {
-        //
-      });
-    });
-    describe('numOtherWhiteCardsPlayed', () => {
-      it('Should keep track of number of other cards played', () => {
-        game.addUser(userTwo);
-        game.addUser(userThree);
-        game.start();
-        game.continue();
-        expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(0);
-        let card = game.players.userTable[userTwo.email].hand[0];
-        game.playCard(userTwo, card);
-        expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(1);
-      });
-      it('Should not keep track of whether the current player has played a card', () => {
+      it('Should return card of current player if they played a card', () => {
         game.addUser(userTwo);
         game.addUser(userThree);
         game.start();
         game.continue();
         let card = game.players.userTable[userTwo.email].hand[0];
         game.playCard(userTwo, card);
-        expect(game.getState(userTwo).numOtherWhiteCardsPlayed).to.equal(0);
+        let currentCards = game.getState(userTwo).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(card);
+      });
+      it('Should return true for another player if they played a card and are in card play round', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        game.continue();
+        let card = game.players.userTable[userTwo.email].hand[0];
+        game.playCard(userTwo, card);
+        let currentCards = game.getState(userThree).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(true);
+      });
+      it('Should return card for another player if they played a card and are NOT in card play round', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        game.continue();
+        let card = game.players.userTable[userTwo.email].hand[0];
+        game.playCard(userTwo, card);
+        game.continue();
+        let currentCards = game.getState(userThree).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(card);
       });
     });
     describe('currentJudge', () => {

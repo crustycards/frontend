@@ -20,7 +20,7 @@ module.exports = (socketHandler) => {
     })
     .post(isLoggedIn, (req, res) => {
       // Create new game
-      games.createGame({creator: req.user, gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
+      games.createGame({creator: db.User.getById(req.user.id), gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
         .then((game) => {
           res.json(game);
         })
