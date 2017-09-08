@@ -70,7 +70,7 @@ describe('Games', () => {
           expect(game.name).to.equal('test game');
         });
     });
-    it('Should reject when game name is invalid', () => {
+    it('Should reject when game name is an empty string', () => {
       return expect(games.createGame({
         creator: users[0],
         gameName: '',
@@ -104,6 +104,24 @@ describe('Games', () => {
             timeout: 30,
             maxPlayers: 8
           })).to.be.rejectedWith('A game with this name already exists');
+        });
+    });
+    it('Should reject when game creator is already in another game', () => {
+      return games.createGame({
+        creator: users[0],
+        gameName: 'game',
+        cardpackIds: [],
+        timeout: 30,
+        maxPlayers: 8
+      })
+        .then(() => {
+          return expect(games.createGame({
+            creator: users[0],
+            gameName: 'game2',
+            cardpackIds: [],
+            timeout: 30,
+            maxPlayers: 8
+          })).to.be.rejectedWith('User is already in a game');
         });
     });
   });

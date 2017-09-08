@@ -20,6 +20,9 @@ class Games {
     if (this.gamesByName[gameName]) {
       return Promise.reject('A game with this name already exists');
     }
+    if (this.gamesByPlayerId[creator.id]) {
+      return Promise.reject('User is already in a game');
+    }
 
     // TODO - Write tests to check if hand size defaults to 5
     return helpers.getCardsFromCardpackIds(cardpackIds)
