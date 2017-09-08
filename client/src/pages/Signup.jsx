@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -88,6 +89,7 @@ class Signup extends React.Component {
   }
 
   render() {
+    const navItemStyle = {textDecoration: 'none'};
     return (
       <div className='signup center'>
         <h1>Signup</h1>
@@ -96,7 +98,9 @@ class Signup extends React.Component {
         <TextField onKeyPress={this.handleKeyPress} hintText='joeswanson@familyguy.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
         <RaisedButton className='btn' onClick={this.sendSignupRequest}>Signup</RaisedButton>
-        <FlatButton className='btn' href='/login'>Login</FlatButton>
+        <NavLink to='/login' style={navItemStyle}>
+          <FlatButton className='btn'>Login</FlatButton>
+        </NavLink>
         <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
       </div>
     ) 
