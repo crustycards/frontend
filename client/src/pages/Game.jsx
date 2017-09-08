@@ -1,21 +1,53 @@
-import React from 'react';
+import React, { Component } from 'react';
 import Navbar from '../components/Navbar.jsx';
+import {connect} from 'react-redux';
+import {GridList, GridTile} from 'material-ui/GridList';
+import IconButton from 'material-ui/IconButton';
+import StarBorder from 'material-ui/svg-icons/toggle/star-border';
+import COHCard from '../components/COHCard.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
 
-class Game extends React.Component {
-  constructor (props) {
-    super(props);
-  }
+const styles = {
+  root: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'space-around',
+  },
+  gridList: {
+    overflowY: 'auto',
+  },
+};
 
-  render () {
-    return (
-      <div>
-        <Navbar/>
-        <div>This is the current game</div>
-        <Tray/>
-      </div>
-    );
-  }
-}
+const Board = ({blackCard, whiteCards, gameName, players}) => (
+  <div>
+    <Navbar/>
+    <div>This is the current game!</div>
+    <div style={styles.root}>
+      <GridList
+        cols={4}
+        cellHeight={200}
+        padding={1}
+        style={styles.gridList}
+      > 
+        {([blackCard].concat(whiteCards))
+          .filter(card => !!card)
+          .map((card, i) => (
+            <COHCard card={card} key={i} />
+          ))}
+      </GridList>
+      <Tray />
+    </div>
+  </div>
+);
 
-export default Game;
+
+const mapStateToProps = ({game}) => (
+  {
+    blackCard: game.blackCard,
+    whiteCards: game.whiteCards,
+    gameName: game.gameName,
+    players: game.players 
+  }
+);
+
+export default connect(mapStateToProps)(Board);

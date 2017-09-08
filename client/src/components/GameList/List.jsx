@@ -1,14 +1,40 @@
 import React from 'react';
+import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { FlatButton } from 'material-ui';
+import axios from 'axios';
 
 class GameList extends React.Component {
   constructor (props) {
     super(props);
+    this.state = {
+      games: []
+    };
+    axios.get('/api/games')
+      .then((response) => {
+        let games = response.data;
+        console.log('Games', games);
+        this.setState({games});
+      });
   }
 
   render () {
     return (
       <div>
         <div>This is the game list</div>
+        {this.state.games.map((game, index) => {
+          return (
+            <Card key={index} className='card'>
+              <CardHeader
+                title={game.name}
+                subtitle={'game.owner.email'}
+              />
+              <CardActions>
+                <FlatButton label='Edit' onClick={console.log} />
+                <FlatButton label='Delete' onClick={console.log} />
+              </CardActions>
+            </Card>
+          );
+        })}
       </div>
     );
   }
