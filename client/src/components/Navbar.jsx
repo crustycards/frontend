@@ -1,5 +1,7 @@
 import React from 'react';
 import { Drawer, MenuItem, AppBar, FlatButton } from 'material-ui';
+import { NavLink } from 'react-router-dom';
+const navItemStyle = {textDecoration: 'none'};
 
 class Navbar extends React.Component {
   constructor (props) {
@@ -49,7 +51,15 @@ class Navbar extends React.Component {
           }
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
-          <MenuItem onClick={this.redirectTo.bind(this, '/')}>Home</MenuItem>
+          <NavLink to='/' style={navItemStyle}>
+            <MenuItem>Home</MenuItem>
+          </NavLink>
+          <NavLink to='/game' style={navItemStyle}>
+            <MenuItem>Current Game</MenuItem>
+          </NavLink>
+          <NavLink to='/gamelist' style={navItemStyle}>
+            <MenuItem>Find a Game</MenuItem>
+          </NavLink>
           <MenuItem onClick={this.redirectTo.bind(this, '/logout')}>Logout</MenuItem>
         </Drawer>
       </div>
