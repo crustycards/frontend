@@ -25,25 +25,36 @@ module.exports.closeSocket = (socket) => {
 };
 
 module.exports.respondToUsers = (users, dataType, data) => {
+  let dataString = JSON.stringify(data);
   for (let i = 0; i < users.length; i++) {
     // If this user has any open socket connections
     if (sockets[users[i].email]) {
       for (let j = 0; j < sockets[users[i].email].length; j++) {
-        sockets[users[i].email][j].emit(dataType, JSON.stringify(data));
+        sockets[users[i].email][j].emit(dataType, dataString);
       }
     }
   }
 };
 
 module.exports.respondToUsersByEmail = (userEmails, dataType, data) => {
+  let dataString = JSON.stringify(data);
   for (let i = 0; i < userEmails.length; i++) {
     // If this user has any open socket connections
     if (sockets[userEmails[i]]) {
       for (let j = 0; j < sockets[userEmails[i]].length; j++) {
-        sockets[userEmails[i]][j].emit(dataType, JSON.stringify(data));
+        sockets[userEmails[i]][j].emit(dataType, dataString);
       }
     }
   }
+};
+
+module.exports.respondToAllUsers = (dataType, data) => {
+  let dataString = JSON.stringify(data);
+  Object.values(sockets).forEach((socketArray) => {
+    socketArray.forEach((socket) => {
+      socket.emit(dataType, dataString);
+    });
+  });
 };
 
 module.exports.getUsersOnline = () => {
