@@ -61,5 +61,14 @@ module.exports = (socketHandler) => {
       res.status(500).send(err);
     }
   });
+
+  router.post('/current/card', isLoggedIn, (req, res) => {
+    try {
+      games.playCard(req.user, req.body);
+      res.json('success');
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
   return router;
 };

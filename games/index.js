@@ -94,6 +94,16 @@ class Games {
     delete this.gamesByPlayerEmail[user.email];
   }
 
+  // TODO - Test this function
+  playCard (user, card) {
+    let game = this.gamesByPlayerId[user.id];
+    if (!game) {
+      throw new Error('Cannot play a card when you are not in a game');
+    } else {
+      return game.playCard(user, card);
+    }
+  }
+
   getStateFor (user) {
     if (!user || user.constructor !== Object || !user.email || !user.id) {
       throw new Error('User is invalid');
