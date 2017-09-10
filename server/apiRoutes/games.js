@@ -42,7 +42,7 @@ module.exports = (socketHandler) => {
       res.status(500).send(err);
     }
   });
-  router.post('/leave', isLoggedIn, (req, res) => {
+  router.post('/current/leave', isLoggedIn, (req, res) => {
     // Leave game that user is currently in
     try {
       let data = games.leaveGame(req.user);

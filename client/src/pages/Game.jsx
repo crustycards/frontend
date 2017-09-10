@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import Navbar from '../components/Navbar.jsx';
-import {connect} from 'react-redux';
-import {GridList, GridTile} from 'material-ui/GridList';
-import IconButton from 'material-ui/IconButton';
+import { connect } from 'react-redux';
+import { GridList, GridTile } from 'material-ui/GridList';
+import { FlatButton } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import COHCard from '../components/COHCard.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
@@ -53,6 +53,10 @@ class Game extends Component {
     axios.post('/api/games/current/card', card);
   }
 
+  leaveGame () {
+    axios.post('/api/games/current/leave');
+  }
+
   render () {
     return (
       <div>
@@ -61,6 +65,7 @@ class Game extends Component {
         this.state.game === null ? <div>Not in a game</div> :
         <div>
           <div>Current game: {this.state.game.gameName}</div>
+          <FlatButton label={'Leave game'} onClick={this.leaveGame} />
           <div style={styles.root}>
             <Tray hand={this.state.game.hand} playCard={this.playCard}/>
           </div>
