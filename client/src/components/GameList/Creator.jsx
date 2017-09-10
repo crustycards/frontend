@@ -37,9 +37,7 @@ class GameCreator extends Component {
     axios.post('/api/games', {
       gameName: this.state.gameName,
       cardpackIds: this.state.cardpacksSelected
-    })
-      .then(console.log)
-      .catch(console.error);
+    });
   }
 
   render() {

@@ -24,7 +24,8 @@ module.exports = (socketHandler) => {
         .then((user) => {
           games.createGame({creator: user, gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
             .then((game) => {
-              res.json(game);
+              res.json('success');
+              socketHandler.respondToAllUsers('gamecreate', game);
             })
             .catch((err) => {
               res.status(500).json(err);

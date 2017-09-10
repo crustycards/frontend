@@ -6,9 +6,13 @@ import axios from 'axios';
 class GameList extends React.Component {
   constructor (props) {
     super(props);
+    this.socket = props.socket;
     this.state = {
       games: []
     };
+    this.socket.on('gamecreate', (game) => {
+      this.setState({games: [...this.state.games, JSON.parse(game)]});
+    });
     axios.get('/api/games')
       .then((response) => {
         let games = response.data;

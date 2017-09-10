@@ -34,7 +34,7 @@ class Games {
         this.namesByGame[game] = gameName;
         this.gamesByPlayerId[creator.id] = game;
         this.gamesByPlayerEmail[creator.email] = game;
-        return game;
+        return game.get();
       });
   }
 
