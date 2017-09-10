@@ -13,9 +13,6 @@ class CardpackManager extends React.Component {
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.createCardpack = this.createCardpack.bind(this);
-    if (props.liveUpdateTime === true) {
-      setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
-    }
     this.createCardpack = this.createCardpack.bind(this);
     this.fetchCardpacks();
 
@@ -27,6 +24,18 @@ class CardpackManager extends React.Component {
       let cardpackId = JSON.parse(data).id;
       this.removeCardpack(cardpackId);
     });
+  }
+
+  componentDidMount () {
+    if (this.props.liveUpdateTime === true) {
+      this.intervalId = setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
+    }
+  }
+
+  componentWillUnmount () {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   fetchCardpacks () {
