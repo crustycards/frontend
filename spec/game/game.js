@@ -63,7 +63,6 @@ describe('Game', () => {
     expect(game.pause).to.be.a('function');
     expect(game.isRunning).to.be.a('function');
     expect(game.continue).to.be.a('function');
-    expect(game.sendDataToUsers).to.be.a('function');
     expect(game.getState).to.be.a('function');
   });
 
@@ -218,7 +217,8 @@ describe('Game', () => {
       expect(state.otherPlayers).to.be.a('array');
       expect(state.roundStage).to.equal(undefined);
       expect(state.nextStageStart).to.equal(undefined);
-      expect(Object.keys(state).length).to.equal(8);
+      expect(state.isRunning).to.equal(false);
+      expect(Object.keys(state).length).to.equal(9);
     });
     it('Should throw when getting state for a user that is not in the game', () => {
       expect(game.getState(userFour).otherPlayers).to.throw;

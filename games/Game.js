@@ -150,10 +150,6 @@ class Game {
     }
   }
 
-  sendDataToUsers (dataType, data) {
-    socketHandler.respondToUsersByEmail(this.players.getCurrentUsers(), dataType, data);
-  }
-
   // TODO - Return actual cards that others have played
   getState (currentUser) {
     let whiteCardsPlayed = {};
@@ -173,7 +169,8 @@ class Game {
       currentOwner: this.players.getOwner(),
       otherPlayers,
       roundStage: ROUND_NAMES[this.roundStage],
-      nextStageStart: this.nextStageStart
+      nextStageStart: this.nextStageStart,
+      isRunning: this.isRunning()
     };
   }
 
@@ -184,7 +181,8 @@ class Game {
       name: this.name,
       owner: this.players.getOwner(),
       judge: this.players.getJudge(),
-      players: this.players.getAllUsers()
+      players: this.players.getAllUsers(),
+      isRunning: this.isRunning()
     }
   }
 }
