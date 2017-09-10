@@ -6,6 +6,7 @@ import IconButton from 'material-ui/IconButton';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import COHCard from '../components/COHCard.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
+import axios from 'axios';
 
 const styles = {
   root: {
@@ -15,39 +16,69 @@ const styles = {
   },
   gridList: {
     overflowY: 'auto',
-  },
+  }
 };
 
-const Board = ({blackCard, whiteCards, gameName, players}) => (
-  <div>
-    <Navbar/>
-    <div>This is the current game!</div>
-    <div style={styles.root}>
-      <GridList
-        cols={4}
-        cellHeight={200}
-        padding={1}
-        style={styles.gridList}
-      > 
-        {([blackCard].concat(whiteCards))
-          .filter(card => !!card)
-          .map((card, i) => (
-            <COHCard card={card} key={i} />
-          ))}
-      </GridList>
-      <Tray />
-    </div>
-  </div>
-);
-
-
-const mapStateToProps = ({game}) => (
-  {
-    blackCard: game.blackCard,
-    whiteCards: game.whiteCards,
-    gameName: game.gameName,
-    players: game.players 
+class Game extends Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      game: undefined
+    };
+    this.fetchGameState = this.fetchGameState.bind(this);
+    this.playCard = this.playCard.bind(this);
+    this.fetchGameState();
   }
-);
 
-export default connect(mapStateToProps)(Board);
+  componentDidMount () {
+    this.intervalId = setInterval(this.fetchGameState, 1000);
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.intervalId);
+  }
+
+  fetchGameState () {
+    axios.get('/api/games/current')
+      .then((response) => {
+        console.log(response);
+        this.setState({game: response.data});
+      })
+      .catch(() => {
+        this.setState({game: null});
+      });
+  }
+
+  playCard (card) {
+    axios.post('/api/games/current/card', card);
+  }
+
+  render () {
+    return (
+      <div>
+        <Navbar/>
+        {this.state.game === undefined ? <div>Loading...</div> :
+        this.state.game === null ? <div>Not in a game</div> :
+        <div>
+          <div>Current game: {this.state.game.gameName}</div>
+          <div style={styles.root}>
+            <Tray hand={this.state.game.hand} playCard={this.playCard}/>
+          </div>
+        </div>}
+      </div>
+    );
+  }
+}
+
+export default Game;
+
+// const mapStateToProps = ({game}) => (
+//   {
+//     blackCard: game.blackCard,
+//     whiteCards: game.whiteCards,
+//     gameName: game.gameName,
+//     players: game.players 
+//   }
+// );
+
+// export default connect(mapStateToProps)(Game);

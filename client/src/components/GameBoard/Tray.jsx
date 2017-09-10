@@ -4,12 +4,18 @@ import {GridList, GridTile} from 'material-ui/GridList';
 import {playCard} from '../../store/modules/game';
 import { bindActionCreators } from 'redux';
 import Card from '../COHCard.jsx';
+const style = {
+  width: '100%',
+  height: '220px',
+  position: 'fixed',
+  minHeight: '100px',
+  bottom: '0px'
+};
 
 const Tray = ({hand, playCard}) => (
-  <div> 
-    <h4>Tray</h4>
+  <div style={style}> 
     <GridList
-      cols={4}
+      cols={hand.length}
       cellHeight={200}
       padding={1}
     > 
@@ -22,12 +28,14 @@ const Tray = ({hand, playCard}) => (
   </div>
 );
 
-const mapStateToProps = ({game}) => ({
-  hand: game.hand
-});
+export default Tray;
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
-  playCard
-}, dispatch);
+// const mapStateToProps = ({game}) => ({
+//   hand: game.hand
+// });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tray);
+// const mapDispatchToProps = (dispatch) => bindActionCreators({
+//   playCard
+// }, dispatch);
+
+// export default connect(mapStateToProps, mapDispatchToProps)(Tray);
