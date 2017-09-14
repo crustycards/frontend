@@ -28,6 +28,7 @@ import {
 
 class Home extends Component {
   constructor(props) {
+    console.log(props);
     if (!props.currentUser) {
       props.history.push('/login');
     }
@@ -97,7 +98,7 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = ({home}) => ({
+const mapStateToProps = ({global, home}) => ({
   currentUser: global.currentUser,
   friends: home.friends, 
   requestsSent: home.requestsSent, 
