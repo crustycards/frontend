@@ -47,13 +47,13 @@ class Navbar extends React.Component {
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
           <NavLink to='/' style={navItemStyle}>
-            <MenuItem leftIcon={<Home/>}>Home</MenuItem>
+            <MenuItem onClick={this.handleClose} leftIcon={<Home/>}>Home</MenuItem>
           </NavLink>
           <NavLink to='/game' style={navItemStyle}>
-            <MenuItem leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
+            <MenuItem onClick={this.handleClose} leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
           </NavLink>
           <NavLink to='/gamelist' style={navItemStyle}>
-            <MenuItem leftIcon={<ViewList/>}>Find a Game</MenuItem>
+            <MenuItem onClick={this.handleClose} leftIcon={<ViewList/>}>Find a Game</MenuItem>
           </NavLink>
           <MenuItem onClick={this.redirectTo.bind(this, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
         </Drawer>

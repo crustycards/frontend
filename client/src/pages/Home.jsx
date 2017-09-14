@@ -9,7 +9,6 @@ import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
-import Navbar from '../components/Navbar.jsx';
 
 import {
   SET_CURRENT_USER
@@ -28,7 +27,6 @@ import {
 
 class Home extends Component {
   constructor(props) {
-    console.log(props);
     if (!props.currentUser) {
       props.history.push('/login');
     }
@@ -80,18 +78,15 @@ class Home extends Component {
 
   render() {
     return (
-      <div>
-        <Navbar/>
-        <div className='content-wrap'>
-          <div className='col-narrow'>
-            <FrienderPanel />
-            <FriendsList />
-            <FriendRequestsSent />
-            <FriendRequestsReceived />
-          </div>
-          <div className='col-wide'>
-            <CardpackManager liveUpdateTime={true} socket={this.socket} />
-          </div>
+      <div className='content-wrap'>
+        <div className='col-narrow'>
+          <FrienderPanel />
+          <FriendsList />
+          <FriendRequestsSent />
+          <FriendRequestsReceived />
+        </div>
+        <div className='col-wide'>
+          <CardpackManager liveUpdateTime={true} socket={this.socket} />
         </div>
       </div>
     ); 

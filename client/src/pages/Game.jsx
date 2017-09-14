@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Navbar from '../components/Navbar.jsx';
 import { connect } from 'react-redux';
 import { GridList, GridTile } from 'material-ui/GridList';
 import { FlatButton } from 'material-ui';
@@ -60,7 +59,6 @@ class Game extends Component {
   render () {
     return (
       <div>
-        <Navbar/>
         {this.state.game === undefined ? <div>Loading...</div> :
         this.state.game === null ? <div>Not in a game</div> :
         <div>
