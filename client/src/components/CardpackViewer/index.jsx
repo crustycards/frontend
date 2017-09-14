@@ -28,11 +28,6 @@ class CardpackViewer extends React.Component {
       cardpack: undefined,
       tab: 0
     };
-    axios.get('/api/currentuser')
-      .then((response) => {
-        let currentUser = response.data;
-        this.setState({currentUser});
-      });
     this.fetchCurrentCardpack();
     this.fetchCards();
 

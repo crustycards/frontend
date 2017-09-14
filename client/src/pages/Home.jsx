@@ -24,7 +24,6 @@ import {
   removeReceivedFriendRequest,
   requestsReceived,
   setCurrentUser,
-  requestCurrentUser,
   requestFriends
 } from '../store/modules/home.js';
 
@@ -73,7 +72,6 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.props.requestCurrentUser();
     this.props.requestFriends(); 
   }
 
@@ -112,7 +110,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   removeSentFriendRequest,
   removeReceivedFriendRequest,
   setCurrentUser,
-  requestCurrentUser,
   requestFriends
 }, dispatch);
 

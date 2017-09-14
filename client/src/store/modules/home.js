@@ -8,11 +8,9 @@ export const ADD_SENT_FRIEND_REQUEST = 'home/ADD_SENT_FRIEND_REQUEST';
 export const ADD_RECEIVED_FRIEND_REQUEST = 'home/ADD_RECEIVED_FRIEND_REQUEST';
 export const REMOVE_SENT_FRIEND_REQUEST = 'home/REMOVE_SENT_FRIEND_REQUEST';
 export const REMOVE_RECEIVED_FRIEND_REQUEST = 'home/REMOVE_RECEIVED_FRIEND_REQUEST';
-export const SET_CURRENT_USER = 'home/SET_CURRENT_USER';
 export const SET_FRIENDS = 'home/SET_FRIENDS';
 
 const initialState = {
-  currentUser: null,
   friends: [],
   requestsSent: [],
   requestsReceived: [],
@@ -24,12 +22,6 @@ const initialState = {
  */
 export default (state = initialState, {type, payload}) => {
   switch (type) {
-  case SET_CURRENT_USER: 
-    return {
-      ...state,
-      currentUser: payload
-    };
-
   case ADD_FRIEND: 
     return {
       ...state,
@@ -80,13 +72,6 @@ export default (state = initialState, {type, payload}) => {
   }
 };
 
-export const setCurrentUser = payload => {
-  return {
-    type: SET_CURRENT_USER,
-    payload
-  };
-};
-
 export const addFriend = payload => {
   return {
     type: ADD_FRIEND,
@@ -122,18 +107,6 @@ export const removeReceivedFriendRequest = payload => ({
   type: REMOVE_RECEIVED_FRIEND_REQUEST,
   payload
 });
-
-export const requestCurrentUser = () => {
-  return (dispatch, getState) => {
-    axios.get('/api/currentuser')
-      .then(({data}) => {
-        dispatch({
-          type: SET_CURRENT_USER,
-          payload: data
-        });
-      });
-  };
-};
 
 export const requestFriends = () => {
   return (dispatch, getState) => {
