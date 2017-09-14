@@ -35,10 +35,8 @@ describe('Friend', () => {
           expect(friendshipStatus.friendee.id).to.equal(userTwo.id);
           expect(friendshipStatus.friender.email).to.equal(userOne.email);
           expect(friendshipStatus.friendee.email).to.equal(userTwo.email);
-          expect(friendshipStatus.friender.firstname).to.equal(userOne.firstname);
-          expect(friendshipStatus.friendee.firstname).to.equal(userTwo.firstname);
-          expect(friendshipStatus.friender.lastname).to.equal(userOne.lastname);
-          expect(friendshipStatus.friendee.lastname).to.equal(userTwo.lastname);
+          expect(friendshipStatus.friender.name).to.equal(userOne.name);
+          expect(friendshipStatus.friendee.name).to.equal(userTwo.name);
           expect(friendshipStatus.accepted).to.equal(false);
         });
     });
@@ -95,10 +93,8 @@ describe('Friend', () => {
               expect(friendshipStatus.friendee.id).to.equal(userTwo.id);
               expect(friendshipStatus.friender.email).to.equal(userOne.email);
               expect(friendshipStatus.friendee.email).to.equal(userTwo.email);
-              expect(friendshipStatus.friender.firstname).to.equal(userOne.firstname);
-              expect(friendshipStatus.friendee.firstname).to.equal(userTwo.firstname);
-              expect(friendshipStatus.friender.lastname).to.equal(userOne.lastname);
-              expect(friendshipStatus.friendee.lastname).to.equal(userTwo.lastname);
+              expect(friendshipStatus.friender.name).to.equal(userOne.name);
+              expect(friendshipStatus.friendee.name).to.equal(userTwo.name);
               expect(friendshipStatus.accepted).to.equal(true);
             });
         });
@@ -136,8 +132,7 @@ describe('Friend', () => {
           expect(friendData.requestsReceived).to.be.a('array');
           expect(friendData.friends[0].id).to.equal(userTwo.id);
           expect(friendData.friends[0].email).to.equal(userTwo.email);
-          expect(friendData.friends[0].firstname).to.equal(userTwo.firstname);
-          expect(friendData.friends[0].lastname).to.equal(userTwo.lastname);
+          expect(friendData.friends[0].name).to.equal(userTwo.name);
         });
     });
   });

@@ -12,11 +12,11 @@ describe('/api/cardpacks', () => {
     return db.connection.clear()
       .then(() => {
         return agent.post('/signup')
-          .send({firstname: 'Hello', lastname: 'World', email: 'hello@world.com', password: 'test'});
+          .send({name: 'Hello World', email: 'hello@world.com', password: 'test'});
       })
       .then(() => {
         return agent2.post('/signup')
-          .send({firstname: 'Test', lastname: 'Person', email: 'test@person.com', password: 'test'});
+          .send({name: 'Hello World', email: 'test@person.com', password: 'test'});
       });
   });
   it('Should create cardpacks when logged in', (done) => {

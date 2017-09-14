@@ -3,32 +3,28 @@
     {
       "id": 1234,
       "googleId": null,
-      "firstname": "Hello",
-      "lastname": "World",
+      "name": "Hello World",
       "email": "hello@world.com",
       "password": "test"
     },
     {
       "id": 123456789,
       "googleId": null,
-      "firstname": "Test",
-      "lastname": "Person",
+      "name": "Test Person",
       "email": "test@person.com",
       "password": "test"
     },
     {
       "id": 12345,
       "googleId": null,
-      "firstname": "Test",
-      "lastname": "Person",
+      "name": "Test Person",
       "email": "example@gmail.com",
       "password": "test"
     },
     {
       "id": 12344445,
       "googleId": null,
-      "firstname": "Test",
-      "lastname": "Person",
+      "name": "Test Person",
       "email": "exampleeeeeee@gmail.com",
       "password": "test"
     }

@@ -11,8 +11,7 @@ class Signup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      firstname: '',
-      lastname: '',
+      name: '',
       email: '',
       password: '',
       errorMessage: '',
@@ -41,10 +40,9 @@ class Signup extends React.Component {
   }
 
   sendSignupRequest () {
-    if (this.state.firstname && this.state.lastname && this.state.email && this.state.password) {
+    if (this.state.name && this.state.email && this.state.password) {
       axios.post('/signup', {
-        firstname: this.state.firstname,
-        lastname: this.state.lastname,
+        name: this.state.name,
         email: this.state.email,
         password: this.state.password
       })
@@ -58,11 +56,8 @@ class Signup extends React.Component {
       });
     } else {
       let missingVals = [];
-      if (!this.state.firstname) {
-        missingVals.push('first name');
-      }
-      if (!this.state.lastname) {
-        missingVals.push('last name');
+      if (!this.state.name) {
+        missingVals.push('name');
       }
       if (!this.state.email) {
         missingVals.push('email');
@@ -97,8 +92,7 @@ class Signup extends React.Component {
     return (
       <div className='signup center'>
         <h1>Signup</h1>
-        <TextField onKeyPress={this.handleKeyPress} hintText='Joe' floatingLabelText='First Name' type='text' value={this.state.firstname} onChange={this.handleInputChange.bind(this, 'firstname')} /><br/>
-        <TextField onKeyPress={this.handleKeyPress} hintText='Swanson' floatingLabelText='Last Name' type='text' value={this.state.lastname} onChange={this.handleInputChange.bind(this, 'lastname')} /><br/>
+        <TextField onKeyPress={this.handleKeyPress} hintText='Joe Swanson' floatingLabelText='Name' type='text' value={this.state.name} onChange={this.handleInputChange.bind(this, 'name')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} hintText='joeswanson@familyguy.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
         <RaisedButton className='btn' onClick={this.sendSignupRequest}>Signup</RaisedButton>

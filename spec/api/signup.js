@@ -11,7 +11,7 @@ describe('/signup', () => {
   it('Should be able to create new local users', (done) => {
     let tempAgent = chai.request.agent(app);
     tempAgent.post('/signup')
-      .send({firstname: 'Hello', lastname: 'World', email: 'temp@agent.com', password: 'test'})
+      .send({name: 'Hello World', email: 'temp@agent.com', password: 'test'})
       .then((res) => {
         expect(res).to.have.cookie;
         done();
@@ -21,11 +21,11 @@ describe('/signup', () => {
     let tempAgentOne = chai.request.agent(app);
     let tempAgentTwo = chai.request.agent(app);
     tempAgentOne.post('/signup')
-      .send({firstname: 'Hello', lastname: 'World', email: 'temp@agent.com', password: 'test'})
+      .send({name: 'Hello World', email: 'temp@agent.com', password: 'test'})
       // Either remove the second account creation below, or reset database after each test
       .then(() => {
         return tempAgentTwo.post('/signup')
-          .send({firstname: 'Hello', lastname: 'World', email: 'temp@agent.com', password: 'test'});
+          .send({name: 'Hello World', email: 'temp@agent.com', password: 'test'});
       })
       // TODO - Figure out a less janky way to do this
       .catch(() => {

@@ -8,8 +8,7 @@ for (let i = 0; i < 50; i++) {
     id: i + 1,
     email: 'user' + i + '@gmail.com',
     password: 'asdf',
-    firstname: 'foo',
-    lastname: 'bar'
+    name: 'foo'
   });
 }
 let whiteCards = [];

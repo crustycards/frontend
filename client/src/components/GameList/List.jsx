@@ -30,7 +30,7 @@ class GameList extends React.Component {
             <Card key={index} className='card'>
               <CardHeader
                 title={game.name}
-                subtitle={`Host: ${game.owner.firstname} ${game.owner.lastname} (${game.owner.email})`}
+                subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
               />
               <CardActions>
                 <FlatButton label='Join' onClick={console.log} />

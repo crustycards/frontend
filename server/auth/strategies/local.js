@@ -26,8 +26,7 @@ module.exports = (passport, userModel) => {
             let data = {
               email,
               password: generateHash(password),
-              firstname: req.body.firstname,
-              lastname: req.body.lastname
+              name: req.body.name
             };
             User.create(data)
               .then((newUser, created) => {

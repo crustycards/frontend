@@ -12,12 +12,7 @@ const UserModel = db.define('users', {
     type: Sequelize.STRING,
     unique: true
   },
-  firstname: {
-    type: Sequelize.STRING,
-    notEmpty: true,
-    allowNull: false
-  },
-  lastname: {
+  name: {
     type: Sequelize.STRING,
     notEmpty: true,
     allowNull: false

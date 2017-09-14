@@ -12,11 +12,11 @@ describe('/api/currentuser', () => {
     return db.connection.clear()
       .then(() => {
         return agent.post('/signup')
-          .send({firstname: 'Hello', lastname: 'World', email: 'hello@world.com', password: 'test'});
+          .send({name: 'Hello World', email: 'hello@world.com', password: 'test'});
       })
       .then(() => {
         return agent2.post('/signup')
-          .send({firstname: 'Test', lastname: 'Person', email: 'test@person.com', password: 'test'});
+          .send({name: 'Hello World', email: 'test@person.com', password: 'test'});
       });
   });
   describe('GET', () => {
@@ -40,11 +40,10 @@ describe('/api/currentuser', () => {
           expect(user.updatedAt).to.exist;
           expect(user.password).to.not.exist;
           expect(user.googleId).to.equal(null); // Since the user we created was not registered through Google OAuth
-          expect(user.firstname).to.equal('Hello');
-          expect(user.lastname).to.equal('World');
+          expect(user.name).to.equal('Hello World');
           expect(user.email).to.equal('hello@world.com');
           expect(user.themeId).to.exist;
-          expect(Object.keys(user).length).to.equal(8); // All keys listed above that should exist
+          expect(Object.keys(user).length).to.equal(7); // All keys listed above that should exist
           done();
         });
     });
