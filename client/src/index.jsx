@@ -14,6 +14,7 @@ import Signup from './pages/Signup.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Game from './pages/Game.jsx';
 import GameList from './pages/GameList.jsx';
+import Settings from './pages/Settings.jsx';
 import Navbar from './components/Navbar.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import './styles.css';
@@ -33,6 +34,7 @@ render(
             <Route exact path='/signup' component={Signup}/>
             <Route exact path='/game' component={Game}/>
             <Route exact path='/gamelist' component={GameList}/>
+            <Route exact path='/settings' component={Settings}/>
             <Route component={NotFound}/>
           </Switch>
         </div>

@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Drawer, MenuItem, AppBar, FlatButton } from 'material-ui';
 import { NavLink } from 'react-router-dom';
-import { Home, ExitToApp, ViewList, VideogameAsset } from 'material-ui-icons';
+import { Home, ExitToApp, ViewList, VideogameAsset, Settings } from 'material-ui-icons';
 const navItemStyle = {textDecoration: 'none'};
 
 class Navbar extends React.Component {
@@ -57,6 +57,9 @@ class Navbar extends React.Component {
             </NavLink>
             <NavLink to='/gamelist' style={navItemStyle}>
               <MenuItem onClick={this.handleClose} leftIcon={<ViewList/>}>Find a Game</MenuItem>
+            </NavLink>
+            <NavLink to='/settings' style={navItemStyle}>
+              <MenuItem onClick={this.handleClose} leftIcon={<Settings/>}>Settings</MenuItem>
             </NavLink>
             <MenuItem onClick={this.redirectTo.bind(this, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
           </div>
