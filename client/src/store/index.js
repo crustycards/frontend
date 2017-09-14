@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import rootReducer from './modules';
 
 
-const initialState = {};
+const initialState = window.__PRELOADED_STATE__ || {};
 const enhancers = [];
 const middleware = [
   thunk

@@ -33,6 +33,9 @@ db.connection.sync().then(() => {
 // Create app
 let app = express();
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'pug');
+
 // ---- MIDDLEWARE ----
 // Body parser
 app.use(bodyParser.urlencoded({
@@ -60,7 +63,7 @@ app.get('*/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
 app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
+  res.render('index', {user: JSON.stringify(req.user), friends: "[]", requestsSent: "[]", requestsReceived: "[]"});
 });
 
 let http = require('http').Server(app);
