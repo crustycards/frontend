@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { TextField, RaisedButton } from 'material-ui';
 import Cardpack from './Cardpack.jsx';
 
-class CardpackManager extends React.Component {
+class CardpackManager extends Component {
   constructor (props) {
     super(props);
     this.state = {

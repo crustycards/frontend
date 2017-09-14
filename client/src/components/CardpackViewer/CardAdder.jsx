@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { TextField, SelectField, RaisedButton, FlatButton, DropDownMenu, MenuItem } from 'material-ui';
+import { TextField, SelectField, RaisedButton, DropDownMenu, MenuItem } from 'material-ui';
 
 class CardAdder extends Component {
   constructor (props) {

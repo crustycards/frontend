@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import time from 'time-converter';
 
-class Cardpack extends React.Component {
+class Cardpack extends Component {
   constructor (props) {
     super(props);
     this.delete = this.delete.bind(this);

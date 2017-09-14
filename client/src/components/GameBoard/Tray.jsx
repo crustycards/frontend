@@ -1,7 +1,7 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {GridList, GridTile} from 'material-ui/GridList';
-import {playCard} from '../../store/modules/game';
+import { connect } from 'react-redux';
+import { GridList } from 'material-ui/GridList';
+import { playCard } from '../../store/modules/game';
 import { bindActionCreators } from 'redux';
 import Card from '../COHCard.jsx';
 const style = {
