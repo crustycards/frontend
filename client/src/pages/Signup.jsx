@@ -1,6 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
@@ -22,6 +23,9 @@ class Signup extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.showError = this.showError.bind(this);
     this.hideError = this.hideError.bind(this);
+    if (props.currentUser) {
+      props.history.push('/');
+    }
   }
 
   handleInputChange (property, e) {
@@ -107,4 +111,8 @@ class Signup extends React.Component {
   }
 }
 
-export default Signup;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser
+});
+
+export default connect(mapStateToProps)(Signup);

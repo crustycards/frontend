@@ -23,12 +23,14 @@ import {
   removeFriend,
   removeReceivedFriendRequest,
   requestsReceived,
-  setCurrentUser,
   requestFriends
 } from '../store/modules/home.js';
 
 class Home extends Component {
   constructor(props) {
+    if (!props.currentUser) {
+      props.history.push('/login');
+    }
     super(props);
     this.socket = io();
 
@@ -96,7 +98,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = ({home}) => ({
-  currentUser: home.currentUser,
+  currentUser: global.currentUser,
   friends: home.friends, 
   requestsSent: home.requestsSent, 
   requestsReceived: home.requestsReceived
@@ -109,7 +111,6 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addFriendRequestReceived,
   removeSentFriendRequest,
   removeReceivedFriendRequest,
-  setCurrentUser,
   requestFriends
 }, dispatch);
 
