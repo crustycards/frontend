@@ -1,4 +1,5 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Drawer, MenuItem, AppBar, FlatButton } from 'material-ui';
 import { NavLink } from 'react-router-dom';
 import { Home, ExitToApp, ViewList, VideogameAsset } from 'material-ui-icons';
@@ -37,29 +38,42 @@ class Navbar extends React.Component {
         <AppBar
           title='Title'
           onLeftIconButtonTouchTap={this.handleToggle}
-          iconElementRight={
+          iconElementRight={this.props.currentUser ?
             <FlatButton
               labelStyle={{ fontSize: '21px' }}
               onClick={this.redirectTo.bind(this, '/game')} 
               label='Game'
-            />
+            /> : null
           }
         />
         <Drawer docked={false} width={250} open={this.state.open} onRequestChange={(open) => this.setState({open})}>
-          <NavLink to='/' style={navItemStyle}>
-            <MenuItem onClick={this.handleClose} leftIcon={<Home/>}>Home</MenuItem>
-          </NavLink>
-          <NavLink to='/game' style={navItemStyle}>
-            <MenuItem onClick={this.handleClose} leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
-          </NavLink>
-          <NavLink to='/gamelist' style={navItemStyle}>
-            <MenuItem onClick={this.handleClose} leftIcon={<ViewList/>}>Find a Game</MenuItem>
-          </NavLink>
-          <MenuItem onClick={this.redirectTo.bind(this, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
+          {this.props.currentUser ?
+          <div>
+            <NavLink to='/' style={navItemStyle}>
+              <MenuItem onClick={this.handleClose} leftIcon={<Home/>}>Home</MenuItem>
+            </NavLink>
+            <NavLink to='/game' style={navItemStyle}>
+              <MenuItem onClick={this.handleClose} leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
+            </NavLink>
+            <NavLink to='/gamelist' style={navItemStyle}>
+              <MenuItem onClick={this.handleClose} leftIcon={<ViewList/>}>Find a Game</MenuItem>
+            </NavLink>
+            <MenuItem onClick={this.redirectTo.bind(this, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
+          </div>
+          :
+          <div>
+            <NavLink to='/login' style={navItemStyle}>
+              <MenuItem onClick={this.handleClose} leftIcon={<ExitToApp/>}>Login/Signup</MenuItem>
+            </NavLink>
+          </div>}
         </Drawer>
       </div>
     );
   }
 }
 
-export default Navbar;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser
+});
+
+export default connect(mapStateToProps)(Navbar);
