@@ -16,6 +16,25 @@ const authRouter = require('./authRouter.js');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 
+// TODO - Remove this variable
+const fakeGame = {
+  hand: [
+    {id: 54, text: 'cardOne', type: 'white'},
+    {id: 34, text: 'cardTwo', type: 'white'},
+    {id: 48, text: 'cardThree', type: 'white'},
+    {id: 2, text: 'cardFour', type: 'white'},
+    {id: 75, text: 'cardFive', type: 'white'}
+  ],
+  currentBlackCard: {id: 555, text: 'blackCard', type: 'black', answerFields: 2},
+  whiteCardsPlayed: [],
+  currentJudge: {},
+  currentOwner: {},
+  otherPlayers: [],
+  roundStage: 'card play phase',
+  nextStageStart: new Date().getTime(),
+  isRunning: true
+};
+
 // Create session store
 let store = new Store({db: db.connection});
 
@@ -63,7 +82,7 @@ app.get('*/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
 app.get('/*', (req, res) => {
-  res.render('index', {user: req.user ? JSON.stringify(req.user) : JSON.stringify(null), friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+  res.render('index', {user: req.user ? JSON.stringify(req.user) : JSON.stringify(null), game: JSON.stringify(fakeGame), friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
 });
 
 let http = require('http').Server(app);
