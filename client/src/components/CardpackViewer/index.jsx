@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
 import CardAdder from './CardAdder.jsx';
@@ -19,7 +20,6 @@ class CardpackViewer extends React.Component {
     this.nextTab = this.nextTab.bind(this);
     this.previousTab = this.previousTab.bind(this);
     this.state = {
-      currentUser: null,
       cards: [],
       cardsFetched: false,
       newCardName: '',
@@ -140,7 +140,7 @@ class CardpackViewer extends React.Component {
       );
     }
 
-    let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
+    let isOwner = this.props.currentUser && this.state.cardpack && this.state.cardpack.owner && this.props.currentUser.id === this.state.cardpack.owner.id;
     let cards = [];
 
     let tabStart = this.state.tab * this.numCardsOnTab;
@@ -173,4 +173,8 @@ class CardpackViewer extends React.Component {
   }
 }
 
-export default CardpackViewer;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser
+});
+
+export default connect(mapStateToProps)(CardpackViewer);
