@@ -1,4 +1,6 @@
 require('dotenv').config();
+console.log(process.env.NODE_ENV);
+console.log(process.env.PORT);
 
 const express = require('express');
 const bodyParser = require('body-parser');
