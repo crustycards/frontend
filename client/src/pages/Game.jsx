@@ -11,7 +11,7 @@ const Game = (props) => (
   <div>
     {props.game ?
     <div>
-      <div>Current game: {props.name}</div>
+      <div>Current game: {props.game.name}</div>
       <FlatButton label={'Leave game'} onClick={console.log} />
       <Tray/>
     </div>
