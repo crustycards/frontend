@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { FlatButton } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import COHCard from '../components/COHCard.jsx';
+import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
 import axios from 'axios';
 
@@ -13,6 +14,7 @@ const Game = (props) => (
     <div>
       <div>Current game: {props.game.name}</div>
       <FlatButton label={'Leave game'} onClick={console.log} />
+      <PlayerList/>
       <Tray/>
     </div>
     :

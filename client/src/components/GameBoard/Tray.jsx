@@ -16,13 +16,13 @@ const style = {
 };
 
 const Tray = ({hand, playCard}) => (
-  <div style={style}> 
+  <div style={style}>
     <GridList
       cols={hand.length}
       cellHeight={200}
       padding={1}
-    > 
-      {hand.map(card => <Card 
+    >
+      {hand.map(card => <Card
         key={card.id} 
         card={card} 
         playHandler={() => playCard(card)} 

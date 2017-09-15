@@ -27,13 +27,40 @@ const fakeGame = {
   ],
   currentBlackCard: {id: 555, text: 'blackCard', type: 'black', answerFields: 2},
   whiteCardsPlayed: [],
-  judge: {},
-  owner: {},
-  otherPlayers: [],
+  judgeId: 420,
+  ownerId: 20,
+  players: [
+    {
+      id: 420,
+      name: 'Alec',
+      email: 'alec@gmail.com'
+    },
+    {
+      id: 20,
+      name: 'Tommy',
+      email: 'tommy@gmail.com'
+    },
+    {
+      id: 420,
+      name: 'Jesse',
+      email: 'jesse@gmail.com'
+    },
+    {
+      id: 420,
+      name: 'Steve',
+      email: 'steve@gmail.com'
+    },
+    {
+      id: 420,
+      name: 'Joey',
+      email: 'joey@gmail.com'
+    }
+  ],
   roundStage: 'card play phase',
   nextStageStart: new Date().getTime(),
   isRunning: true,
-  name: `Tommy's Game`
+  name: `Tommy's Game`,
+  maxPlayers: 8
 };
 
 // Create session store
