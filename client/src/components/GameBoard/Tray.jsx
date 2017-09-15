@@ -9,7 +9,10 @@ const style = {
   height: '220px',
   position: 'fixed',
   minHeight: '100px',
-  bottom: '0px'
+  bottom: '0px',
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-around',
 };
 
 const Tray = ({hand, playCard}) => (
@@ -28,14 +31,12 @@ const Tray = ({hand, playCard}) => (
   </div>
 );
 
-export default Tray;
+const mapStateToProps = ({global}) => ({
+  hand: global.currentGame.hand
+});
 
-// const mapStateToProps = ({game}) => ({
-//   hand: game.hand
-// });
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  playCard
+}, dispatch);
 
-// const mapDispatchToProps = (dispatch) => bindActionCreators({
-//   playCard
-// }, dispatch);
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Tray);
+export default connect(mapStateToProps, mapDispatchToProps)(Tray);
