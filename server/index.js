@@ -8,13 +8,14 @@ const session = require('express-session');
 const Store = require('connect-session-sequelize')(session.Store);
 const db = require('../database');
 const url = require('url');
-const env = require('dotenv').load();
 const path = require('path');
 const apiRouter = require('./apiRoutes');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
+
+require('dotenv').config();
 
 // TODO - Remove this variable
 const fakeGame = {
