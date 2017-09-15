@@ -1,5 +1,4 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-process.env.PORT = process.env.PORT || 3000;
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -14,8 +13,6 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
-
-require('dotenv').config();
 
 // TODO - Remove this variable
 const fakeGame = {
@@ -121,8 +118,9 @@ let io = require('socket.io')(http);
 if (module.parent) {
   module.exports = http;
 } else {
-  http.listen(process.env.PORT, () => {
-    console.log('Listening on port ' + process.env.PORT);
+  let port = process.env.PORT || 3000;
+  http.listen(port, () => {
+    console.log('Listening on port ' + port);
   });
 }
 
