@@ -4,21 +4,36 @@ import { List, ListItem } from 'material-ui/List';
 import { Star } from 'material-ui-icons';
 
 const styles = {
-  overflowY: 'scroll',
-  maxHeight: '300px',
-  maxWidth: '200px'
+  overflowY: 'auto',
+  maxHeight: '100%'
 };
 
-const PlayerList = ({players}) => (
+// TODO - Render game owner uniquely
+
+let renderPlayer = (player, index, ownerId, judgeId) => {
+  if (player.id === ownerId && player.id === judgeId) {
+    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={player.email}/>;
+  } else if (player.id === ownerId) {
+    return <ListItem primaryText={player.name} secondaryText={player.email}/>;
+  } else if (player.id === judgeId) {
+    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={player.email}/>;
+  } else {
+    return <ListItem primaryText={player.name} secondaryText={player.email}/>;
+  }
+};
+
+const PlayerList = ({players, ownerId, judgeId}) => (
   <List style={styles}>
     {players.map((player, index) => {
-      return <ListItem key={index} primaryText={player.name} secondaryText={player.email}/>
+      return <div key={index}>{renderPlayer(player, index, ownerId, judgeId)}</div>;
     })}
   </List>
 );
 
 const mapStateToProps = ({global}) => ({
-  players: global.currentGame.players
+  players: global.currentGame.players,
+  ownerId: global.currentGame.ownerId,
+  judgeId: global.currentGame.judgeId
 });
 
 export default connect(mapStateToProps)(PlayerList);

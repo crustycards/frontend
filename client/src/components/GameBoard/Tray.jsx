@@ -5,14 +5,7 @@ import { playCard } from '../../store/modules/game';
 import { bindActionCreators } from 'redux';
 import Card from '../COHCard.jsx';
 const style = {
-  width: '100%',
-  height: '220px',
-  position: 'fixed',
-  minHeight: '100px',
-  bottom: '0px',
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'space-around',
+  width: '100%'
 };
 
 const Tray = ({hand, playCard}) => (
