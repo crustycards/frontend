@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "react-dev": "webpack -d --watch",
-    "server-dev": "nodemon server/index.js",
-    "start": "node server/index.js",
+    "build": "webpack -d --watch",
+    "start": "nodemon server/index.js",
     "lint": "eslint .",
     "lint-clean": "eslint . --fix",
     "lint-init": "eslint --init",
-    "test": "mocha ./spec --recursive"
+    "test": "mocha ./spec --recursive",
+    "deploy": "git pull && webpack && pm2 restart all"
   },
   "author": "Thomas Volk",
   "license": "BOII",
