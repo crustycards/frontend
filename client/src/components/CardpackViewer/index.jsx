@@ -12,7 +12,6 @@ class CardpackViewer extends React.Component {
   constructor (props) {
     super(props);
     this.numCardsOnTab = 20;
-    this.socket = this.props.socket;
     this.cardpackId = this.props.cardpackId;
     this.addCards = this.addCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
@@ -31,11 +30,11 @@ class CardpackViewer extends React.Component {
     this.fetchCurrentCardpack();
     this.fetchCards();
 
-    this.socket.on('cardcreate', (cardString) => {
+    props.socket.on('cardcreate', (cardString) => {
       let cards = JSON.parse(cardString).cards;
       this.renderNewCards(cards);
     });
-    this.socket.on('carddelete', (cardString) => {
+    props.socket.on('carddelete', (cardString) => {
       let card = JSON.parse(cardString).card;
       this.unrenderOldCard(card);
     });
@@ -174,7 +173,8 @@ class CardpackViewer extends React.Component {
 }
 
 const mapStateToProps = ({global}) => ({
-  currentUser: global.currentUser
+  currentUser: global.currentUser,
+  socket: global.socket
 });
 
 export default connect(mapStateToProps)(CardpackViewer);

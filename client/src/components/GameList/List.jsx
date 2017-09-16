@@ -1,16 +1,16 @@
 import React from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
+import { connect } from 'react-redux';
 import axios from 'axios';
 
 class GameList extends React.Component {
   constructor (props) {
     super(props);
-    this.socket = props.socket;
     this.state = {
       games: []
     };
-    this.socket.on('gamecreate', (game) => {
+    props.socket.on('gamecreate', (game) => {
       this.setState({games: [...this.state.games, JSON.parse(game)]});
     });
     axios.get('/api/games')
@@ -43,4 +43,8 @@ class GameList extends React.Component {
   }
 }
 
-export default GameList;
+const mapStateToProps = ({global}) => ({
+  socket: global.socket
+});
+
+export default connect(mapStateToProps)(GameList);

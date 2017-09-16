@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
 
 export const ADD_FRIEND = 'home/ADD_FRIEND';
 export const REMOVE_FRIEND = 'home/REMOVE_FRIEND';

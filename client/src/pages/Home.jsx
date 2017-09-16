@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 
@@ -27,48 +26,47 @@ import {
 
 class Home extends Component {
   constructor(props) {
+    super(props);
     if (!props.currentUser) {
       props.history.push('/login');
     }
-    super(props);
-    this.socket = io();
 
-    this.socket.on('friendrequestsend', (data) => {
+    props.socket.on('friendrequestsend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
-      if (users.friender.id === this.props.currentUser.id) {
+      if (users.friender.id === props.currentUser.id) {
         otherUser = users.friendee;
-        this.props.addFriendRequestSent(otherUser);
+        props.addFriendRequestSent(otherUser);
       } else {
         otherUser = users.friender;
-        this.props.addFriendRequestReceived(otherUser);
+        props.addFriendRequestReceived(otherUser);
       }
     });
 
-    this.socket.on('friendrequestaccept', (data) => {
+    props.socket.on('friendrequestaccept', (data) => {
       let users = JSON.parse(data);
       let otherUser;
-      if (users.acceptor.id === this.props.currentUser.id) {
+      if (users.acceptor.id === props.currentUser.id) {
         otherUser = users.acceptee;
       } else {
         otherUser = users.acceptor;
       }
-      this.props.removeSentFriendRequest(otherUser);
-      this.props.removeReceivedFriendRequest(otherUser);
-      this.props.addFriend(otherUser);
+      props.removeSentFriendRequest(otherUser);
+      props.removeReceivedFriendRequest(otherUser);
+      props.addFriend(otherUser);
     });
 
-    this.socket.on('unfriend', (data) => {
+    props.socket.on('unfriend', (data) => {
       let users = JSON.parse(data);
       let otherUser;
-      if (users.unfriender.id === this.props.currentUser.id) {
+      if (users.unfriender.id === props.currentUser.id) {
         otherUser = users.unfriendee;
       } else {
         otherUser = users.unfriender;
       }
-      this.props.removeSentFriendRequest(otherUser);
-      this.props.removeReceivedFriendRequest(otherUser);
-      this.props.removeFriend(otherUser);
+      props.removeSentFriendRequest(otherUser);
+      props.removeReceivedFriendRequest(otherUser);
+      props.removeFriend(otherUser);
     });
   }
 
@@ -86,7 +84,7 @@ class Home extends Component {
           <FriendRequestsReceived />
         </div>
         <div className='col-wide'>
-          <CardpackManager liveUpdateTime={true} socket={this.socket} />
+          <CardpackManager />
         </div>
       </div>
     ); 
@@ -94,6 +92,7 @@ class Home extends Component {
 }
 
 const mapStateToProps = ({global, home}) => ({
+  socket: global.socket,
   currentUser: global.currentUser,
   friends: home.friends, 
   requestsSent: home.requestsSent, 

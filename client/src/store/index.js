@@ -2,9 +2,16 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import thunk from 'redux-thunk';
 import rootReducer from './modules';
+import io from 'socket.io-client';
 
 
-const initialState = window.__PRELOADED_STATE__ || {};
+const initialState = {
+  ...window.__PRELOADED_STATE__,
+  global: {
+    ...window.__PRELOADED_STATE__.global,
+    socket: io()
+  }
+};
 const enhancers = [];
 const middleware = [
   thunk

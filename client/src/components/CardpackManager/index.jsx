@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { TextField, RaisedButton } from 'material-ui';
 import Cardpack from './Cardpack.jsx';
 
@@ -27,9 +28,7 @@ class CardpackManager extends Component {
   }
 
   componentDidMount () {
-    if (this.props.liveUpdateTime === true) {
-      this.intervalId = setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
-    }
+    this.intervalId = setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
   }
 
   componentWillUnmount () {
@@ -92,4 +91,8 @@ class CardpackManager extends Component {
   }
 }
 
-export default CardpackManager;
+const mapStateToProps = ({global}) => ({
+  socket: global.socket
+});
+
+export default connect(mapStateToProps)(CardpackManager);
