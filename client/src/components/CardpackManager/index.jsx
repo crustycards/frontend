@@ -32,9 +32,7 @@ class CardpackManager extends Component {
   }
 
   componentWillUnmount () {
-    if (this.intervalId) {
-      clearInterval(this.intervalId);
-    }
+    clearInterval(this.intervalId);
   }
 
   fetchCardpacks () {
