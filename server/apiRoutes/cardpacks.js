@@ -37,7 +37,10 @@ module.exports = (socketHandler) => {
     db.Cardpack.create(req.user.email, req.body.name)
     .then((cardpack) => {
       res.json('success');
-      socketHandler.respondToUsers([req.user], 'cardpackcreate', cardpack);
+      socketHandler.respondToUsers([req.user], 'action', {
+        type: 'global/ADD_CARDPACK',
+        payload: cardpack
+      });
     })
     .catch((error) => {
       res.status(500).send(error);
@@ -47,7 +50,10 @@ module.exports = (socketHandler) => {
     db.Cardpack.delete(req.user.email, req.body.id)
     .then(() => {
       res.json('success');
-      socketHandler.respondToUsers([req.user], 'cardpackdelete', {id: req.body.id});
+      socketHandler.respondToUsers([req.user], 'action', {
+        type: 'global/REMOVE_CARDPACK',
+        payload: req.body.id
+      });
     })
     .catch((error) => {
       res.status(500).send(error);

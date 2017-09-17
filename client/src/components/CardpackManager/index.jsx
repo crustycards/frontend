@@ -8,22 +8,11 @@ class CardpackManager extends Component {
   constructor (props) {
     super(props);
     this.state = {
-      newCardpackName: '',
-      cardpacks: []
+      newCardpackName: ''
     }
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.createCardpack = this.createCardpack.bind(this);
-    this.createCardpack = this.createCardpack.bind(this);
-    this.fetchCardpacks();
-
-    props.socket.on('cardpackcreate', (cardpack) => {
-      this.addCardpack(cardpack);
-    });
-    props.socket.on('cardpackdelete', (card) => {
-      let cardpackId = card.id;
-      this.removeCardpack(cardpackId);
-    });
   }
 
   componentDidMount () {
@@ -34,18 +23,12 @@ class CardpackManager extends Component {
     clearInterval(this.intervalId);
   }
 
-  fetchCardpacks () {
-    axios.get('/api/cardpacks')
-    .then((response) => {
-      this.setState({cardpacks: response.data});
-    });
-  }
-
   handleInputChange (property, e) {
     let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
   }
+  
   handleKeyPress (e) {
     if (e.key === 'Enter') {
       this.createCardpack();
@@ -61,22 +44,13 @@ class CardpackManager extends Component {
     }
   }
 
-  addCardpack(cardpack) {
-    this.setState({cardpacks: [...this.state.cardpacks, cardpack]});
-  }
-  removeCardpack (id) {
-    this.setState({cardpacks: this.state.cardpacks.filter((cardpack) => {
-      return cardpack.id !== id;
-    })});
-  }
-
   render () {
     return (
     <div className='panel'>
       <div>Cardpack Manager</div>
       <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} /><br/>
       <RaisedButton label='Create Cardpack' onClick={this.createCardpack} disabled={!this.state.newCardpackName} />
-      {this.state.cardpacks.map((cardpack, index) => {
+      {this.props.cardpacks.map((cardpack, index) => {
         return (
           <div key={index}>
             <Cardpack cardpack={cardpack} />
@@ -89,7 +63,7 @@ class CardpackManager extends Component {
 }
 
 const mapStateToProps = ({global}) => ({
-  socket: global.socket
+  cardpacks: global.cardpacks
 });
 
 export default connect(mapStateToProps)(CardpackManager);

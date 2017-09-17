@@ -108,7 +108,14 @@ app.get('*/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
 app.get('/*', (req, res) => {
-  res.render('index', {user: req.user ? JSON.stringify(req.user) : JSON.stringify(null), game: JSON.stringify(fakeGame), friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+  if (req.user) {
+    db.Cardpack.getByUserEmail(req.user.email)
+      .then((cardpacks) => {
+        res.render('index', {user: JSON.stringify(req.user), game: JSON.stringify(fakeGame), cardpacks: JSON.stringify(cardpacks), friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+      });
+  } else {
+    res.render('index', {user: JSON.stringify(null), game: JSON.stringify(null), cardpacks: '[]', friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+  }
 });
 
 let http = require('http').Server(app);
