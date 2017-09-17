@@ -28,7 +28,7 @@ module.exports = (socketHandler) => {
     });
     Promise.all(promises)
       .then(() => {
-        socketHandler.respondToUsers([req.user], 'cardcreate', {cards: socketCards});
+        socketHandler.respondToUsers([req.user], 'cardcreate', socketCards);
         res.json('success');
       })
       .catch((error) => {
@@ -39,7 +39,7 @@ module.exports = (socketHandler) => {
     db.Card.delete(req.user.email, req.params.cardId)
     .then((card) => {
       res.json('success');
-      socketHandler.respondToUsers([req.user], 'carddelete', {card});
+      socketHandler.respondToUsers([req.user], 'carddelete', card);
     })
     .catch((error) => {
       res.status(500).send(error);
