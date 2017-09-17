@@ -42,9 +42,13 @@ module.exports = (socketHandler) => {
               });
           })
           .then((users) => {
-            socketHandler.respondToUsers([users.acceptor, users.acceptee], 'friendrequestaccept', {
-              acceptor: users.acceptor,
-              acceptee: users.acceptee
+            socketHandler.respondToUsers([users.acceptor], 'action', {
+              type: 'home/ADD_FRIEND',
+              payload: users.acceptee
+            });
+            socketHandler.respondToUsers([users.acceptee], 'action', {
+              type: 'home/ADD_FRIEND',
+              payload: users.acceptor
             });
             res.json('success');
           })
@@ -64,9 +68,13 @@ module.exports = (socketHandler) => {
             });
         })
         .then((users) => {
-          socketHandler.respondToUsers([users.unfriender, users.unfriendee], 'unfriend', {
-            unfriender: users.unfriender,
-            unfriendee: users.unfriendee
+          socketHandler.respondToUsers([users.unfriender], 'action', {
+            type: 'home/REMOVE_FRIEND',
+            payload: users.unfriendee
+          });
+          socketHandler.respondToUsers([users.unfriendee], 'action', {
+            type: 'home/REMOVE_FRIEND',
+            payload: users.unfriender
           });
           res.json('success');
         })

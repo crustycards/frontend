@@ -14,12 +14,7 @@ import {
 } from '../store/modules/home';
 
 import {
-  addFriend,
-  addFriendRequestSent,
-  addFriendRequestReceived,
-  removeSentFriendRequest,
-  removeFriend,
-  removeReceivedFriendRequest
+  removeFriend
 } from '../store/modules/home.js';
 
 class Home extends Component {
@@ -28,18 +23,6 @@ class Home extends Component {
     if (!props.currentUser) {
       props.history.push('/login');
     }
-
-    props.socket.on('unfriend', (users) => {
-      let otherUser;
-      if (users.unfriender.id === props.currentUser.id) {
-        otherUser = users.unfriendee;
-      } else {
-        otherUser = users.unfriender;
-      }
-      props.removeSentFriendRequest(otherUser);
-      props.removeReceivedFriendRequest(otherUser);
-      props.removeFriend(otherUser);
-    });
   }
 
   render() {
@@ -68,12 +51,7 @@ const mapStateToProps = ({global, home}) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  addFriend,
-  removeFriend,
-  addFriendRequestSent,
-  addFriendRequestReceived,
-  removeSentFriendRequest,
-  removeReceivedFriendRequest
+  removeFriend
 }, dispatch);
 
 export default connect(

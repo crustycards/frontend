@@ -5,8 +5,6 @@ export const ADD_FRIEND = 'home/ADD_FRIEND';
 export const REMOVE_FRIEND = 'home/REMOVE_FRIEND';
 export const ADD_SENT_FRIEND_REQUEST = 'home/ADD_SENT_FRIEND_REQUEST';
 export const ADD_RECEIVED_FRIEND_REQUEST = 'home/ADD_RECEIVED_FRIEND_REQUEST';
-export const REMOVE_SENT_FRIEND_REQUEST = 'home/REMOVE_SENT_FRIEND_REQUEST';
-export const REMOVE_RECEIVED_FRIEND_REQUEST = 'home/REMOVE_RECEIVED_FRIEND_REQUEST';
 export const SET_FRIENDS = 'home/SET_FRIENDS';
 
 const initialState = {
@@ -24,7 +22,9 @@ export default (state = initialState, {type, payload}) => {
   case ADD_FRIEND: 
     return {
       ...state,
-      friends: state.friends.concat([payload])
+      friends: state.friends.concat([payload]),
+      requestsSent: state.requestsSent.filter(f => f.id !== payload.id),
+      requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
     };
 
   case SET_FRIENDS: 
@@ -46,24 +46,11 @@ export default (state = initialState, {type, payload}) => {
     };
 
   case REMOVE_FRIEND:
-    const newFriends = state.friends.filter(f => f.id !== payload.id);
     return {
       ...state,
-      friends: newFriends
-    };
-
-  case REMOVE_SENT_FRIEND_REQUEST:
-    const requestsSent = state.requestsSent.filter(f => f.id !== payload.id);
-    return {
-      ...state,
-      requestsSent
-    };
-
-  case REMOVE_RECEIVED_FRIEND_REQUEST:
-    const requestsReceived = state.requestsReceived.filter(f => f.id !== payload.id);
-    return {
-      ...state,
-      requestsReceived
+      friends: state.friends.filter(f => f.id !== payload.id),
+      requestsSent: state.requestsSent.filter(f => f.id !== payload.id),
+      requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
     };
 
   default: 
@@ -94,15 +81,5 @@ export const addFriendRequestReceived = payload => {
 
 export const removeFriend = payload => ({
   type: REMOVE_FRIEND,
-  payload
-});
-
-export const removeSentFriendRequest = payload => ({
-  type: REMOVE_SENT_FRIEND_REQUEST,
-  payload
-});
-
-export const removeReceivedFriendRequest = payload => ({
-  type: REMOVE_RECEIVED_FRIEND_REQUEST,
   payload
 });
