@@ -27,19 +27,3 @@ export const setCardpacks = payload => {
     payload
   };
 };
-
-export const fetchCardPacks = payload => {
-  return (dispatch, getState) => {
-    axios.get('/api/cardpacks')
-      .then(({data}) => {
-        console.log('test', data);
-        dispatch({
-          type: SET_CARDPACKS,
-          payload: data, 
-        });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  };
-};

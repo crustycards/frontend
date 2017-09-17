@@ -111,7 +111,10 @@ app.get('/*', (req, res) => {
   if (req.user) {
     db.Cardpack.getByUserEmail(req.user.email)
       .then((cardpacks) => {
-        res.render('index', {user: JSON.stringify(req.user), game: JSON.stringify(fakeGame), cardpacks: JSON.stringify(cardpacks), friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+        db.Friend.get(req.user.email)
+          .then((friendData) => {
+            res.render('index', {user: JSON.stringify(req.user), game: JSON.stringify(fakeGame), cardpacks: JSON.stringify(cardpacks), friends: JSON.stringify(friendData.friends), requestsSent: JSON.stringify(friendData.requestsSent), requestsReceived: JSON.stringify(friendData.requestsReceived)});
+          });
       });
   } else {
     res.render('index', {user: JSON.stringify(null), game: JSON.stringify(null), cardpacks: '[]', friends: '[]', requestsSent: '[]', requestsReceived: '[]'});

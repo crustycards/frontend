@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
-import { fetchCardPacks } from '../../store/modules/cardpacks';
 import { connect } from 'react-redux';
 import { RaisedButton, TextField, Checkbox } from 'material-ui';
 import axios from 'axios';
@@ -15,10 +14,6 @@ class GameCreator extends Component {
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
-  }
-
-  componentWillMount() {
-    this.props.fetchCardPacks();
   }
 
   handleGameNameChange(e) {
@@ -71,12 +66,8 @@ class GameCreator extends Component {
   }
 }
 
-const mapStateToProps = ({cardpacks}) => ({
-  cardpacks: cardpacks.cardpacks
+const mapStateToProps = ({global}) => ({
+  cardpacks: global.cardpacks
 });
 
-const mapDispatchToProps = dispatch => bindActionCreators({
-  fetchCardPacks  
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameCreator);
+export default connect(mapStateToProps)(GameCreator);

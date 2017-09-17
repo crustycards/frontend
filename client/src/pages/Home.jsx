@@ -19,9 +19,7 @@ import {
   addFriendRequestReceived,
   removeSentFriendRequest,
   removeFriend,
-  removeReceivedFriendRequest,
-  requestsReceived,
-  requestFriends
+  removeReceivedFriendRequest
 } from '../store/modules/home.js';
 
 class Home extends Component {
@@ -42,10 +40,6 @@ class Home extends Component {
       props.removeReceivedFriendRequest(otherUser);
       props.removeFriend(otherUser);
     });
-  }
-
-  componentDidMount() {
-    this.props.requestFriends(); 
   }
 
   render() {
@@ -79,8 +73,7 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   addFriendRequestSent,
   addFriendRequestReceived,
   removeSentFriendRequest,
-  removeReceivedFriendRequest,
-  requestFriends
+  removeReceivedFriendRequest
 }, dispatch);
 
 export default connect(

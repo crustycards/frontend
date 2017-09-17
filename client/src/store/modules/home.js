@@ -106,24 +106,3 @@ export const removeReceivedFriendRequest = payload => ({
   type: REMOVE_RECEIVED_FRIEND_REQUEST,
   payload
 });
-
-export const requestFriends = () => {
-  return (dispatch, getState) => {
-    axios.get('/api/friends')
-      .then(({data}) => {
-        console.log('response', data);
-        dispatch({
-          type: SET_FRIENDS,
-          payload: data.friends, 
-        });
-        dispatch({
-          type: ADD_SENT_FRIEND_REQUEST,
-          payload: data.requestsSent, 
-        });
-        dispatch({
-          type: ADD_RECEIVED_FRIEND_REQUEST,
-          payload: data.requestsReceived, 
-        });
-      });
-  };
-};

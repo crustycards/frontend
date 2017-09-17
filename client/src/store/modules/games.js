@@ -42,22 +42,6 @@ export const fetchGames = () => {
   };
 };
 
-export const fetchCardPacks = () => {
-  return (dispatch, getState) => {
-    axios.get('/api/cardpacks')
-      .then(({data}) => {
-        console.log(data);
-        dispatch({
-          type: SET_CARDPACKS,
-          payload: data, 
-        });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  };
-};
-
 /**
  * Game name
  * cardpacks array
