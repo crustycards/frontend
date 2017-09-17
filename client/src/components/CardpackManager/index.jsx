@@ -17,12 +17,11 @@ class CardpackManager extends Component {
     this.createCardpack = this.createCardpack.bind(this);
     this.fetchCardpacks();
 
-    props.socket.on('cardpackcreate', (data) => {
-      let cardpack = JSON.parse(data);
+    props.socket.on('cardpackcreate', (cardpack) => {
       this.addCardpack(cardpack);
     });
-    props.socket.on('cardpackdelete', (data) => {
-      let cardpackId = JSON.parse(data).id;
+    props.socket.on('cardpackdelete', (card) => {
+      let cardpackId = card.id;
       this.removeCardpack(cardpackId);
     });
   }

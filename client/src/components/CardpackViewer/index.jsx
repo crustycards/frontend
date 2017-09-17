@@ -30,12 +30,10 @@ class CardpackViewer extends React.Component {
     this.fetchCurrentCardpack();
     this.fetchCards();
 
-    props.socket.on('cardcreate', (cardString) => {
-      let cards = JSON.parse(cardString).cards;
+    props.socket.on('cardcreate', (cards) => {
       this.renderNewCards(cards);
     });
-    props.socket.on('carddelete', (cardString) => {
-      let card = JSON.parse(cardString).card;
+    props.socket.on('carddelete', (card) => {
       this.unrenderOldCard(card);
     });
   }

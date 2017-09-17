@@ -20,9 +20,13 @@ module.exports = (socketHandler) => {
               });
           })
           .then((users) => {
-            socketHandler.respondToUsers([users.friender, users.friendee], 'friendrequestsend', {
-              friender: users.friender,
-              friendee: users.friendee
+            socketHandler.respondToUsers([users.friender], 'action', {
+              type: 'home/ADD_SENT_FRIEND_REQUEST',
+              payload: users.friendee
+            });
+            socketHandler.respondToUsers([users.friendee], 'action', {
+              type: 'home/ADD_RECEIVED_FRIEND_REQUEST',
+              payload: users.friender
             });
             res.json('success');
           })

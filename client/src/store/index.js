@@ -1,20 +1,24 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
+import createSocketIoMiddleware from 'redux-socket.io';
 import thunk from 'redux-thunk';
 import rootReducer from './modules';
 import io from 'socket.io-client';
+const socket = io();
+const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
 
 
 const initialState = {
   ...window.__PRELOADED_STATE__,
   global: {
     ...window.__PRELOADED_STATE__.global,
-    socket: io()
+    socket
   }
 };
 const enhancers = [];
 const middleware = [
-  thunk
+  thunk,
+  socketIoMiddleware
 ];
 
 // This block of code hooks up Redux DevTools if exists

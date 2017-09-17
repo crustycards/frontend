@@ -31,33 +31,7 @@ class Home extends Component {
       props.history.push('/login');
     }
 
-    props.socket.on('friendrequestsend', (data) => {
-      let users = JSON.parse(data);
-      let otherUser;
-      if (users.friender.id === props.currentUser.id) {
-        otherUser = users.friendee;
-        props.addFriendRequestSent(otherUser);
-      } else {
-        otherUser = users.friender;
-        props.addFriendRequestReceived(otherUser);
-      }
-    });
-
-    props.socket.on('friendrequestaccept', (data) => {
-      let users = JSON.parse(data);
-      let otherUser;
-      if (users.acceptor.id === props.currentUser.id) {
-        otherUser = users.acceptee;
-      } else {
-        otherUser = users.acceptor;
-      }
-      props.removeSentFriendRequest(otherUser);
-      props.removeReceivedFriendRequest(otherUser);
-      props.addFriend(otherUser);
-    });
-
-    props.socket.on('unfriend', (data) => {
-      let users = JSON.parse(data);
+    props.socket.on('unfriend', (users) => {
       let otherUser;
       if (users.unfriender.id === props.currentUser.id) {
         otherUser = users.unfriendee;

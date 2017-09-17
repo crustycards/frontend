@@ -11,7 +11,7 @@ class GameList extends React.Component {
       games: []
     };
     props.socket.on('gamecreate', (game) => {
-      this.setState({games: [...this.state.games, JSON.parse(game)]});
+      this.setState({games: [...this.state.games, game]});
     });
     axios.get('/api/games')
       .then((response) => {
