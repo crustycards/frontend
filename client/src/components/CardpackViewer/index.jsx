@@ -159,8 +159,12 @@ class CardpackViewer extends React.Component {
             <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
             {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
             <div className='center'>
-              <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-              <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
+              {this.state.cards.length > this.numCardsOnTab ?
+              <div>
+                <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
+                <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
+              </div>
+              : null}
             </div>
             <GridList children={cards} cols={4} cellHeight='auto' />
           </div>
