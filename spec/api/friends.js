@@ -3,7 +3,6 @@ const expect = chai.expect;
 const app = require('../../server').listen(8080);
 const db = require('../../database');
 const request = chai.request(app);
-const sinon = require('sinon');
 const agent = chai.request.agent(app);
 const agent2 = chai.request.agent(app);
 
