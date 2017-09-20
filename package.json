@@ -10,7 +10,7 @@
     "lint-clean": "eslint . --fix",
     "lint-init": "eslint --init",
     "test": "mocha ./spec --recursive",
-    "deploy": "git pull && webpack --optimize-minimize && pm2 restart all"
+    "deploy": "git pull && npm install && webpack --optimize-minimize && pm2 restart all"
   },
   "author": "Thomas Volk",
   "license": "BOII",
