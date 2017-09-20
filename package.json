@@ -4,13 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -d --watch",
+    "build": "webpack -d --watch --optimize-minimize",
     "start": "nodemon server/index.js",
     "lint": "eslint .",
     "lint-clean": "eslint . --fix",
     "lint-init": "eslint --init",
     "test": "mocha ./spec --recursive",
-    "deploy": "git pull && webpack && pm2 restart all"
+    "deploy": "git pull && webpack --optimize-minimize && pm2 restart all"
   },
   "author": "Thomas Volk",
   "license": "BOII",
@@ -32,6 +32,7 @@
     "axios": "^0.16.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.17.2",
+    "compression": "^1.7.0",
     "connect-session-sequelize": "^4.1.0",
     "cookie-parser": "^1.4.3",
     "css-loader": "^0.28.4",

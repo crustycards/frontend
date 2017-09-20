@@ -13,6 +13,17 @@ const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
+const compression = require('compression');
+
+const shouldCompress = (req, res) => {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header 
+    return false
+  }
+ 
+  // fallback to standard filter function 
+  return compression.filter(req, res)
+}
 
 // TODO - Remove this variable
 const fakeGame = {
@@ -80,6 +91,8 @@ let app = express();
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
+
+app.use(compression({filter: shouldCompress}))
 
 // ---- MIDDLEWARE ----
 // Body parser
