@@ -18,7 +18,7 @@ const Cardpack = (props) => (
       subtitle={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
     />
     <CardActions>
-      <NavLink to={`/cardpack?id=${props.cardpack.id}`} style={navItemStyle}>
+      <NavLink to={`/cardpacks?id=${props.cardpack.id}`} style={navItemStyle}>
         <FlatButton label='Edit' />
       </NavLink>
       <FlatButton label='Delete' onClick={deleteCardpack.bind(null, props.cardpack.id)} />
