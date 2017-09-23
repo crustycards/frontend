@@ -30,10 +30,10 @@ const PlayerList = ({players, ownerId, judgeId}) => (
   </List>
 );
 
-const mapStateToProps = ({global}) => ({
-  players: global.currentGame.players,
-  ownerId: global.currentGame.ownerId,
-  judgeId: global.currentGame.judgeId
+const mapStateToProps = ({game}) => ({
+  players: game.players,
+  ownerId: game.ownerId,
+  judgeId: game.judgeId
 });
 
 export default connect(mapStateToProps)(PlayerList);

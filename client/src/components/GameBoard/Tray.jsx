@@ -24,8 +24,8 @@ const Tray = ({hand, playCard}) => (
   </div>
 );
 
-const mapStateToProps = ({global}) => ({
-  hand: global.currentGame.hand
+const mapStateToProps = ({game}) => ({
+  hand: game.hand
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

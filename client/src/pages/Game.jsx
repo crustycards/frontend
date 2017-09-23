@@ -32,10 +32,6 @@ const Game = (props) => (
   </div>
 );
 
-const mapStateToProps = ({global}) => (
-  {
-    game: global.currentGame
-  }
-);
+const mapStateToProps = ({game}) => ({game});
 
 export default connect(mapStateToProps)(Game);
