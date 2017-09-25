@@ -53,7 +53,7 @@ describe('Cardpack', () => {
     it('Should not create a cardpack when given a non-existing user', () => {
       let cardpackName = mockDB.cardpacks[0].name;
       let ownerEmail = 'notarealemail@fakesite.com';
-      return expect(Cardpack.create(ownerEmail, cardpackName)).to.be.rejectedWith('No user is registered under ' + ownerEmail);
+      return expect(Cardpack.create(ownerEmail, cardpackName)).to.be.rejectedWith('User does not exist');
     });
     it('Should not create a cardpack when given an empty string as a cardpack name', () => {
       let cardpackName = '';
@@ -126,7 +126,7 @@ describe('Cardpack', () => {
         });
     });
     it('Should reject when trying to retrieve a cardpack that does not exist', () => {
-      return expect(Cardpack.getById(-1)).to.be.rejectedWith('Cardpack ID does not map to an existing cardpack');
+      return expect(Cardpack.getById(-1)).to.be.rejectedWith('Cardpack does not exist');
     });
   });
 
@@ -195,7 +195,7 @@ describe('Cardpack', () => {
       let fakeUserEmail = 'fake@user.com';
       return Cardpack.create(user.email, 'cardpack')
         .then((cardpack) => {
-          return expect(Cardpack.subscribe(fakeUserEmail, cardpack.id)).to.be.rejectedWith('No user is registered under fake@user.com');
+          return expect(Cardpack.subscribe(fakeUserEmail, cardpack.id)).to.be.rejectedWith('User does not exist');
         });
     });
   });
@@ -225,10 +225,10 @@ describe('Cardpack', () => {
     });
     it('Should reject when attempting to unsubscribe from a cardpack that does not exist', () => {
       let user = mockDB.users[0];
-      return expect(Cardpack.unsubscribe(user.email, 1234)).to.be.rejectedWith('Cannot unsubscribe from a cardpack that you are not subscribed to');
+      return expect(Cardpack.unsubscribe(user.email, 1234)).to.be.rejectedWith('Cardpack does not exist');
     });
     it('Should reject when attempting to unsubscribe from a non-existent user', () => {
-      return expect(Cardpack.unsubscribe('fake@email.com', 1234)).to.be.rejectedWith('No user is registered under fake@email.com');
+      return expect(Cardpack.unsubscribe('fake@email.com', 1234)).to.be.rejectedWith('User does not exist');
     });
   });
   describe('getSubscriptions()', () => {

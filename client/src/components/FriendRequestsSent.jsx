@@ -11,6 +11,6 @@ const FriendRequestsSent = ({requestsSent}) => (
   </div>
 );
 
-export default connect(
-  ({home}) => ({requestsSent: home.requestsSent})
-)(FriendRequestsSent);
+export default connect(({home}) => ({
+  requestsSent: home.requestsSent
+}))(FriendRequestsSent);

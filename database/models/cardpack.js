@@ -1,7 +1,6 @@
 const db = require('../connection');
 const Sequelize = require('sequelize');
 const User = require('./user');
-const CardpackSubscribe = require('./cardpackSubscribe');
 
 const CardpackModel = db.define('cardpacks', {
   id: {
@@ -25,9 +24,7 @@ let Cardpack = {model: CardpackModel};
 // 2. cardpackName is null/undefined/emptystring/notastring
 Cardpack.create = (userEmail, cardpackName) => {
   if (!cardpackName || cardpackName.constructor !== String) {
-    return new Promise((resolve, reject) => {
-      reject('Cardpack name is invalid - name must be a non-empty string');
-    });
+    return Promise.reject('Cardpack name is invalid - name must be a non-empty string');
   }
 
   return User.getByEmail(userEmail)
@@ -67,10 +64,7 @@ Cardpack.getByUserEmail = (userEmail) => {
 };
 
 Cardpack.getById = (cardpackId) => {
-  return Cardpack.model.findOne({
-    where: {
-      id: cardpackId
-    },
+  return Cardpack.model.findById(cardpackId, {
     include: [{
       model: User.model,
       as: 'owner'
@@ -81,7 +75,7 @@ Cardpack.getById = (cardpackId) => {
   })
     .then((cardpack) => {
       if (!cardpack) {
-        throw new Error('Cardpack ID does not map to an existing cardpack');
+        throw new Error('Cardpack does not exist');
       }
       return cardpack;
     });
@@ -97,21 +91,10 @@ Cardpack.getById = (cardpackId) => {
 Cardpack.delete = (userEmail, cardpackId) => {
   return User.getByEmail(userEmail)
     .then((owner) => {
-      return Cardpack.model.findOne({
-        where: {
-          id: cardpackId
-        }
-      })
+      return Cardpack.getById(cardpackId)
         .then((cardpack) => {
-          if (!cardpack) {
-            return new Promise((resolve, reject) => {
-              reject('Cardpack does not exist');
-            });
-          }
-          if (cardpack.ownerId !== owner.id) {
-            return new Promise((resolve, reject) => {
-              reject('Cannot delete someone else\'s cardpack');
-            });
+          if (cardpack.owner.id !== owner.id) {
+            return Promise.reject('Cannot delete someone else\'s cardpack');
           }
 
           return Cardpack.model.findAll({
@@ -144,17 +127,11 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
           throw new Error('Cardpack does not exist');
         })
         .then((cardpack) => {
-          // TODO - Use bare sequelize cardpack.model.findone so that we can use cardpack.ownerId instead of cardpack.owner.id
           if (cardpack.owner.id === user.id) {
             throw new Error('Cannot subscribe to your own cardpack');
           }
-          return CardpackSubscribe.model.findOrCreate({
-            where: {
-              subscriberId: user.id,
-              cardpackId
-            }
-          })
-            .spread((subscription, created) => {
+          return cardpack.addSubscriber(user)
+            .then((created) => {
               if (created) {
               // TODO - handle socket events here
               }
@@ -167,15 +144,13 @@ Cardpack.subscribe = (userEmail, cardpackId) => {
 Cardpack.unsubscribe = (userEmail, cardpackId) => {
   return User.getByEmail(userEmail)
     .then((user) => {
-      return CardpackSubscribe.model.destroy({
-        where: {
-          subscriberId: user.id,
-          cardpackId
-        }
-      })
-        .then((affectedRows) => {
-          if (affectedRows) {
-          // TODO - Add socket events here
+      return Cardpack.getById(cardpackId)
+        .then((cardpack) => {
+          return cardpack.removeSubscriber(user);
+        })
+        .then((destroyed) => {
+          if (destroyed) {
+            // TODO - Add socket events here
             return true;
           } else {
             throw new Error('Cannot unsubscribe from a cardpack that you are not subscribed to');

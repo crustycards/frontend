@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
 import CardAdder from './CardAdder.jsx';
@@ -11,7 +12,6 @@ class CardpackViewer extends React.Component {
   constructor (props) {
     super(props);
     this.numCardsOnTab = 20;
-    this.socket = this.props.socket;
     this.cardpackId = this.props.cardpackId;
     this.addCards = this.addCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
@@ -19,7 +19,6 @@ class CardpackViewer extends React.Component {
     this.nextTab = this.nextTab.bind(this);
     this.previousTab = this.previousTab.bind(this);
     this.state = {
-      currentUser: null,
       cards: [],
       cardsFetched: false,
       newCardName: '',
@@ -28,20 +27,13 @@ class CardpackViewer extends React.Component {
       cardpack: undefined,
       tab: 0
     };
-    axios.get('/api/currentuser')
-      .then((response) => {
-        let currentUser = response.data;
-        this.setState({currentUser});
-      });
     this.fetchCurrentCardpack();
     this.fetchCards();
 
-    this.socket.on('cardcreate', (cardString) => {
-      let cards = JSON.parse(cardString).cards;
+    props.socket.on('cardcreate', (cards) => {
       this.renderNewCards(cards);
     });
-    this.socket.on('carddelete', (cardString) => {
-      let card = JSON.parse(cardString).card;
+    props.socket.on('carddelete', (card) => {
       this.unrenderOldCard(card);
     });
   }
@@ -83,7 +75,17 @@ class CardpackViewer extends React.Component {
   }
 
   addCards (cards) {
-    return axios.post('/api/cards/' + this.cardpackId, cards);
+    if (cards.length <= 100) {
+      return axios.post('/api/cards/' + this.cardpackId, cards);
+    }
+    let tempCards = [];
+    cards.forEach((card, index) => {
+      tempCards.push(card);
+      if (tempCards.length === 100 || index === cards.length - 1) {
+        axios.post('/api/cards/' + this.cardpackId, tempCards);
+        tempCards = [];
+      }
+    });
   }
 
   downloadStringifiedCards () {
@@ -116,7 +118,7 @@ class CardpackViewer extends React.Component {
           }
         });
     } else {
-      // TODO - Handle properly if browser does not support file uploading
+      alert('Your browser does not support file uploading');
     }
   }
 
@@ -129,21 +131,13 @@ class CardpackViewer extends React.Component {
   }
 
   render () {
-    const styles = {
-      gridList: {
-        width: 'auto',
-        height: 500,
-        overflowY: 'auto'
-      }
-    };
-
     if (this.state.cardpack === null) {
       return (
         <div className='panel'>Cardpack does not exist</div>
       );
     }
 
-    let isOwner = this.state.currentUser && this.state.cardpack && this.state.cardpack.owner && this.state.currentUser.id === this.state.cardpack.owner.id;
+    let isOwner = this.props.currentUser && this.state.cardpack && this.state.cardpack.owner && this.props.currentUser.id === this.state.cardpack.owner.id;
     let cards = [];
 
     let tabStart = this.state.tab * this.numCardsOnTab;
@@ -158,15 +152,21 @@ class CardpackViewer extends React.Component {
 
     return (
       <div className='panel'>
-        <div>{this.state.cardpack && this.state.cardsFetched ? this.state.cardpack.name : <LinearProgress/>}</div>
+        <div>{this.state.cardpack && this.state.cardsFetched ? <div className='center'>{this.state.cardpack.name}</div> : <LinearProgress/>}</div>
         {isOwner && this.state.cardsFetched ? <CardAdder addCards={this.addCards} /> : null}
         {this.state.cardsFetched ?
           <div>
             <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-            <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /><br/>
-            <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-            <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
-            <GridList children={cards} cols={4} cellHeight='auto' style={styles.gridList} />
+            {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
+            <div className='center'>
+              {this.state.cards.length > this.numCardsOnTab ?
+              <div>
+                <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
+                <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
+              </div>
+              : null}
+            </div>
+            <GridList children={cards} cols={4} cellHeight='auto' />
           </div>
         : null}
       </div>
@@ -174,4 +174,9 @@ class CardpackViewer extends React.Component {
   }
 }
 
-export default CardpackViewer;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser,
+  socket: global.socket
+});
+
+export default connect(mapStateToProps)(CardpackViewer);

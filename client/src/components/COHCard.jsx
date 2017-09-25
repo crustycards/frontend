@@ -50,13 +50,12 @@ class COHCard extends Component {
       />
     );
 
-    if (this.props.isOwner) {
-      cardElements.push(
-        <CardActions key={1}>
-          <FlatButton label='Delete' onClick={this.removeCard} />
-        </CardActions>
-      );
-    }
+    cardElements.push(
+      <CardActions key={1}>
+        {this.props.isOwner ? <FlatButton label='Delete' onClick={this.removeCard} /> : null}
+        {this.props.playHandler ? <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} /> : null}
+      </CardActions>
+    );
 
     if (this.props.playHandler) {
       cardElements.push(

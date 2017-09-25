@@ -63,16 +63,15 @@ describe('Game', () => {
     expect(game.pause).to.be.a('function');
     expect(game.isRunning).to.be.a('function');
     expect(game.continue).to.be.a('function');
-    expect(game.sendDataToUsers).to.be.a('function');
     expect(game.getState).to.be.a('function');
   });
 
   describe('addUser()', () => {
     it('Should add users to games', () => {
       game.addUser(userTwo);
-      expect(game.users.size()).to.equal(2);
+      expect(game.players.size()).to.equal(2);
       game.addUser(userThree);
-      expect(game.users.size()).to.equal(3);
+      expect(game.players.size()).to.equal(3);
     });
     it('Should not add a user if the game is full', () => {
       expect(game.addUser(userTwo)).to.equal(true);
@@ -82,7 +81,7 @@ describe('Game', () => {
     it('Should not add a user if they are already in the game', () => {
       expect(game.addUser(userTwo)).to.equal(true);
       expect(() => {game.addUser(userTwo)}).to.throw(Error, 'You are already in this game');
-      expect(game.users.size()).to.eql(2);
+      expect(game.players.size()).to.eql(2);
     });
   });
 
@@ -124,19 +123,19 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       expect(game.playCard(userTwo, card)).to.equal(true);
     });
     it('Should throw error when attempting to play a card while the game is not running', () => {
       game.addUser(userTwo);
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Game is not running');
     });
     it('Should throw error when attempting to play a card during the wrong round phase', () => {
       game.addUser(userTwo);
       game.addUser(userThree);
       game.start();
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play cards during');
     });
     it('Should throw error when attempting to play a card after already playing one', () => {
@@ -144,7 +143,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       game.playCard(userTwo, card);
       expect(() => {game.playCard(userTwo, card)}).to.throw(Error, 'You have already played a card for this round');
     });
@@ -153,7 +152,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userOne.email].hand[0];
+      let card = game.players.userTable[userOne.email].hand[0];
       expect(() => {game.playCard(userOne, card)}).to.throw(Error, 'Cannot play a card when you are the judge');
     });
   });
@@ -164,7 +163,7 @@ describe('Game', () => {
       game.addUser(userThree);
       game.start();
       game.continue();
-      let card = game.users.userTable[userTwo.email].hand[0];
+      let card = game.players.userTable[userTwo.email].hand[0];
       expect(Object.keys(game.whiteCardDeck.currentCards).length).to.equal(0);
       game.playCard(userTwo, card);
       expect(Object.keys(game.whiteCardDeck.currentCards).length).to.equal(1);
@@ -212,13 +211,14 @@ describe('Game', () => {
       let state = game.getState(userOne);
       expect(state.hand).to.be.a('array');
       expect(state.currentBlackCard).to.be.a('object');
-      expect(state.playerCurrentWhiteCard).to.equal(null);
-      expect(state.numOtherWhiteCardsPlayed).to.be.a('number');
+      expect(state.whiteCardsPlayed).to.be.a('object');
       expect(state.currentJudge).to.be.a('object');
       expect(state.currentOwner).to.be.a('object');
       expect(state.otherPlayers).to.be.a('array');
-      expect(state.roundStage).to.be.a('string');
-      expect(Object.keys(state).length).to.equal(8);
+      expect(state.roundStage).to.equal(undefined);
+      expect(state.nextStageStart).to.equal(undefined);
+      expect(state.isRunning).to.equal(false);
+      expect(Object.keys(state).length).to.equal(9);
     });
     it('Should throw when getting state for a user that is not in the game', () => {
       expect(game.getState(userFour).otherPlayers).to.throw;
@@ -239,33 +239,40 @@ describe('Game', () => {
         expect(game.getState(userOne).currentBlackCard.id).to.exist;
       });
     });
-    describe('playerCurrentWhiteCard', () => {
-      it('Should be null before any card is played', () => {
-        expect(game.getState(userOne).playerCurrentWhiteCard).to.equal(null);
+    describe('whiteCardsPlayed', () => {
+      it('Should be an empty object upon game creation', () => {
+        expect(game.getState(userOne).whiteCardsPlayed).to.eql({});
       });
-      it('Should return a card object once the user has played a card', () => {
-        //
-      });
-    });
-    describe('numOtherWhiteCardsPlayed', () => {
-      it('Should keep track of number of other cards played', () => {
+      it('Should return card of current player if they played a card', () => {
         game.addUser(userTwo);
         game.addUser(userThree);
         game.start();
         game.continue();
-        expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(0);
-        let card = game.users.userTable[userTwo.email].hand[0];
+        let card = game.players.userTable[userTwo.email].hand[0];
         game.playCard(userTwo, card);
-        expect(game.getState(userOne).numOtherWhiteCardsPlayed).to.equal(1);
+        let currentCards = game.getState(userTwo).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(card);
       });
-      it('Should not keep track of whether the current player has played a card', () => {
+      it('Should return true for another player if they played a card and are in card play round', () => {
         game.addUser(userTwo);
         game.addUser(userThree);
         game.start();
         game.continue();
-        let card = game.users.userTable[userTwo.email].hand[0];
+        let card = game.players.userTable[userTwo.email].hand[0];
         game.playCard(userTwo, card);
-        expect(game.getState(userTwo).numOtherWhiteCardsPlayed).to.equal(0);
+        let currentCards = game.getState(userThree).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(true);
+      });
+      it('Should return card for another player if they played a card and are NOT in card play round', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        game.continue();
+        let card = game.players.userTable[userTwo.email].hand[0];
+        game.playCard(userTwo, card);
+        game.continue();
+        let currentCards = game.getState(userThree).whiteCardsPlayed;
+        expect(currentCards[userTwo.email]).to.eql(card);
       });
     });
     describe('currentJudge', () => {
@@ -292,7 +299,26 @@ describe('Game', () => {
       });
     });
     describe('roundStage', () => {
-      it('');
+      it('Should be undefined before game is started', () => {
+        expect(game.getState(userOne).roundStage).to.equal(undefined);
+      });
+      it('Should exist after the game is started', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        expect(game.getState(userOne).roundStage).to.be.a('string');
+      });
+    });
+    describe('nextStageStart', () => {
+      it('Should be undefined before game is started', () => {
+        expect(game.getState(userOne).nextStageStart).to.equal(undefined);
+      });
+      it('Should exist after the game is started', () => {
+        game.addUser(userTwo);
+        game.addUser(userThree);
+        game.start();
+        expect(game.getState(userOne).nextStageStart).to.be.a('number');
+      });
     });
   });
 });

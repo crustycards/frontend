@@ -1,35 +1,29 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { NavLink } from 'react-router-dom';
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import time from 'time-converter';
+const navItemStyle = {textDecoration: 'none'};
+const deleteCardpack = (id) => {
+  axios.delete('/api/cardpacks', {
+    data: {id}
+  });
+};
 
-class Cardpack extends React.Component {
-  constructor (props) {
-    super(props);
-    this.delete = this.delete.bind(this);
-  }
-
-  delete () {
-    axios.delete('/api/cardpacks', {
-      data: {id: this.props.cardpack.id}
-    });
-  }
-
-  render () {
-    return (
-      <Card className='card'>
-        <CardHeader
-          title={this.props.cardpack.name}
-          subtitle={'Created ' + time.stringify(this.props.cardpack.createdAt, {relativeTime: true})}
-        />
-        <CardActions>
-          <FlatButton label='Edit' onClick={() => {window.location.href = '/cardpack?id=' + this.props.cardpack.id}} />
-          <FlatButton label='Delete' onClick={this.delete} />
-        </CardActions>
-      </Card>
-    )
-  }
-}
+const Cardpack = (props) => (
+  <Card className='card'>
+    <CardHeader
+      title={props.cardpack.name}
+      subtitle={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
+    />
+    <CardActions>
+      <NavLink to={`/cardpacks?id=${props.cardpack.id}`} style={navItemStyle}>
+        <FlatButton label='Edit' />
+      </NavLink>
+      <FlatButton label='Delete' onClick={deleteCardpack.bind(null, props.cardpack.id)} />
+    </CardActions>
+  </Card>
+);
 
 export default Cardpack;

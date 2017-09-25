@@ -8,26 +8,37 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Home from './pages/Home.jsx';
-import Cardpack from './pages/Cardpack.jsx';
+import Cardpacks from './pages/Cardpacks.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import NotFound from './pages/NotFound.jsx';
-import Board from './pages/Board.jsx';
+import Game from './pages/Game.jsx';
+import GameList from './pages/GameList.jsx';
+import Settings from './pages/Settings.jsx';
+import Navbar from './components/Navbar.jsx';
+import { BrowserRouter } from 'react-router-dom';
 import './styles.css';
-import { Router, Route, browserHistory, IndexRoute } from 'react-router';
+import { Router, Route, browserHistory, Switch } from 'react-router';
 
 
 render(
-  <Provider store={store}> 
-    <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-      <Router history={browserHistory}>
-        <Route path='/' component={Home}/>
-        <Route path='/cardpack' component={Cardpack}/>
-        <Route path='/login' component={Login}/>
-        <Route path='/signup' component={Signup}/>
-        <Route path='/game' component={Board}/>
-        <Route path='*' component={NotFound}/>
-      </Router>
-    </MuiThemeProvider>
+  <Provider store={store}>
+    <BrowserRouter basename="/">
+      <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+        <div>
+          <Navbar/>
+          <Switch>
+            <Route exact path='/' component={Home}/>
+            <Route exact path='/cardpacks' component={Cardpacks}/>
+            <Route exact path='/login' component={Login}/>
+            <Route exact path='/signup' component={Signup}/>
+            <Route exact path='/game' component={Game}/>
+            <Route exact path='/gamelist' component={GameList}/>
+            <Route exact path='/settings' component={Settings}/>
+            <Route component={NotFound}/>
+          </Switch>
+        </div>
+      </MuiThemeProvider>
+    </BrowserRouter>
   </Provider>
   , document.getElementById('app'));

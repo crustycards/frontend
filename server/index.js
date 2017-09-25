@@ -1,5 +1,4 @@
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
-process.env.PORT = process.env.PORT || 3000;
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -8,13 +7,70 @@ const session = require('express-session');
 const Store = require('connect-session-sequelize')(session.Store);
 const db = require('../database');
 const url = require('url');
-const env = require('dotenv').load();
 const path = require('path');
 const apiRouter = require('./apiRoutes');
 const cookieParser = require('cookie-parser');
 const authRouter = require('./authRouter.js');
 const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
+const compression = require('compression');
+
+const shouldCompress = (req, res) => {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header 
+    return false
+  }
+ 
+  // fallback to standard filter function 
+  return compression.filter(req, res)
+}
+
+// TODO - Remove this variable
+const fakeGame = {
+  hand: [
+    {id: 54, text: 'cardOne', type: 'white'},
+    {id: 34, text: 'cardTwo', type: 'white'},
+    {id: 48, text: 'cardThree', type: 'white'},
+    {id: 2, text: 'cardFour', type: 'white'},
+    {id: 75, text: 'cardFive', type: 'white'}
+  ],
+  currentBlackCard: {id: 555, text: 'blackCard', type: 'black', answerFields: 2},
+  whiteCardsPlayed: [],
+  judgeId: 420,
+  ownerId: 20,
+  players: [
+    {
+      id: 420,
+      name: 'Alec',
+      email: 'alec@gmail.com'
+    },
+    {
+      id: 20,
+      name: 'Tommy',
+      email: 'tommy@gmail.com'
+    },
+    {
+      id: 75,
+      name: 'Jesse',
+      email: 'jesse@gmail.com'
+    },
+    {
+      id: 4,
+      name: 'Steve',
+      email: 'steve@gmail.com'
+    },
+    {
+      id: 2,
+      name: 'Joey',
+      email: 'joey@gmail.com'
+    }
+  ],
+  roundStage: 'card play phase',
+  nextStageStart: new Date().getTime(),
+  isRunning: true,
+  name: `Tommy's Game`,
+  maxPlayers: 8
+};
 
 // Create session store
 let store = new Store({db: db.connection});
@@ -32,6 +88,11 @@ db.connection.sync().then(() => {
 
 // Create app
 let app = express();
+
+app.set('views', __dirname + '/views');
+app.set('view engine', 'pug');
+
+app.use(compression({filter: shouldCompress}))
 
 // ---- MIDDLEWARE ----
 // Body parser
@@ -60,7 +121,17 @@ app.get('*/bundle.js', (req, res) => {
   res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
 });
 app.get('/*', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/index.html'));
+  if (req.user) {
+    db.Cardpack.getByUserEmail(req.user.email)
+      .then((cardpacks) => {
+        db.Friend.get(req.user.email)
+          .then((friendData) => {
+            res.render('index', {user: JSON.stringify(req.user), game: JSON.stringify(fakeGame), cardpacks: JSON.stringify(cardpacks), friends: JSON.stringify(friendData.friends), requestsSent: JSON.stringify(friendData.requestsSent), requestsReceived: JSON.stringify(friendData.requestsReceived)});
+          });
+      });
+  } else {
+    res.render('index', {user: JSON.stringify(null), game: JSON.stringify(null), cardpacks: '[]', friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+  }
 });
 
 let http = require('http').Server(app);
@@ -70,8 +141,9 @@ let io = require('socket.io')(http);
 if (module.parent) {
   module.exports = http;
 } else {
-  http.listen(process.env.PORT, () => {
-    console.log('Listening on port ' + process.env.PORT);
+  let port = process.env.PORT || 3000;
+  http.listen(port, () => {
+    console.log('Listening on port ' + port);
   });
 }
 

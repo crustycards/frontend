@@ -3,7 +3,7 @@
         "username": "student",
         "password": "student",
         "database": "cards",
-        "host": "localhost",
+        "host": "127.0.0.1",
         "dialect": "mysql",
         "logging": false
     },
@@ -11,7 +11,7 @@
         "username": "root",
         "password": null,
         "database": "cards",
-        "host": "localhost",
+        "host": "127.0.0.1",
         "dialect": "mysql",
         "logging": false
     },
@@ -19,7 +19,7 @@
         "username": "server",
         "password": "serverpass",
         "database": "cards",
-        "host": "localhost",
+        "host": "127.0.0.1",
         "dialect": "mysql",
         "logging": false
     }

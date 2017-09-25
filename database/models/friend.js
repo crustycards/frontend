@@ -29,14 +29,10 @@ let Friend = {model: FriendModel};
 // 3. addType is not either 'create' or 'accept'
 const addFriend = (frienderEmail, friendeeEmail, addType) => {
   if (!addType || addType.constructor !== String && (addType !== 'create' || addType !== 'accept')) {
-    return new Promise((resolve, reject) => {
-      reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
-    });
+    return Promise.reject(`Expected addType to equal either 'create' or 'accept', but instead it equals: ${addType}`);
   }
   if (frienderEmail === friendeeEmail) {
-    return new Promise((resolve, reject) => {
-      reject('Cannot friend yourself');
-    });
+    return Promise.reject('Cannot friend yourself');
   }
 
   return User.getByEmail(frienderEmail)
@@ -62,11 +58,7 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
         }
       })
         .then((friendData) => {
-          let friendStatus = null;
-          if (friendData) {
-            friendStatus = friendData;
-          }
-          return {friends, friendStatus};
+          return {friends, friendStatus: friendData || null};
         });
     })
     .then((friendshipData) => {
@@ -77,15 +69,19 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
           friendeeId: friendshipData.friends.friendee.id,
           accepted: false
         })
-          .then((friendshipData) => {
-            return friendshipData.dataValues;
-          })
-          .then((friendship) => {
-            delete friendship.frienderId;
-            delete friendship.friendeeId;
-            friendship.friender = friendshipData.friends.friender;
-            friendship.friendee = friendshipData.friends.friendee;
-            return friendship;
+          .then((friendshipStatus) => {
+            return Friend.model.findById(friendshipStatus.id, {
+              include: [{
+                model: User.model,
+                as: 'friender'
+              }, {
+                model: User.model,
+                as: 'friendee'
+              }],
+              attributes: {
+                exclude: ['frienderId', 'friendeeId']
+              }
+            });
           });
       } else if (addType === 'accept' && friendshipData.friendStatus) {
       // Set friend request to accepted only if you are the receiver of the request
@@ -95,30 +91,28 @@ const addFriend = (frienderEmail, friendeeEmail, addType) => {
             accepted: true
           })
             .then((newFriendshipStatus) => {
-              return newFriendshipStatus.dataValues;
-            })
-            .then((friendship) => {
-              delete friendship.frienderId;
-              delete friendship.friendeeId;
-              friendship.friender = friendshipData.friends.friender;
-              friendship.friendee = friendshipData.friends.friendee;
-              return friendship;
+              return Friend.model.findById(newFriendshipStatus.id, {
+                include: [{
+                  model: User.model,
+                  as: 'friender'
+                }, {
+                  model: User.model,
+                  as: 'friendee'
+                }],
+                attributes: {
+                  exclude: ['frienderId', 'friendeeId']
+                }
+              });
             });
         } else {
-          return new Promise((resolve, reject) => {
-            reject('Cannot accept a friend request that does not exist');
-          });
+          return Promise.reject('Cannot accept a friend request that does not exist');
         }
       } else {
       // If the original request sender tries to accept, return the current request status without modifying it
         if (addType === 'create') {
-          return new Promise((resolve, reject) => {
-            reject('There is already an open friend request between you and this person');
-          });
+          return Promise.reject('There is already an open friend request between you and this person');
         } else {
-          return new Promise((resolve, reject) => {
-            reject('Cannot send a friend request to a person that has already sent you a request');
-          });
+          return Promise.reject('Cannot send a friend request to a person that has already sent you a request');
         }
       }
     });
@@ -169,9 +163,7 @@ Friend.remove = (unfrienderEmail, unfriendeeEmail) => {
             return true;
           });
       } else {
-        return new Promise((resolve, reject) => {
-          reject('You are not friends with this person');
-        });
+        return Promise.reject('You are not friends with this person');
       }
     });
 };

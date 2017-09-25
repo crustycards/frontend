@@ -20,9 +20,13 @@ module.exports = (socketHandler) => {
               });
           })
           .then((users) => {
-            socketHandler.respondToUsers([users.friender, users.friendee], 'friendrequestsend', {
-              friender: users.friender,
-              friendee: users.friendee
+            socketHandler.respondToUsers([users.friender], 'action', {
+              type: 'home/ADD_SENT_FRIEND_REQUEST',
+              payload: users.friendee
+            });
+            socketHandler.respondToUsers([users.friendee], 'action', {
+              type: 'home/ADD_RECEIVED_FRIEND_REQUEST',
+              payload: users.friender
             });
             res.json('success');
           })
@@ -33,14 +37,18 @@ module.exports = (socketHandler) => {
         db.Friend.acceptRequest(req.user.email, req.body.user)
           .then(() => {
             return db.User.getByEmail(req.body.user)
-              .then((acceptee) => {
-                return {acceptor: req.user, acceptee};
+              .then((acceptor) => {
+                return {acceptor, acceptee: req.user};
               });
           })
           .then((users) => {
-            socketHandler.respondToUsers([users.acceptor, users.acceptee], 'friendrequestaccept', {
-              acceptor: users.acceptor,
-              acceptee: users.acceptee
+            socketHandler.respondToUsers([users.acceptor], 'action', {
+              type: 'home/ADD_FRIEND',
+              payload: users.acceptee
+            });
+            socketHandler.respondToUsers([users.acceptee], 'action', {
+              type: 'home/ADD_FRIEND',
+              payload: users.acceptor
             });
             res.json('success');
           })
@@ -60,9 +68,13 @@ module.exports = (socketHandler) => {
             });
         })
         .then((users) => {
-          socketHandler.respondToUsers([users.unfriender, users.unfriendee], 'unfriend', {
-            unfriender: users.unfriender,
-            unfriendee: users.unfriendee
+          socketHandler.respondToUsers([users.unfriender], 'action', {
+            type: 'home/REMOVE_FRIEND',
+            payload: users.unfriendee
+          });
+          socketHandler.respondToUsers([users.unfriendee], 'action', {
+            type: 'home/REMOVE_FRIEND',
+            payload: users.unfriender
           });
           res.json('success');
         })

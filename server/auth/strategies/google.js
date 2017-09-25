@@ -35,8 +35,7 @@ module.exports = (passport, userModel) => {
               User.create({
                 googleId: profile.id,
                 token: token,
-                firstname: profile.name.givenName,
-                lastname: profile.name.familyName,
+                name: profile.name.givenName + ' ' + profile.name.familyName,
                 email: profile.emails[0].value
               })
                 .then((newUser) => {

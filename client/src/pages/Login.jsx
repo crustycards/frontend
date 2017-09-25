@@ -1,10 +1,13 @@
 import React from 'react';
 import axios from 'axios';
+import { NavLink } from 'react-router-dom';
+import { connect } from 'react-redux';
 import GoogleButton from '../components/GoogleButton/index.jsx';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
 import Snackbar from 'material-ui/Snackbar';
+import helpers from '../helpers';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,6 +23,9 @@ class Login extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.showError = this.showError.bind(this);
     this.hideError = this.hideError.bind(this);
+    if (props.currentUser) {
+      props.history.push('/');
+    }
   }
 
   handleInputChange (property, e) {
@@ -83,13 +89,16 @@ class Login extends React.Component {
   }
 
   render() {
+    const navItemStyle = {textDecoration: 'none'};
     return (
-      <div className='login center'>
+      <div className='login center' style={{zoom: helpers.isMobile() ? '180%' : '100%'}}>
         <h1>Login</h1>
         <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
         <RaisedButton className='btn' onClick={this.sendLoginRequest}>Login</RaisedButton>
-        <FlatButton className='btn' href='/signup'>Sign Up</FlatButton><br/>
+        <NavLink to='/signup' style={navItemStyle}>
+          <FlatButton className='btn'>Sign Up</FlatButton><br/>
+        </NavLink>
         <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
         <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
       </div>
@@ -97,4 +106,8 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser
+});
+
+export default connect(mapStateToProps)(Login);

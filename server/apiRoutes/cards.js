@@ -14,10 +14,13 @@ module.exports = (socketHandler) => {
   router.post('/:cardpackId', (req, res) => {
     let promises = [];
     let cards = req.body;
+    if (cards.length > 100) {
+      return res.status(500).send('Exceeded the limit of 100 cards per request');
+    }
     let socketCards = [];
     cards.forEach((card) => {
       promises.push(
-        db.Card.create(req.user.email, req.params.cardpackId, card.text, card.type, card.answerFields)
+        db.Card.create({userId: req.user.id, cardpackId: req.params.cardpackId, text: card.text, type: card.type, answerFields: card.answerFields})
           .then((card) => {
             socketCards.push(card);
           })
@@ -25,7 +28,7 @@ module.exports = (socketHandler) => {
     });
     Promise.all(promises)
       .then(() => {
-        socketHandler.respondToUsers([req.user], 'cardcreate', {cards: socketCards});
+        socketHandler.respondToUsers([req.user], 'cardcreate', socketCards);
         res.json('success');
       })
       .catch((error) => {
@@ -36,7 +39,7 @@ module.exports = (socketHandler) => {
     db.Card.delete(req.user.email, req.params.cardId)
     .then((card) => {
       res.json('success');
-      socketHandler.respondToUsers([req.user], 'carddelete', {card});
+      socketHandler.respondToUsers([req.user], 'carddelete', card);
     })
     .catch((error) => {
       res.status(500).send(error);

@@ -1,7 +1,6 @@
 const BlackCardDeck = require('./blackCardDeck');
 const WhiteCardDeck = require('./whiteCardDeck');
-const Users = require('./Users.js');
-// TODO - Rename Users.js to Players.js
+const Players = require('./Players.js');
 
 const ROUND_STAGES = {
   playBlackCard: 1,
@@ -29,9 +28,10 @@ class Game {
     this.handSize = handSize;
     this.blackCardDeck = new BlackCardDeck(blackCards);
     this.whiteCardDeck = new WhiteCardDeck(whiteCards);
-    this.users = new Users(maxPlayers);
+    this.players = new Players(maxPlayers);
     this.addUser(creator);
     this.timeoutId; // Saved to allow pausing and stopping of games
+    this.nextStageStart;
     this.roundStage;
     this.timeout = timeout;
 
@@ -40,14 +40,14 @@ class Game {
 
   addUser (user) {
     // TODO - Add function to Users that allows for searching its userTable and remove the manual lookup of that property right below
-    this.users.addUser(user);
+    this.players.addUser(user);
     for (let i = 0; i < this.handSize; i++) {
       this.drawForUser(user);
     }
     return true;
   }
   removeUser (user) {
-    let userHand = this.users.removeUser(user);
+    let userHand = this.players.removeUser(user);
     if (userHand) {
       // while (this.playerHands[user.email].length) {
       //   this.whiteCardDiscard.push(this.playerHands[user.email].pop());
@@ -60,7 +60,7 @@ class Game {
   }
 
   drawForUser (user) {
-    this.users.drawCard(user, this.whiteCardDeck.popCard());
+    this.players.drawCard(user, this.whiteCardDeck.popCard());
   }
 
   playCard (user, card) {
@@ -73,16 +73,16 @@ class Game {
     if (this.whiteCardDeck.currentCards[user.email]) {
       throw new Error('You have already played a card for this round');
     }
-    if (this.users.getJudge().email === user.email) {
+    if (this.players.getJudge().email === user.email) {
       throw new Error('Cannot play a card when you are the judge');
     }
 
-    let hand = this.users.getHand(user);
+    let hand = this.players.getHand(user);
     for (let i = 0; i < hand.length; i++) {
       if (card.id === hand[i].id) {
-        this.whiteCardDeck.playCard(user, hand.splice(i, 1));
+        this.whiteCardDeck.playCard(user, hand.splice(i, 1)[0]);
         // If this is the last user to play a card, then stop waiting and move on to the next step of the round
-        if (Object.keys(this.whiteCardDeck.currentCards).length === this.users.size()) {
+        if (Object.keys(this.whiteCardDeck.currentCards).length === this.players.size()) {
           this.continue();
         }
         return true;
@@ -92,7 +92,7 @@ class Game {
   }
 
   start () {
-    if (this.users.size() < minPlayerCount) {
+    if (this.players.size() < minPlayerCount) {
       throw new Error('Not enough players to start game');
     }
     if (this.roundStage) {
@@ -101,6 +101,7 @@ class Game {
     } else {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = new Date().getTime() + this.timeout;
     }
   }
   stop () {
@@ -110,6 +111,7 @@ class Game {
     if (this.timeoutId) {
       clearTimeout(this.timeoutId);
       this.timeoutId = undefined;
+      this.nextStageStart = undefined;
     }
     this.whiteCardDeck.resetCurrentCards();
   }
@@ -119,6 +121,7 @@ class Game {
     }
     clearTimeout(this.timeoutId);
     this.timeoutId = undefined;
+    this.nextStageStart = undefined;
   }
 
   isRunning () {
@@ -131,43 +134,56 @@ class Game {
       this.blackCardDeck.cycleCard();
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, 0);
+      this.nextStageStart = this.nextStageStart = new Date().getTime() + 0;
     } else if (this.roundStage === ROUND_STAGES.playWhiteCards) {
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = this.nextStageStart = new Date().getTime() + this.timeout;
     } else if (this.roundStage === ROUND_STAGES.judgeRound) {
       this.roundStage++;
       this.timeoutId = setTimeout(this.continue, this.timeout);
+      this.nextStageStart = new Date().getTime() + this.timeout;
     } else if (this.roundStage === ROUND_STAGES.incrementScore) {
       this.roundStage = ROUND_STAGES.playBlackCard;
       this.timeoutId = setTimeout(this.continue, roundEndDelay);
+      this.nextStageStart = new Date().getTime() + roundEndDelay;
     }
   }
 
-  sendDataToUsers (dataType, data) {
-    socketHandler.respondToUsersByEmail(this.users.getCurrentUsers(), dataType, data);
-  }
-
+  // TODO - Return actual cards that others have played
   getState (currentUser) {
-    let playerCurrentWhiteCard = this.whiteCardDeck.currentCards[currentUser.email] || null;
-    let numOtherWhiteCardsPlayed = Object.keys(this.whiteCardDeck.currentCards).length;
-    if (playerCurrentWhiteCard) {
-      numOtherWhiteCardsPlayed--;
-    }
+    let whiteCardsPlayed = {};
+    Object.keys(this.whiteCardDeck.currentCards).forEach((email) => {
+      whiteCardsPlayed[email] = email === currentUser.email || this.roundStage !== ROUND_STAGES.playWhiteCards ? this.whiteCardDeck.currentCards[email] : true;
+    });
 
-    let otherPlayers = this.users.getAllUsers().filter((user) => {
+    let otherPlayers = this.players.getAllUsers().filter((user) => {
       return user.email !== currentUser.email;
     });
 
     return {
-      hand: this.users.getHand(currentUser),
+      hand: this.players.getHand(currentUser),
       currentBlackCard: this.blackCardDeck.currentCard,
-      playerCurrentWhiteCard,
-      numOtherWhiteCardsPlayed,
-      currentJudge: this.users.getJudge(),
-      currentOwner: this.users.getOwner(),
+      whiteCardsPlayed,
+      currentJudge: this.players.getJudge(),
+      currentOwner: this.players.getOwner(),
       otherPlayers,
-      roundStage: ROUND_NAMES[this.roundStage] || 'Not running'
+      roundStage: ROUND_NAMES[this.roundStage],
+      nextStageStart: this.nextStageStart,
+      isRunning: this.isRunning()
     };
+  }
+
+  // Returns basic game state with no card info or player-specific data
+  // TODO - Write tests for this function
+  get () {
+    return {
+      name: this.name,
+      owner: this.players.getOwner(),
+      judge: this.players.getJudge(),
+      players: this.players.getAllUsers(),
+      isRunning: this.isRunning()
+    }
   }
 }
 

@@ -1,5 +1,3 @@
-// TODO - Handle cards that have commas in the card text
-
 module.exports.parse = (string) => {
   let cards = [];
   let cardStrings = string.split(/\r\n\r\n/);
@@ -33,10 +31,18 @@ module.exports.parse = (string) => {
   return cards;
 };
 
-// TODO - Write tests for this
 module.exports.stringify = (cards) => {
+  if (!cards || cards.constructor !== Array) {
+    throw new Error('Cards must be an array');
+  }
   let cardString = '';
   cards.forEach((card, i) => {
+    if (!card.text) {
+      throw new Error('Card is missing \'text\' property');
+    }
+    if (!card.type) {
+      throw new Error('Card is missing \'type\' property');
+    }
     cardString += card.text + '\r\n' + card.type + (card.answerFields ? '\r\n' + card.answerFields : '');
     if (i + 1 < cards.length) {
       cardString += '\r\n\r\n';

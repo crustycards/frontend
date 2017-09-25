@@ -20,12 +20,16 @@ module.exports = (socketHandler) => {
     })
     .post(isLoggedIn, (req, res) => {
       // Create new game
-      games.createGame({creator: req.user, gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
-        .then((game) => {
-          res.json(game);
-        })
-        .catch((err) => {
-          res.status(500).json(err);
+      db.User.getById(req.user.id)
+        .then((user) => {
+          games.createGame({creator: user, gameName: req.body.gameName, cardpackIds: req.body.cardpackIds, timeout: req.body.timeout, maxPlayers: req.body.maxPlayers})
+            .then((game) => {
+              res.json('success');
+              socketHandler.respondToAllUsers('gamecreate', game);
+            })
+            .catch((err) => {
+              res.status(500).json(err);
+            });
         });
     });
   
@@ -38,7 +42,7 @@ module.exports = (socketHandler) => {
       res.status(500).send(err);
     }
   });
-  router.post('/leave', isLoggedIn, (req, res) => {
+  router.post('/current/leave', isLoggedIn, (req, res) => {
     // Leave game that user is currently in
     try {
       let data = games.leaveGame(req.user);
@@ -53,6 +57,15 @@ module.exports = (socketHandler) => {
     try {
       let state = games.getStateFor(req.user);
       res.json(state);
+    } catch (err) {
+      res.status(500).send(err);
+    }
+  });
+
+  router.post('/current/card', isLoggedIn, (req, res) => {
+    try {
+      games.playCard(req.user, req.body);
+      res.json('success');
     } catch (err) {
       res.status(500).send(err);
     }

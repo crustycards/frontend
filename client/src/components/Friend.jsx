@@ -1,9 +1,7 @@
 import React from 'react';
 import axios from 'axios';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 class Friend extends React.Component {
   constructor (props) {
@@ -19,7 +17,7 @@ class Friend extends React.Component {
     return (
       <Card className='card'>
         <CardHeader
-          title={this.props.user.firstname + ' ' + this.props.user.lastname}
+          title={this.props.user.name}
           subtitle={this.props.user.email}
         />
         <CardActions>

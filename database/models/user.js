@@ -1,5 +1,6 @@
 const db = require('../connection');
 const Sequelize = require('sequelize');
+const maxThemeId = 4; // Defines number of client-side themes that exist
 
 const UserModel = db.define('users', {
   id: {
@@ -11,12 +12,7 @@ const UserModel = db.define('users', {
     type: Sequelize.STRING,
     unique: true
   },
-  firstname: {
-    type: Sequelize.STRING,
-    notEmpty: true,
-    allowNull: false
-  },
-  lastname: {
+  name: {
     type: Sequelize.STRING,
     notEmpty: true,
     allowNull: false
@@ -29,6 +25,10 @@ const UserModel = db.define('users', {
   },
   password: {
     type: Sequelize.STRING
+  },
+  themeId: {
+    type: Sequelize.INTEGER(2),
+    defaultValue: 1
   }
 });
 
@@ -39,39 +39,39 @@ let User = {model: UserModel};
 //
 // Exceptions:
 // 1. userEmail does not map to any existing users
-User.getByEmail = (userEmail) => {
+User.getByEmail = (email) => {
   return User.model.findOne({
-    where: {
-      email: userEmail
+    where: {email},
+    attributes: {
+      exclude: ['password']
     }
   })
-    .then((userData) => {
-      if (!userData) {
-        return new Promise((resolve, reject) => {
-          reject('No user is registered under ' + userEmail);
-        });
-      } else {
-        delete userData.dataValues.password; // Prevents password from being sent over http/sockets
-        return userData.dataValues;
+    .then((user) => {
+      if (!user) {
+        return Promise.reject('User does not exist');
       }
+      return user;
+    });
+};
+
+User.changeTheme = (userId, themeId) => {
+  if (!themeId || themeId.constructor !== Number || themeId < 0 || themeId > maxThemeId) {
+    return Promise.reject('Theme ID must be a number between zero and ' + maxThemeId);
+  }
+  return User.getById(userId)
+    .then((user) => {
+      return user.update({themeId});
     });
 };
 
 User.getById = (userId) => {
-  return User.model.findOne({
-    where: {
-      id: userId
+  return User.model.findById(userId, {
+    attributes: {
+      exclude: ['password']
     }
   })
-    .then((userData) => {
-      if (!userData) {
-        return new Promise((resolve, reject) => {
-          reject('No user has ID ' + userId);
-        });
-      } else {
-        delete userData.dataValues.password;
-        return userData.dataValues;
-      }
+    .then((user) => {
+      return user ? user : Promise.reject('User does not exist');
     });
 };
 

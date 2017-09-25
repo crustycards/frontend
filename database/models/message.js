@@ -10,6 +10,7 @@ const MessageModel = db.define('messages', {
   },
   text: {
     type: Sequelize.STRING,
+    notEmpty: true,
     allowNull: false
   }
 });
@@ -26,9 +27,7 @@ let Message = {model: MessageModel};
 // 3. text is null/undefined/emptystring/notastring
 Message.create = (senderEmail, receiverEmail, text) => {
   if (!text || text.constructor !== String) {
-    return new Promise((resolve, reject) => {
-      reject('Expected message text to be a non-empty string');
-    });
+    return Promise.reject('Expected message text to be a non-empty string');
   }
 
   return User.getByEmail(senderEmail)

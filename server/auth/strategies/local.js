@@ -15,36 +15,34 @@ module.exports = (passport, userModel) => {
       };
 
       User.findOne({
-        where: {
-          email: email
-        }
-      }).then((user) => {
-        if (user) {
-          return done(null, false, {
-            message: 'Email is already in use'
-          });
-        } else {
-          let userPassword = generateHash(password);
-          let data = {
-            email: email,
-            password: userPassword,
-            firstname: req.body.firstname,
-            lastname: req.body.lastname
-          };
-          User.create(data).then((newUser, created) => {
-            if (!newUser) {
-              return done(null, false);
-            } else {
-              return done(null, newUser);
-            }
-          })
-            .catch((err) => {
-              return done(null, false, {
-                message: 'Email is invalid'
-              });
+        where: {email}
+      })
+        .then((user) => {
+          if (user) {
+            return done(null, false, {
+              message: 'Email is already in use'
             });
-        }
-      });
+          } else {
+            let data = {
+              email,
+              password: generateHash(password),
+              name: req.body.name
+            };
+            User.create(data)
+              .then((newUser, created) => {
+                if (!newUser) {
+                  return done(null, false);
+                } else {
+                  return done(null, newUser);
+                }
+              })
+              .catch((err) => {
+                return done(null, false, {
+                  message: 'Email is invalid'
+                });
+              });
+          }
+        });
     }
   ));
 
@@ -65,6 +63,7 @@ module.exports = (passport, userModel) => {
         }
       })
         .then((user) => {
+          // TODO - Lines 73 and 78, make then have the same message
           if (!user) {
             return done(null, false, {
               message: 'Email does not exist'
@@ -77,8 +76,9 @@ module.exports = (passport, userModel) => {
           }
           let userInfo = user.get();
           return done(null, userInfo);
-        }).catch((err) => {
-          console.log('Error: ' + err);
+        })
+        .catch((err) => {
+          console.error('Error: ' + err);
           return done(null, false, {
             message: 'Something went wrong with your sign-in'
           });
