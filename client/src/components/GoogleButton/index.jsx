@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import pressed from './pressed.png';
 import unpressed from './unpressed.png';
 
-class GoogleButton extends React.Component {
+class GoogleButton extends Component {
   constructor (props) {
     super(props);
     this.onClick = this.onClick.bind(this);

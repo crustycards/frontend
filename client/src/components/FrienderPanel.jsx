@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { TextField, RaisedButton } from 'material-ui';
 import helpers from '../helpers';
 
-class FrienderPanel extends React.Component {
+class FrienderPanel extends Component {
   constructor (props) {
     super(props);
     this.state = {

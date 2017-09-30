@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 
-class FriendRequest extends React.Component {
+class FriendRequest extends Component {
   constructor (props) {
     super(props);
     this.accept = this.accept.bind(this);
