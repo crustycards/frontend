@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-class GameList extends React.Component {
+class GameList extends Component {
   constructor (props) {
     super(props);
     this.state = {

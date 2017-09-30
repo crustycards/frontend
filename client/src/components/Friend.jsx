@@ -3,29 +3,20 @@ import axios from 'axios';
 import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 
-class Friend extends React.Component {
-  constructor (props) {
-    super(props);
-    this.remove = this.remove.bind(this);
-  }
+const remove = (email) => {
+  axios.delete('/api/friends', {data: {user: email}});
+};
 
-  remove () {
-    axios.delete('/api/friends', {data: {user: this.props.user.email}});
-  }
-
-  render () {
-    return (
-      <Card className='card'>
-        <CardHeader
-          title={this.props.user.name}
-          subtitle={this.props.user.email}
-        />
-        <CardActions>
-          <FlatButton label='Unfriend' onClick={this.remove} />
-        </CardActions>
-      </Card>
-    );
-  }
-}
+const Friend = (props) => (
+  <Card className='card'>
+    <CardHeader
+      title={props.user.name}
+      subtitle={props.user.email}
+    />
+    <CardActions>
+      <FlatButton label='Unfriend' onClick={remove.bind(null, props.user.email)} />
+    </CardActions>
+  </Card>
+);
 
 export default Friend;

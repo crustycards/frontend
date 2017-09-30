@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
@@ -8,7 +8,7 @@ import COHCard from '../COHCard.jsx';
 import fileSelect from 'file-select';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 
-class CardpackViewer extends React.Component {
+class CardpackViewer extends Component {
   constructor (props) {
     super(props);
     this.numCardsOnTab = 20;
