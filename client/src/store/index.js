@@ -5,14 +5,15 @@ import thunk from 'redux-thunk';
 import rootReducer from './modules';
 import io from 'socket.io-client';
 const socket = io();
+const gameSocket = io(window.__PRELOADED_DATA__.gameURL);
 const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
-
 
 const initialState = {
   ...window.__PRELOADED_STATE__,
   global: {
     ...window.__PRELOADED_STATE__.global,
-    socket
+    socket,
+    gameSocket
   }
 };
 const enhancers = [];
