@@ -15,6 +15,8 @@ const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 const compression = require('compression');
 
+const gameURL = process.env.GAME_URL || "http://localhost:8000"
+
 const shouldCompress = (req, res) => {
   if (req.headers['x-no-compression']) {
     // don't compress responses with this request header 
@@ -24,53 +26,6 @@ const shouldCompress = (req, res) => {
   // fallback to standard filter function 
   return compression.filter(req, res)
 }
-
-// TODO - Remove this variable
-const fakeGame = {
-  hand: [
-    {id: 54, text: 'cardOne', type: 'white'},
-    {id: 34, text: 'cardTwo', type: 'white'},
-    {id: 48, text: 'cardThree', type: 'white'},
-    {id: 2, text: 'cardFour', type: 'white'},
-    {id: 75, text: 'cardFive', type: 'white'}
-  ],
-  currentBlackCard: {id: 555, text: 'blackCard', type: 'black', answerFields: 2},
-  whiteCardsPlayed: [],
-  judgeId: 420,
-  ownerId: 20,
-  players: [
-    {
-      id: 420,
-      name: 'Alec',
-      email: 'alec@gmail.com'
-    },
-    {
-      id: 20,
-      name: 'Tommy',
-      email: 'tommy@gmail.com'
-    },
-    {
-      id: 75,
-      name: 'Jesse',
-      email: 'jesse@gmail.com'
-    },
-    {
-      id: 4,
-      name: 'Steve',
-      email: 'steve@gmail.com'
-    },
-    {
-      id: 2,
-      name: 'Joey',
-      email: 'joey@gmail.com'
-    }
-  ],
-  roundStage: 'card play phase',
-  nextStageStart: new Date().getTime(),
-  isRunning: true,
-  name: `Tommy's Game`,
-  maxPlayers: 8
-};
 
 // Create session store
 let store = new Store({db: db.connection});
@@ -126,11 +81,25 @@ app.get('/*', (req, res) => {
       .then((cardpacks) => {
         db.Friend.get(req.user.email)
           .then((friendData) => {
-            res.render('index', {user: JSON.stringify(req.user), game: JSON.stringify(fakeGame), cardpacks: JSON.stringify(cardpacks), friends: JSON.stringify(friendData.friends), requestsSent: JSON.stringify(friendData.requestsSent), requestsReceived: JSON.stringify(friendData.requestsReceived)});
+            res.render('index', {
+              user: JSON.stringify(req.user),
+              gameURL: JSON.stringify(gameURL),
+              cardpacks: JSON.stringify(cardpacks),
+              friends: JSON.stringify(friendData.friends),
+              requestsSent: JSON.stringify(friendData.requestsSent),
+              requestsReceived: JSON.stringify(friendData.requestsReceived)
+            });
           });
       });
   } else {
-    res.render('index', {user: JSON.stringify(null), game: JSON.stringify(null), cardpacks: '[]', friends: '[]', requestsSent: '[]', requestsReceived: '[]'});
+    res.render('index', {
+      user: JSON.stringify(null),
+      gameURL: JSON.stringify(gameURL),
+      cardpacks: '[]',
+      friends: '[]',
+      requestsSent: '[]',
+      requestsReceived: '[]'
+    });
   }
 });
 
