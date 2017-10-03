@@ -27,9 +27,7 @@ const initialState = {
 export default (state = initialState, {type, payload}) => {
   switch (type) {
   case SET_GAME_STATE:
-    return {
-      ...payload
-    };
+    return payload;
   case SET_BLACK_CARD:
     return {
       ...state,

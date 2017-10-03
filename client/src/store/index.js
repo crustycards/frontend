@@ -7,6 +7,7 @@ import io from 'socket.io-client';
 const socket = io();
 const gameSocket = io(window.__PRELOADED_DATA__.gameURL);
 const socketIoMiddleware = createSocketIoMiddleware(socket, 'server/');
+const socketIoMiddlewareGame = createSocketIoMiddleware(gameSocket, 'gameserver/');
 
 const initialState = {
   ...window.__PRELOADED_STATE__,
@@ -19,7 +20,8 @@ const initialState = {
 const enhancers = [];
 const middleware = [
   thunk,
-  socketIoMiddleware
+  socketIoMiddleware,
+  socketIoMiddlewareGame
 ];
 
 // This block of code hooks up Redux DevTools if exists
