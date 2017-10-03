@@ -26,6 +26,7 @@ export default (state = initialState, {type, payload}) => {
   }
 };
 
+// TODO - Change endpoint to communicate with Go server
 export const fetchGames = () => {
   return (dispatch, getState) => {
     axios.get('/api/games')
@@ -46,6 +47,7 @@ export const fetchGames = () => {
  * Game name
  * cardpacks array
  */
+// TODO - Change endpoint to communicate with Go server
 export const createGame = ({gameName, cardpackIds}) => {
   return (dispatch, getState) => {
     axios.post('/api/games', {

@@ -1,6 +1,7 @@
 /**
  * TYPES
  */
+export const SET_GAME_STATE = 'game/SET_GAME_STATE';
 export const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
 export const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
 export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
@@ -10,11 +11,14 @@ export const ADD_PLAYER = 'game/ADD_PLAYER';
 export const PLAY_CARD = 'game/PLAY_CARD';
 
 const initialState = {
+  name: null,
   blackCard: null,
   whiteCards: [],
-  gameName: undefined,
+  judgeId: null,
+  ownerId: null,
   players: [],
-  hand: []
+  hand: [],
+  roundPhase: null
 };
 
 /**
@@ -22,6 +26,10 @@ const initialState = {
  */
 export default (state = initialState, {type, payload}) => {
   switch (type) {
+  case SET_GAME_STATE:
+    return {
+      ...payload
+    };
   case SET_BLACK_CARD:
     return {
       ...state,
@@ -32,20 +40,20 @@ export default (state = initialState, {type, payload}) => {
       ...state,
       whiteCards: payload
     };
-  case ADD_WHITE_CARD: 
+  case ADD_WHITE_CARD:
     return {
       ...state,
       whiteCards: state.game.whiteCards.concat([payload])
     };
-  case SET_HAND: 
+  case SET_HAND:
     return {
       ...state,
       hand: payload
     };
-  case ADD_CARD_TO_HAND: 
+  case ADD_CARD_TO_HAND:
     return {
       ...state,
-      hand: state.game.hand.concat([payload]) 
+      hand: state.game.hand.concat([payload])
     };
   case ADD_PLAYER:
     return {
@@ -68,44 +76,7 @@ export default (state = initialState, {type, payload}) => {
   }
 };
 
-
-/**
- * Dispatcher 
- * @param {any} payload 
- */
-export const setBlackCard = payload => ({
-  type: SET_BLACK_CARD,
-  payload
-});
-
-export const setWhiteCards = payload => ({
-  type: SET_WHITE_CARDS,
-  payload
-});
-
-export const addWhiteCard = payload => ({
-  type: ADD_WHITE_CARD,
-  payload
-});
-
-export const setHand = payload => ({
-  type: SET_HAND,
-  payload
-});
-
-export const addCardToHand = payload => ({
-  type: ADD_CARD_TO_HAND,
-  payload
-});
-
-export const addPlayer = payload => ({
-  type: ADD_PLAYER,
-  payload
-});
-
 export const playCard = payload => ({
   type: PLAY_CARD,
   payload
 });
-
-
