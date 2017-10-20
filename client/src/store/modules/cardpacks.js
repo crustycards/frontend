@@ -3,6 +3,8 @@
  */
 import axios from 'axios';
 
+// TODO - Switch client to use this instead of cardpacks in global section of state
+
 const SET_CARDPACKS = 'cardpacks/SET_CARDPACKS';
 
 const initialState = {
