@@ -27,7 +27,7 @@ const UserModel = db.define('users', {
     type: Sequelize.STRING
   },
   themeId: {
-    type: Sequelize.INTEGER(2),
+    type: Sequelize.INTEGER,
     defaultValue: 1
   }
 });

@@ -51,6 +51,7 @@
     "passport-google-oauth2": "^0.1.6",
     "passport-local": "^1.0.0",
     "passport.socketio": "^3.7.0",
+    "pg": "^7.3.0",
     "pug": "^2.0.0-rc.4",
     "query-string": "^5.0.0",
     "react": "^15.4.2",
