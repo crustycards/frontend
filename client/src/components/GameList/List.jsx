@@ -4,47 +4,28 @@ import { FlatButton } from 'material-ui';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-class GameList extends Component {
-  constructor (props) {
-    super(props);
-    this.state = {
-      games: []
-    };
-    props.socket.on('gamecreate', (game) => {
-      this.setState({games: [...this.state.games, game]});
-    });
-    axios.get('/api/games')
-      .then((response) => {
-        let games = response.data;
-        console.log('Games', games);
-        this.setState({games});
-      });
-  }
+const GameList = (props) => (
+  <div>
+    <div>This is the game list</div>
+    {props.games.map((game, index) => {
+      return (
+        <Card key={index} className='card'>
+          <CardHeader
+            title={game.name}
+            subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
+          />
+          <CardActions>
+            <FlatButton label='Join' onClick={() => {props.socket.emit('join', game.name)}} />
+          </CardActions>
+        </Card>
+      );
+    })}
+  </div>
+);
 
-  render () {
-    return (
-      <div>
-        <div>This is the game list</div>
-        {this.state.games.map((game, index) => {
-          return (
-            <Card key={index} className='card'>
-              <CardHeader
-                title={game.name}
-                subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
-              />
-              <CardActions>
-                <FlatButton label='Join' onClick={console.log} />
-              </CardActions>
-            </Card>
-          );
-        })}
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = ({global}) => ({
-  socket: global.socket
+const mapStateToProps = (state) => ({
+  socket: state.global.socket,
+  games: state.games
 });
 
 export default connect(mapStateToProps)(GameList);
