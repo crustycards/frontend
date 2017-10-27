@@ -13,9 +13,7 @@ import {
   SET_CURRENT_USER
 } from '../store/modules/home';
 
-import {
-  removeFriend
-} from '../store/modules/home.js';
+import { removeFriend } from '../store/modules/home.js';
 
 class Home extends Component {
   constructor(props) {

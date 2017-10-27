@@ -25,15 +25,3 @@ export default (state = initialState, {type, payload}) => {
     return state;
   }
 };
-
-export const updateList = (socket) => {
-  return (dispatch, getState) => {
-    // TODO - Hook up to gameServerInterface
-  };
-};
-
-export const createGame = ({gameName, cardpackIds}) => {
-  return (dispatch, getState) => {
-    // TODO - Hook up to gameServerInterface
-  };
-};
