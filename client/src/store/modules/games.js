@@ -1,67 +1,39 @@
 import axios from 'axios';
 
-export const FETCH_GAMES = 'games/FETCH_GAMES';
-export const SET_CARDPACKS = 'games/SET_CARDPACKS';
+export const ADD_GAME = 'games/ADD_GAME';
+export const REMOVE_GAME = 'games/REMOVE_GAME';
 export const SET_GAMES = 'games/SET_GAMES';
 
-const initialState = {
-  games: [],
-  cardPacks: [],
-};
+const initialState = [];
 
 export default (state = initialState, {type, payload}) => {
   switch (type) {
-  case FETCH_GAMES:
-    return {
+  case ADD_GAME:
+    return [
       ...state,
-      games: payload
-    };
-  case FETCH_GAMES:
-    return {
-      ...state,
-      games: payload
-    };
+      payload
+    ];
+  case REMOVE_GAME:
+    return state.filter((game) => {
+      return game.name != payload;
+    });
+  case SET_GAMES:
+    return [
+      ...payload
+    ];
   default:
     return state;
   }
 };
 
-// TODO - Change endpoint to communicate with Go server
-export const fetchGames = () => {
+export const updateList = (socket) => {
   return (dispatch, getState) => {
-    axios.get('/api/games')
-      .then(({data}) => {
-        console.log(data);
-        dispatch({
-          type: FETCH_GAMES,
-          payload: data, 
-        });
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    // TODO - Hook up to gameServerInterface
   };
 };
 
-/**
- * Game name
- * cardpacks array
- */
-// TODO - Change endpoint to communicate with Go server
 export const createGame = ({gameName, cardpackIds}) => {
   return (dispatch, getState) => {
-    axios.post('/api/games', {
-      gameName,
-      cardpackIds
-    })
-      .then(({data}) => {
-        dispatch({
-          type: SET_GAMES,
-          payload: data, 
-        });
-      })
-      .catch(err => {
-        console.error(err);
-      });
+    // TODO - Hook up to gameServerInterface
   };
 };

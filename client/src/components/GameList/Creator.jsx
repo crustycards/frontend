@@ -29,10 +29,11 @@ class GameCreator extends Component {
   }
 
   handleSubmit(e) {
-    axios.post('/api/games', {
+    let gameData = {
       gameName: this.state.gameName,
       cardpackIds: this.state.cardpacksSelected
-    });
+    };
+    // TODO - Hook up to gameServerInterface
   }
 
   render() {
