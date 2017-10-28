@@ -1,7 +1,6 @@
 import { createStore, applyMiddleware, compose } from 'redux';
 import { routerMiddleware } from 'react-router-redux';
 import createSocketIoMiddleware from 'redux-socket.io';
-import thunk from 'redux-thunk';
 import rootReducer from './modules';
 import io from 'socket.io-client';
 import { socket as gameSocket } from '../gameServerInterface';
@@ -20,7 +19,6 @@ const initialState = {
 };
 const enhancers = [];
 const middleware = [
-  thunk,
   socketIoMiddleware,
   socketIoMiddlewareGame
 ];
