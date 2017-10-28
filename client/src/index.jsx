@@ -16,6 +16,7 @@ import Game from './pages/Game.jsx';
 import GameList from './pages/GameList.jsx';
 import Settings from './pages/Settings.jsx';
 import Navbar from './components/Navbar.jsx';
+import StatusBar from './components/StatusBar.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import './styles.css';
 import { Router, Route, browserHistory, Switch } from 'react-router';
@@ -27,6 +28,7 @@ render(
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <div>
           <Navbar/>
+          <StatusBar/>
           <Switch>
             <Route exact path='/' component={Home}/>
             <Route exact path='/cardpacks' component={Cardpacks}/>
