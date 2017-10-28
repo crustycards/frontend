@@ -15,7 +15,7 @@ const initialState = {
     ...window.__PRELOADED_STATE__.global,
     socket,
     statusMessage: '',
-    statusVisible: true
+    statusVisible: false
   }
 };
 const enhancers = [];

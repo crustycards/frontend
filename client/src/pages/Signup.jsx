@@ -2,10 +2,11 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
+import { showStatusMessage } from '../store/modules/global';
 
 class Signup extends Component {
   constructor(props) {
@@ -13,15 +14,11 @@ class Signup extends Component {
     this.state = {
       name: '',
       email: '',
-      password: '',
-      errorMessage: '',
-      showError: false
+      password: ''
     }
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.sendSignupRequest = this.sendSignupRequest.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.showError = this.showError.bind(this);
-    this.hideError = this.hideError.bind(this);
+    this.sendSignupRequest = this.sendSignupRequest.bind(this);
     if (props.currentUser) {
       props.history.push('/');
     }
@@ -51,8 +48,7 @@ class Signup extends Component {
         return res;
       })
       .catch((err) => {
-        this.setState({errorMessage: 'Email is invalid or already in use'});
-        this.showError();
+        this.props.showStatusMessage('Email is invalid or already in use');
       });
     } else {
       let missingVals = [];
@@ -75,16 +71,8 @@ class Signup extends Component {
           errorString += ', ' + missingVals[i];
         }
       }
-      this.setState({errorMessage: errorString});
-      this.showError();
+      this.props.showStatusMessage(errorString);
     }
-  }
-
-  showError () {
-    this.setState({showError: true});
-  }
-  hideError () {
-    this.setState({showError: false});
   }
 
   render() {
@@ -99,7 +87,6 @@ class Signup extends Component {
         <NavLink to='/login' style={navItemStyle}>
           <FlatButton className='btn'>Login</FlatButton>
         </NavLink>
-        <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
       </div>
     ) 
   }
@@ -109,4 +96,8 @@ const mapStateToProps = ({global}) => ({
   currentUser: global.currentUser
 });
 
-export default connect(mapStateToProps)(Signup);
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  showStatusMessage
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);

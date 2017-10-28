@@ -2,27 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import GoogleButton from '../components/GoogleButton/index.jsx';
 import TextField from 'material-ui/TextField';
 import RaisedButton from 'material-ui/RaisedButton';
 import FlatButton from 'material-ui/FlatButton';
-import Snackbar from 'material-ui/Snackbar';
-import helpers from '../helpers';
+import { showStatusMessage } from '../store/modules/global';
 
 class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
       email: '',
-      password: '',
-      errorMessage: '',
-      showError: false
+      password: ''
     }
     this.handleInputChange = this.handleInputChange.bind(this);
-    this.sendLoginRequest = this.sendLoginRequest.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.showError = this.showError.bind(this);
-    this.hideError = this.hideError.bind(this);
+    this.sendLoginRequest = this.sendLoginRequest.bind(this);
     if (props.currentUser) {
       props.history.push('/');
     }
@@ -51,8 +47,7 @@ class Login extends Component {
         return res;
       })
       .catch((err) => {
-        this.setState({errorMessage: 'Incorrect email or password'});
-        this.showError();
+        this.props.showStatusMessage('Incorrect email or password');
       });
     } else {
       let missingVals = [];
@@ -72,16 +67,8 @@ class Login extends Component {
           errorString += ', ' + missingVals[i];
         }
       }
-      this.setState({errorMessage: errorString});
-      this.showError();
+      this.props.showStatusMessage(errorString);
     }
-  }
-
-  showError () {
-    this.setState({showError: true});
-  }
-  hideError () {
-    this.setState({showError: false});
   }
 
   googleOAuthRedirect () {
@@ -91,7 +78,7 @@ class Login extends Component {
   render() {
     const navItemStyle = {textDecoration: 'none'};
     return (
-      <div className='login center' style={{zoom: helpers.isMobile() ? '180%' : '100%'}}>
+      <div className='login center'>
         <h1>Login</h1>
         <TextField onKeyPress={this.handleKeyPress} hintText='hello@world.com' floatingLabelText='Email' type='email' value={this.state.email} onChange={this.handleInputChange.bind(this, 'email')} /><br/>
         <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Password' type='password' value={this.state.password} onChange={this.handleInputChange.bind(this, 'password')} /><br/>
@@ -100,7 +87,6 @@ class Login extends Component {
           <FlatButton className='btn'>Sign Up</FlatButton><br/>
         </NavLink>
         <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
-        <Snackbar open={this.state.showError} message={this.state.errorMessage} autoHideDuration={4000} onRequestClose={this.hideError} />
       </div>
     ) 
   }
@@ -110,4 +96,8 @@ const mapStateToProps = ({global}) => ({
   currentUser: global.currentUser
 });
 
-export default connect(mapStateToProps)(Login);
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  showStatusMessage
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);
