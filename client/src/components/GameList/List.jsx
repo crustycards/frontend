@@ -7,19 +7,17 @@ import axios from 'axios';
 const GameList = (props) => (
   <div>
     <div>This is the game list</div>
-    {props.games.map((game, index) => {
-      return (
-        <Card key={index} className='card'>
-          <CardHeader
-            title={game.name}
-            subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
-          />
-          <CardActions>
-            <FlatButton label='Join' onClick={() => {props.socket.emit('join', game.name)}} />
-          </CardActions>
-        </Card>
-      );
-    })}
+    {props.games.map((game, index) => (
+      <Card key={index} className='card'>
+        <CardHeader
+          title={game.name}
+          subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
+        />
+        <CardActions>
+          <FlatButton label='Join' onClick={() => {props.socket.emit('join', game.name)}} />
+        </CardActions>
+      </Card>
+    ))}
   </div>
 );
 
