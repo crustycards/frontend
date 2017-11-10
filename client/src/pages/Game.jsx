@@ -13,7 +13,7 @@ const Game = (props) => (
     {props.game.name ?
     <div>
       <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
-        <COHCard card={props.game.currentBlackCard} />
+        {props.game.currentBlackCard ? <COHCard card={props.game.currentBlackCard} /> : null}
       </div>
       <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
         <div>Current game: {props.game.name}</div>
