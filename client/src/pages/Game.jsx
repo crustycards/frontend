@@ -5,6 +5,7 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import COHCard from '../components/COHCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
+import { leaveGame } from '../gameServerInterface';
 import axios from 'axios';
 
 // TODO - Redirect to game list if you are not in a game
@@ -17,7 +18,7 @@ const Game = (props) => (
       </div>
       <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
         <div>Current game: {props.game.name}</div>
-        <FlatButton label={'Leave game'} onClick={console.log} />
+        <FlatButton label={'Leave game'} onClick={leaveGame} />
       </div>
       <div className='bottom-left' style={{width: '25%', height: '50%', float: 'left'}}>
         <Divider/>
