@@ -64,6 +64,7 @@ export default (state = initialState, {type, payload}) => {
       return {
         ...state,
         hand: state.game.hand.filter(c => c !== payload),
+        // TODO - Potentially fix the line below
         whiteCards: state.game.whiteCards.concat([payload])
       };
     }
@@ -73,6 +74,11 @@ export default (state = initialState, {type, payload}) => {
     return state;
   }
 };
+
+export const setGameState = payload => ({
+  type: SET_GAME_STATE,
+  payload
+});
 
 export const playCard = payload => ({
   type: PLAY_CARD,

@@ -25,3 +25,8 @@ export default (state = initialState, {type, payload}) => {
     return state;
   }
 };
+
+export const setGameList = payload => ({
+  type: SET_GAMES,
+  payload
+});

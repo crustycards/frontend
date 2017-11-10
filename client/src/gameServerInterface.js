@@ -2,6 +2,7 @@ import io from 'socket.io-client';
 import ax from 'axios';
 import store from './store';
 import { setGameState } from './store/modules/game';
+import { setGameList } from './store/modules/games';
 const gameServerURL = window.__PRELOADED_DATA__.gameURL;
 const axios = ax.create({
   baseURL: gameServerURL,
@@ -23,7 +24,7 @@ export const createGame = (name, maxPlayers, cardpackIDs) => {
   return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
     .then((response) => {
       store.dispatch(setGameState(response.data));
-      return parseGameData(response.data);
+      return response.data;
     });
 };
 
@@ -32,14 +33,22 @@ export const createGame = (name, maxPlayers, cardpackIDs) => {
  * @param {string} gameName The game name
  */
 export const joinGame = (gameName) => {
-  return axios.post('/game/join', gameName);
+  return axios.post('/game/join', gameName)
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
 };
 
 /**
  * Leaves the current game
  */
 export const leaveGame = () => {
-  return axios.post('/game/leave');
+  return axios.post('/game/leave')
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
 };
 
 /**
@@ -49,7 +58,8 @@ export const leaveGame = () => {
 export const getGameState = () => {
   return axios.get('/game/state')
     .then((response) => {
-      return parseGameData(response.data);
+      store.dispatch(setGameState(response.data));
+      return response.data;
     });
 };
 
@@ -58,7 +68,11 @@ export const getGameState = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameList = () => {
-  return axios.get('/gamelist');
+  return axios.get('/gamelist')
+    .then((response) => {
+      store.dispatch(setGameList(response.data));
+      return response.data;
+    });
 };
 
 /**
@@ -84,12 +98,4 @@ export const kickPlayer = (playerID) => {
  */
 export const vote = (cardID) => {
   return axios.post('/game/vote');
-};
-
-
-const parseGameData = gameData => {
-  if (gameData.name === "") {
-    return null;
-  }
-  return gameData;
 };
