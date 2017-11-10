@@ -21,8 +21,9 @@ import { BrowserRouter } from 'react-router-dom';
 import './styles.css';
 import { Router, Route, browserHistory, Switch } from 'react-router';
 
-import { getGameState } from './gameServerInterface';
+import { getGameState, getGameList } from './gameServerInterface';
 getGameState();
+getGameList();
 
 render(
   <Provider store={store}>
