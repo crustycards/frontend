@@ -1,16 +1,23 @@
 import React, {Component} from 'react';
 import { bindActionCreators } from 'redux';
+import { createGame } from '../../gameServerInterface';
 import { connect } from 'react-redux';
-import { RaisedButton, TextField, Checkbox } from 'material-ui';
+import { RaisedButton, TextField, Checkbox, DropDownMenu, MenuItem } from 'material-ui';
 import axios from 'axios';
+import { setGameState } from '../../store/modules/game';
 
 class GameCreator extends Component {
   constructor(props) {
     super(props);
     this.state = {
       gameName: '',
+      maxPlayers: 8,
       cardpacksSelected: []
     };
+    this.maxPlayersDropdownItems = [];
+    for (let i = 4; i <= 20; i++) {
+      this.maxPlayersDropdownItems.push(<MenuItem value={i} key={i} primaryText={i}></MenuItem>);
+    }
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -28,12 +35,8 @@ class GameCreator extends Component {
     }
   }
 
-  handleSubmit(e) {
-    let gameData = {
-      gameName: this.state.gameName,
-      cardpackIds: this.state.cardpacksSelected
-    };
-    // TODO - Hook up to gameServerInterface
+  handleSubmit() {
+    createGame(this.state.gameName, this.state.maxPlayers, this.state.cardpacksSelected);
   }
 
   render() {
@@ -51,6 +54,9 @@ class GameCreator extends Component {
             value={this.state.gameName} 
             onChange={this.handleGameNameChange} 
           />
+          <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
+            {this.maxPlayersDropdownItems}
+          </DropDownMenu>
           {this.props.cardpacks.map(c => (
             <Checkbox
               key={c.id}
@@ -71,4 +77,8 @@ const mapStateToProps = ({global}) => ({
   cardpacks: global.cardpacks
 });
 
-export default connect(mapStateToProps)(GameCreator);
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  setGameState
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(GameCreator);
