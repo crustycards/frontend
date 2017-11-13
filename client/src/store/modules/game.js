@@ -10,16 +10,7 @@ export const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
 export const ADD_PLAYER = 'game/ADD_PLAYER';
 export const PLAY_CARD = 'game/PLAY_CARD';
 
-const initialState = {
-  name: null,
-  blackCard: null,
-  whiteCards: [],
-  judgeId: null,
-  ownerId: null,
-  players: [],
-  hand: [],
-  roundPhase: null
-};
+const initialState = null;
 
 /**
  * Reducer
