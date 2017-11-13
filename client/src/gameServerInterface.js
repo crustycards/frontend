@@ -28,6 +28,14 @@ export const createGame = (name, maxPlayers, cardpackIDs) => {
     });
 };
 
+export const startGame = () => {
+  return axios.post('/game/start')
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
+};
+
 /**
  * Adds user to the game with the given name
  * @param {string} gameName The game name
