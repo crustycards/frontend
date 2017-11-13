@@ -11,7 +11,7 @@ import axios from 'axios';
 // TODO - Redirect to game list if you are not in a game
 const Game = (props) => (
   <div>
-    {props.game.name ?
+    {props.game ?
     <div>
       <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
         {props.game.currentBlackCard ? <COHCard card={props.game.currentBlackCard} /> : null}
