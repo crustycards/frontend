@@ -3,6 +3,8 @@ import ax from 'axios';
 import store from './store';
 import { setGameState } from './store/modules/game';
 import { setGameList } from './store/modules/games';
+import { showStatusMessage } from './store/modules/global';
+
 const gameServerURL = window.__PRELOADED_DATA__.gameURL;
 const axios = ax.create({
   baseURL: gameServerURL,
@@ -10,6 +12,7 @@ const axios = ax.create({
   withCredentials: true
 });
 export const socket = io(gameServerURL);
+
 
 /**
  * Creates a new game session
@@ -19,12 +22,21 @@ export const socket = io(gameServerURL);
  */
 export const createGame = (name, maxPlayers, cardpackIDs) => {
   if (maxPlayers < 4 || maxPlayers > 20) {
-    return Promise.reject("Max players must be between 4 and 20");
+    return Promise.reject('Max players must be between 4 and 20');
+  }
+  if (!name) {
+    return Promise.reject('Game name cannot be blank');
+  }
+  if (!cardpackIDs.length) {
+    return Promise.reject('Must select at least one cardpack');
   }
   return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -33,6 +45,9 @@ export const startGame = () => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -45,6 +60,9 @@ export const joinGame = (gameName) => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -56,6 +74,9 @@ export const leaveGame = () => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -68,6 +89,9 @@ export const getGameState = () => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -80,6 +104,9 @@ export const getGameList = () => {
     .then((response) => {
       store.dispatch(setGameList(response.data));
       return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
