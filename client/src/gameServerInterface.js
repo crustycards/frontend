@@ -51,6 +51,17 @@ export const startGame = () => {
     });
 };
 
+export const stopGame = () => {
+  return axios.post('/game/stop')
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    });
+};
+
 /**
  * Adds user to the game with the given name
  * @param {string} gameName The game name
