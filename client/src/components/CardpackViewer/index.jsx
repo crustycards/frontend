@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
 import CardAdder from './CardAdder.jsx';
-import COHCard from '../COHCard.jsx';
+import CAHCard from '../CAHCard.jsx';
 import fileSelect from 'file-select';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 
@@ -147,7 +147,7 @@ class CardpackViewer extends Component {
       if (!card) {
         break;
       }
-      cards.push(<GridTile key={i}><COHCard card={card} isOwner={isOwner} showTime={true} /></GridTile>);
+      cards.push(<GridTile key={i}><CAHCard card={card} isOwner={isOwner} showTime={true} /></GridTile>);
     }
 
     return (

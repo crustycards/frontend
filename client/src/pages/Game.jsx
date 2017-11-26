@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FlatButton, Divider } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import COHCard from '../components/COHCard.jsx';
+import CAHCard from '../components/CAHCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
@@ -14,7 +14,7 @@ const Game = (props) => (
     {props.game ?
     <div>
       <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
-        {props.game.currentBlackCard ? <COHCard card={props.game.currentBlackCard} /> : null}
+        {props.game.currentBlackCard ? <CAHCard card={props.game.currentBlackCard} /> : null}
       </div>
       <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
         <div>Current game: {props.game.name}</div>

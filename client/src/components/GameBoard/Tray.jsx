@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { GridList } from 'material-ui/GridList';
 import { bindActionCreators } from 'redux';
-import Card from '../COHCard.jsx';
+import Card from '../CAHCard.jsx';
 const style = {
   width: '100%'
 };

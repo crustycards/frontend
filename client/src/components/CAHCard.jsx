@@ -6,7 +6,7 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import time from 'time-converter';
 import axios from 'axios';
 
-class COHCard extends Component {
+class CAHCard extends Component {
   constructor (props) {
     super(props);
     this.state = {};
@@ -86,4 +86,4 @@ class COHCard extends Component {
   }
 }
 
-module.exports = COHCard;
+module.exports = CAHCard;
