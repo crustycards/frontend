@@ -9,9 +9,10 @@ import axios from 'axios';
 class COHCard extends Component {
   constructor (props) {
     super(props);
-    this.state = {
-      time: this.getTime()
-    };
+    this.state = {};
+    if (props.showTime) {
+      this.state.time = this.getTime();
+    }
 
     this.removeCard = this.removeCard.bind(this);
     // If we have no playhandler register console.error to 
@@ -20,16 +21,20 @@ class COHCard extends Component {
   }
 
   componentDidMount() {
-    this.intervalId = setInterval(() => {
-      let time = this.getTime();
-      if (time !== this.state.time) {
-        this.setState({time});
-      }
-    }, 100);
+    if (this.props.showTime) {
+      this.intervalId = setInterval(() => {
+        let time = this.getTime();
+        if (time !== this.state.time) {
+          this.setState({time});
+        }
+      }, 100);
+    }
   }
 
   componentWillUnmount() {
-    clearInterval(this.intervalId);
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 
   getTime() {
@@ -45,7 +50,7 @@ class COHCard extends Component {
     cardElements.push(
       <CardHeader
         title={this.props.card.text + (this.props.card.answerFields && this.props.card.answerFields > 1 ? ' - ' + this.props.card.answerFields + ' card answer' : '')}
-        subtitle={this.state.time}
+        subtitle={this.props.showTime ? this.state.time : ""}
         key={0}
       />
     );

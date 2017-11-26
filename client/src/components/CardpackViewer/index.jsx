@@ -147,7 +147,7 @@ class CardpackViewer extends Component {
       if (!card) {
         break;
       }
-      cards.push(<GridTile key={i}><COHCard card={card} isOwner={isOwner} /></GridTile>);
+      cards.push(<GridTile key={i}><COHCard card={card} isOwner={isOwner} showTime={true} /></GridTile>);
     }
 
     return (
