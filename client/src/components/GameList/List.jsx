@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 import { connect } from 'react-redux';
+import { joinGame } from '../../gameServerInterface';
 import axios from 'axios';
 
 const GameList = (props) => (
@@ -14,7 +15,7 @@ const GameList = (props) => (
           subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
         />
         <CardActions>
-          <FlatButton label='Join' onClick={() => {props.socket.emit('join', game.name)}} />
+          <FlatButton label='Join' onClick={() => {joinGame(game.name)}} />
         </CardActions>
       </Card>
     ))}
@@ -22,7 +23,6 @@ const GameList = (props) => (
 );
 
 const mapStateToProps = (state) => ({
-  socket: state.global.socket,
   games: state.games
 });
 
