@@ -22,13 +22,19 @@ export const socket = io(gameServerURL);
  */
 export const createGame = (name, maxPlayers, cardpackIDs) => {
   if (maxPlayers < 4 || maxPlayers > 20) {
-    return Promise.reject('Max players must be between 4 and 20');
+    let message = 'Max players must be between 4 and 20';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
   }
   if (!name) {
-    return Promise.reject('Game name cannot be blank');
+    let message = 'Game name cannot be blank';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
   }
   if (!cardpackIDs.length) {
-    return Promise.reject('Must select at least one cardpack');
+    let message = 'Must select at least one cardpack';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
   }
   return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
     .then((response) => {
