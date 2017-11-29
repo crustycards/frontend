@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { FlatButton, Divider } from 'material-ui';
+import { FlatButton, RaisedButton, Divider } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CAHCard from '../components/CAHCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
+import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
 import axios from 'axios';
 
-// TODO - Redirect to game list if you are not in a game
 const Game = (props) => (
   <div>
     {props.game ?
@@ -31,7 +31,7 @@ const Game = (props) => (
       </div>
     </div>
     :
-    <div>Not in a game</div>}
+    <div className="center panel">You're not in a game. <NavLink to='/gamelist' style={{textDecoration: 'none'}}><RaisedButton label='See Games' /></NavLink></div>}
   </div>
 );
 
