@@ -97,7 +97,7 @@ class CardpackViewer extends Component {
       document.body.appendChild(element);
       element.click();
       document.body.removeChild(element);
-    }
+    };
     // Start file download.
     download(this.state.cardpack.name, cardpackFileHandler.stringify(this.state.cards));
   }
@@ -160,15 +160,15 @@ class CardpackViewer extends Component {
             {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
             <div className='center'>
               {this.state.cards.length > this.numCardsOnTab ?
-              <div>
-                <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-                <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
-              </div>
-              : null}
+                <div>
+                  <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
+                  <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
+                </div>
+                : null}
             </div>
             <GridList children={cards} cols={4} cellHeight='auto' />
           </div>
-        : null}
+          : null}
       </div>
     );
   }
