@@ -1,12 +1,19 @@
 import React from 'react';
 import Creator from '../components/GameList/Creator.jsx';
 import List from '../components/GameList/List.jsx';
+import Divider from 'material-ui/Divider';
+import { connect } from 'react-redux';
 
 const GameList = (props) => (
-  <div>
-    <Creator/>
-    <List/>
+  <div className='content-wrap'>
+    <div className='panel'>
+      <Creator/>
+      {props.games.length ? <Divider style={{marginTop: '10px', marginBottom: '10px'}} /> : null}
+      <List/>
+    </div>
   </div>
 );
 
-export default GameList;
+const mapStateToProps = ({games}) => ({games});
+
+export default connect(mapStateToProps)(GameList);
