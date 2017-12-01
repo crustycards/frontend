@@ -4,6 +4,7 @@ import { createGame } from '../../gameServerInterface';
 import { connect } from 'react-redux';
 import { RaisedButton, TextField, Checkbox, DropDownMenu, MenuItem } from 'material-ui';
 import axios from 'axios';
+import { List, ListItem } from 'material-ui/List';
 import { setGameState } from '../../store/modules/game';
 
 class GameCreator extends Component {
@@ -40,11 +41,6 @@ class GameCreator extends Component {
   }
 
   render() {
-    const styles = {
-      checkbox: {
-        marginBottom: 16,
-      }
-    };
     return (
       <div>
         <div>
@@ -57,15 +53,18 @@ class GameCreator extends Component {
           <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
             {this.maxPlayersDropdownItems}
           </DropDownMenu>
-          {this.props.cardpacks.map(c => (
-            <Checkbox
-              key={c.id}
-              label={c.name}
-              checked={this.state.cardpacksSelected.includes(c.id)}
-              onCheck={this.handleSelectChange.bind(this, c.id)}
-              style={styles.checkbox}
-            />
-          ))}
+          <List>
+            {this.props.cardpacks.map(c => (
+              <ListItem
+                key={c.id}
+                leftCheckbox={<Checkbox
+                  checked={this.state.cardpacksSelected.includes(c.id)}
+                  onCheck={this.handleSelectChange.bind(this, c.id)}
+                />}
+                primaryText={c.name}
+              />
+            ))}
+          </List>
           <RaisedButton type="submit" label="Submit" onClick={this.handleSubmit} />
         </div> 
       </div>
