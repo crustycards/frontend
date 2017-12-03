@@ -60,17 +60,17 @@ class CardAdder extends Component {
             <MenuItem value={'black'} primaryText='Black' />
           </DropDownMenu>
           {this.state.newCardType === 'black' ?
-          <SelectField
-            disabled={this.state.newCardType !== 'black'}
-            floatingLabelText="Answer Fields"
-            value={this.state.newCardAnswerFields}
-            onChange={this.changeAnswerField}
-          >
-            <MenuItem value={1} primaryText="One" />
-            <MenuItem value={2} primaryText="Two" />
-            <MenuItem value={3} primaryText="Three" />
-          </SelectField>
-          : null}
+            <SelectField
+              disabled={this.state.newCardType !== 'black'}
+              floatingLabelText='Answer Fields'
+              value={this.state.newCardAnswerFields}
+              onChange={this.changeAnswerField}
+            >
+              <MenuItem value={1} primaryText='One' />
+              <MenuItem value={2} primaryText='Two' />
+              <MenuItem value={3} primaryText='Three' />
+            </SelectField>
+            : null}
         </div>
       </div>
     );

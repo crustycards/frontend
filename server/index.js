@@ -15,17 +15,17 @@ const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 const compression = require('compression');
 
-const gameURL = process.env.GAME_URL || "http://localhost:8000"
+const gameURL = process.env.GAME_URL || 'http://localhost:8000';
 
 const shouldCompress = (req, res) => {
   if (req.headers['x-no-compression']) {
     // don't compress responses with this request header 
-    return false
+    return false;
   }
  
   // fallback to standard filter function 
-  return compression.filter(req, res)
-}
+  return compression.filter(req, res);
+};
 
 // Create session store
 let store = new Store({db: db.connection});
@@ -47,7 +47,7 @@ let app = express();
 app.set('views', __dirname + '/views');
 app.set('view engine', 'pug');
 
-app.use(compression({filter: shouldCompress}))
+app.use(compression({filter: shouldCompress}));
 
 // ---- MIDDLEWARE ----
 // Body parser

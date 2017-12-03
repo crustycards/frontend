@@ -27,7 +27,7 @@ getGameList();
 
 render(
   <Provider store={store}>
-    <BrowserRouter basename="/">
+    <BrowserRouter basename='/'>
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <div>
           <Navbar/>

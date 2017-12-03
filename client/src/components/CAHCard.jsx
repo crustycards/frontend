@@ -50,7 +50,7 @@ class CAHCard extends Component {
     cardElements.push(
       <CardHeader
         title={this.props.card.text + (this.props.card.answerFields && this.props.card.answerFields > 1 ? ' - ' + this.props.card.answerFields + ' card answer' : '')}
-        subtitle={this.props.showTime ? this.state.time : ""}
+        subtitle={this.props.showTime ? this.state.time : ''}
         key={0}
       />
     );
