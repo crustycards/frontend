@@ -12,26 +12,32 @@ import axios from 'axios';
 const Game = (props) => (
   <div>
     {props.game ?
-    <div>
-      <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
-        {props.game.currentBlackCard ? <CAHCard card={props.game.currentBlackCard} /> : null}
+      <div>
+        <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
+          {props.game.currentBlackCard ? <CAHCard card={props.game.currentBlackCard} /> : null}
+        </div>
+        <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
+          <div>Current game: {props.game.name}</div>
+          <FlatButton label={'Start game'} onClick={startGame} />
+          <FlatButton label={'Stop game'} onClick={stopGame} />
+          <FlatButton label={'Leave game'} onClick={leaveGame} />
+        </div>
+        <div className='bottom-left' style={{width: '25%', height: '50%', float: 'left'}}>
+          <Divider/>
+          <PlayerList/>
+        </div>
+        <div className='bottom-right' style={{width: '75%', height: '50%', float: 'left'}}>
+          <Tray/>
+        </div>
       </div>
-      <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
-        <div>Current game: {props.game.name}</div>
-        <FlatButton label={'Start game'} onClick={startGame} />
-        <FlatButton label={'Stop game'} onClick={stopGame} />
-        <FlatButton label={'Leave game'} onClick={leaveGame} />
+      :
+      <div className='content-wrap'>
+        <div className="center panel">You're not in a game. <NavLink to='/gamelist' style={{textDecoration: 'none'}}>
+          <RaisedButton label='See Games' />
+        </NavLink>
+        </div>
       </div>
-      <div className='bottom-left' style={{width: '25%', height: '50%', float: 'left'}}>
-        <Divider/>
-        <PlayerList/>
-      </div>
-      <div className='bottom-right' style={{width: '75%', height: '50%', float: 'left'}}>
-        <Tray/>
-      </div>
-    </div>
-    :
-    <div className="center panel">You're not in a game. <NavLink to='/gamelist' style={{textDecoration: 'none'}}><RaisedButton label='See Games' /></NavLink></div>}
+    }
   </div>
 );
 
