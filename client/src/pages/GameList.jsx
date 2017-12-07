@@ -8,7 +8,7 @@ const GameList = (props) => (
   <div className='content-wrap'>
     <div className='panel'>
       <Creator/>
-      {props.games.length ? <Divider style={{marginTop: '10px', marginBottom: '10px'}} /> : null}
+      <Divider style={{marginTop: '10px', marginBottom: '10px'}} />
       <List/>
     </div>
   </div>

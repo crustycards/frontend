@@ -43,30 +43,42 @@ class GameCreator extends Component {
   render() {
     return (
       <div>
-        <div>
-          <TextField
-            name='gameName'
-            floatingLabelText='Game Name'
-            value={this.state.gameName} 
-            onChange={this.handleGameNameChange} 
-          />
-          <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
-            {this.maxPlayersDropdownItems}
-          </DropDownMenu>
-          <List>
-            {this.props.cardpacks.map(c => (
-              <ListItem
-                key={c.id}
-                leftCheckbox={<Checkbox
-                  checked={this.state.cardpacksSelected.includes(c.id)}
-                  onCheck={this.handleSelectChange.bind(this, c.id)}
-                />}
-                primaryText={c.name}
-              />
-            ))}
-          </List>
-          <RaisedButton type="submit" label="Submit" onClick={this.handleSubmit} />
-        </div> 
+        <h2>Create Game</h2>
+        <div className='content-wrap'>
+          <div className='col-narrow center'>
+            <TextField
+              name='gameName'
+              floatingLabelText='Game Name'
+              value={this.state.gameName} 
+              onChange={this.handleGameNameChange} 
+            />
+            <br/>
+            <span>Max Players</span>
+            <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
+              {this.maxPlayersDropdownItems}
+            </DropDownMenu>
+          </div>
+          <div className='col-wide'>
+            <div className='subpanel'>
+              <h3>Cardpacks</h3>
+              <List>
+                {this.props.cardpacks.map(c => (
+                  <ListItem
+                    key={c.id}
+                    leftCheckbox={<Checkbox
+                      checked={this.state.cardpacksSelected.includes(c.id)}
+                      onCheck={this.handleSelectChange.bind(this, c.id)}
+                    />}
+                    primaryText={c.name}
+                  />
+                ))}
+              </List>
+            </div>
+          </div>
+        </div>
+        <div className='center'>
+          <RaisedButton type='submit' label='Submit' onClick={this.handleSubmit} />
+        </div>
       </div>
     );
   }

@@ -6,23 +6,27 @@ import { joinGame, leaveGame } from '../../gameServerInterface';
 import axios from 'axios';
 
 const GameList = (props) => (
-  <div>
-    {props.games.map((game, index) => (
-      <Card key={index} className='card'>
-        <CardHeader
-          title={game.name}
-          subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
-        />
-        <CardActions>
-          {
-            props.game && props.game.name === game.name ?
-              <FlatButton label='Leave' onClick={leaveGame} /> :
-              <FlatButton label='Join' onClick={() => {joinGame(game.name)}} />
-          }
-        </CardActions>
-      </Card>
-    ))}
-  </div>
+  props.games.length ?
+    <div>
+      <h2>Join Game</h2>
+      {props.games.map((game, index) => (
+        <Card key={index} className='card'>
+          <CardHeader
+            title={game.name}
+            subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
+          />
+          <CardActions>
+            {
+              props.game && props.game.name === game.name ?
+                <FlatButton label='Leave' onClick={leaveGame} /> :
+                <FlatButton label='Join' onClick={() => {joinGame(game.name)}} />
+            }
+          </CardActions>
+        </Card>
+      ))}
+    </div>
+    :
+    <div className='center'><span>There are no open games to join</span></div>
 );
 
 const mapStateToProps = ({game, games}) => ({
