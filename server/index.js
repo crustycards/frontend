@@ -15,7 +15,10 @@ const passportSocketIo = require('passport.socketio');
 const socketHandler = require('./socketHandler.js');
 const compression = require('compression');
 
-const gameURL = process.env.GAME_URL || 'http://localhost:8000';
+const gameURL = process.env.GAME_URL;
+if (!gameURL) {
+  throw new Error('Game URL is not defined in .env file');
+}
 
 const shouldCompress = (req, res) => {
   if (req.headers['x-no-compression']) {

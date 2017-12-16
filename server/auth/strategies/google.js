@@ -4,11 +4,14 @@ let GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 let GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
 let callbackURL = process.env.callbackURL;
 
-if (!(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && callbackURL)) {
-  const googleConfig = require('../googleConfig.json');
-  GOOGLE_CLIENT_ID = googleConfig.GOOGLE_CLIENT_ID;
-  GOOGLE_CLIENT_SECRET = googleConfig.GOOGLE_CLIENT_SECRET;
-  callbackURL = googleConfig.callbackURL;
+if (!GOOGLE_CLIENT_ID) {
+  throw new Error('Missing Google OAuth client ID in .env');
+}
+if (!GOOGLE_CLIENT_SECRET) {
+  throw new Error('Missing Google OAuth client secret in .env');
+}
+if (!GOOGLE_CLIENT_ID) {
+  throw new Error('Missing Google OAuth callback URL in .env');
 }
 
 
