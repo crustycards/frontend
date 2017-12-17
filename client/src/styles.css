@@ -7,13 +7,13 @@ body {
     text-align: center;
     overflow: visible;
 }
-.navbar a{
+.navbar a {
     color: #2B2D42;
     font-size: 20px;
     padding: 20px 30px;
     font-weight: 400;
 }
-.navbar a:hover{
+.navbar a:hover {
     background: #8D99AE;
     text-decoration: none;
 }
@@ -56,10 +56,8 @@ h1, h2, h3 {
 }
 
 .card {
-    margin: 5px 0;
-}
-.card:last-child {
-    margin-bottom: 0;
+    min-width: 10em;
+    margin: 3px;
 }
 
 .content-wrap {
@@ -68,13 +66,24 @@ h1, h2, h3 {
     padding: 10px;
     overflow: hidden;
 }
-  .col-narrow{
+.col-narrow {
     width: 40%;
     float: left;
     min-height: 125px;
 }
-  .col-wide{
+.col-wide {
     width: 60%;
     float: right;
     min-height: 125px;
+}
+
+.tray {
+    width: 100%;
+    overflow-x: scroll;
+    display: flex;
+}
+
+.tray .card {
+    width: 10em;
+    box-sizing: border-box;
 }
