@@ -15,7 +15,7 @@ export default (state = initialState, {type, payload}) => {
     ];
   case REMOVE_GAME:
     return state.filter((game) => {
-      return game.name != payload;
+      return game.name !== payload;
     });
   case SET_GAMES:
     return [

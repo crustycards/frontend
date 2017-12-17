@@ -25,30 +25,30 @@ const Navbar = (props) => (
     />
     <Drawer docked={false} width={250} open={props.isOpen} onRequestChange={(input) => props.setNavbar(input)}>
       {props.currentUser ?
-      <div>
-        <NavLink to='/' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<Home/>}>Home</MenuItem>
-        </NavLink>
-        <NavLink to='/game' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
-        </NavLink>
-        <NavLink to='/gamelist' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<ViewList/>}>Find a Game</MenuItem>
-        </NavLink>
-        <NavLink to='/cardpacks' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<ViewCarousel/>}>Cardpacks</MenuItem>
-        </NavLink>
-        <NavLink to='/settings' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<Settings/>}>Settings</MenuItem>
-        </NavLink>
-        <MenuItem onClick={redirectTo.bind(null, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
-      </div>
-      :
-      <div>
-        <NavLink to='/login' style={navItemStyle}>
-          <MenuItem onClick={props.closeNavbar} leftIcon={<ExitToApp/>}>Login/Signup</MenuItem>
-        </NavLink>
-      </div>}
+        <div>
+          <NavLink to='/' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<Home/>}>Home</MenuItem>
+          </NavLink>
+          <NavLink to='/game' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<VideogameAsset/>}>Current Game</MenuItem>
+          </NavLink>
+          <NavLink to='/gamelist' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<ViewList/>}>Find a Game</MenuItem>
+          </NavLink>
+          <NavLink to='/cardpacks' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<ViewCarousel/>}>Cardpacks</MenuItem>
+          </NavLink>
+          <NavLink to='/settings' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<Settings/>}>Settings</MenuItem>
+          </NavLink>
+          <MenuItem onClick={redirectTo.bind(null, '/logout')} leftIcon={<ExitToApp/>}>Logout</MenuItem>
+        </div>
+        :
+        <div>
+          <NavLink to='/login' style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<ExitToApp/>}>Login/Signup</MenuItem>
+          </NavLink>
+        </div>}
     </Drawer>
   </div>
 );

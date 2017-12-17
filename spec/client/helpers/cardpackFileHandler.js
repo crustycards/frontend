@@ -52,10 +52,10 @@ describe('parse', () => {
     expect(cards[1].type).to.equal('white');
   });
   it('Should throw an error when white card string contains more than two enter-separated elements', () => {
-    expect(() => {fileHandler.parse('test card\r\nwhite\r\nasdf')}).to.throw(Error, 'Expected two parameters on line 1 but got 3');
+    expect(() => { fileHandler.parse('test card\r\nwhite\r\nasdf'); }).to.throw(Error, 'Expected two parameters on line 1 but got 3');
   });
   it('Should throw an error when white or black card string contains less than two enter-separated elements', () => {
-    expect(() => {fileHandler.parse(`test card`)}).to.throw(Error, 'Expected two parameters on line 1 but got 1');
+    expect(() => { fileHandler.parse('test card'); }).to.throw(Error, 'Expected two parameters on line 1 but got 1');
   });
 });
 
@@ -69,11 +69,11 @@ describe('stringify', () => {
     expect(fileHandler.stringify([{text: 'card', type: 'black'}])).to.equal('card\r\nblack');
   });
   it('Should throw error if input parameter is not an array', () => {
-    expect(() => {fileHandler.stringify({})}).to.throw(Error, 'Cards must be an array');
+    expect(() => { fileHandler.stringify({}); }).to.throw(Error, 'Cards must be an array');
   });
   it('Should throw error if any card is missing text or type properties', () => {
-    expect(() => {fileHandler.stringify([{text: 'card text'}])}).to.throw(Error, 'Card is missing \'type\' property');
-    expect(() => {fileHandler.stringify([{type: 'black'}])}).to.throw(Error, 'Card is missing \'text\' property');
-    expect(() => {fileHandler.stringify([{}])}).to.throw(Error, 'Card is missing');
+    expect(() => { fileHandler.stringify([{text: 'card text'}]); }).to.throw(Error, 'Card is missing \'type\' property');
+    expect(() => { fileHandler.stringify([{type: 'black'}]); }).to.throw(Error, 'Card is missing \'text\' property');
+    expect(() => { fileHandler.stringify([{}]); }).to.throw(Error, 'Card is missing');
   });
 });

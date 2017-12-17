@@ -18,55 +18,55 @@ const initialState = {
 
 export default (state = initialState, {type, payload}) => {
   switch (type) {
-    case SET_CURRENT_USER: 
-      return {
-        ...state,
-        currentUser: payload
-      };
-    case ADD_CARDPACK: 
-      return {
-        ...state,
-        cardpacks: state.cardpacks.concat(payload)
-      };
-    case REMOVE_CARDPACK: 
-      return {
-        ...state,
-        cardpacks: state.cardpacks.filter(cardpack => cardpack.id !== payload)
-      };
-    case OPEN_NAVBAR:
-      return {
-        ...state,
-        navbarOpen: true
-      };
-    case CLOSE_NAVBAR:
-      return {
-        ...state,
-        navbarOpen: false
-      };
-    case TOGGLE_NAVBAR:
-      return {
-        ...state,
-        navbarOpen: !state.navbarOpen
-      };
-    case SET_NAVBAR:
-      return {
-        ...state,
-        navbarOpen: !!payload
-      };
-    case SHOW_STATUS_MESSAGE:
-      return {
-        ...state,
-        statusMessage: payload,
-        statusVisible: true
-      }
-    case HIDE_STATUS_MESSAGE:
-      return {
-        ...state,
-        statusVisible: false
-      }
+  case SET_CURRENT_USER: 
+    return {
+      ...state,
+      currentUser: payload
+    };
+  case ADD_CARDPACK: 
+    return {
+      ...state,
+      cardpacks: state.cardpacks.concat(payload)
+    };
+  case REMOVE_CARDPACK: 
+    return {
+      ...state,
+      cardpacks: state.cardpacks.filter(cardpack => cardpack.id !== payload)
+    };
+  case OPEN_NAVBAR:
+    return {
+      ...state,
+      navbarOpen: true
+    };
+  case CLOSE_NAVBAR:
+    return {
+      ...state,
+      navbarOpen: false
+    };
+  case TOGGLE_NAVBAR:
+    return {
+      ...state,
+      navbarOpen: !state.navbarOpen
+    };
+  case SET_NAVBAR:
+    return {
+      ...state,
+      navbarOpen: !!payload
+    };
+  case SHOW_STATUS_MESSAGE:
+    return {
+      ...state,
+      statusMessage: payload,
+      statusVisible: true
+    };
+  case HIDE_STATUS_MESSAGE:
+    return {
+      ...state,
+      statusVisible: false
+    };
   
-    default: 
-      return state;
+  default: 
+    return state;
   }
 };
 
@@ -119,11 +119,11 @@ export const showStatusMessage = payload => {
   return {
     type: SHOW_STATUS_MESSAGE,
     payload
-  }
-}
+  };
+};
 
 export const hideStatusMessage = payload => {
   return {
     type: HIDE_STATUS_MESSAGE
-  }
-}
+  };
+};

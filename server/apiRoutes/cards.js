@@ -4,12 +4,12 @@ let db = require('../../database');
 module.exports = (socketHandler) => {
   router.get('/:cardpackId', (req, res) => {
     db.Card.getByCardpackId(req.params.cardpackId)
-    .then((cards) => {
-      res.json(cards);
-    })
-    .catch((error) => {
-      res.status(500).send(error);
-    });
+      .then((cards) => {
+        res.json(cards);
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
   });
   router.post('/:cardpackId', (req, res) => {
     let promises = [];
@@ -37,13 +37,13 @@ module.exports = (socketHandler) => {
   });
   router.delete('/:cardId', (req, res) => {
     db.Card.delete(req.user.email, req.params.cardId)
-    .then((card) => {
-      res.json('success');
-      socketHandler.respondToUsers([req.user], 'carddelete', card);
-    })
-    .catch((error) => {
-      res.status(500).send(error);
-    });
+      .then((card) => {
+        res.json('success');
+        socketHandler.respondToUsers([req.user], 'carddelete', card);
+      })
+      .catch((error) => {
+        res.status(500).send(error);
+      });
   });
   return router;
 };

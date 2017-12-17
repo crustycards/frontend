@@ -146,16 +146,16 @@ describe('/api/friends', () => {
     });
     it('Should succeed when accepting a received friend request', (done) => {
       agent.post('/api/friends')
-      .send({user: 'test@person.com', type: 'request'})
-      .then(() => {
-        agent2.post('/api/friends')
-          .send({user: 'hello@world.com', type: 'accept'})
-          .end((err, res) => {
-            expect(err).to.not.exist;
-            expect(res.body).to.equal('success');
-            done();
-          });
-      });
+        .send({user: 'test@person.com', type: 'request'})
+        .then(() => {
+          agent2.post('/api/friends')
+            .send({user: 'hello@world.com', type: 'accept'})
+            .end((err, res) => {
+              expect(err).to.not.exist;
+              expect(res.body).to.equal('success');
+              done();
+            });
+        });
     });
   });
 
