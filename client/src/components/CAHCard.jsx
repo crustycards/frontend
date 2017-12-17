@@ -62,14 +62,6 @@ class CAHCard extends Component {
       </CardActions>
     );
 
-    if (this.props.playHandler) {
-      cardElements.push(
-        <CardActions key={2}>
-          <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} />
-        </CardActions>
-      );
-    }
-
     let cardWrapper = this.props.card.type === 'black' ? (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         <Card className='card'>;
