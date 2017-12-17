@@ -25,7 +25,7 @@ let renderPlayer = (player, index, ownerId, judgeId) => {
 const PlayerList = ({players, ownerId, judgeId}) => (
   <List style={styles}>
     {players.map((player, index) => {
-      return <div key={index}>{renderPlayer(player, index, ownerId, judgeId)}</div>;
+      return <div key={index}>{renderPlayer(player.user, index, ownerId, judgeId)}</div>;
     })}
   </List>
 );
