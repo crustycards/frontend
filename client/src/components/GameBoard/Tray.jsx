@@ -14,11 +14,13 @@ const Tray = ({hand}) => (
       cellHeight={200}
       padding={1}
     >
-      {hand.map(card => <Card
-        key={card.id} 
-        card={card} 
-        playHandler={() => console.log(card)} 
-      />)}
+      {hand.map(card =>
+        <Card
+          key={card.id} 
+          card={card} 
+          playHandler={() => console.log(card)} 
+        />
+      )}
     </GridList>
   </div>
 );
