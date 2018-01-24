@@ -13,22 +13,14 @@ const Game = (props) => (
   <div>
     {props.game ?
       <div>
-        <div className='top-left' style={{width: '25%', height: '50%', float: 'left'}}>
-          {props.game.blackCard ? <CAHCard card={props.game.blackCard} /> : null}
-        </div>
-        <div className='top-right' style={{width: '75%', height: '50%', float: 'left'}}>
-          <div>Current game: {props.game.name}</div>
-          <FlatButton label={'Start game'} onClick={startGame} />
-          <FlatButton label={'Stop game'} onClick={stopGame} />
-          <FlatButton label={'Leave game'} onClick={leaveGame} />
-        </div>
-        <div className='bottom-left' style={{width: '25%', height: '50%', float: 'left'}}>
-          <Divider/>
-          <PlayerList/>
-        </div>
-        <div className='bottom-right' style={{width: '75%', height: '50%', float: 'left'}}>
-          <Tray/>
-        </div>
+        {props.game.blackCard ? <CAHCard card={props.game.blackCard} /> : null}
+        <div>Current game: {props.game.name}</div>
+        <FlatButton label={'Start game'} onClick={startGame} />
+        <FlatButton label={'Stop game'} onClick={stopGame} />
+        <FlatButton label={'Leave game'} onClick={leaveGame} />
+        <Divider/>
+        <PlayerList/>
+        <Tray/>
       </div>
       :
       <div className='content-wrap'>
