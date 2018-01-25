@@ -13,14 +13,18 @@ const Game = (props) => (
   <div>
     {props.game ?
       <div>
-        {props.game.blackCard ? <CAHCard card={props.game.blackCard} /> : null}
-        <div>Current game: {props.game.name}</div>
-        <FlatButton label={'Start game'} onClick={startGame} />
-        <FlatButton label={'Stop game'} onClick={stopGame} />
-        <FlatButton label={'Leave game'} onClick={leaveGame} />
-        <Divider/>
-        <PlayerList/>
-        <Tray/>
+        <div className="col-narrow">
+          <h2>Current game: {props.game.name}</h2>
+          {props.game.blackCard ? <CAHCard card={props.game.blackCard} /> : null}
+          <PlayerList/>
+        </div>
+        <div>
+          <FlatButton label={'Start game'} onClick={startGame} />
+          <FlatButton label={'Stop game'} onClick={stopGame} />
+          <FlatButton label={'Leave game'} onClick={leaveGame} />
+          <Divider/>
+          <Tray/>
+        </div>
       </div>
       :
       <div className='content-wrap'>
