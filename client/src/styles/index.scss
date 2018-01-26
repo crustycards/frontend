@@ -1,0 +1,91 @@
+body {
+  font-family: 'Roboto', sans-serif;
+  background-color: #FBFBFB;
+}
+
+.navbar {
+  text-align: center;
+  overflow: visible;
+
+  a {
+    color: #2B2D42;
+    font-size: 20px;
+    padding: 20px 30px;
+    font-weight: 400;
+
+    &:hover {
+      background: #8D99AE;
+      text-decoration: none;
+    }
+  }
+}
+
+.subpanel {
+  padding: 10px;
+  background: #6D798E;
+  border-radius: 0.25em;
+  margin: 5px;
+}
+
+.panel {
+  background: #F0F0F0;
+  border-radius: 0.5em;
+  padding: 10px;
+  margin: 10px;
+
+  .title {
+    font-size: 1.25em;
+    font-weight: 500;
+  }
+}
+
+a {
+  text-decoration: none;
+}
+
+.btn {
+  margin: 0.2em;
+}
+
+.center, h1, h2, h3 {
+  margin: auto;
+  width: 50%;
+  text-align: center;
+}
+
+h1, h2, h3 {
+  font-weight: 400;
+}
+
+.card {
+  min-width: 10em;
+  margin: 3px;
+}
+
+.content-wrap {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 10px;
+  overflow: hidden;
+}
+.col-narrow {
+  width: 40%;
+  float: left;
+  min-height: 125px;
+}
+.col-wide {
+  width: 60%;
+  float: right;
+  min-height: 125px;
+}
+
+.tray {
+  width: 100%;
+  overflow-x: scroll;
+  display: flex;
+
+  .card {
+    width: 10em;
+    box-sizing: border-box;
+  }
+}
