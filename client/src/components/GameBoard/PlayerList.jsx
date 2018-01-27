@@ -5,7 +5,8 @@ import { Star } from 'material-ui-icons';
 
 const styles = {
   overflowY: 'auto',
-  maxHeight: '100%'
+  maxHeight: '100%',
+  padding: 0
 };
 
 // TODO - Render game owner uniquely

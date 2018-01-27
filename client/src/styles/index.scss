@@ -1,3 +1,5 @@
+@import 'game-board';
+
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #FBFBFB;
@@ -48,9 +50,12 @@ a {
 }
 
 .center, h1, h2, h3 {
-  margin: auto;
-  width: 50%;
   text-align: center;
+}
+
+.center {
+  width: 50%;
+  margin: auto;
 }
 
 h1, h2, h3 {
