@@ -14,7 +14,7 @@ const Navbar = (props) => (
   <div>
     <AppBar
       title='Title'
-      onLeftIconButtonTouchTap={props.openNavbar}
+      onLeftIconButtonClick={props.openNavbar}
       iconElementRight={props.currentUser ?
         <FlatButton
           labelStyle={{ fontSize: '21px' }}
