@@ -1,7 +1,6 @@
 /**
  * Keep track of available cardpacks here.
  */
-import axios from 'axios';
 
 // TODO - Switch client to use this instead of cardpacks in global section of state
 
