@@ -1,137 +1,184 @@
 require('dotenv').config();
-
-const express = require('express');
-const bodyParser = require('body-parser');
-const passport = require('passport');
-const session = require('express-session');
-const Store = require('connect-session-sequelize')(session.Store);
-const db = require('../database');
-const url = require('url');
-const path = require('path');
-const apiRouter = require('./apiRoutes');
-const cookieParser = require('cookie-parser');
-const authRouter = require('./authRouter.js');
-const passportSocketIo = require('passport.socketio');
-const socketHandler = require('./socketHandler.js');
-const compression = require('compression');
-
-const gameURL = process.env.GAME_URL;
-if (!gameURL) {
-  throw new Error('Game URL is not defined in .env file');
+if (!['development', 'test', 'production'].includes(process.env.NODE_ENV)) {
+  throw new Error('NODE_ENV must be either development, test, or production');
 }
 
-const shouldCompress = (req, res) => {
-  if (req.headers['x-no-compression']) {
-    // don't compress responses with this request header 
-    return false;
+const password = process.env.TOKEN_KEY;
+const isProduction = process.env.NODE_ENV === 'production';
+const port = process.env.PORT;
+const cookieName = 'session';
+
+const getToken = ({oAuthId, oAuthProvider}) => {
+  if (!(oAuthId && oAuthProvider)) {
+    throw new Error('Missing parameters');
   }
- 
-  // fallback to standard filter function 
-  return compression.filter(req, res);
+  return jwt.sign({oAuthId, oAuthProvider}, password, {
+    expiresIn: parseInt(process.env.JWT_TIMEOUT_SECONDS)
+  });
 };
 
-// Create session store
-let store = new Store({db: db.connection});
+const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsReceived}) => {
+  return `<script>
+    window.__PRELOADED_STATE__ = ${JSON.stringify(
+      {
+        global: {
+          currentUser: user,
+          cardpacks: cardpacks
+        },
+        home: {
+          friends,
+          requestsSent,
+          requestsReceived
+        }
+      }
+    )}
+  </script>
+  <script>
+    window.__PRELOADED_DATA__ = ${JSON.stringify(
+      {
+        gameURL: process.env.GAME_URL
+      }
+    )}
+  </script>
+  ${html}`
+};
 
-// Initialize passport strategies
-require('./auth')(passport, db.User.model);
+const fs = require('fs');
+const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
+// const vendor = fs.readFileSync(`${__dirname}/../client/dist/vendor.js`).toString();
+const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
-// Sync database
-db.connection.sync().then(() => {
-  console.log('Nice! Database looks fine.');
-}).catch((err) => {
-  console.log('Uh oh. something went wrong when updating the database.');
-  console.error(err);
-});
+const socketHandler   = require('./socketHandler');
+const api             = require('../api');
+const jwt             = require('jsonwebtoken');
+const Hapi            = require('hapi');
 
-// Create app
-let app = express();
+const server = new Hapi.Server();
+server.connection({port, host: 'localhost'});
 
-app.set('views', __dirname + '/views');
-app.set('view engine', 'pug');
-
-app.use(compression({filter: shouldCompress}));
-
-// ---- MIDDLEWARE ----
-// Body parser
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
-// Cookie parser
-app.use(cookieParser());
-// Passport and sessions
-app.use(session({
-  store,
-  secret: 'thisisasecret',
-  resave: true,
-  saveUninitialized: false
-}));
-app.use(passport.initialize());
-app.use(passport.session());
-
-// Setup auth and api routing
-app.use('/api', apiRouter(socketHandler));
-app.use('/', authRouter); // Middleware redirector
-
-// Serve static files
-app.get('*/bundle.js', (req, res) => {
-  res.sendFile(path.resolve(__dirname + '/../client/dist/bundle.js'));
-});
-app.get('/*', (req, res) => {
-  if (req.user) {
-    db.Cardpack.getByUserEmail(req.user.email)
-      .then((cardpacks) => {
-        db.Friend.get(req.user.email)
-          .then((friendData) => {
-            res.render('index', {
-              user: JSON.stringify(req.user),
-              gameURL: JSON.stringify(gameURL),
-              cardpacks: JSON.stringify(cardpacks),
-              friends: JSON.stringify(friendData.friends),
-              requestsSent: JSON.stringify(friendData.requestsSent),
-              requestsReceived: JSON.stringify(friendData.requestsReceived)
-            });
-          });
-      });
-  } else {
-    res.render('index', {
-      user: JSON.stringify(null),
-      gameURL: JSON.stringify(gameURL),
-      cardpacks: '[]',
-      friends: '[]',
-      requestsSent: '[]',
-      requestsReceived: '[]'
-    });
-  }
-});
-
-let http = require('http').Server(app);
-let io = require('socket.io')(http);
-
-// Launch/export server
-if (module.parent) {
-  module.exports = http;
-} else {
-  let port = process.env.PORT || 3000;
-  http.listen(port, () => {
-    console.log('Listening on port ' + port);
+server.register(require('bell'), (err) => {
+  server.auth.strategy('google', 'bell', {
+    provider: 'google',
+    password,
+    clientId: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+    location: server.info.uri,
+    isSecure: isProduction
   });
-}
 
-// Setup passport authentication for web sockets
-io.use(passportSocketIo.authorize({
-  key: 'connect.sid',
-  secret: 'thisisasecret',
-  store,
-  passport: passport,
-  cookieParser: cookieParser
-}));
+  server.state(cookieName, {
+    isSecure: isProduction,
+    encoding: 'base64json',
+    path: '/'
+  });
 
-// Setup socket event handlers
+  server.route({
+    method: 'GET',
+    path: '/auth/google',
+    config: {
+      auth: {
+        strategy: 'google',
+        mode: 'try'
+      },
+      handler: async (request, reply) => {
+        if (!request.auth.isAuthenticated) {
+          return reply('Authentication failed due to: ' + request.auth.error.message);
+        }
+
+        // Account lookup/registration
+        const userData = {
+          name: request.auth.credentials.profile.displayName,
+          oAuthId: request.auth.credentials.profile.id,
+          oAuthProvider: request.auth.credentials.provider
+        };
+        await api.User.findOrCreate(userData);
+        return reply.redirect('/').state(cookieName, getToken(userData));
+      }
+    }
+  });
+});
+
+server.route([
+  {
+    method: 'GET',
+    path: '/{any*}',
+    handler: async (request, reply) => {
+      let user = null;
+      let friends = [];
+      let requestsSent = [];
+      let requestsReceived = [];
+
+      let tokenData;
+      try {
+        tokenData = jwt.verify(request.state[cookieName], password);
+        const secondsToExp = tokenData.exp - Math.floor(Date.now() / 1000);
+        if (secondsToExp <= process.env.JWT_TIMEOUT_SECONDS - process.env.JWT_MIN_REFRESH_DELAY_SECONDS) {
+          reply.state(cookieName, getToken(tokenData));
+        }
+      } catch (err) {
+        // Token has expired or does not exist
+      }
+      if (tokenData) {
+        user = await api.User.get({oAuthId: tokenData.oAuthId, oAuthProvider: tokenData.oAuthProvider});
+        friends = await api.Friend.getFriends(user.id);
+        requestsSent = await api.Friend.getSentRequests(user.id);
+        requestsReceived = await api.Friend.getReceivedRequests(user.id);
+      }
+      const cardpacks = []; // TODO - GET CARDPACKS
+      
+      reply(generateScript(html, {user, cardpacks, friends, requestsSent, requestsReceived}));
+    }
+  },
+  {
+    method: 'GET',
+    path: '/vendor.js',
+    handler: (request, reply) => {
+      reply(vendor);
+    }
+  },
+  {
+    method: 'GET',
+    path: '/bundle.js',
+    handler: (request, reply) => {
+      reply(bundle);
+    }
+  },
+  {
+    method: 'GET',
+    path: '/logout',
+    handler: (request, reply) => {
+      reply.redirect('/login').unstate(cookieName);
+    }
+  }
+]);
+
+const io = require('socket.io')(server.listener);
+
+io.use(async (socket, next) => {
+  if (socket.handshake.headers.cookie) {
+    let cookie = socket.handshake.headers.cookie;
+    cookie = cookie
+      .split('; ')
+      .find(cookie => cookie.startsWith(`${cookieName}=`));
+    if (cookie) {
+      cookie = cookie.split(`${cookieName}=`)[1];
+      cookie = Buffer.from(cookie, 'base64').toString();
+      cookie = cookie.substring(1, cookie.length - 1);
+      try {
+        socket.request.user = await api.User.get(jwt.verify(cookie, password));
+      } catch (e) {
+        socket.request.user = null;
+      }
+    }
+  }
+  next();
+});
+
 io.on('connection', (socket) => {
   socketHandler.openSocket(socket);
   socket.on('disconnect', () => {
     socketHandler.closeSocket(socket);
   });
 });
+
+server.start().then(() => { console.log(`Server is running on port ${port}`); });
