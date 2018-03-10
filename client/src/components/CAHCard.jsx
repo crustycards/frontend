@@ -65,12 +65,12 @@ class CAHCard extends Component {
     let cardWrapper = this.props.card.type === 'black' ? (
       <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
         <Card className='card'>;
-          {cardElements}
+        {cardElements}
         </Card>
       </MuiThemeProvider>
     ) : (
       <Card className='card'>;
-        {cardElements}
+      {cardElements}
       </Card>
     );
 
