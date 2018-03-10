@@ -36,7 +36,8 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
   <script>
     window.__PRELOADED_DATA__ = ${JSON.stringify(
       {
-        gameURL: process.env.GAME_URL
+        gameURL: process.env.GAME_URL,
+        apiURL: process.env.API_URL
       }
     )}
   </script>

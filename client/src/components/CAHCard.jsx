@@ -4,7 +4,7 @@ import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
 import { FlatButton } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import time from 'time-converter';
-import axios from 'axios';
+import api from '../apiInterface';
 
 class CAHCard extends Component {
   constructor (props) {
@@ -42,7 +42,7 @@ class CAHCard extends Component {
   }
 
   removeCard() {
-    axios.delete('/api/cards/' + this.props.card.id);
+    api.delete(`/card/${this.props.card.id}`);
   }
 
   render() {

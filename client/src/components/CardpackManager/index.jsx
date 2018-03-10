@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import api from '../../apiInterface';
 import { connect } from 'react-redux';
 import { TextField, RaisedButton } from 'material-ui';
 import Cardpack from './Cardpack.jsx';
@@ -9,7 +9,7 @@ class CardpackManager extends Component {
     super(props);
     this.state = {
       newCardpackName: ''
-    }
+    };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.createCardpack = this.createCardpack.bind(this);
@@ -37,8 +37,9 @@ class CardpackManager extends Component {
 
   createCardpack () {
     if (this.state.newCardpackName) {
-      axios.post('/api/cardpacks', {
-        name: this.state.newCardpackName
+      api.put('/cardpack', {
+        name: this.state.newCardpackName,
+        userId: this.props.currentUser.id
       });
       this.setState({newCardpackName: ''});
     }
@@ -46,23 +47,24 @@ class CardpackManager extends Component {
 
   render () {
     return (
-    <div className='panel'>
-      <div>Cardpack Manager</div>
-      <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} /><br/>
-      <RaisedButton label='Create Cardpack' onClick={this.createCardpack} disabled={!this.state.newCardpackName} />
-      {this.props.cardpacks.map((cardpack, index) => {
-        return (
-          <div key={index}>
-            <Cardpack cardpack={cardpack} />
-          </div>
-        )
-      })}
-    </div>
+      <div className='panel'>
+        <div>Cardpack Manager</div>
+        <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Cardpack Name' type='text' value={this.state.newCardpackName} onChange={this.handleInputChange.bind(this, 'newCardpackName')} /><br/>
+        <RaisedButton label='Create Cardpack' onClick={this.createCardpack} disabled={!this.state.newCardpackName} />
+        {this.props.cardpacks.map((cardpack, index) => {
+          return (
+            <div key={index}>
+              <Cardpack cardpack={cardpack} />
+            </div>
+          );
+        })}
+      </div>
     );
   }
 }
 
 const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser,
   cardpacks: global.cardpacks
 });
 

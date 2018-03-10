@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import { connect } from 'react-redux';
+import api from '../apiInterface';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 
@@ -11,14 +12,11 @@ class FriendRequest extends Component {
   }
 
   accept () {
-    axios.post('/api/friends', {
-      type: 'accept',
-      user: this.props.user.email
-    });
+    api.put(`/user/${this.props.currentUser.id}/friends/${this.props.user.id}`);
   }
 
   remove () {
-    axios.delete('/api/friends', {data: {user: this.props.user.email}});
+    api.delete(`/user/${this.props.currentUser.id}/friends/${this.props.user.id}`);
   }
 
   render () {
@@ -35,7 +33,7 @@ class FriendRequest extends Component {
           </CardActions>
         </Card>
       );
-    } else if (this.props.type === "sent") {
+    } else if (this.props.type === 'sent') {
       return (
         <Card className='card'>
           <CardHeader
@@ -51,4 +49,6 @@ class FriendRequest extends Component {
   }
 }
 
-export default FriendRequest;
+const mapStateToProps = ({global}) => ({ currentUser: global.currentUser });
+
+export default connect(mapStateToProps)(FriendRequest);

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import api from '../../apiInterface';
 import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
@@ -52,7 +52,7 @@ class CardpackViewer extends Component {
   }
 
   fetchCurrentCardpack () {
-    axios.get('/api/cardpacks/' + this.cardpackId)
+    api.get(`/cardpack/${this.cardpackId}`)
       .then((response) => {
         let cardpack = response.data;
         this.setState({cardpack});
@@ -63,7 +63,7 @@ class CardpackViewer extends Component {
   }
   fetchCards () {
     if (this.cardpackId) {
-      axios.get('/api/cards/' + this.cardpackId)
+      api.get(`/cardpack/${this.cardpackId}/cards`)
         .then((response) => {
           let cards = response.data;
           this.setState({cards, cardsFetched: true});
@@ -76,13 +76,13 @@ class CardpackViewer extends Component {
 
   addCards (cards) {
     if (cards.length <= 100) {
-      return axios.post('/api/cards/' + this.cardpackId, cards);
+      return api.put(`/cardpack/${this.cardpackId}`, cards);
     }
     let tempCards = [];
     cards.forEach((card, index) => {
       tempCards.push(card);
       if (tempCards.length === 100 || index === cards.length - 1) {
-        axios.post('/api/cards/' + this.cardpackId, tempCards);
+        api.put(`/cardpack/${this.cardpackId}`, tempCards);
         tempCards = [];
       }
     });
