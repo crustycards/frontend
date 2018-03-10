@@ -46,7 +46,7 @@ const Navbar = (props) => (
         :
         <div>
           <NavLink to='/login' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar} leftIcon={<ExitToApp/>}>Login/Signup</MenuItem>
+            <MenuItem onClick={props.closeNavbar} leftIcon={<ExitToApp/>}>Login</MenuItem>
           </NavLink>
         </div>}
     </Drawer>
