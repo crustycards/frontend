@@ -1,5 +1,5 @@
 const fileHandler = require('../../../client/src/helpers/cardpackFileHandler');
-const expect = require('chai').expect;
+const { expect } = require('chai');
 
 let dummyCards = [];
 for (let i = 0; i < 100; i++) {
