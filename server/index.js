@@ -92,8 +92,12 @@ server.register(require('bell'), (err) => {
           oAuthId: request.auth.credentials.profile.id,
           oAuthProvider: request.auth.credentials.provider
         };
-        await api.User.findOrCreate(userData);
-        return reply.redirect('/').state(cookieName, getToken(userData));
+        try {
+          let resUser = await api.User.findOrCreate(userData);
+          return reply.redirect('/').state(cookieName, getToken(resUser));
+        } catch (err) {
+          console.log(err);
+        }
       }
     }
   });
@@ -166,7 +170,8 @@ io.use(async (socket, next) => {
       cookie = Buffer.from(cookie, 'base64').toString();
       cookie = cookie.substring(1, cookie.length - 1);
       try {
-        socket.request.user = await api.User.get(jwt.verify(cookie, password));
+        let {oAuthId, oAuthProvider} = jwt.verify(cookie, password);
+        socket.request.user = await api.User.get({oAuthId, oAuthProvider});
       } catch (e) {
         socket.request.user = null;
       }
