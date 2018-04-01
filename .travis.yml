@@ -7,6 +7,9 @@ before_script:
 
 script:
   - npm test
+  - docker build . -t tvolk131/cards-web-client:latest
+  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+  - docker push $DOCKER_USERNAME/cards-web-client
 
 cache:
   directories:
@@ -14,3 +17,6 @@ cache:
 
 env:
   - NODE_ENV=test
+
+services:
+  - docker

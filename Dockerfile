@@ -1,6 +1,7 @@
-FROM node:carbon
+FROM node:latest
 EXPOSE 80
-WORKDIR ./
+COPY ./ ./
 RUN npm install
+RUN npm run build-css
 RUN npm run build-prod
 CMD ["npm", "start"]
