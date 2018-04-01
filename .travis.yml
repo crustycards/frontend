@@ -2,9 +2,6 @@ language: node_js
 node_js:
   - "node"
 
-before_script:
-  - webpack -d
-
 script:
   - npm test
   - docker build . -t tvolk131/cards-web-client:latest
