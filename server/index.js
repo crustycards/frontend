@@ -1,9 +1,6 @@
-require('dotenv').config();
-if (!['development', 'test', 'production'].includes(process.env.NODE_ENV)) {
-  throw new Error('NODE_ENV must be either development, test, or production');
-}
+require('./loadEnvVars')();
 
-const password = process.env.TOKEN_KEY;
+const password = process.env.JWT_SECRET;
 const isProduction = process.env.NODE_ENV === 'production';
 const port = process.env.PORT;
 const cookieName = 'session';
@@ -13,7 +10,7 @@ const getToken = ({oAuthId, oAuthProvider}) => {
     throw new Error('Missing parameters');
   }
   return jwt.sign({oAuthId, oAuthProvider}, password, {
-    expiresIn: parseInt(process.env.JWT_TIMEOUT_SECONDS)
+    expiresIn: process.env.JWT_TIMEOUT_SECONDS
   });
 };
 
@@ -55,7 +52,7 @@ const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
 
 const server = new Hapi.Server();
-server.connection({port, host: 'localhost'});
+server.connection({port, tls: isProduction, listener: require('./http2listener')()});
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {

@@ -8,7 +8,8 @@
     "build-prod": "webpack --mode production",
     "build-css": "node-sass --include-path scss client/src/styles/index.scss client/dist/styles.css",
     "watch-css": "nodemon -e scss -x \"npm run build-css\"",
-    "start": "nodemon server/index.js",
+    "start": "node server/index.js",
+    "start-dev": "nodemon server/index.js",
     "lint": "eslint .",
     "lint-clean": "eslint . --fix",
     "lint-init": "eslint --init",
@@ -34,6 +35,7 @@
     "webpack-cli": "^2.0.11"
   },
   "dependencies": {
+    "assert": "^1.4.1",
     "axios": "^0.18.0",
     "bell": "^8.9.0",
     "body-parser": "^1.17.2",
@@ -42,6 +44,7 @@
     "css-loader": "^0.28.10",
     "dotenv": "^4.0.0",
     "file-select": "^1.0.2",
+    "get-docker-secrets": "^0.1.5",
     "hapi": "^16.6.2",
     "jsonwebtoken": "^8.2.0",
     "material-ui": "^0.20.0",
