@@ -1,16 +1,18 @@
 require('./loadEnvVars')();
 
-const password = process.env.JWT_SECRET;
-const isProduction = process.env.NODE_ENV === 'production';
-const port = process.env.PORT;
-const cookieName = 'session';
+const password       = process.env.JWT_SECRET;
+const isProduction   = process.env.NODE_ENV === 'production';
+const port           = parseInt(process.env.PORT);
+const jwtExpTime     = parseInt(process.env.JWT_TIMEOUT_SECONDS);
+const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS);
+const cookieName     = 'session';
 
 const getToken = ({oAuthId, oAuthProvider}) => {
   if (!(oAuthId && oAuthProvider)) {
     throw new Error('Missing parameters');
   }
   return jwt.sign({oAuthId, oAuthProvider}, password, {
-    expiresIn: process.env.JWT_TIMEOUT_SECONDS
+    expiresIn: jwtExpTime
   });
 };
 
@@ -114,7 +116,7 @@ server.route([
       try {
         tokenData = jwt.verify(request.state[cookieName], password);
         const secondsToExp = tokenData.exp - Math.floor(Date.now() / 1000);
-        if (secondsToExp <= process.env.JWT_TIMEOUT_SECONDS - process.env.JWT_MIN_REFRESH_DELAY_SECONDS) {
+        if (secondsToExp <= jwtExpTime - jwtRefreshTime) {
           reply.state(cookieName, getToken(tokenData));
         }
       } catch (err) {
