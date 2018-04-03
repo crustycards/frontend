@@ -23,9 +23,9 @@ module.exports = () => {
     'test',
     'production'
   ].includes(process.env.NODE_ENV), 'NODE_ENV must be either development, test, or production');
-  assert(!!process.env.JWT_SECRET, 'Missing Google oAuth client id - please add docker secret with a name of GOOGLE_CLIENT_ID');
-  assert(!!process.env.JWT_SECRET, 'Missing Google oAuth client secret - please add docker secret with a name of GOOGLE_CLIENT_SECRET');
-  assert(!!process.env.JWT_SECRET, 'Missing Google oAuth callback URL - please add docker secret with a name of callbackURL');
+  assert(!!process.env.GOOGLE_CLIENT_ID, 'Missing Google oAuth client id - please add docker secret with a name of GOOGLE_CLIENT_ID');
+  assert(!!process.env.GOOGLE_CLIENT_SECRET, 'Missing Google oAuth client secret - please add docker secret with a name of GOOGLE_CLIENT_SECRET');
+  assert(!!process.env.callbackURL, 'Missing Google oAuth callback URL - please add docker secret with a name of callbackURL');
   assert(!!process.env.JWT_SECRET, 'Missing JWT secret - please add docker secret with a name of JWT_SECRET');
   assert(!!process.env.WEB_TLS_KEY, 'Missing http2 TLS private key - please add docker secret with a name of WEB_TLS_KEY');
   assert(!!process.env.WEB_TLS_CERTIFICATE, 'Missing http2 TLS certificate - please add docker secret with a name of WEB_TLS_CERTIFICATE');
