@@ -17,6 +17,10 @@ module.exports = () => {
       process.env[key] = defaultVals[key];
     }
   }
+  process.argv.slice(2).forEach(arg => {
+    [key, value] = arg.split('=');
+    process.env[key] = value;
+  });
   assert(!!process.env.NODE_ENV, 'Missing environment type - please add docker secret with a name of NODE_ENV');
   assert([
     'development',
