@@ -52,7 +52,7 @@ const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
 
 const server = new Hapi.Server();
-server.connection({port, tls: isProduction, listener: require('./http2listener')()});
+server.connection({port, tls: isProduction, listener: require('./httpListener')()});
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
