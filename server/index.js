@@ -114,6 +114,7 @@ server.route([
       let friends = [];
       let requestsSent = [];
       let requestsReceived = [];
+      let cardpacks = [];
 
       let tokenData;
       try {
@@ -130,8 +131,8 @@ server.route([
         friends = await api.Friend.getFriends(user.id);
         requestsSent = await api.Friend.getSentRequests(user.id);
         requestsReceived = await api.Friend.getReceivedRequests(user.id);
+        cardpacks = await api.Cardpack.getByUser(user.id);
       }
-      const cardpacks = []; // TODO - GET CARDPACKS
       
       reply(generateScript(html, {user, cardpacks, friends, requestsSent, requestsReceived}));
     }
