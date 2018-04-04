@@ -22,7 +22,7 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
       {
         global: {
           currentUser: user,
-          cardpacks: cardpacks
+          cardpacks
         },
         home: {
           friends,
@@ -36,7 +36,7 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
     window.__PRELOADED_DATA__ = ${JSON.stringify(
       {
         gameURL: process.env.GAME_URL,
-        apiURL: process.env.API_URL
+        apiURL: process.env.PUBLIC_API_URL
       }
     )}
   </script>
@@ -45,7 +45,6 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
 
 const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
-// const vendor = fs.readFileSync(`${__dirname}/../client/dist/vendor.js`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
 const socketHandler   = require('./socketHandler');
@@ -54,7 +53,11 @@ const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
 
 const server = new Hapi.Server();
-server.connection({port, tls: isProduction, listener: require('./httpListener')()});
+const connectionData = {host: 'localhost', port, tls: isProduction, listener: require('./httpListener')()};
+if (!this.isProduction) {
+  connectionData.host = 'localhost';
+}
+server.connection(connectionData);
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
