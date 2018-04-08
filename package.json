@@ -13,7 +13,7 @@
     "lint": "eslint .",
     "lint-clean": "eslint . --fix",
     "lint-init": "eslint --init",
-    "test": "mocha ./spec --recursive",
+    "test": "jest",
     "deploy": "git pull && npm install && webpack && pm2 restart all"
   },
   "author": "Thomas Volk",
@@ -28,9 +28,11 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
+    "enzyme": "^3.3.0",
     "eslint": "^4.18.2",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git",
     "eslint-plugin-react": "^7.7.0",
+    "jest": "^22.4.3",
     "webpack": "^4.1.1",
     "webpack-cli": "^2.0.11"
   },
@@ -49,7 +51,6 @@
     "jsonwebtoken": "^8.2.0",
     "material-ui": "^0.20.0",
     "material-ui-icons": "^1.0.0-beta.36",
-    "mocha": "^3.5.0",
     "node-sass": "^4.7.2",
     "passport": "^0.4.0",
     "passport-google-oauth2": "^0.1.6",
