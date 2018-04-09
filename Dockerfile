@@ -1,4 +1,4 @@
-FROM node:latest
+FROM node:carbon
 EXPOSE 80
 COPY ./ ./
 RUN npm install
