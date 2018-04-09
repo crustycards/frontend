@@ -53,11 +53,7 @@ const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
 
 const server = new Hapi.Server();
-const connectionData = {host: 'localhost', port, tls: isProduction, listener: require('./httpListener')()};
-if (!this.isProduction) {
-  connectionData.host = 'localhost';
-}
-server.connection(connectionData);
+server.connection({port, host: isProduction ? undefined : 'localhost'});
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
@@ -66,11 +62,11 @@ server.register(require('bell'), (err) => {
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     location: server.info.uri,
-    isSecure: isProduction
+    isSecure: false
   });
 
   server.state(cookieName, {
-    isSecure: isProduction,
+    isSecure: false,
     encoding: 'base64json',
     path: '/'
   });
