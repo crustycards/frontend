@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import api from '../apiInterface';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
@@ -12,11 +11,11 @@ class FriendRequest extends Component {
   }
 
   accept () {
-    api.put(`/user/${this.props.currentUser.id}/friends/${this.props.user.id}`);
+    api.addFriend(this.props.user.id);
   }
 
   remove () {
-    api.delete(`/user/${this.props.currentUser.id}/friends/${this.props.user.id}`);
+    api.removeFriend(this.props.user.id);
   }
 
   render () {
@@ -49,6 +48,4 @@ class FriendRequest extends Component {
   }
 }
 
-const mapStateToProps = ({global}) => ({ currentUser: global.currentUser });
-
-export default connect(mapStateToProps)(FriendRequest);
+export default FriendRequest;

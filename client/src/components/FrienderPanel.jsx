@@ -18,10 +18,7 @@ class FrienderPanel extends Component {
   sendRequest () {
     if (helpers.isEmail(this.state.requestEmail)) {
       // TODO - Fix this to search users rather than add by email
-      api.put(`/user/${this.props.currentUser.id}/friends`, {
-        type: 'request',
-        user: this.state.requestEmail
-      });
+      api.addFriend(this.state.requestEmail);
       this.setState({requestEmail: ''});
     }
   }

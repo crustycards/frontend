@@ -42,7 +42,7 @@ class CAHCard extends Component {
   }
 
   removeCard() {
-    api.delete(`/card/${this.props.card.id}`);
+    return api.deleteCard(this.props.card.id);
   }
 
   render() {

@@ -37,10 +37,7 @@ class CardpackManager extends Component {
 
   createCardpack () {
     if (this.state.newCardpackName) {
-      api.put('/cardpack', {
-        name: this.state.newCardpackName,
-        userId: this.props.currentUser.id
-      });
+      api.createCardpack(this.state.newCardpackName);
       this.setState({newCardpackName: ''});
     }
   }
@@ -64,7 +61,6 @@ class CardpackManager extends Component {
 }
 
 const mapStateToProps = ({global}) => ({
-  currentUser: global.currentUser,
   cardpacks: global.cardpacks
 });
 
