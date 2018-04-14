@@ -2,21 +2,18 @@ language: node_js
 node_js:
   - "node"
 
-before_install:
-  - mysql -e 'CREATE DATABASE cards;'
-
-before_script:
-  - webpack -d
-
 script:
   - npm test
+  - docker build . -t tvolk131/cards-web-client:latest
+  - echo "$DOCKER_PASSWORD" | docker login --username "$DOCKER_USERNAME" --password-stdin
+  - docker push $DOCKER_USERNAME/cards-web-client
 
 cache:
   directories:
     - "node_modules"
 
-services:
-  - mysql
-
 env:
   - NODE_ENV=test
+
+services:
+  - docker

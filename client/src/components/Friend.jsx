@@ -1,10 +1,10 @@
 import React from 'react';
-import axios from 'axios';
+import api from '../apiInterface';
 import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';
 
-const remove = (email) => {
-  axios.delete('/api/friends', {data: {user: email}});
+const remove = (friendId) => {
+  api.removeFriend(friendId);
 };
 
 const Friend = (props) => (
@@ -14,7 +14,7 @@ const Friend = (props) => (
       subtitle={props.user.email}
     />
     <CardActions>
-      <FlatButton label='Unfriend' onClick={remove.bind(null, props.user.email)} />
+      <FlatButton label='Unfriend' onClick={remove.bind(null, props.currentUser.id)} />
     </CardActions>
   </Card>
 );

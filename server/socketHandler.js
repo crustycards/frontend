@@ -1,59 +1,55 @@
-let sockets = {};
-
-module.exports.openSocket = (socket) => {
-  console.log('A user has connected');
-  if (socket.request.user.email) {
-    sockets[socket.request.user.email] = sockets[socket.request.user.email] || [];
-    sockets[socket.request.user.email].push(socket);
+class SocketHandler {
+  constructor() {
+    this.sockets = {};
   }
-  // TODO - Add event listeners here
-};
 
-module.exports.closeSocket = (socket) => {
-  console.log('A user has disconnected');
-  if (socket.request.user.id) {
-    for (let i = 0; i < sockets[socket.request.user.email].length; i++) {
-      if (sockets[socket.request.user.email][i] === socket) {
-        sockets[socket.request.user.email].splice(i, 1);
-        if (sockets[socket.request.user.email].length === 0) {
-          delete sockets[socket.request.user.email];
-          break;
+  openSocket(socket) {
+    if (socket.request.user) {
+      console.log('A user has connected');
+      this.sockets[socket.request.user.id] = this.sockets[socket.request.user.id] || [];
+      this.sockets[socket.request.user.id].push(socket);
+    }
+  }
+
+  closeSocket(socket) {
+    if (socket.request.user) {
+      const userId = socket.request.user.id;
+      for (let i in this.sockets[userId]) {
+        if (this.sockets[userId][i] === socket) {
+          this.sockets[userId].splice(i, 1);
+          if (this.sockets[userId].length === 0) {
+            delete this.sockets[userId];
+          }
+          console.log('A user has disconnected');
+          return;
+        }
+      }
+      throw new Error('Socket is not registered with this handler');
+    }
+  }
+
+  respondToUsersById(userIds, dataType, data) {
+    for (let i = 0; i < userIds.length; i++) {
+      // If this user has any open socket connections
+      if (this.sockets[userIds[i]]) {
+        for (let j = 0; j < this.sockets[userIds[i]].length; j++) {
+          this.sockets[userIds[i]][j].emit(dataType, data);
         }
       }
     }
   }
-};
 
-module.exports.respondToUsers = (users, dataType, data) => {
-  for (let i = 0; i < users.length; i++) {
-    // If this user has any open socket connections
-    if (sockets[users[i].email]) {
-      for (let j = 0; j < sockets[users[i].email].length; j++) {
-        sockets[users[i].email][j].emit(dataType, data);
-      }
-    }
-  }
-};
-
-module.exports.respondToUsersByEmail = (userEmails, dataType, data) => {
-  for (let i = 0; i < userEmails.length; i++) {
-    // If this user has any open socket connections
-    if (sockets[userEmails[i]]) {
-      for (let j = 0; j < sockets[userEmails[i]].length; j++) {
-        sockets[userEmails[i]][j].emit(dataType, data);
-      }
-    }
-  }
-};
-
-module.exports.respondToAllUsers = (dataType, data) => {
-  Object.values(sockets).forEach((socketArray) => {
-    socketArray.forEach((socket) => {
-      socket.emit(dataType, data);
+  respondToAllUsers(dataType, data) {
+    Object.values(this.sockets).forEach((socketArray) => {
+      socketArray.forEach((socket) => {
+        socket.emit(dataType, data);
+      });
     });
-  });
-};
+  }
 
-module.exports.getUsersOnline = () => {
-  return Object.keys(sockets);
-};
+  getUsersOnline() {
+    return Object.keys(this.sockets);
+  }
+}
+
+module.exports = new SocketHandler();

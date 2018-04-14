@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import api from '../../apiInterface';
 import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
@@ -19,8 +19,6 @@ class CardpackViewer extends Component {
     this.nextTab = this.nextTab.bind(this);
     this.previousTab = this.previousTab.bind(this);
     this.state = {
-      cards: [],
-      cardsFetched: false,
       newCardName: '',
       newCardType: 'white',
       newCardAnswerFields: 1,
@@ -28,64 +26,20 @@ class CardpackViewer extends Component {
       tab: 0
     };
     this.fetchCurrentCardpack();
-    this.fetchCards();
-
-    props.socket.on('cardcreate', (cards) => {
-      this.renderNewCards(cards);
-    });
-    props.socket.on('carddelete', (card) => {
-      this.unrenderOldCard(card);
-    });
-  }
-
-  renderNewCards (cards) {
-    this.setState({cards: [...this.state.cards, ...cards]});
-  }
-  unrenderOldCard (card) {
-    this.setState({cards: this.state.cards.filter((cardCurrent) => {
-      return card.id !== cardCurrent.id;
-    })});
-    // Switches to last tab if the last card on the current tab has been deleted
-    if ((this.state.tab * this.numCardsOnTab >= this.state.cards.length) && this.state.tab > 0) {
-      this.setState({tab: this.state.tab - 1});
-    }
   }
 
   fetchCurrentCardpack () {
-    axios.get('/api/cardpacks/' + this.cardpackId)
-      .then((response) => {
-        let cardpack = response.data;
+    api.getCardpack(this.cardpackId)
+      .then((cardpack) => {
         this.setState({cardpack});
       })
       .catch(() => {
         this.setState({cardpack: null});
       });
   }
-  fetchCards () {
-    if (this.cardpackId) {
-      axios.get('/api/cards/' + this.cardpackId)
-        .then((response) => {
-          let cards = response.data;
-          this.setState({cards, cardsFetched: true});
-        })
-        .catch((error) => {
-          this.setState({cardpack: null});
-        });
-    }
-  }
 
   addCards (cards) {
-    if (cards.length <= 100) {
-      return axios.post('/api/cards/' + this.cardpackId, cards);
-    }
-    let tempCards = [];
-    cards.forEach((card, index) => {
-      tempCards.push(card);
-      if (tempCards.length === 100 || index === cards.length - 1) {
-        axios.post('/api/cards/' + this.cardpackId, tempCards);
-        tempCards = [];
-      }
-    });
+    return api.createCards(this.cardpackId, cards);
   }
 
   downloadStringifiedCards () {
@@ -99,7 +53,7 @@ class CardpackViewer extends Component {
       document.body.removeChild(element);
     };
     // Start file download.
-    download(this.state.cardpack.name, cardpackFileHandler.stringify(this.state.cards));
+    download(this.state.cardpack.name, cardpackFileHandler.stringify({whiteCards: this.state.cardpack.whiteCards, blackCards: this.state.cardpack.blackCards}));
   }
   uploadStringifiedCards () {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -152,9 +106,9 @@ class CardpackViewer extends Component {
 
     return (
       <div className='panel'>
-        <div>{this.state.cardpack && this.state.cardsFetched ? <div className='center'>{this.state.cardpack.name}</div> : <LinearProgress/>}</div>
-        {isOwner && this.state.cardsFetched ? <CardAdder addCards={this.addCards} /> : null}
-        {this.state.cardsFetched ?
+        <div>{this.state.cardpack ? <div className='center'>{this.state.cardpack.name}</div> : <LinearProgress/>}</div>
+        {isOwner ? <CardAdder addCards={this.addCards} /> : null}
+        {this.state.cardpack ?
           <div>
             <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
             {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}

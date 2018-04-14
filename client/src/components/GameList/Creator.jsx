@@ -3,7 +3,6 @@ import { bindActionCreators } from 'redux';
 import { createGame } from '../../gameServerInterface';
 import { connect } from 'react-redux';
 import { RaisedButton, TextField, Checkbox, DropDownMenu, MenuItem } from 'material-ui';
-import axios from 'axios';
 import { List, ListItem } from 'material-ui/List';
 import { setGameState } from '../../store/modules/game';
 

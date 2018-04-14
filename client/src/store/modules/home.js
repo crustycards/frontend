@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import axios from 'axios';
 
 export const ADD_FRIEND = 'home/ADD_FRIEND';
 export const REMOVE_FRIEND = 'home/REMOVE_FRIEND';

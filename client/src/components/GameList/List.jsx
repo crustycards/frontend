@@ -3,7 +3,6 @@ import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'm
 import { FlatButton } from 'material-ui';
 import { connect } from 'react-redux';
 import { joinGame, leaveGame } from '../../gameServerInterface';
-import axios from 'axios';
 
 const GameList = (props) => (
   props.games.length ?

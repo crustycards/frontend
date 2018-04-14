@@ -1,15 +1,10 @@
 import React from 'react';
-import axios from 'axios';
+import api from '../../apiInterface';
 import { NavLink } from 'react-router-dom';
 import { Card, CardActions, CardHeader } from 'material-ui/Card';
 import FlatButton from 'material-ui/FlatButton';
 import time from 'time-converter';
 const navItemStyle = {textDecoration: 'none'};
-const deleteCardpack = (id) => {
-  axios.delete('/api/cardpacks', {
-    data: {id}
-  });
-};
 
 const Cardpack = (props) => (
   <Card className='card'>
@@ -21,7 +16,7 @@ const Cardpack = (props) => (
       <NavLink to={`/cardpacks?id=${props.cardpack.id}`} style={navItemStyle}>
         <FlatButton label='Edit' />
       </NavLink>
-      <FlatButton label='Delete' onClick={deleteCardpack.bind(null, props.cardpack.id)} />
+      <FlatButton label='Delete' onClick={api.deleteCardpack.bind(null, props.cardpack.id)} />
     </CardActions>
   </Card>
 );

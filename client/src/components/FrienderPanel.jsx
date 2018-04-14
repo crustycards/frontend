@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import api from '../apiInterface';
+import { connect } from 'react-redux';
 import { TextField, RaisedButton } from 'material-ui';
 import helpers from '../helpers';
 
@@ -16,10 +17,8 @@ class FrienderPanel extends Component {
 
   sendRequest () {
     if (helpers.isEmail(this.state.requestEmail)) {
-      axios.post('/api/friends', {
-        type: 'request',
-        user: this.state.requestEmail
-      });
+      // TODO - Fix this to search users rather than add by email
+      api.addFriend(this.state.requestEmail);
       this.setState({requestEmail: ''});
     }
   }
@@ -59,4 +58,8 @@ class FrienderPanel extends Component {
   }
 }
 
-export default FrienderPanel;
+const mapStateToProps = ({global}) => ({
+  currentUser: global.currentUser
+});
+
+export default connect(mapStateToProps)(FrienderPanel);

@@ -7,7 +7,6 @@ import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
 import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
-import axios from 'axios';
 const buttonStyle = {
   height: '36px',
   margin: '10px'
