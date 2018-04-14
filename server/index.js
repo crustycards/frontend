@@ -35,7 +35,7 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
   <script>
     window.__PRELOADED_DATA__ = ${JSON.stringify(
       {
-        gameURL: process.env.GAME_URL,
+        notificationServerURL: process.env.NOTIFICATION_SERVER_URL,
         apiURL: process.env.PUBLIC_API_URL
       }
     )}
@@ -47,7 +47,6 @@ const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
-const socketHandler   = require('./socketHandler');
 const api             = require('../api');
 const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
@@ -155,35 +154,5 @@ server.route([
     }
   }
 ]);
-
-const io = require('socket.io')(server.listener);
-
-io.use(async (socket, next) => {
-  if (socket.handshake.headers.cookie) {
-    let cookie = socket.handshake.headers.cookie;
-    cookie = cookie
-      .split('; ')
-      .find(cookie => cookie.startsWith(`${cookieName}=`));
-    if (cookie) {
-      cookie = cookie.split(`${cookieName}=`)[1];
-      cookie = Buffer.from(cookie, 'base64').toString();
-      cookie = cookie.substring(1, cookie.length - 1);
-      try {
-        let {oAuthId, oAuthProvider} = jwt.verify(cookie, password);
-        socket.request.user = await api.User.get({oAuthId, oAuthProvider});
-      } catch (e) {
-        socket.request.user = null;
-      }
-    }
-  }
-  next();
-});
-
-io.on('connection', (socket) => {
-  socketHandler.openSocket(socket);
-  socket.on('disconnect', () => {
-    socketHandler.closeSocket(socket);
-  });
-});
 
 server.start().then(() => { console.log(`Server is running on port ${port}`); });

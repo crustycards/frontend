@@ -1,7 +1,7 @@
 import axios from 'axios';
 import store from './store';
 
-const apiURL = window.__PRELOADED_DATA__.apiURL;
+const { apiURL } = window.__PRELOADED_DATA__;
 
 const user = store.getState().global.currentUser;
 

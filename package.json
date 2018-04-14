@@ -67,7 +67,6 @@
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "redux-socket.io": "^1.4.0",
-    "socket.io": "^2.0.3",
     "socket.io-client": "^2.0.3",
     "style-loader": "^0.20.3",
     "time-converter": "0.0.1",
