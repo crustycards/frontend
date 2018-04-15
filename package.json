@@ -6,8 +6,6 @@
   "scripts": {
     "build-dev": "webpack -d --watch --mode development",
     "build-prod": "webpack --mode production",
-    "build-css": "node-sass --include-path scss client/src/styles/index.scss client/dist/styles.css",
-    "watch-css": "nodemon -e scss -x \"npm run build-css\"",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
     "lint": "eslint .",
@@ -28,11 +26,15 @@
     "chai": "^4.1.1",
     "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
+    "css-loader": "^0.28.10",
     "enzyme": "^3.3.0",
     "eslint": "^4.18.2",
     "eslint-config-hackreactor": "git://github.com/reactorcore/eslint-config-hackreactor.git",
     "eslint-plugin-react": "^7.7.0",
     "jest": "^22.4.3",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^7.0.1",
+    "style-loader": "^0.20.3",
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14"
   },
@@ -43,7 +45,6 @@
     "body-parser": "^1.17.2",
     "compression": "^1.7.2",
     "cookie-parser": "^1.4.3",
-    "css-loader": "^0.28.10",
     "dotenv": "^4.0.0",
     "file-select": "^1.0.2",
     "get-docker-secrets": "^0.1.5",
@@ -51,7 +52,6 @@
     "jsonwebtoken": "^8.2.1",
     "material-ui": "^0.20.0",
     "material-ui-icons": "^1.0.0-beta.36",
-    "node-sass": "^4.7.2",
     "passport": "^0.4.0",
     "passport-google-oauth2": "^0.1.6",
     "passport-local": "^1.0.0",
@@ -67,7 +67,6 @@
     "redux": "^3.7.2",
     "redux-observable": "^0.18.0",
     "socket.io-client": "^2.0.3",
-    "style-loader": "^0.20.3",
     "time-converter": "0.0.1",
     "url-loader": "^0.5.9"
   }

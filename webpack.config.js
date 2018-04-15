@@ -19,7 +19,18 @@ module.exports = {
         }
       },
       {
-        test: /\.css$/, loader: 'style-loader!css-loader' // Allows css in React
+        test: /\.scss$/,
+        use: [
+          {
+            loader: 'style-loader' // creates style nodes from JS strings
+          },
+          {
+            loader: 'css-loader' // translates CSS into CommonJS
+          },
+          {
+            loader: 'sass-loader' // compiles Sass to CSS
+          }
+        ]
       },
       {
         test: /\.(jpg|png|svg)$/,
