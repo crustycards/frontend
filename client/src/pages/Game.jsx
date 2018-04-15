@@ -34,7 +34,7 @@ const Game = (props) => (
       </div>
       :
       <div className='content-wrap'>
-        <div className='center panel'>You're not in a game. <NavLink to='/gamelist' style={{textDecoration: 'none'}}>
+        <div className='center panel'>You're not in a game.<NavLink to='/gamelist' style={{textDecoration: 'none'}}>
           <RaisedButton label='See Games' />
         </NavLink>
         </div>
