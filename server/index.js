@@ -20,15 +20,11 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
   return `<script>
     window.__PRELOADED_STATE__ = ${JSON.stringify(
       {
-        global: {
-          currentUser: user,
-          cardpacks
-        },
-        home: {
-          friends,
-          requestsSent,
-          requestsReceived
-        }
+        user,
+        friends,
+        requestsSent,
+        requestsReceived,
+        cardpacks
       }
     )}
   </script>
