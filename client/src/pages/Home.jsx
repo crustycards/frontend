@@ -40,7 +40,6 @@ class Home extends Component {
 }
 
 const mapStateToProps = ({global, home}) => ({
-  socket: global.socket,
   currentUser: global.currentUser,
   friends: home.friends, 
   requestsSent: home.requestsSent, 
