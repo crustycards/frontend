@@ -83,8 +83,8 @@ class GameCreator extends Component {
   }
 }
 
-const mapStateToProps = ({global}) => ({
-  cardpacks: global.cardpacks
+const mapStateToProps = ({user}) => ({
+  cardpacks: user.cardpacks
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

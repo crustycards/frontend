@@ -53,9 +53,9 @@ const Navbar = (props) => (
   </div>
 );
 
-const mapStateToProps = ({global}) => ({
-  currentUser: global.currentUser,
-  isOpen: global.navbarOpen
+const mapStateToProps = ({global, user}) => ({
+  isOpen: global.navbarOpen,
+  currentUser: user.currentUser
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

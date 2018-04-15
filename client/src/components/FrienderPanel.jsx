@@ -58,8 +58,8 @@ class FrienderPanel extends Component {
   }
 }
 
-const mapStateToProps = ({global}) => ({
-  currentUser: global.currentUser
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser
 });
 
 export default connect(mapStateToProps)(FrienderPanel);
