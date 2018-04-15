@@ -20,7 +20,7 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
   return `<script>
     window.__PRELOADED_STATE__ = ${JSON.stringify(
       {
-        user,
+        currentUser: user,
         friends,
         requestsSent,
         requestsReceived,
