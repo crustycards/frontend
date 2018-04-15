@@ -1,19 +1,9 @@
-import io from 'socket.io-client';
-import ax from 'axios';
 import store from './store';
 import { setGameState } from './store/modules/game';
 import { setGameList } from './store/modules/games';
 import { showStatusMessage } from './store/modules/global';
 
-const gameServerURL = window.__PRELOADED_DATA__.gameURL;
-const axios = ax.create({
-  baseURL: gameServerURL,
-  timeout: 1000,
-  withCredentials: true
-});
-export const socket = io(gameServerURL);
-
-
+// TODO - Rewrite game server interface
 /**
  * Creates a new game session
  * @param {string} gameName Name of new game
@@ -21,51 +11,51 @@ export const socket = io(gameServerURL);
  * @returns {Promise} Resolves to the new game state, or rejects if there is an error
  */
 export const createGame = (name, maxPlayers, cardpackIDs) => {
-  if (maxPlayers < 4 || maxPlayers > 20) {
-    let message = 'Max players must be between 4 and 20';
-    store.dispatch(showStatusMessage(message));
-    return Promise.reject(message);
-  }
-  if (!name) {
-    let message = 'Game name cannot be blank';
-    store.dispatch(showStatusMessage(message));
-    return Promise.reject(message);
-  }
-  if (!cardpackIDs.length) {
-    let message = 'Must select at least one cardpack';
-    store.dispatch(showStatusMessage(message));
-    return Promise.reject(message);
-  }
-  return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // if (maxPlayers < 4 || maxPlayers > 20) {
+  //   let message = 'Max players must be between 4 and 20';
+  //   store.dispatch(showStatusMessage(message));
+  //   return Promise.reject(message);
+  // }
+  // if (!name) {
+  //   let message = 'Game name cannot be blank';
+  //   store.dispatch(showStatusMessage(message));
+  //   return Promise.reject(message);
+  // }
+  // if (!cardpackIDs.length) {
+  //   let message = 'Must select at least one cardpack';
+  //   store.dispatch(showStatusMessage(message));
+  //   return Promise.reject(message);
+  // }
+  // return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 export const startGame = () => {
-  return axios.post('/game/start')
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.post('/game/start')
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 export const stopGame = () => {
-  return axios.post('/game/stop')
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.post('/game/stop')
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 /**
@@ -73,28 +63,28 @@ export const stopGame = () => {
  * @param {string} gameName The game name
  */
 export const joinGame = (gameName) => {
-  return axios.post('/game/join', gameName)
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.post('/game/join', gameName)
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 /**
  * Leaves the current game
  */
 export const leaveGame = () => {
-  return axios.post('/game/leave')
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.post('/game/leave')
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 /**
@@ -102,14 +92,14 @@ export const leaveGame = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameState = () => {
-  return axios.get('/game/state')
-    .then((response) => {
-      store.dispatch(setGameState(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.get('/game/state')
+  //   .then((response) => {
+  //     store.dispatch(setGameState(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
 };
 
 /**
@@ -117,14 +107,15 @@ export const getGameState = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameList = () => {
-  return axios.get('/gamelist')
-    .then((response) => {
-      store.dispatch(setGameList(response.data));
-      return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    });
+  // return axios.get('/gamelist')
+  //   .then((response) => {
+  //     store.dispatch(setGameList(response.data));
+  //     return response.data;
+  //   })
+  //   .catch((e) => {
+  //     store.dispatch(showStatusMessage(e.response.data));
+  //   });
+  return Promise.resolve([]);
 };
 
 /**
@@ -133,7 +124,7 @@ export const getGameList = () => {
  * @returns {Promise} Resolves to an error (or null if it succeeded)
  */
 export const playCard = (cardID) => {
-  return axios.post('/game/card', cardID);
+  // return axios.post('/game/card', cardID);
 };
 
 /**
@@ -141,7 +132,7 @@ export const playCard = (cardID) => {
  * @param {number} playerID
  */
 export const kickPlayer = (playerID) => {
-  return axios.post('/game/kickplayer', playerID);
+  // return axios.post('/game/kickplayer', playerID);
 };
 
 /**
@@ -149,5 +140,5 @@ export const kickPlayer = (playerID) => {
  * @param {number} cardID The ID of the card (or one of the cards in a set)
  */
 export const vote = (cardID) => {
-  return axios.post('/game/vote');
+  // return axios.post('/game/vote');
 };
