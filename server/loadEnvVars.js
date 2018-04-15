@@ -2,6 +2,20 @@ const dotEnv = require('dotenv');
 const { getDockerSecrets } = require('get-docker-secrets');
 const assert = require('assert');
 
+const requiredVars = ['NODE_ENV', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'callbackURL', 'JWT_SECRET', 'PUBLIC_API_URL', 'PRIVATE_API_URL'];
+const assertVarsExist = () => {
+  let missingVars = [];
+  requiredVars.forEach((varName) => {
+    if (!process.env[varName]) {
+      missingVars.push(varName);
+    }
+  });
+
+  if (missingVars.length) {
+    throw new Error(`Missing the following environment variables: ${JSON.stringify(missingVars)}`);
+  }
+};
+
 const defaultVals = {
   NODE_ENV: 'production',
   JWT_TIMEOUT_SECONDS: 60 * 60 * 24,
@@ -34,18 +48,12 @@ const applyCommandLineArguments = () => {
 module.exports = () => {
   applyDockerSecrets();
   applyEnvConfig();
-  applyDefaultValues();
   applyCommandLineArguments();
-  assert(!!process.env.NODE_ENV, 'Missing environment type - please add docker secret with a name of NODE_ENV');
+  applyDefaultValues();
+  assertVarsExist();
   assert([
     'development',
     'test',
     'production'
   ].includes(process.env.NODE_ENV), 'NODE_ENV must be either development, test, or production');
-  assert(!!process.env.GOOGLE_CLIENT_ID, 'Missing Google oAuth client id - please add docker secret with a name of GOOGLE_CLIENT_ID');
-  assert(!!process.env.GOOGLE_CLIENT_SECRET, 'Missing Google oAuth client secret - please add docker secret with a name of GOOGLE_CLIENT_SECRET');
-  assert(!!process.env.callbackURL, 'Missing Google oAuth callback URL - please add docker secret with a name of callbackURL');
-  assert(!!process.env.JWT_SECRET, 'Missing JWT secret - please add docker secret with a name of JWT_SECRET');
-  assert(!!process.env.PUBLIC_API_URL, 'Missing public api url - please add docker secret with a name of PUBLIC_API_URL');
-  assert(!!process.env.PUBLIC_API_URL, 'Missing private api url - please add docker secret with a name of PRIVATE_API_URL');
 };

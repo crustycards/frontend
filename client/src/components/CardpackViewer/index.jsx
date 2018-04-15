@@ -128,9 +128,8 @@ class CardpackViewer extends Component {
   }
 }
 
-const mapStateToProps = ({global}) => ({
-  currentUser: global.currentUser,
-  socket: global.socket
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser
 });
 
 export default connect(mapStateToProps)(CardpackViewer);

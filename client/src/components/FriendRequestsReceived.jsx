@@ -11,6 +11,8 @@ const FriendRequestsReceived = ({requestsReceived}) => (
   </div>
 );
 
-export default connect(({home}) => (
-  {requestsReceived: home.requestsReceived}
-))(FriendRequestsReceived);
+const mapStateToProps = ({user}) => ({
+  requestsReceived: user.requestsReceived
+});
+
+export default connect(mapStateToProps)(FriendRequestsReceived);

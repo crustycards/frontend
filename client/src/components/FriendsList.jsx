@@ -11,6 +11,8 @@ const FriendsList = ({friends}) => (
   </div>
 );
 
-export default connect(
-  ({home}) => ({friends: home.friends})
-)(FriendsList);
+const mapStateToProps = ({user}) => ({
+  friends: user.friends
+});
+
+export default connect(mapStateToProps)(FriendsList);

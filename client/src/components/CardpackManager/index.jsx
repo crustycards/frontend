@@ -60,8 +60,8 @@ class CardpackManager extends Component {
   }
 }
 
-const mapStateToProps = ({global}) => ({
-  cardpacks: global.cardpacks
+const mapStateToProps = ({user}) => ({
+  cardpacks: user.cardpacks
 });
 
 export default connect(mapStateToProps)(CardpackManager);

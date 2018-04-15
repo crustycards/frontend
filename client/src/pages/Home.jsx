@@ -8,11 +8,8 @@ import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
 
-import {
-  SET_CURRENT_USER
-} from '../store/modules/home';
-
-import { removeFriend } from '../store/modules/home.js';
+import { SET_CURRENT_USER } from '../store/modules/user';
+import { removeFriend } from '../store/modules/user';
 
 class Home extends Component {
   constructor(props) {
@@ -39,12 +36,11 @@ class Home extends Component {
   }
 }
 
-const mapStateToProps = ({global, home}) => ({
-  socket: global.socket,
-  currentUser: global.currentUser,
-  friends: home.friends, 
-  requestsSent: home.requestsSent, 
-  requestsReceived: home.requestsReceived
+const mapStateToProps = ({user}) => ({
+  currentUser: user.currentUser,
+  friends: user.friends, 
+  requestsSent: user.requestsSent, 
+  requestsReceived: user.requestsReceived
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
