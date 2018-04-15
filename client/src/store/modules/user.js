@@ -19,22 +19,22 @@ const initialState = {
 
 export default (state = initialState, {type, payload}) => {
   switch (type) {
-  case SET_CURRENT_USER: 
+  case SET_CURRENT_USER:
     return {
       ...state,
       currentUser: payload
     };
-  case ADD_CARDPACK: 
+  case ADD_CARDPACK:
     return {
       ...state,
       cardpacks: state.cardpacks.concat(payload)
     };
-  case REMOVE_CARDPACK: 
+  case REMOVE_CARDPACK:
     return {
       ...state,
       cardpacks: state.cardpacks.filter(cardpack => cardpack.id !== payload)
     };
-  case ADD_FRIEND: 
+  case ADD_FRIEND:
     return {
       ...state,
       friends: state.friends.concat([payload]),
@@ -42,7 +42,7 @@ export default (state = initialState, {type, payload}) => {
       requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
     };
 
-  case SET_FRIENDS: 
+  case SET_FRIENDS:
     return {
       ...state,
       friends: payload
@@ -68,7 +68,7 @@ export default (state = initialState, {type, payload}) => {
       requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
     };
   
-  default: 
+  default:
     return state;
   }
 };
