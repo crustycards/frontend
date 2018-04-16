@@ -5,7 +5,12 @@ import { bindActionCreators } from 'redux';
 import { hideStatusMessage } from '../store/modules/global';
 
 const StatusBar = (props) => (
-  <Snackbar open={props.isVisible} message={props.message} autoHideDuration={4000} onRequestClose={props.hideStatusMessage} />
+  <Snackbar
+    open={props.isVisible}
+    message={props.message}
+    autoHideDuration={4000}
+    onRequestClose={props.hideStatusMessage}
+  />
 );
 
 const mapStateToProps = ({global}) => ({
