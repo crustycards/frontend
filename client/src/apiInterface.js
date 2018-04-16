@@ -1,5 +1,6 @@
 import axios from 'axios';
 import store from './store';
+import { addCardpack, removeCardpack } from './store/modules/user';
 
 const { apiURL } = window.__PRELOADED_DATA__;
 
@@ -18,12 +19,20 @@ module.exports.deleteCard = (cardId) => {
 
 module.exports.deleteCardpack = (cardpackId) => {
   return api.delete(`/cardpack/${cardpackId}`)
-    .then(res => res.data);
+    .then(res => res.data)
+    .then(data => {
+      store.dispatch(removeCardpack(cardpackId));
+      return data;
+    });
 };
 
 module.exports.createCardpack = (name) => {
   return api.put(`/${user.id}/cardpack`, {name})
-    .then(res => res.data);
+    .then(res => res.data)
+    .then(cardpack => {
+      store.dispatch(addCardpack(cardpack));
+      return cardpack;
+    });
 };
 
 module.exports.getCardpack = (id) => {
