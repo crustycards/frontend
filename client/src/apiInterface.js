@@ -60,3 +60,23 @@ module.exports.addFriend = (friendId) => {
   return api.put(`/user/${user.id}/friends/${friendId}`)
     .then(res => res.data);
 };
+
+module.exports.searchUsers = (query) => {
+  return api.get(`/user/search?query=${query}`)
+    .then(res => res.data);
+};
+
+module.exports.autocompleteUserSearch = (query) => {
+  return api.get(`/user/search/autocomplete?query=${query}`)
+    .then(res => res.data);
+};
+
+module.exports.searchCardpacks = (query) => {
+  return api.get(`/cardpack/search?query=${query}`)
+    .then(res => res.data);
+};
+
+module.exports.autocompleteCardpackSearch = (query) => {
+  return api.get(`/cardpack/search/autocomplete?query=${query}`)
+    .then(res => res.data);
+};
