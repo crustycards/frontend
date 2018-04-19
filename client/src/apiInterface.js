@@ -50,7 +50,6 @@ module.exports.createBlackCards = (cardpackId, cards) => {
     .then(res => res.data);
 };
 
-// TODO - Add support for adding friends by email
 module.exports.removeFriend = (friendId) => {
   return api.delete(`/user/${user.id}/friends/${friendId}`)
     .then(res => res.data);
