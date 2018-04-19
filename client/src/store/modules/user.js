@@ -38,8 +38,8 @@ export default (state = initialState, {type, payload}) => {
     return {
       ...state,
       friends: state.friends.concat([payload]),
-      requestsSent: state.requestsSent.filter(f => f.id !== payload.id),
-      requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
+      requestsSent: state.requestsSent.filter(user => user.id !== payload),
+      requestsReceived: state.requestsReceived.filter(user => user.id !== payload)
     };
 
   case SET_FRIENDS:
@@ -63,9 +63,9 @@ export default (state = initialState, {type, payload}) => {
   case REMOVE_FRIEND:
     return {
       ...state,
-      friends: state.friends.filter(f => f.id !== payload.id),
-      requestsSent: state.requestsSent.filter(f => f.id !== payload.id),
-      requestsReceived: state.requestsReceived.filter(f => f.id !== payload.id)
+      friends: state.friends.filter(user => user.id !== payload),
+      requestsSent: state.requestsSent.filter(user => user.id !== payload),
+      requestsReceived: state.requestsReceived.filter(user => user.id !== payload)
     };
   
   default:
