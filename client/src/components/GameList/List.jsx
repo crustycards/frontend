@@ -18,7 +18,7 @@ const GameList = (props) => (
             {
               props.game && props.game.name === game.name ?
                 <FlatButton label='Leave' onClick={leaveGame} /> :
-                <FlatButton label='Join' onClick={() => {joinGame(game.name)}} />
+                <FlatButton label='Join' onClick={() => { joinGame(game.name); }} />
             }
           </CardActions>
         </Card>
