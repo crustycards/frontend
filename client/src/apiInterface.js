@@ -1,6 +1,6 @@
 import axios from 'axios';
 import store from './store';
-import { addCardpack, removeCardpack, removeFriend } from './store/modules/user';
+import { addCardpack, removeCardpack, removeFriend, addFriend } from './store/modules/user';
 
 const { apiURL } = window.__PRELOADED_DATA__;
 
@@ -11,6 +11,11 @@ const api = axios.create({
   timeout: 1000,
   withCredentials: true
 });
+
+const getUser = (id) => {
+  return api.get(`/user/${id}`)
+    .then(res => res.data);
+};
 
 module.exports.deleteCard = (cardId) => {
   return api.delete(`/card/${cardId}`)
@@ -61,7 +66,14 @@ module.exports.removeFriend = (friendId) => {
 
 module.exports.addFriend = (friendId) => {
   return api.put(`/user/${user.id}/friends/${friendId}`)
-    .then(res => res.data);
+    .then(res => res.data)
+    .then((data) => {
+      return getUser(friendId)
+        .then((user) => {
+          store.dispatch(addFriend(user));
+          return data;
+        });
+    });
 };
 
 module.exports.searchUsers = (query) => {
