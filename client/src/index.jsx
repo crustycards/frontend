@@ -17,10 +17,6 @@ import StatusBar from './components/StatusBar.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/index.scss';
 import { Router, Route, browserHistory, Switch } from 'react-router';
-import { getGameState, getGameList } from './gameServerInterface';
-
-getGameState();
-getGameList();
 
 render(
   <Provider store={store}>
