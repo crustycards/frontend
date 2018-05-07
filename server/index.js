@@ -32,7 +32,8 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
     window.__PRELOADED_DATA__ = ${JSON.stringify(
       {
         notificationServerURL: process.env.NOTIFICATION_SERVER_URL,
-        apiURL: process.env.PUBLIC_API_URL
+        apiURL: process.env.PUBLIC_API_URL,
+        gameServerURL: process.env.GAME_SERVER_URL
       }
     )}
   </script>
@@ -118,7 +119,7 @@ server.route([
         // Token has expired or does not exist
       }
       if (tokenData) {
-        user = await api.User.get({oAuthId: tokenData.oAuthId, oAuthProvider: tokenData.oAuthProvider});
+        user = await api.User.get({oAuthId: tokenData.oAuthId, oAuthProvider: tokenData.oAuthProvider}).catch(() => null);
         friends = await api.Friend.getFriends(user.id);
         requestsSent = await api.Friend.getSentRequests(user.id);
         requestsReceived = await api.Friend.getReceivedRequests(user.id);
