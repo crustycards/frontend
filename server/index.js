@@ -4,14 +4,14 @@ const password       = process.env.JWT_SECRET;
 const isProduction   = process.env.NODE_ENV === 'production';
 const port           = parseInt(process.env.PORT);
 const jwtExpTime     = parseInt(process.env.JWT_TIMEOUT_SECONDS);
-const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS);
+const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS); // TODO - Set this variable in env file and varLoader
 const cookieName     = 'session';
 
-const getToken = ({oAuthId, oAuthProvider}) => {
-  if (!(oAuthId && oAuthProvider)) {
-    throw new Error('Missing parameters');
+const getToken = (userId) => {
+  if (!userId) {
+    throw new Error('Missing user ID');
   }
-  return jwt.sign({oAuthId, oAuthProvider}, password, {
+  return jwt.sign({userId}, password, {
     expiresIn: jwtExpTime
   });
 };
@@ -88,7 +88,7 @@ server.register(require('bell'), (err) => {
         };
         try {
           let resUser = await api.User.findOrCreate(userData);
-          return reply.redirect('/').state(cookieName, getToken(resUser));
+          return reply.redirect('/').state(cookieName, getToken(resUser.id));
         } catch (err) {
           console.log(err);
         }
@@ -113,13 +113,13 @@ server.route([
         tokenData = jwt.verify(request.state[cookieName], password);
         const secondsToExp = tokenData.exp - Math.floor(Date.now() / 1000);
         if (secondsToExp <= jwtExpTime - jwtRefreshTime) {
-          reply.state(cookieName, getToken(tokenData));
+          reply.state(cookieName, getToken(tokenData.userId));
         }
       } catch (err) {
         // Token has expired or does not exist
       }
       if (tokenData) {
-        user = await api.User.get({oAuthId: tokenData.oAuthId, oAuthProvider: tokenData.oAuthProvider}).catch(() => null);
+        user = await api.User.get({id: tokenData.userId});
         friends = await api.Friend.getFriends(user.id);
         requestsSent = await api.Friend.getSentRequests(user.id);
         requestsReceived = await api.Friend.getReceivedRequests(user.id);
