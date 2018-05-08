@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import api from '../../apiInterface';
 import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
-import { GridList, GridTile } from 'material-ui/GridList';
+import { Tabs, Tab } from 'material-ui/Tabs';
 import CardAdder from './CardAdder.jsx';
 import CAHCard from '../CAHCard.jsx';
 import fileSelect from 'file-select';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';
+import TabbedList from '../TabbedList.jsx';
+import SwipeableViews from 'react-swipeable-views';
 
 class CardpackViewer extends Component {
   constructor (props) {
@@ -16,14 +18,13 @@ class CardpackViewer extends Component {
     this.addCards = this.addCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.uploadStringifiedCards = this.uploadStringifiedCards.bind(this);
-    this.nextTab = this.nextTab.bind(this);
-    this.previousTab = this.previousTab.bind(this);
+    this.handleTabChange = this.handleTabChange.bind(this);
     this.state = {
       newCardName: '',
       newCardType: 'white',
       newCardAnswerFields: 1,
       cardpack: undefined,
-      tab: 0
+      slideIndex: 0
     };
     this.fetchCurrentCardpack();
   }
@@ -55,6 +56,7 @@ class CardpackViewer extends Component {
     // Start file download.
     download(this.state.cardpack.name, cardpackFileHandler.stringify({whiteCards: this.state.cardpack.whiteCards, blackCards: this.state.cardpack.blackCards}));
   }
+
   uploadStringifiedCards () {
     if (window.File && window.FileReader && window.FileList && window.Blob) {
       fileSelect({
@@ -76,12 +78,8 @@ class CardpackViewer extends Component {
     }
   }
 
-  nextTab () {
-    this.setState({tab: this.state.tab + 1});
-  }
-
-  previousTab () {
-    this.setState({tab: this.state.tab - 1});
+  handleTabChange(value) {
+    this.setState({slideIndex: value});
   }
 
   render () {
@@ -92,37 +90,40 @@ class CardpackViewer extends Component {
     }
 
     let isOwner = this.props.currentUser && this.state.cardpack && this.state.cardpack.owner && this.props.currentUser.id === this.state.cardpack.owner.id;
-    let cards = [];
 
-    let tabStart = this.state.tab * this.numCardsOnTab;
-    let tabEnd = tabStart + this.numCardsOnTab;
-    for (let i = tabStart; i < tabEnd; i++) {
-      let card = this.state.cards[i];
-      if (!card) {
-        break;
-      }
-      cards.push(<GridTile key={i}><CAHCard card={card} isOwner={isOwner} showTime={true} /></GridTile>);
-    }
+    // cards.push(<CAHCard card={card} isOwner={isOwner} showTime={true} />);
 
     return (
       <div className='panel'>
-        <div>{this.state.cardpack ? <div className='center'>{this.state.cardpack.name}</div> : <LinearProgress/>}</div>
-        {isOwner ? <CardAdder addCards={this.addCards} /> : null}
         {this.state.cardpack ?
           <div>
-            <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-            {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
-            <div className='center'>
-              {this.state.cards.length > this.numCardsOnTab ?
-                <div>
-                  <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-                  <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.state.cards.length} />
-                </div>
-                : null}
+            <div className='center'>{this.state.cardpack.name}</div>
+            {isOwner ? <CardAdder addCards={this.addCards} /> : null}
+            {this.state.cardpack ?
+              <div>
+                <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
+                {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
+              </div>
+              : null}
+            <div>
+              <Tabs
+                onChange={this.handleTabChange}
+                value={this.state.slideIndex}
+              >
+                <Tab label='White Cards' value={0} />
+                <Tab label='Black Cards' value={1} />
+              </Tabs>
+              <SwipeableViews
+                index={this.state.slideIndex}
+                onChangeIndex={this.handleTabChange}
+              >
+                <TabbedList elements={this.state.cardpack.whiteCards.map(card => <CAHCard card={card} isOwner={isOwner} showTime={true} />)} />
+                <TabbedList elements={this.state.cardpack.blackCards.map(card => <CAHCard card={card} isOwner={isOwner} showTime={true} />)} />
+              </SwipeableViews>
             </div>
-            <GridList children={cards} cols={4} cellHeight='auto' />
           </div>
-          : null}
+          :
+          <LinearProgress/>}
       </div>
     );
   }
