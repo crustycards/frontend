@@ -24,10 +24,9 @@ class CAHCard extends Component {
     return <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
       <Card className='card'>
         <CardHeader
-          title={this.props.card.text + (this.props.card.answerFields && this.props.card.answerFields > 1 ? ' - ' + this.props.card.answerFields + ' card answer' : '')}
-          key={0}
+          title={this.props.card.text}
         />
-        <CardActions key={1}>
+        <CardActions>
           {this.props.isOwner ? <FlatButton label='Delete' onClick={this.removeCard} /> : null}
           {this.props.playHandler ? <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} /> : null}
         </CardActions>
