@@ -15,7 +15,8 @@ class CardpackViewer extends Component {
     super(props);
     this.numCardsOnTab = 20;
     this.cardpackId = this.props.cardpackId;
-    this.addCards = this.addCards.bind(this);
+    this.addWhiteCards = this.addWhiteCards.bind(this);
+    this.addBlackCards = this.addBlackCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
     this.uploadStringifiedCards = this.uploadStringifiedCards.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
@@ -39,8 +40,18 @@ class CardpackViewer extends Component {
       });
   }
 
-  addCards (cards) {
-    return api.createCards(this.cardpackId, cards);
+  addWhiteCards (cards) {
+    return api.createWhiteCards(this.cardpackId, cards).then((data) => {
+      this.setState({cardpack: {...this.state.cardpack, whiteCards: [...this.state.cardpack.whiteCards, ...cards]}});
+      return data;
+    });
+  }
+
+  addBlackCards (cards) {
+    return api.createBlackCards(this.cardpackId, cards).then((data) => {
+      this.setState({cardpack: {...this.state.cardpack, blackCards: [...this.state.cardpack.blackCards, ...cards]}});
+      return data;
+    });
   }
 
   downloadStringifiedCards () {
@@ -98,7 +109,12 @@ class CardpackViewer extends Component {
         {this.state.cardpack ?
           <div>
             <div className='center'>{this.state.cardpack.name}</div>
-            {isOwner ? <CardAdder addCards={this.addCards} /> : null}
+            {isOwner && <CardAdder
+              addCard={(cardData) => {
+                cardData.type === 'white' ? this.addWhiteCards([{text: cardData.text}]) : this.addBlackCards([{text: cardData.text, answerFields: cardData.answerFields}]);
+              }}
+              type={!!this.state.slideIndex ? 'black' : 'white'}
+            />}
             {this.state.cardpack ?
               <div>
                 <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />

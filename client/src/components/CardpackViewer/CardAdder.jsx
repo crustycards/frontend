@@ -5,13 +5,11 @@ class CardAdder extends Component {
   constructor (props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.handleNewSelect = this.handleNewSelect.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.changeAnswerField = this.changeAnswerField.bind(this);
     this.addCurrentCard = this.addCurrentCard.bind(this);
     this.state = {
       newCardName: '',
-      newCardType: 'white',
       newCardAnswerFields: 1
     };
   }
@@ -20,10 +18,6 @@ class CardAdder extends Component {
     if (e.key === 'Enter') {
       this.addCurrentCard();
     }
-  }
-
-  handleNewSelect (e, index, newCardType) {
-    this.setState({newCardType});
   }
 
   handleInputChange (property, e) {
@@ -38,30 +32,25 @@ class CardAdder extends Component {
 
   addCurrentCard () {
     if (this.state.newCardName) {
-      this.props.addCards([{
+      this.props.addCard({
         text: this.state.newCardName,
-        type: this.state.newCardType,
-        answerFields: this.state.newCardAnswerFields
-      }]);
+        answerFields: this.state.newCardAnswerFields,
+        type: this.props.type
+      });
       this.setState({newCardName: ''});
     }
   }
 
   render () {
     return (
-      <div className='panel'>
+      <div>
         <div className='col-narrow'>
           <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} />
           <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCurrentCard} />
         </div>
         <div className='col-wide'>
-          <DropDownMenu value={this.state.newCardType} onChange={this.handleNewSelect}>
-            <MenuItem value={'white'} primaryText='White' />
-            <MenuItem value={'black'} primaryText='Black' />
-          </DropDownMenu>
-          {this.state.newCardType === 'black' ?
+          {this.props.type === 'black' &&
             <SelectField
-              disabled={this.state.newCardType !== 'black'}
               floatingLabelText='Answer Fields'
               value={this.state.newCardAnswerFields}
               onChange={this.changeAnswerField}
@@ -69,8 +58,7 @@ class CardAdder extends Component {
               <MenuItem value={1} primaryText='One' />
               <MenuItem value={2} primaryText='Two' />
               <MenuItem value={3} primaryText='Three' />
-            </SelectField>
-            : null}
+            </SelectField>}
         </div>
       </div>
     );
