@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { FlatButton, RaisedButton, Divider } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import CAHCard from '../components/CAHCard.jsx';
+import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
 import { NavLink } from 'react-router-dom';
@@ -24,7 +24,7 @@ const Game = (props) => (
         </div>
         <div className='game-main'>
           <div className='col-narrow'>
-            {props.game.blackCard ? <CAHCard card={props.game.blackCard} /> : null}
+            {props.game.blackCard ? <CAHBlackCard card={props.game.blackCard} /> : null}
             <PlayerList/>
           </div>
           <div className='col-wide'>

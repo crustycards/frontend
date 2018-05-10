@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import { FlatButton, LinearProgress } from 'material-ui';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import CardAdder from './CardAdder.jsx';
-import CAHCard from '../CAHCard.jsx';
+import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
+import CAHBlackCard from '../shells/CAHBlackCard.jsx';
 import fileSelect from 'file-select';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 import TabbedList from '../TabbedList.jsx';
@@ -102,8 +103,6 @@ class CardpackViewer extends Component {
 
     let isOwner = this.props.currentUser && this.state.cardpack && this.state.cardpack.owner && this.props.currentUser.id === this.state.cardpack.owner.id;
 
-    // cards.push(<CAHCard card={card} isOwner={isOwner} showTime={true} />);
-
     return (
       <div className='panel'>
         {this.state.cardpack ?
@@ -133,8 +132,8 @@ class CardpackViewer extends Component {
                 index={this.state.slideIndex}
                 onChangeIndex={this.handleTabChange}
               >
-                <TabbedList elements={this.state.cardpack.whiteCards.map(card => <CAHCard card={card} isOwner={isOwner} showTime={true} />)} />
-                <TabbedList elements={this.state.cardpack.blackCards.map(card => <CAHCard card={card} isOwner={isOwner} showTime={true} />)} />
+                <TabbedList elements={this.state.cardpack.whiteCards.map(card => <CAHWhiteCard card={card} isOwner={isOwner} showTime={true} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, whiteCards: this.state.cardpack.whiteCards.filter(card => card.id !== cardId)}})} />)} />
+                <TabbedList elements={this.state.cardpack.blackCards.map(card => <CAHBlackCard card={card} isOwner={isOwner} showTime={true} />)} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, blackCards: this.state.cardpack.blackCards.filter(card => card.id !== cardId)}})} />
               </SwipeableViews>
             </div>
           </div>

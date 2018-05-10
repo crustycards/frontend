@@ -17,8 +17,13 @@ const getUser = (id) => {
     .then(res => res.data);
 };
 
-module.exports.deleteCard = (cardId) => {
-  return api.delete(`/card/${cardId}`)
+module.exports.deleteWhiteCard = (cardId) => {
+  return api.delete(`/cards/white/${cardId}`)
+    .then(res => res.data);
+};
+
+module.exports.deleteBlackCard = (cardId) => {
+  return api.delete(`/cards/black/${cardId}`)
     .then(res => res.data);
 };
 

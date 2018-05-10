@@ -1,38 +1,39 @@
 import React, {Component} from 'react';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
+import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
 import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
 import { FlatButton } from 'material-ui';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import api from '../apiInterface';
+import { deleteBlackCard } from '../../apiInterface';
 
-class CAHCard extends Component {
+class CAHBlackCard extends Component {
   constructor (props) {
     super(props);
 
     this.removeCard = this.removeCard.bind(this);
-
-    // If we have no playhandler register console.error to 
-    // report the error if invoked
-    this.playHandler = (this.props.playHandler || console.error).bind(this);
   }
 
   removeCard() {
-    return api.deleteCard(this.props.card.id);
+    return deleteBlackCard(this.props.card.id).then((data) => {
+      if (this.props.onDelete) {
+        this.props.onDelete(this.props.card.id);
+      }
+      return data;
+    });
   }
 
   render() {
-    return <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+    return <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
       <Card className='card'>
         <CardHeader
           title={this.props.card.text}
+          subtitle={this.props.card.answerFields}
         />
         <CardActions>
           {this.props.isOwner ? <FlatButton label='Delete' onClick={this.removeCard} /> : null}
-          {this.props.playHandler ? <FlatButton label='Play' onClick={() => this.playHandler(this.props.card)} /> : null}
         </CardActions>
       </Card>
     </MuiThemeProvider>;
   }
 }
 
-module.exports = CAHCard;
+module.exports = CAHBlackCard;
