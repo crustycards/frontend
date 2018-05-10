@@ -42,16 +42,16 @@ class CardpackViewer extends Component {
   }
 
   addWhiteCards (cards) {
-    return api.createWhiteCards(this.cardpackId, cards).then((data) => {
-      this.setState({cardpack: {...this.state.cardpack, whiteCards: [...this.state.cardpack.whiteCards, ...cards]}});
-      return data;
+    return api.createWhiteCards(this.cardpackId, cards).then((createdCards) => {
+      this.setState({cardpack: {...this.state.cardpack, whiteCards: [...this.state.cardpack.whiteCards, ...createdCards]}});
+      return createdCards;
     });
   }
 
   addBlackCards (cards) {
-    return api.createBlackCards(this.cardpackId, cards).then((data) => {
-      this.setState({cardpack: {...this.state.cardpack, blackCards: [...this.state.cardpack.blackCards, ...cards]}});
-      return data;
+    return api.createBlackCards(this.cardpackId, cards).then((createdCards) => {
+      this.setState({cardpack: {...this.state.cardpack, blackCards: [...this.state.cardpack.blackCards, ...createdCards]}});
+      return createdCards;
     });
   }
 
@@ -132,8 +132,8 @@ class CardpackViewer extends Component {
                 index={this.state.slideIndex}
                 onChangeIndex={this.handleTabChange}
               >
-                <TabbedList elements={this.state.cardpack.whiteCards.map(card => <CAHWhiteCard card={card} isOwner={isOwner} showTime={true} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, whiteCards: this.state.cardpack.whiteCards.filter(card => card.id !== cardId)}})} />)} />
-                <TabbedList elements={this.state.cardpack.blackCards.map(card => <CAHBlackCard card={card} isOwner={isOwner} showTime={true} />)} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, blackCards: this.state.cardpack.blackCards.filter(card => card.id !== cardId)}})} />
+                <TabbedList elements={this.state.cardpack.whiteCards.map(card => <CAHWhiteCard card={card} isOwner={isOwner} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, whiteCards: this.state.cardpack.whiteCards.filter(card => card.id !== cardId)}})} />)} />
+                <TabbedList elements={this.state.cardpack.blackCards.map(card => <CAHBlackCard card={card} isOwner={isOwner} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, blackCards: this.state.cardpack.blackCards.filter(card => card.id !== cardId)}})} />)} />
               </SwipeableViews>
             </div>
           </div>
