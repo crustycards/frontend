@@ -2,21 +2,35 @@ import React from 'react';
 import DraggableCardInHand from './DraggableCardInHand.jsx';
 import { cardInHand } from '../../../dndTypes';
 import { DropTarget } from 'react-dnd/lib';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { queueCard } from '../../../store/modules/game';
 
-const Tray = ({cards, onMove, connectDropTarget, isOver, canDrop}) => (
+const Tray = ({cards, queuedCardIds, queueCard, connectDropTarget, isOver, canDrop}) => (
   connectDropTarget(<div className='tray' style={{minHeight: '100px'}}>
-    {cards.map(card =>
+    {cards.filter(card => !queuedCardIds.includes(card.id)).map(card =>
       <DraggableCardInHand
         key={card.id}
         card={card}
-        onDrop={onMove}
+        onDrop={() => queueCard(card.id)}
       />
     )}
   </div>)
 );
 
-export default DropTarget(cardInHand, {}, (connect, monitor) => ({
+const DropTargetTray = DropTarget(cardInHand, {}, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
 }))(Tray);
+
+const mapStateToProps = ({game}) => ({
+  cards: game.hand,
+  queuedCardIds: game.queuedCardIds
+});
+
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  queueCard
+}, dispatch);
+
+export default connect(mapStateToProps, mapDispatchToProps)(DropTargetTray);

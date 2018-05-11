@@ -2,6 +2,8 @@
  * TYPES
  */
 export const SET_GAME_STATE = 'game/SET_GAME_STATE';
+export const QUEUE_CARD = 'game/QUEUE_CARD';
+export const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
 export const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
 export const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
 export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
@@ -19,6 +21,10 @@ export default (state = initialState, {type, payload}) => {
   switch (type) {
   case SET_GAME_STATE:
     return {...payload, queuedCardIds: []};
+  case QUEUE_CARD:
+    return {...state, queuedCardIds: [...state.queuedCardIds, payload]};
+  case UNQUEUE_CARD:
+    return {...state, queuedCardIds: state.queuedCardIds.filter(id => id !== payload)};
   case SET_BLACK_CARD:
     return {
       ...state,
@@ -68,6 +74,16 @@ export default (state = initialState, {type, payload}) => {
 
 export const setGameState = payload => ({
   type: SET_GAME_STATE,
+  payload
+});
+
+export const queueCard = payload => ({
+  type: QUEUE_CARD,
+  payload
+});
+
+export const unqueueCard = payload => ({
+  type: UNQUEUE_CARD,
   payload
 });
 
