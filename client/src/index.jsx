@@ -17,24 +17,28 @@ import StatusBar from './components/StatusBar.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/index.scss';
 import { Router, Route, browserHistory, Switch } from 'react-router';
+import { DragDropContextProvider } from 'react-dnd/lib';
+import DragDropHTML5Backend from 'react-dnd-html5-backend';
 
 render(
   <Provider store={store}>
     <BrowserRouter basename='/'>
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-        <div>
-          <Navbar/>
-          <StatusBar/>
-          <Switch>
-            <Route exact path='/' component={Home}/>
-            <Route exact path='/cardpacks' component={Cardpacks}/>
-            <Route exact path='/login' component={Login}/>
-            <Route exact path='/game' component={Game}/>
-            <Route exact path='/gamelist' component={GameList}/>
-            <Route exact path='/settings' component={Settings}/>
-            <Route component={NotFound}/>
-          </Switch>
-        </div>
+        <DragDropContextProvider backend={DragDropHTML5Backend}>
+          <div>
+            <Navbar/>
+            <StatusBar/>
+            <Switch>
+              <Route exact path='/' component={Home}/>
+              <Route exact path='/cardpacks' component={Cardpacks}/>
+              <Route exact path='/login' component={Login}/>
+              <Route exact path='/game' component={Game}/>
+              <Route exact path='/gamelist' component={GameList}/>
+              <Route exact path='/settings' component={Settings}/>
+              <Route component={NotFound}/>
+            </Switch>
+          </div>
+        </DragDropContextProvider>
       </MuiThemeProvider>
     </BrowserRouter>
   </Provider>

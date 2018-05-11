@@ -2,13 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { GridList } from 'material-ui/GridList';
 import { bindActionCreators } from 'redux';
-import Card from '../shells/CAHWhiteCard.jsx';
+import DraggableCard from './DraggableCard.jsx';
 import { playCard } from '../../gameServerInterface';
 
 const Tray = ({hand}) => (
   <div className='tray'>
     {hand.map(card =>
-      <Card
+      <DraggableCard
         key={card.id}
         card={card}
         playHandler={() => playCard(card.id)}

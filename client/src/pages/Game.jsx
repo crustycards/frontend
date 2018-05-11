@@ -5,8 +5,10 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import Tray from '../components/GameBoard/Tray.jsx';
+import PlayArea from '../components/GameBoard/PlayArea.jsx';
 import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
+
 const buttonStyle = {
   height: '36px',
   margin: '10px'
@@ -29,6 +31,7 @@ const Game = (props) => (
           </div>
           <div className='col-wide'>
             <Tray/>
+            <PlayArea/>
           </div>
         </div>
       </div>
