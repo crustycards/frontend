@@ -18,7 +18,7 @@ const initialState = null;
 export default (state = initialState, {type, payload}) => {
   switch (type) {
   case SET_GAME_STATE:
-    return payload;
+    return {...payload, queuedCardIds: []};
   case SET_BLACK_CARD:
     return {
       ...state,
@@ -32,7 +32,7 @@ export default (state = initialState, {type, payload}) => {
   case ADD_WHITE_CARD:
     return {
       ...state,
-      whiteCards: state.game.whiteCards.concat([payload])
+      whiteCards: state.whiteCards.concat([payload])
     };
   case SET_HAND:
     return {
@@ -42,21 +42,21 @@ export default (state = initialState, {type, payload}) => {
   case ADD_CARD_TO_HAND:
     return {
       ...state,
-      hand: state.game.hand.concat([payload])
+      hand: state.hand.concat([payload])
     };
   case ADD_PLAYER:
     return {
       ...state,
-      players: state.game.players.concat([payload])
+      players: state.players.concat([payload])
     };
   case PLAY_CARD:
     // If the player has the card to play then play it
-    if (state.game.hand.includes(payload)) {
+    if (state.hand.includes(payload)) {
       return {
         ...state,
-        hand: state.game.hand.filter(c => c !== payload),
+        hand: state.hand.filter(c => c !== payload),
         // TODO - Potentially fix the line below
-        whiteCards: state.game.whiteCards.concat([payload])
+        whiteCards: state.whiteCards.concat([payload])
       };
     }
     // else do nothing
