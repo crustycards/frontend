@@ -20,7 +20,7 @@ const initialState = null;
 export default (state = initialState, {type, payload}) => {
   switch (type) {
   case SET_GAME_STATE:
-    return {...payload, queuedCardIds: []};
+    return payload ? {...payload, queuedCardIds: state ? state.queuedCardIds.filter(id => payload.hand.map(card => card.id).includes(id)) : []} : null;
   case QUEUE_CARD:
     return {...state, queuedCardIds: [...state.queuedCardIds, payload]};
   case UNQUEUE_CARD:
