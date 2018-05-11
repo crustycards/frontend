@@ -2,38 +2,49 @@ import store from './store';
 import { setGameState } from './store/modules/game';
 import { setGameList } from './store/modules/games';
 import { showStatusMessage } from './store/modules/global';
+import axios from 'axios';
 
-// TODO - Rewrite game server interface
+const { gameServerURL } = window.__PRELOADED_DATA__;
+
+const user = store.getState().user.currentUser;
+
+const gameApi = axios.create({
+  baseURL: gameServerURL,
+  timeout: 1000,
+  withCredentials: true
+});
+
 /**
  * Creates a new game session
  * @param {string} gameName Name of new game
- * @param {number[]} cardpackIDs List of cardpacks to include in the game
+ * @param {number} maxPlayers
+ * @param {number[]} cardpackIds List of cardpacks to include in the game
  * @returns {Promise} Resolves to the new game state, or rejects if there is an error
  */
-export const createGame = (name, maxPlayers, cardpackIDs) => {
-  // if (maxPlayers < 4 || maxPlayers > 20) {
-  //   let message = 'Max players must be between 4 and 20';
-  //   store.dispatch(showStatusMessage(message));
-  //   return Promise.reject(message);
-  // }
-  // if (!name) {
-  //   let message = 'Game name cannot be blank';
-  //   store.dispatch(showStatusMessage(message));
-  //   return Promise.reject(message);
-  // }
-  // if (!cardpackIDs.length) {
-  //   let message = 'Must select at least one cardpack';
-  //   store.dispatch(showStatusMessage(message));
-  //   return Promise.reject(message);
-  // }
-  // return axios.post('/game/create', {name, maxPlayers, cardpackIDs})
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+export const createGame = (gameName, maxPlayers, cardpackIds) => {
+  if (maxPlayers < 4 || maxPlayers > 20) {
+    let message = 'Max players must be between 4 and 20';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
+  }
+  if (!gameName) {
+    let message = 'Game name cannot be blank';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
+  }
+  if (!cardpackIds.length) {
+    let message = 'Must select at least one cardpack';
+    store.dispatch(showStatusMessage(message));
+    return Promise.reject(message);
+  }
+  return gameApi.post(`${user.id}/game/create`, {gameName, maxPlayers, cardpackIds})
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    });
 };
 
 export const startGame = () => {
