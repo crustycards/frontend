@@ -4,8 +4,7 @@ import { FlatButton, RaisedButton, Divider } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
-import Tray from '../components/GameBoard/Tray.jsx';
-import PlayArea from '../components/GameBoard/PlayArea.jsx';
+import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
 
@@ -30,8 +29,7 @@ const Game = (props) => (
             <PlayerList/>
           </div>
           <div className='col-wide'>
-            <Tray/>
-            <PlayArea/>
+            <PlaySelection/>
           </div>
         </div>
       </div>

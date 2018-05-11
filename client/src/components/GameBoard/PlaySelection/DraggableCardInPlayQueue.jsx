@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DragSource from 'react-dnd/lib/DragSource';
-import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
-import { playableCard } from '../../dndTypes';
+import CAHWhiteCard from '../../shells/CAHWhiteCard.jsx';
+import { cardInHand } from '../../../dndTypes';
 
 class DraggableCard extends Component {
   render() {
@@ -12,7 +12,7 @@ class DraggableCard extends Component {
   }
 }
 
-export default DragSource(playableCard, {beginDrag: (props) => props.card}, (connect, monitor) => ({
+export default DragSource(cardInHand, {beginDrag: (props) => props.card}, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))(DraggableCard);
