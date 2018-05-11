@@ -5,6 +5,7 @@ import StarBorder from 'material-ui/svg-icons/toggle/star-border';
 import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
+import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
 import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
 
@@ -25,7 +26,7 @@ const Game = (props) => (
         </div>
         <div className='game-main'>
           <div className='col-narrow'>
-            {props.game.blackCard ? <CAHBlackCard card={props.game.blackCard} /> : null}
+            <CurrentBlackCard/>
             <PlayerList/>
           </div>
           <div className='col-wide'>
