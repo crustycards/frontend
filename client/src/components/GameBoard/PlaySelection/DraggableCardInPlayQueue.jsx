@@ -12,7 +12,13 @@ class DraggableCard extends Component {
   }
 }
 
-export default DragSource(cardInHand, {beginDrag: (props) => props.card}, (connect, monitor) => ({
+const endDrag = (props, monitor) => {
+  if (monitor.didDrop()) {
+    props.onDrop(props.card.id);
+  }
+};
+
+export default DragSource(cardInHand, {beginDrag: () => ({}), endDrag}, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))(DraggableCard);
