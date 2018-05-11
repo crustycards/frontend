@@ -1,6 +1,5 @@
 export const OPEN_NAVBAR = 'global/OPEN_NAVBAR';
 export const CLOSE_NAVBAR = 'global/CLOSE_NAVBAR';
-export const TOGGLE_NAVBAR = 'global/TOGGLE_NAVBAR';
 export const SET_NAVBAR = 'global/SET_NAVBAR';
 export const SHOW_STATUS_MESSAGE = 'global/SHOW_STATUS_MESSAGE';
 export const HIDE_STATUS_MESSAGE = 'global/HIDE_STATUS_MESSAGE';
@@ -22,11 +21,6 @@ export default (state = initialState, {type, payload}) => {
     return {
       ...state,
       navbarOpen: false
-    };
-  case TOGGLE_NAVBAR:
-    return {
-      ...state,
-      navbarOpen: !state.navbarOpen
     };
   case SET_NAVBAR:
     return {
@@ -59,12 +53,6 @@ export const openNavbar = payload => {
 export const closeNavbar = payload => {
   return {
     type: CLOSE_NAVBAR
-  };
-};
-
-export const toggleNavbar = payload => {
-  return {
-    type: TOGGLE_NAVBAR
   };
 };
 
