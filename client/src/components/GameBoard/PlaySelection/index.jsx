@@ -1,16 +1,7 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
 
-class PlaySelection extends Component {
-  constructor (props) {
-    super(props);
-  }
-
-  render() {
-    return <div><Tray/><PlayArea/></div>;
-  }
-}
+const PlaySelection = () => (<div><Tray/><PlayArea/></div>);
 
 export default PlaySelection;
