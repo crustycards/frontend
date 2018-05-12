@@ -48,25 +48,25 @@ export const createGame = (gameName, maxPlayers, cardpackIds) => {
 };
 
 export const startGame = () => {
-  // return axios.post('/game/start')
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+  return gameApi.post(`${user.id}/game/start`)
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    });
 };
 
 export const stopGame = () => {
-  // return axios.post('/game/stop')
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+  return gameApi.post(`/${user.id}/game/stop`)
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    });
 };
 
 /**
@@ -74,28 +74,28 @@ export const stopGame = () => {
  * @param {string} gameName The game name
  */
 export const joinGame = (gameName) => {
-  // return axios.post('/game/join', gameName)
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+  return gameApi.post(`/${user.id}/game/${gameName}/join`, gameName)
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    })
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
 };
 
 /**
  * Leaves the current game
  */
 export const leaveGame = () => {
-  // return axios.post('/game/leave')
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+  return gameApi.delete(`/${user.id}/game`)
+    .then((response) => {
+      store.dispatch(setGameState(null));
+      return response.data;
+    })
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    });
 };
 
 /**
@@ -103,14 +103,14 @@ export const leaveGame = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameState = () => {
-  // return axios.get('/game/state')
-  //   .then((response) => {
-  //     store.dispatch(setGameState(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
+  return gameApi.get(`/${user.id}/game`)
+    .catch((e) => {
+      store.dispatch(showStatusMessage(e.response.data));
+    })
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
 };
 
 /**
@@ -118,15 +118,11 @@ export const getGameState = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameList = () => {
-  // return axios.get('/gamelist')
-  //   .then((response) => {
-  //     store.dispatch(setGameList(response.data));
-  //     return response.data;
-  //   })
-  //   .catch((e) => {
-  //     store.dispatch(showStatusMessage(e.response.data));
-  //   });
-  return Promise.resolve([]);
+  return gameApi.get('/games')
+    .then((response) => {
+      store.dispatch(setGameList(response.data));
+      return response.data;
+    });
 };
 
 /**
@@ -134,22 +130,22 @@ export const getGameList = () => {
  * @param {number} cardID The ID of the card to play
  * @returns {Promise} Resolves to an error (or null if it succeeded)
  */
-export const playCard = (cardID) => {
-  // return axios.post('/game/card', cardID);
+export const playCard = (cardId) => {
+  return gameApi.put(`/${user.id}/game/play/${cardId}`).then(() => {});
 };
 
 /**
  * Kicks a player from the game if the kicker is the game owner
  * @param {number} playerID
  */
-export const kickPlayer = (playerID) => {
-  // return axios.post('/game/kickplayer', playerID);
+export const kickPlayer = (playerId) => {
+  return gameApi.delete(`${user.id}/game/players/${playerId}`).then(() => {});
 };
 
 /**
  * Used to vote a card for set of cards if you are the judge
  * @param {number} cardID The ID of the card (or one of the cards in a set)
  */
-export const vote = (cardID) => {
-  // return axios.post('/game/vote');
+export const vote = (cardId) => {
+  return gameApi.put(`${user.id}/game/vote/${cardId}`).then(() => {});
 };
