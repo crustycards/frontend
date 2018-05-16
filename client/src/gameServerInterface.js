@@ -41,9 +41,6 @@ export const createGame = (gameName, maxPlayers, cardpackIds) => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -52,9 +49,6 @@ export const startGame = () => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -63,9 +57,6 @@ export const stopGame = () => {
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -75,9 +66,6 @@ export const stopGame = () => {
  */
 export const joinGame = (gameName) => {
   return gameApi.post(`/${user.id}/game/${gameName}/join`, gameName)
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    })
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -92,9 +80,6 @@ export const leaveGame = () => {
     .then((response) => {
       store.dispatch(setGameState(null));
       return response.data;
-    })
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
     });
 };
 
@@ -104,9 +89,6 @@ export const leaveGame = () => {
  */
 export const getGameState = () => {
   return gameApi.get(`/${user.id}/game`)
-    .catch((e) => {
-      store.dispatch(showStatusMessage(e.response.data));
-    })
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
