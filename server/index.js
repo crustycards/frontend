@@ -69,7 +69,7 @@ server.register(require('bell'), (err) => {
 
   server.route({
     method: 'GET',
-    path: '/auth/google',
+    path: process.env.callbackURL,
     config: {
       auth: {
         strategy: 'google',
