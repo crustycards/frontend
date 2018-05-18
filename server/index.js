@@ -49,7 +49,7 @@ const jwt             = require('jsonwebtoken');
 const Hapi            = require('hapi');
 
 const server = new Hapi.Server();
-server.connection({port, host: isProduction ? undefined : 'localhost'});
+server.connection({port, host: process.env.HOST || isProduction ? undefined : 'localhost'});
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
