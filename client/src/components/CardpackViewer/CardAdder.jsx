@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { TextField, SelectField, RaisedButton, DropDownMenu, MenuItem } from 'material-ui';
 
 class CardAdder extends Component {

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { createGame } from '../../gameServerInterface';
 import { connect } from 'react-redux';

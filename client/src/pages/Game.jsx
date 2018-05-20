@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { FlatButton, RaisedButton, Divider } from 'material-ui';
 import StarBorder from 'material-ui/svg-icons/toggle/star-border';

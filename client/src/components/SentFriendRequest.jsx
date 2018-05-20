@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import api from '../apiInterface';
 import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
 import { FlatButton } from 'material-ui';

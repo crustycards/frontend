@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
 import { FlatButton } from 'material-ui';
