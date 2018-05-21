@@ -109,11 +109,11 @@ export const getGameList = () => {
 
 /**
  * Plays a user's card if they are not the judge
- * @param {number} cardID The ID of the card to play
+ * @param {number[]} cardIds The ids of the cards to play
  * @returns {Promise} Resolves to an error (or null if it succeeded)
  */
-export const playCard = (cardId) => {
-  return gameApi.put(`/${user.id}/game/play/${cardId}`).then(() => {});
+export const playCards = (cardIds) => {
+  return gameApi.put(`/${user.id}/game/play`, cardIds).then(() => {});
 };
 
 /**
