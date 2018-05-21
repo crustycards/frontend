@@ -45,7 +45,7 @@ class GameList extends Component {
           <Card style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}} key={index} className='card'>
             <CardHeader
               title={game.name}
-              subtitle={`Host: ${game.owner.name} (${game.owner.email})`}
+              subtitle={`Host: ${game.owner.name}`}
             />
             <CardActions>
               {
