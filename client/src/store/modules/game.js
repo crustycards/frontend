@@ -10,7 +10,7 @@ export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
 export const SET_HAND = 'game/SET_HAND';
 export const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
 export const ADD_PLAYER = 'game/ADD_PLAYER';
-export const PLAY_CARD = 'game/PLAY_CARD';
+export const SET_PLAYED_CARDS = 'game/SET_PLAYED_CARDS';
 
 const initialState = null;
 
@@ -55,18 +55,12 @@ export default (state = initialState, {type, payload}) => {
       ...state,
       players: state.players.concat([payload])
     };
-  case PLAY_CARD:
-    // If the player has the card to play then play it
-    if (state.hand.includes(payload)) {
-      return {
-        ...state,
-        hand: state.hand.filter(c => c !== payload),
-        // TODO - Potentially fix the line below
-        whiteCards: state.whiteCards.concat([payload])
-      };
-    }
-    // else do nothing
-    return state;
+  case SET_PLAYED_CARDS:
+    return {
+      ...state,
+      hand: state.hand.filter(c => !payload.includes(c.id))
+      // TODO - Add white cards to played cards object
+    };
   default:
     return state;
   }
@@ -87,7 +81,7 @@ export const unqueueCard = payload => ({
   payload
 });
 
-export const playCard = payload => ({
-  type: PLAY_CARD,
+export const setPlayedCards = payload => ({
+  type: SET_PLAYED_CARDS,
   payload
 });
