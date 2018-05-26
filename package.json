@@ -48,6 +48,7 @@
     "dotenv": "^4.0.0",
     "file-select": "^1.0.2",
     "get-docker-secrets": "^0.1.5",
+    "h2o2": "^6.1.0",
     "hapi": "^16.6.2",
     "jsonwebtoken": "^8.2.1",
     "material-ui": "^0.20.0",

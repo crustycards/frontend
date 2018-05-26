@@ -6,29 +6,23 @@ const { apiURL } = window.__PRELOADED_DATA__;
 
 const user = store.getState().user.currentUser;
 
-const api = axios.create({
-  baseURL: apiURL,
-  timeout: 1000,
-  withCredentials: true
-});
-
 const getUser = (id) => {
-  return api.get(`/user/${id}`)
+  return axios.get(`/api/user/${id}`)
     .then(res => res.data);
 };
 
 module.exports.deleteWhiteCard = (cardId) => {
-  return api.delete(`/cards/white/${cardId}`)
+  return axios.delete(`/api/cards/white/${cardId}`)
     .then(res => res.data);
 };
 
 module.exports.deleteBlackCard = (cardId) => {
-  return api.delete(`/cards/black/${cardId}`)
+  return axios.delete(`/api/cards/black/${cardId}`)
     .then(res => res.data);
 };
 
 module.exports.deleteCardpack = (cardpackId) => {
-  return api.delete(`/cardpack/${cardpackId}`)
+  return axios.delete(`/api/cardpack/${cardpackId}`)
     .then(res => res.data)
     .then(data => {
       store.dispatch(removeCardpack(cardpackId));
@@ -37,7 +31,7 @@ module.exports.deleteCardpack = (cardpackId) => {
 };
 
 module.exports.createCardpack = (name) => {
-  return api.put(`/${user.id}/cardpack`, {name})
+  return axios.put(`/api/cardpacks/${user.id}`, {name})
     .then(res => res.data)
     .then(cardpack => {
       store.dispatch(addCardpack(cardpack));
@@ -46,22 +40,22 @@ module.exports.createCardpack = (name) => {
 };
 
 module.exports.getCardpack = (id) => {
-  return api.get(`/cardpack/${id}`)
+  return axios.get(`/api/cardpack/${id}`)
     .then(res => res.data);
 };
 
 module.exports.createWhiteCards = (cardpackId, cards) => {
-  return api.put(`/cardpack/${cardpackId}/cards/white`, cards)
+  return axios.put(`/api/cardpack/cards/white/${cardpackId}`, cards)
     .then(res => res.data);
 };
 
 module.exports.createBlackCards = (cardpackId, cards) => {
-  return api.put(`/cardpack/${cardpackId}/cards/black`, cards)
+  return axios.put(`/api/cardpack/cards/black/${cardpackId}`, cards)
     .then(res => res.data);
 };
 
 module.exports.removeFriend = (friendId) => {
-  return api.delete(`/user/${user.id}/friends/${friendId}`)
+  return axios.delete(`/api/user/friends?userId=${user.id}&friendId=${friendId}`)
     .then(res => res.data)
     .then(data => {
       store.dispatch(removeFriend(friendId));
@@ -70,7 +64,7 @@ module.exports.removeFriend = (friendId) => {
 };
 
 module.exports.addFriend = (friendId) => {
-  return api.put(`/user/${user.id}/friends/${friendId}`)
+  return axios.put(`/api/user/friends?userId=${user.id}&friendId=${friendId}`)
     .then(res => res.data)
     .then((data) => {
       return getUser(friendId)
@@ -82,21 +76,21 @@ module.exports.addFriend = (friendId) => {
 };
 
 module.exports.searchUsers = (query) => {
-  return api.get(`/user/search?query=${query}`)
+  return axios.get(`/api/user/search?query=${query}`)
     .then(res => res.data);
 };
 
 module.exports.autocompleteUserSearch = (query) => {
-  return api.get(`/user/search/autocomplete?query=${query}`)
+  return axios.get(`/api/user/search/autocomplete?query=${query}`)
     .then(res => res.data);
 };
 
 module.exports.searchCardpacks = (query) => {
-  return api.get(`/cardpack/search?query=${query}`)
+  return axios.get(`/api/cardpack/search?query=${query}`)
     .then(res => res.data);
 };
 
 module.exports.autocompleteCardpackSearch = (query) => {
-  return api.get(`/cardpack/search/autocomplete?query=${query}`)
+  return axios.get(`/api/cardpack/search/autocomplete?query=${query}`)
     .then(res => res.data);
 };
