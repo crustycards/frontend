@@ -2,8 +2,6 @@ import axios from 'axios';
 import store from './store';
 import { addCardpack, removeCardpack, removeFriend, addFriend } from './store/modules/user';
 
-const { apiURL } = window.__PRELOADED_DATA__;
-
 const user = store.getState().user.currentUser;
 
 const getUser = (id) => {

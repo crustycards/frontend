@@ -1,5 +1,5 @@
 const axios = require('axios');
-const api = process.env.PRIVATE_API_URL;
+const api = process.env.API_URL;
 
 const get = async ({id, oAuthId, oAuthProvider}) => {
   if ((!id && !oAuthId && !oAuthProvider) || (id && oAuthId && oAuthProvider) || (!!oAuthId ^ !!oAuthProvider)) {

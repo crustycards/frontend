@@ -1,5 +1,5 @@
 const axios = require('axios');
-const api = process.env.PRIVATE_API_URL;
+const api = process.env.API_URL;
 
 const getById = async (cardpackId) => {
   const response = await axios.get(`${api}/cardpack/${cardpackId}`);
