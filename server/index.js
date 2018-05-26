@@ -97,8 +97,6 @@ server.register(require('bell'), (err) => {
   });
 });
 
-server.register({register: require('h2o2')});
-
 server.route([
   {
     method: 'GET',
@@ -154,6 +152,7 @@ server.route([
   }
 ]);
 
+server.register({register: require('h2o2')});
 server.route(require('./route'));
 
 server.start().then(() => { console.log(`Server is running on port ${port}`); });
