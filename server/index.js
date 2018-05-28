@@ -28,14 +28,6 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
       }
     )}
   </script>
-  <script>
-    window.__PRELOADED_DATA__ = ${JSON.stringify(
-      {
-        notificationServerURL: process.env.NOTIFICATION_SERVER_URL,
-        gameServerURL: process.env.GAME_SERVER_URL
-      }
-    )}
-  </script>
   ${html}`
 };
 

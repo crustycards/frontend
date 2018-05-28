@@ -4,15 +4,7 @@ import { setGameList } from './store/modules/games';
 import { showStatusMessage } from './store/modules/global';
 import axios from 'axios';
 
-const { gameServerURL } = window.__PRELOADED_DATA__;
-
 const user = store.getState().user.currentUser;
-
-const gameApi = axios.create({
-  baseURL: gameServerURL,
-  timeout: 1000,
-  withCredentials: true
-});
 
 /**
  * Creates a new game session
@@ -37,7 +29,7 @@ export const createGame = (gameName, maxPlayers, cardpackIds) => {
     store.dispatch(showStatusMessage(message));
     return Promise.reject(message);
   }
-  return gameApi.post(`${user.id}/game/create`, {gameName, maxPlayers, cardpackIds})
+  return axios.post(`/api/game/create/${user.id}`, {gameName, maxPlayers, cardpackIds})
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -45,7 +37,7 @@ export const createGame = (gameName, maxPlayers, cardpackIds) => {
 };
 
 export const startGame = () => {
-  return gameApi.post(`${user.id}/game/start`)
+  return axios.post(`/api/game/start/${user.id}`)
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -53,7 +45,7 @@ export const startGame = () => {
 };
 
 export const stopGame = () => {
-  return gameApi.post(`/${user.id}/game/stop`)
+  return axios.post(`/api/game/stop/${user.id}`)
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -65,7 +57,9 @@ export const stopGame = () => {
  * @param {string} gameName The game name
  */
 export const joinGame = (gameName) => {
-  return gameApi.post(`/${user.id}/game/${gameName}/join`, gameName)
+  return axios.post(`/api/game/join/${user.id}`, {
+    params: { gameName }
+  })
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -76,7 +70,7 @@ export const joinGame = (gameName) => {
  * Leaves the current game
  */
 export const leaveGame = () => {
-  return gameApi.delete(`/${user.id}/game`)
+  return axios.delete(`/api/game/players/${user.id}`)
     .then((response) => {
       store.dispatch(setGameState(null));
       return response.data;
@@ -88,7 +82,7 @@ export const leaveGame = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameState = () => {
-  return gameApi.get(`/${user.id}/game`)
+  return axios.get(`/api/game/${user.id}`)
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -100,7 +94,7 @@ export const getGameState = () => {
  * @returns {Promise} Resolves to game data
  */
 export const getGameList = () => {
-  return gameApi.get('/games')
+  return axios.get('/api/games')
     .then((response) => {
       store.dispatch(setGameList(response.data));
       return response.data;
@@ -113,7 +107,7 @@ export const getGameList = () => {
  * @returns {Promise} Resolves to an error (or null if it succeeded)
  */
 export const playCards = (cardIds) => {
-  return gameApi.put(`/${user.id}/game/play`, cardIds).then(() => {});
+  return axios.put(`/api/game/play/${user.id}`, cardIds).then(() => {});
 };
 
 /**
@@ -121,7 +115,12 @@ export const playCards = (cardIds) => {
  * @param {number} playerID
  */
 export const kickPlayer = (playerId) => {
-  return gameApi.delete(`${user.id}/game/players/${playerId}`).then(() => {});
+  return axios.delete('/api/game/players', {
+    params: {
+      kickerId: user.id,
+      kickeeId: playerId
+    }
+  }).then(() => {});
 };
 
 /**
@@ -129,5 +128,14 @@ export const kickPlayer = (playerId) => {
  * @param {number} cardID The ID of the card (or one of the cards in a set)
  */
 export const vote = (cardId) => {
-  return gameApi.put(`${user.id}/game/vote/${cardId}`).then(() => {});
+  return axios.put(`/api/game/vote/${user.id}`, {
+    params: { cardId }
+  }).then(() => {});
+};
+
+/**
+ * Starts next round of the game
+ */
+export const startNextRound = () => {
+  return axios.put(`/api/game/continue/${user.id}`).then(() => {});
 };
