@@ -19,14 +19,16 @@ module.exports = [
       } else {
         reply.proxy({ uri: `${gameUrl}/${kickerId}/game/players/${kickeeId}` });
       }
-    }
+    },
+    config: { payload: { parse: false } }
   },
   {
     method: 'DELETE',
     path: '/api/game/players/{userId}',
     handler: (request, reply) => {
       reply.proxy({ uri: `${gameUrl}/{userId}/game` });
-    }
+    },
+    config: { payload: { parse: false } }
   },
   {
     method: 'GET',
@@ -40,7 +42,8 @@ module.exports = [
     path: '/api/game/continue/{userId}',
     handler: (request, reply) => {
       reply.proxy({ uri: `${gameUrl}/{userId}/game/continue` });
-    }
+    },
+    config: { payload: { parse: false } }
   },
   {
     method: 'POST',
