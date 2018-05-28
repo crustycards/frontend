@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const apiUrl = process.env.API_URL;
 
 module.exports = [
@@ -44,7 +45,7 @@ module.exports = [
       const { userId, friendId } = request.query;
 
       if (userId === undefined || friendId === undefined) {
-        reply(Boom.badRequest('Must provide query parameters for userId and friendId'))
+        reply(Boom.badRequest('Must provide query parameters for userId and friendId'));
       } else {
         reply.proxy({ uri: `${apiUrl}/user/${frienderId}/friends/${friendeeId}` });
       }
