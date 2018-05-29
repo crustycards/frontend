@@ -6,6 +6,7 @@ import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
+import MessageBox from '../components/GameBoard/MessageBox.jsx';
 import { NavLink } from 'react-router-dom';
 import { startGame, stopGame, leaveGame } from '../gameServerInterface';
 
@@ -28,6 +29,7 @@ const Game = (props) => (
           <div className='col-narrow'>
             <CurrentBlackCard/>
             <PlayerList/>
+            <MessageBox/>
           </div>
           <div className='col-wide'>
             <PlaySelection/>
