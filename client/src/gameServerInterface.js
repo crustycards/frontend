@@ -141,5 +141,9 @@ export const startNextRound = () => {
 };
 
 export const sendMessage = (message) => {
-  return axios.put(`/api/game/messages/${user.id}`, message);
+  return axios.put(`/api/game/messages/${user.id}`, message)
+    .then((response) => {
+      store.dispatch(setGameState(response.data));
+      return response.data;
+    });
 };
