@@ -21,9 +21,9 @@ const Game = (props) => (
       <div>
         <div className='game-top'>
           <h2>Current game: {props.game.name}</h2>
-          <FlatButton label={'Start game'} onClick={startGame} style={buttonStyle} />
-          <FlatButton label={'Stop game'} onClick={stopGame} style={buttonStyle} />
           <FlatButton label={'Leave game'} onClick={leaveGame} style={buttonStyle} />
+          {props.game.ownerId === props.currentUser.id && props.game.stage === 'notRunning' && <FlatButton label={'Start game'} onClick={startGame} style={buttonStyle} />}
+          {props.game.ownerId === props.currentUser.id && props.game.stage !== 'notRunning' && <FlatButton label={'Stop game'} onClick={stopGame} style={buttonStyle} />}
         </div>
         <div className='game-main'>
           <div className='col-narrow'>
@@ -47,6 +47,6 @@ const Game = (props) => (
   </div>
 );
 
-const mapStateToProps = ({game}) => ({game});
+const mapStateToProps = ({game, user: {currentUser}}) => ({game, currentUser});
 
 export default connect(mapStateToProps)(Game);
