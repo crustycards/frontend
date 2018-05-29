@@ -32,7 +32,7 @@ const MessageBox = (props) => {
   return (
     <div className={'panel'}>
       <div style={{maxHeight: '250px', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse'}}>
-        {props.messages.map(message => <Paper style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}><b>{message.user.name + ': '}</b>{message.text}</Paper>)}
+        {props.messages.map((message, i) => <Paper key={i} style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}><b>{message.user.name + ': '}</b>{message.text}</Paper>)}
       </div>
       <form onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}>
         <Field
