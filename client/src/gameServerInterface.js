@@ -139,3 +139,7 @@ export const vote = (cardId) => {
 export const startNextRound = () => {
   return axios.put(`/api/game/continue/${user.id}`).then(() => {});
 };
+
+export const sendMessage = (message) => {
+  return axios.put(`/api/game/messages/${user.id}`, message);
+};

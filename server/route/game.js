@@ -55,6 +55,14 @@ module.exports = [
   },
   {
     method: 'PUT',
+    path: '/api/game/messages/{userId}',
+    handler: (request, reply) => {
+      reply.proxy({ uri: `${gameUrl}/{userId}/game/messages` });
+    },
+    config: { payload: { parse: false } }
+  },
+  {
+    method: 'PUT',
     path: '/api/game/play/{userId}',
     handler: (request, reply) => {
       reply.proxy({ uri: `${gameUrl}/{userId}/game/play` });
