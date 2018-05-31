@@ -3,6 +3,7 @@ import { setGameState } from './store/modules/game';
 import { setGameList } from './store/modules/games';
 import { showStatusMessage } from './store/modules/global';
 import axios from 'axios';
+import queryString from 'query-string';
 
 const user = store.getState().user.currentUser;
 
@@ -57,9 +58,7 @@ export const stopGame = () => {
  * @param {string} gameName The game name
  */
 export const joinGame = (gameName) => {
-  return axios.post(`/api/game/join/${user.id}`, {
-    params: { gameName }
-  })
+  return axios.post(`/api/game/join/${user.id}?${queryString.stringify({gameName})}`)
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -115,12 +114,7 @@ export const playCards = (cardIds) => {
  * @param {number} playerID
  */
 export const kickPlayer = (playerId) => {
-  return axios.delete('/api/game/players', {
-    params: {
-      kickerId: user.id,
-      kickeeId: playerId
-    }
-  }).then(() => {});
+  return axios.delete(`/api/game/players?${queryString.stringify({kickerId: user.id, kickeeId: playerId})}`).then(() => {});
 };
 
 /**
@@ -128,9 +122,7 @@ export const kickPlayer = (playerId) => {
  * @param {number} cardID The ID of the card (or one of the cards in a set)
  */
 export const vote = (cardId) => {
-  return axios.put(`/api/game/vote/${user.id}`, {
-    params: { cardId }
-  }).then(() => {});
+  return axios.put(`/api/game/vote/${user.id}?${queryString.stringify({cardId})}`).then(() => {});
 };
 
 /**
