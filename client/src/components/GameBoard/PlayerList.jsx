@@ -13,13 +13,13 @@ const styles = {
 
 let renderPlayer = (player, index, ownerId, judgeId) => {
   if (player.id === ownerId && player.id === judgeId) {
-    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={player.email}/>;
+    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else if (player.id === ownerId) {
-    return <ListItem primaryText={player.name} secondaryText={player.email}/>;
+    return <ListItem primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else if (player.id === judgeId) {
-    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={player.email}/>;
+    return <ListItem leftIcon={<Star/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else {
-    return <ListItem primaryText={player.name} secondaryText={player.email}/>;
+    return <ListItem primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   }
 };
 
