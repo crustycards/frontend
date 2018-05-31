@@ -20,6 +20,9 @@ import { Router, Route, browserHistory, Switch } from 'react-router';
 import { DragDropContextProvider } from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 
+import { getGameState } from './gameServerInterface';
+setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
+
 render(
   <Provider store={store}>
     <BrowserRouter basename='/'>
