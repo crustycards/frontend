@@ -16,6 +16,7 @@ const PlaySelection = (props) => (
       <PlayArea/>
       <RaisedButton
         label={'Play'}
+        disabled={!props.currentBlackCard || props.queuedCardIds.length !== props.currentBlackCard.answerFields}
         onClick={() => { playCards(props.queuedCardIds); }}
       />
     </div>
@@ -24,7 +25,8 @@ const PlaySelection = (props) => (
 const mapStateToProps = ({game, user: {currentUser}}) => ({
   currentUserId: currentUser.id,
   currentJudgeId: game.judgeId,
-  queuedCardIds: game.queuedCardIds
+  queuedCardIds: game.queuedCardIds,
+  currentBlackCard: game.currentBlackCard
 });
 
 export default connect(mapStateToProps)(PlaySelection);
