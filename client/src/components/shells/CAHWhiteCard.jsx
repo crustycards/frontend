@@ -21,7 +21,7 @@ const CAHWhiteCard = (props) => {
         title={props.card.text}
       />
       <CardActions>
-        {props.isOwner ? <FlatButton label='Delete' onClick={removeCard} /> : null}
+        {props.isOwner && props.onDelete && <FlatButton label='Delete' onClick={removeCard} />}
       </CardActions>
     </Card>
   </MuiThemeProvider>;
