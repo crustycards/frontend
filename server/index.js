@@ -49,7 +49,7 @@ server.register(require('bell'), (err) => {
     password,
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    location: server.info.uri,
+    location: process.env.HOST || server.info.uri,
     isSecure: false
   });
 
