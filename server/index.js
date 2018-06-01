@@ -41,7 +41,7 @@ const Hapi            = require('hapi');
 const Boom            = require('boom');
 
 const server = new Hapi.Server();
-server.connection({port, host: process.env.HOST || isProduction ? undefined : 'localhost'});
+server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')});
 
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
