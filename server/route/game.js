@@ -106,7 +106,7 @@ module.exports = [
       if (gameName === undefined) {
         reply(Boom.badRequest('Must provide query parameter for gameName'));
       } else {
-        reply.proxy({ uri: `${gameUrl}/{userId}/game/join/${gameName}` });
+        reply.proxy({ uri: `${gameUrl}/{userId}/game/${gameName}/join` });
       }
     },
     config: { payload: { parse: false } }
