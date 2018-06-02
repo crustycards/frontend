@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import DragSource from 'react-dnd/lib/DragSource';
 import CAHWhiteCard from '../../shells/CAHWhiteCard.jsx';
 import { cardInPlayQueue } from '../../../dndTypes';
 
-const DraggableCard = (props) => (
-  props.connectDragSource(<div style={{ opacity: props.isDragging ? 0.5 : 1 }}><CAHWhiteCard {...props} /></div>)
-);
+class DraggableCard extends Component {
+  render() {
+    return this.props.connectDragSource(<div style={{ opacity: this.props.isDragging ? 0.5 : 1 }}><CAHWhiteCard {...this.props} /></div>);
+  }
+}
 
 const endDrag = (props, monitor) => {
   if (monitor.didDrop()) {

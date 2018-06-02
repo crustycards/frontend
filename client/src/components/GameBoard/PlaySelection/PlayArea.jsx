@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import DraggableCardInPlayQueue from './DraggableCardInPlayQueue.jsx';
 import { cardInPlayQueue } from '../../../dndTypes';
 import { DropTarget } from 'react-dnd/lib';
@@ -6,17 +6,21 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { unqueueCard } from '../../../store/modules/game';
 
-const PlayArea = ({cards, queuedCardIds, unqueueCard, connectDropTarget, isOver, canDrop}) => (
-  connectDropTarget(<div className='tray' style={{minHeight: '100px'}}>
-    {cards.filter(card => queuedCardIds.includes(card.id)).map(card =>
-      <DraggableCardInPlayQueue
-        key={card.id}
-        card={card}
-        onDrop={() => unqueueCard(card.id)}
-      />
-    )}
-  </div>)
-);
+class PlayArea extends Component {
+  render() {
+    const {cards, queuedCardIds, unqueueCard, connectDropTarget, isOver, canDrop} = this.props;
+
+    return connectDropTarget(<div className='tray' style={{minHeight: '100px'}}>
+      {cards.filter(card => queuedCardIds.includes(card.id)).map(card =>
+        <DraggableCardInPlayQueue
+          key={card.id}
+          card={card}
+          onDrop={() => unqueueCard(card.id)}
+        />
+      )}
+    </div>);
+  }
+}
 
 const DropTargetPlayArea = DropTarget(cardInPlayQueue, {}, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
