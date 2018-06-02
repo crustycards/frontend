@@ -80,7 +80,9 @@ class CardpackViewer extends Component {
             let reader = new FileReader();
             reader.onload = (result) => {
               let text = result.currentTarget.result;
-              this.addCards(cardpackFileHandler.parse(text));
+              const { whiteCards, blackCards } = cardpackFileHandler.parse(text);
+              this.addWhiteCards(whiteCards);
+              this.addBlackCards(blackCards);
             };
             reader.readAsText(textFile);
           }
