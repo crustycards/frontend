@@ -1,19 +1,22 @@
 module.exports.parse = (string) => {
-  let whiteCards = [];
-  let blackCards = [];
+  const cardpack = JSON.parse(string);
 
-  const whiteCardString = string.split('White Cards\r\n\r\n')[1].split('Black Cards\r\n\r\n')[0].trim();
-  const blackCardString = string.split('Black Cards\r\n\r\n')[1].trim();
+  if (typeof cardpack.whiteCards !== 'object' || cardpack.whiteCards.constructor !== Array) {
+    throw new Error('White cards must be an array');
+  }
 
-  whiteCardString.split('\r\n\r\n').forEach(singleCardString => {
-    const lines = singleCardString.split('\r\n');
-    whiteCards.push({text: lines[0]});
-  });
+  if (typeof cardpack.blackCards !== 'object' || cardpack.blackCards.constructor !== Array) {
+    throw new Error('Black cards must be an array');
+  }
 
-  blackCardString.split('\r\n\r\n').forEach(singleCardString => {
-    const lines = singleCardString.split('\r\n');
-    blackCards.push({text: lines[0], answerFields: parseInt(lines[1])});
-  });
+  const whiteCards = cardpack.whiteCards.map(whiteCard => ({
+    text: whiteCard.text
+  }));
+
+  const blackCards = cardpack.blackCards.map(blackCard => ({
+    text: blackCard.text,
+    answerFields: blackCard.answerFields || 1
+  }));
 
   return { whiteCards, blackCards };
 };
@@ -26,9 +29,5 @@ module.exports.stringify = ({whiteCards, blackCards}) => {
     throw new Error('Black cards must be an array');
   }
 
-  let whiteCardString = whiteCards.reduce((acc, card) => `${acc}${card.text}\r\n\r\n`, '').trim();
-
-  let blackCardString = blackCards.reduce((acc, card) => `${acc}${card.text}${'\r\n'}${card.answerFields}\r\n\r\n`, '').trim();
-
-  return `White Cards\r\n\r\n${whiteCardString}\r\n\r\n\r\nBlack Cards\r\n\r\n${blackCardString}`;
+  return JSON.stringify({whiteCards, blackCards}, null, 2).replace(/\n/g, '\r\n');
 };
