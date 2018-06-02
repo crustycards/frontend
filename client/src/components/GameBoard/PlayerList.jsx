@@ -17,16 +17,16 @@ let renderPlayer = (player, index, ownerId, judgeId, hasPlayed) => {
   } else if (player.id === judgeId) {
     return <ListItem rightIcon={<Star/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else if (player.id === ownerId) {
-    return <ListItem rightIcon={hasPlayed && <Check/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
+    return <ListItem rightIcon={hasPlayed ? <Check/> : null} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else {
-    return <ListItem rightIcon={hasPlayed && <Check/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
+    return <ListItem rightIcon={hasPlayed ? <Check/> : null} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   }
 };
 
 const PlayerList = ({players, ownerId, judgeId, whitePlayed, currentBlackCard}) => (
   <List style={styles}>
     {players.map((player, index) => {
-      return <div key={index}>{renderPlayer(player, index, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
+      return <div key={index}>{renderPlayer(player, index, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && currentBlackCard && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
     })}
   </List>
 );
