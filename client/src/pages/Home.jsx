@@ -8,30 +8,19 @@ import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';
 import FrienderPanel from '../components/FrienderPanel.jsx';
 import CardpackManager from '../components/CardpackManager/index.jsx';
 
-class Home extends Component {
-  constructor(props) {
-    super(props);
-    if (!props.currentUser) {
-      props.history.push('/login');
-    }
-  }
-
-  render() {
-    return (
-      <div className='content-wrap'>
-        <div className='col-narrow'>
-          <FrienderPanel />
-          <FriendsList />
-          <FriendRequestsSent />
-          <FriendRequestsReceived />
-        </div>
-        <div className='col-wide'>
-          <CardpackManager />
-        </div>
-      </div>
-    ); 
-  }
-}
+const Home = (props) => (
+  <div className='content-wrap'>
+    <div className='col-narrow'>
+      <FrienderPanel />
+      <FriendsList />
+      <FriendRequestsSent />
+      <FriendRequestsReceived />
+    </div>
+    <div className='col-wide'>
+      <CardpackManager />
+    </div>
+  </div>
+);
 
 const mapStateToProps = ({user}) => ({
   currentUser: user.currentUser
