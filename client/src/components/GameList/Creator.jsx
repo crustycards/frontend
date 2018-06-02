@@ -12,12 +12,19 @@ class GameCreator extends Component {
     this.state = {
       gameName: '',
       maxPlayers: 8,
+      maxScore: 8,
       cardpacksSelected: []
     };
     this.maxPlayersDropdownItems = [];
     for (let i = 4; i <= 20; i++) {
       this.maxPlayersDropdownItems.push(<MenuItem value={i} key={i} primaryText={i}></MenuItem>);
     }
+
+    this.maxScoreDropdownItems = [];
+    for (let i = 4; i <= 20; i++) {
+      this.maxScoreDropdownItems.push(<MenuItem value={i} key={i} primaryText={i}></MenuItem>);
+    }
+
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
@@ -36,7 +43,7 @@ class GameCreator extends Component {
   }
 
   handleSubmit() {
-    createGame(this.state.gameName, this.state.maxPlayers, this.state.cardpacksSelected);
+    createGame(this.state.gameName, this.state.maxPlayers, this.state.maxScore, this.state.cardpacksSelected);
   }
 
   render() {
@@ -55,6 +62,11 @@ class GameCreator extends Component {
             <span>Max Players</span>
             <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
               {this.maxPlayersDropdownItems}
+            </DropDownMenu>
+            <br/>
+            <span>Winning Score</span>
+            <DropDownMenu maxHeight={300} value={this.state.maxScore} onChange={(event, index, value) => this.setState({maxScore: value})}>
+              {this.maxScoreDropdownItems}
             </DropDownMenu>
           </div>
           <div className='col-wide'>
