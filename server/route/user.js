@@ -47,7 +47,7 @@ module.exports = [
       if (userId === undefined || friendId === undefined) {
         reply(Boom.badRequest('Must provide query parameters for userId and friendId'));
       } else {
-        reply.proxy({ uri: `${apiUrl}/user/${frienderId}/friends/${friendeeId}` });
+        reply.proxy({ uri: `${apiUrl}/user/${userId}/friends/${friendId}` });
       }
     },
     config: { payload: { parse: false } }
