@@ -41,6 +41,7 @@ class TabbedList extends Component {
             <div>
               <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
               <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.props.elements.length} />
+              <div>Tab {this.state.tab + 1} of {Math.ceil(this.props.elements.length / this.itemsPerTab)}</div>
             </div>
           }
         </div>
