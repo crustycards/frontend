@@ -29,5 +29,13 @@ module.exports.stringify = ({whiteCards, blackCards}) => {
     throw new Error('Black cards must be an array');
   }
 
-  return JSON.stringify({whiteCards, blackCards}, null, 2).replace(/\n/g, '\r\n');
+  return JSON.stringify({
+    whiteCards: whiteCards.map(whiteCard => ({
+      text: whiteCard.text
+    })),
+    blackCards: blackCards.map(blackCard => ({
+      text: blackCard.text,
+      answerFields: blackCard.answerFields || 1
+    }))
+  }, null, 2).replace(/\n/g, '\r\n');
 };
