@@ -19,7 +19,10 @@ class PlayedCards extends Component {
     } else {
       return (
         <div className={'panel'}>
-          {this.props.currentUser.id === this.props.game.judgeId && <RaisedButton label={'Vote'} disabled={this.state.selectedSetIndex === null} onClick={() => { vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id); }} />}
+          {this.props.currentUser.id === this.props.game.judgeId && <RaisedButton label={'Vote'} disabled={this.state.selectedSetIndex === null} onClick={() => {
+            vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
+            this.setState({selectedSetIndex: null});
+          }} />}
           {this.props.game.whitePlayedAnonymous.map((cards, index) => (
             <div
               className={'subpanel'}
