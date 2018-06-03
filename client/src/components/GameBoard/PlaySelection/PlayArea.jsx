@@ -11,7 +11,7 @@ class PlayArea extends Component {
     const {cards, queuedCardIds, unqueueCard, connectDropTarget, isOver, canDrop} = this.props;
 
     return connectDropTarget(<div className='tray' style={{minHeight: '100px'}}>
-      {cards.filter(card => queuedCardIds.includes(card.id)).map(card =>
+      {queuedCardIds.map(id => cards.find(card => card.id === id)).map(card =>
         <DraggableCardInPlayQueue
           key={card.id}
           card={card}
