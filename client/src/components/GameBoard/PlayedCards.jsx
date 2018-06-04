@@ -14,9 +14,7 @@ class PlayedCards extends Component {
   }
 
   render() {
-    if (!this.props.game.whitePlayedAnonymous) {
-      return null;
-    } else {
+    if (this.props.game.stage === 'judgePhase') {
       return (
         <div className={'panel'}>
           {this.props.currentUser.id === this.props.game.judgeId && <RaisedButton label={'Vote'} disabled={this.state.selectedSetIndex === null} onClick={() => {
@@ -39,6 +37,23 @@ class PlayedCards extends Component {
           ))}
         </div>
       );
+    } else if (this.props.game.stage === 'roundEndPhase') {
+      return (
+        <div className={'panel'}>
+          {Object.keys(this.props.game.whitePlayed).map((userId, index) => (
+            <div
+              style={this.props.game.winnerId === userId ? {} : {opacity: 0.5}}
+              className={'subpanel'}
+              key={index}
+            >
+              <div>{this.props.game.players.find(player => player.id === userId) ? this.props.game.players.find(player => player.id === userId).name : 'This user has left the game'}</div>
+              {this.props.game.whitePlayed[userId].map((card, index) => <WhiteCard card={card} key={index} />)}
+            </div>
+          ))}
+        </div>
+      );
+    } else {
+      return null;
     }
   }
 }
