@@ -33,7 +33,7 @@ const createCardpack = ({cardpackName}) => {
 
 const CardpackCreator = (props) => {
   return (
-    <form onSubmit={props.handleSubmit(createCardpack)}>
+    <form autoComplete={'off'} onSubmit={props.handleSubmit(createCardpack)}>
       <Field
         name='cardpackName'
         component={renderTextField}
