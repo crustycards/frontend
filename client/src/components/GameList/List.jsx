@@ -33,10 +33,6 @@ class GameList extends Component {
       </div>;
     }
 
-    if (!this.props.games.length) {
-      return <div className='center'><span>There are no open games to join</span></div>;
-    }
-
     return (
       <div>
         <h2>Games</h2>
@@ -56,6 +52,7 @@ class GameList extends Component {
             </CardActions>
           </Card>
         ))}
+        {this.props.games.length === 0 && <div className='center'><span>There are no open games to join</span></div>}
       </div>
     );
   }
