@@ -41,7 +41,7 @@ const MessageBox = (props) => {
           label='Message'
         />
         <br/>
-        <RaisedButton type={'submit'} disabled={props.pristine || props.submitting} label='Create Cardpack' />
+        <RaisedButton type={'submit'} disabled={props.pristine || props.submitting} label='Send' />
       </form>
     </div>
   );
