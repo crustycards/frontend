@@ -1,5 +1,3 @@
-image: node:carbon
-
 services:
   - docker:dind
 
@@ -11,10 +9,12 @@ before_script:
 
 build:
   stage: build
+  image: docker:stable
   script:
     - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
 
 test:
   stage: test
+  image: node:carbon
   script: npm test
