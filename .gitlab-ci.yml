@@ -17,5 +17,5 @@ build:
 
 test:
   stage: test
-  stage: node:carbon
+  image: node:carbon
   script: npm test
