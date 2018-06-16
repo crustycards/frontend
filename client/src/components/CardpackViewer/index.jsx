@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import api from '../../apiInterface';
 import { connect } from 'react-redux';
-import { FlatButton, LinearProgress } from 'material-ui';
-import { Tabs, Tab } from 'material-ui/Tabs';
+import { Button, LinearProgress, Tab, Tabs } from '@material-ui/core';
 import CardAdder from './CardAdder.jsx';
 import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
 import CAHBlackCard from '../shells/CAHBlackCard.jsx';
@@ -92,7 +91,7 @@ class CardpackViewer extends Component {
     }
   }
 
-  handleTabChange(value) {
+  handleTabChange(_, value) {
     this.setState({slideIndex: value});
   }
 
@@ -118,8 +117,15 @@ class CardpackViewer extends Component {
             />}
             {this.state.cardpack ?
               <div>
-                <FlatButton label={'Download'} onClick={this.downloadStringifiedCards} />
-                {isOwner ? <FlatButton label={'Upload'} onClick={this.uploadStringifiedCards} /> : null}
+                <Button onClick={this.downloadStringifiedCards}>
+                  Download
+                </Button>
+                {
+                  isOwner &&
+                  <Button onClick={this.uploadStringifiedCards}>
+                    Upload
+                  </Button>
+                }
               </div>
               : null}
             <div>
@@ -127,8 +133,8 @@ class CardpackViewer extends Component {
                 onChange={this.handleTabChange}
                 value={this.state.slideIndex}
               >
-                <Tab label='White Cards' value={0} />
-                <Tab label='Black Cards' value={1} />
+                <Tab label='White Cards' />
+                <Tab label='Black Cards' />
               </Tabs>
               <SwipeableViews
                 index={this.state.slideIndex}

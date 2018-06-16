@@ -1,6 +1,6 @@
 import React from 'react';
 import { Field, reduxForm, reset } from 'redux-form';
-import { TextField, RaisedButton } from 'material-ui';
+import { TextField, Button } from '@material-ui/core';
 import api from '../../apiInterface';
 
 const renderTextField = ({
@@ -10,9 +10,10 @@ const renderTextField = ({
   ...custom
 }) => (
   <TextField
-    floatingLabelText = {label}
+    label={label}
     {...input}
     {...custom}
+    margin={'normal'}
   />
 );
 
@@ -40,7 +41,9 @@ const CardpackCreator = (props) => {
         label='Cardpack Name'
       />
       <br/>
-      <RaisedButton type={'submit'} disabled={props.pristine || props.submitting} label='Create Cardpack' />
+      <Button type={'submit'} disabled={props.pristine || props.submitting}>
+        Create Cardpack
+      </Button>
     </form>
   );
 };

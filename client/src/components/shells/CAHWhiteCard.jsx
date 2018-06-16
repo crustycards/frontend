@@ -1,8 +1,5 @@
 import React from 'react';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
-import { FlatButton } from 'material-ui';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardContent, Button } from '@material-ui/core';
 import { deleteWhiteCard } from '../../apiInterface';
 
 const CAHWhiteCard = (props) => {
@@ -15,16 +12,18 @@ const CAHWhiteCard = (props) => {
     });
   };
 
-  return <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
+  // TODO - Wrap in white theme
+
+  return (
     <Card className='card'>
-      <CardHeader
-        title={props.card.text}
-      />
+      <CardContent>
+        {props.card.text}
+      </CardContent>
       <CardActions>
-        {props.isOwner && props.onDelete && <FlatButton label='Delete' onClick={removeCard} />}
+        {props.isOwner && props.onDelete && <Button onClick={removeCard}>Delete</Button>}
       </CardActions>
     </Card>
-  </MuiThemeProvider>;
+  );
 };
 
 module.exports = CAHWhiteCard;

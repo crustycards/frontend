@@ -1,8 +1,7 @@
 import React from 'react';
 import api from '../../apiInterface';
 import { NavLink } from 'react-router-dom';
-import { Card, CardActions, CardHeader } from 'material-ui/Card';
-import FlatButton from 'material-ui/FlatButton';
+import { Button, Card, CardHeader, CardActions } from '@material-ui/core';
 import time from 'time-converter';
 const navItemStyle = {textDecoration: 'none'};
 
@@ -10,13 +9,17 @@ const Cardpack = (props) => (
   <Card className='card'>
     <CardHeader
       title={props.cardpack.name}
-      subtitle={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
+      subheader={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
     />
     <CardActions>
       <NavLink to={`/cardpacks?id=${props.cardpack.id}`} style={navItemStyle}>
-        <FlatButton label='Edit' />
+        <Button>
+          Edit
+        </Button>
       </NavLink>
-      <FlatButton label='Delete' onClick={api.deleteCardpack.bind(null, props.cardpack.id)} />
+      <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
+        Delete
+      </Button>
     </CardActions>
   </Card>
 );

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { searchUsers, autocompleteUserSearch } from '../apiInterface';
 import { connect } from 'react-redux';
-import { AutoComplete, RaisedButton } from 'material-ui';
-import { AccessAlarm } from 'material-ui-icons';
+import { AutoComplete } from 'material-ui';
+import { Button } from '@material-ui/core';
 import UserCard from './shells/UserCard.jsx';
 
 class FrienderPanel extends Component {
@@ -26,7 +26,11 @@ class FrienderPanel extends Component {
 
   handleInputChange (searchQuery) {
     this.setState({searchQuery});
-    autocompleteUserSearch(searchQuery).then(autocompleteOptions => this.setState({autocompleteOptions}));
+    if (searchQuery.length) {
+      autocompleteUserSearch(searchQuery).then(autocompleteOptions => this.setState({autocompleteOptions}));
+    } else {
+      this.setState({autocompleteOptions: []});
+    }
   }
 
   handleKeyPress (e) {
@@ -45,18 +49,19 @@ class FrienderPanel extends Component {
           menuCloseDelay={0}
           hintText='User Name'
           floatingLabelText='Name'
-          type='email'
           searchText={this.state.searchQuery}
           dataSource={this.state.autocompleteOptions}
           onUpdateInput={this.handleInputChange}
           filter={AutoComplete.caseInsensitiveFilter}
         />
-        <RaisedButton
+        <Button
+          variant={'contained'}
+          color={'primary'}
           style={{margin: '3px'}}
-          label='Search Users'
           onClick={this.searchUsers}
-          primary={true}
-        />
+        >
+          Search Users
+        </Button>
         {
           this.state.hasSearched &&
           <div style={{marginTop: '14px'}}>

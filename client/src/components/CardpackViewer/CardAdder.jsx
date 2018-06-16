@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { TextField, SelectField, RaisedButton, DropDownMenu, MenuItem } from 'material-ui';
+import { FormControl, InputLabel, TextField, Select, Button, MenuItem } from '@material-ui/core';
 
 class CardAdder extends Component {
   constructor (props) {
@@ -26,8 +26,8 @@ class CardAdder extends Component {
     this.setState(stateChange);
   }
 
-  changeAnswerField (event, index, value) {
-    this.setState({newCardAnswerFields: value});
+  changeAnswerField (e) {
+    this.setState({newCardAnswerFields: e.target.value});
   }
 
   addCurrentCard () {
@@ -45,20 +45,28 @@ class CardAdder extends Component {
     return (
       <div>
         <div className='col-narrow'>
-          <TextField onKeyPress={this.handleKeyPress} floatingLabelText='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} />
-          <RaisedButton label='Create Card' disabled={!this.state.newCardName} className='btn' onClick={this.addCurrentCard} />
+          <TextField onKeyPress={this.handleKeyPress} label='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} />
+          <Button
+            disabled={!this.state.newCardName}
+            className={'btn'}
+            onClick={this.addCurrentCard}
+          >
+            Create Card
+          </Button>
         </div>
         <div className='col-wide'>
           {this.props.type === 'black' &&
-            <SelectField
-              floatingLabelText='Answer Fields'
-              value={this.state.newCardAnswerFields}
-              onChange={this.changeAnswerField}
-            >
-              <MenuItem value={1} primaryText='One' />
-              <MenuItem value={2} primaryText='Two' />
-              <MenuItem value={3} primaryText='Three' />
-            </SelectField>}
+            <FormControl>
+              <InputLabel style={{minWidth: '120px'}}>Answer Fields</InputLabel>
+              <Select
+                value={this.state.newCardAnswerFields}
+                onChange={this.changeAnswerField}
+              >
+                <MenuItem value={1}>One</MenuItem>
+                <MenuItem value={2}>Two</MenuItem>
+                <MenuItem value={3}>Three</MenuItem>
+              </Select>
+            </FormControl>}
         </div>
       </div>
     );
