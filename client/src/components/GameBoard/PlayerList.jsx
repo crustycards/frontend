@@ -31,7 +31,7 @@ const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, curr
   <List style={styles}>
     {players.map((player, index) => {
       return <div key={index}>{renderPlayer(player, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && currentBlackCard && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
-    }).concat(queuedPlayers.map((player, index) => <div key={index}>{renderQueuedPlayer(player)}</div>))}
+    }).concat(queuedPlayers.map((player, index) => <div key={index + players.length}>{renderQueuedPlayer(player)}</div>))}
   </List>
 );
 
