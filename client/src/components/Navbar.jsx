@@ -26,7 +26,7 @@ const styles = {
 
 const Navbar = (props) => (
   <div>
-    <AppBar>
+    <AppBar position={'static'}>
       <Toolbar>
         <IconButton className={props.classes.menuButton} color={'inherit'} aria-label={'Menu'} onClick={props.openNavbar}>
           <MenuIcon/>
