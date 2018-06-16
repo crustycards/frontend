@@ -11,7 +11,7 @@ const styles = {
 
 // TODO - Render game owner uniquely
 
-let renderPlayer = (player, index, ownerId, judgeId, hasPlayed) => {
+const renderPlayer = (player, ownerId, judgeId, hasPlayed) => {
   if (player.id === ownerId && player.id === judgeId) {
     return <ListItem rightIcon={<Star/>} primaryText={player.name} secondaryText={`Score: ${player.score}`}/>;
   } else if (player.id === judgeId) {
@@ -23,16 +23,21 @@ let renderPlayer = (player, index, ownerId, judgeId, hasPlayed) => {
   }
 };
 
-const PlayerList = ({players, ownerId, judgeId, whitePlayed, currentBlackCard}) => (
+const renderQueuedPlayer = (player) => (
+  <ListItem disabled={true} primaryText={player.name}/>
+);
+
+const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, currentBlackCard}) => (
   <List style={styles}>
     {players.map((player, index) => {
-      return <div key={index}>{renderPlayer(player, index, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && currentBlackCard && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
-    })}
+      return <div key={index}>{renderPlayer(player, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && currentBlackCard && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
+    }).concat(queuedPlayers.map((player, index) => <div key={index}>{renderQueuedPlayer(player)}</div>))}
   </List>
 );
 
 const mapStateToProps = ({game}) => ({
   players: game.players,
+  queuedPlayers: game.queuedPlayers,
   ownerId: game.ownerId,
   judgeId: game.judgeId,
   whitePlayed: game.whitePlayed,
