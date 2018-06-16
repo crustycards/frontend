@@ -58,7 +58,8 @@ export const closeNavbar = payload => {
 
 export const setNavbar = payload => {
   return {
-    type: SET_NAVBAR
+    type: SET_NAVBAR,
+    payload
   };
 };
 
