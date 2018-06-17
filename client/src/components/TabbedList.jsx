@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { FlatButton, LinearProgress } from 'material-ui';
+import { FlatButton } from 'material-ui';
 import { GridList, GridTile } from 'material-ui/GridList';
 
 class TabbedList extends Component {
