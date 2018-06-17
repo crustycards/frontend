@@ -1,9 +1,9 @@
 import React from 'react';
-import darkBaseTheme from 'material-ui/styles/baseThemes/darkBaseTheme';
-import { MuiThemeProvider, getMuiTheme } from 'material-ui/styles';
-import { FlatButton } from 'material-ui';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
+import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { deleteBlackCard } from '../../apiInterface';
+
+const darkTheme = createMuiTheme({ palette: { type: 'dark' } });
 
 const CAHBlackCard = (props) => {
   const removeCard = () => {
@@ -15,14 +15,18 @@ const CAHBlackCard = (props) => {
     });
   };
 
-  return <MuiThemeProvider muiTheme={getMuiTheme(darkBaseTheme)}>
+  return <MuiThemeProvider theme={darkTheme}>
     <Card className='card'>
-      <CardHeader
-        title={props.card.text}
-        subtitle={props.card.answerFields}
-      />
+      <CardContent>
+        <Typography align={'left'} gutterBottom variant={'title'}>
+          {props.card.text}
+        </Typography>
+        <Typography align={'left'} color={'textSecondary'} variant={'subheading'}>
+          {`Answers: ${props.card.answerFields}`}
+        </Typography>
+      </CardContent>
       <CardActions>
-        {props.isOwner ? <FlatButton label='Delete' onClick={removeCard} /> : null}
+        {props.isOwner && <Button onClick={removeCard}>Delete</Button>}
       </CardActions>
     </Card>
   </MuiThemeProvider>;

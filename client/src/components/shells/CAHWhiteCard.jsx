@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, CardActions, CardContent, Button } from '@material-ui/core';
+import { Card, CardActions, CardContent, Button, Typography } from '@material-ui/core';
 import { deleteWhiteCard } from '../../apiInterface';
 
 const CAHWhiteCard = (props) => {
@@ -17,7 +17,9 @@ const CAHWhiteCard = (props) => {
   return (
     <Card className='card'>
       <CardContent>
-        {props.card.text}
+        <Typography align={'left'} variant={'body1'}>
+          {props.card.text}
+        </Typography>
       </CardContent>
       <CardActions>
         {props.isOwner && props.onDelete && <Button onClick={removeCard}>Delete</Button>}

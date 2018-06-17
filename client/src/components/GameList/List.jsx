@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardActions, CardHeader } from 'material-ui/Card';
-import { Button, CircularProgress } from '@material-ui/core';
+import { Button, CircularProgress, Card, CardActions, CardHeader } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { joinGame, leaveGame, getGameList } from '../../gameServerInterface';
 
@@ -36,6 +35,7 @@ class GameList extends Component {
       <div>
         <h2>Games</h2>
         <Button
+          style={{marginBottom: '5px'}}
           onClick={this.refresh}
           variant={'contained'}
           color={'secondary'}
@@ -46,7 +46,7 @@ class GameList extends Component {
           <Card style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}} key={index} className='card'>
             <CardHeader
               title={game.name}
-              subtitle={`Host: ${game.owner.name}`}
+              subheader={`Host: ${game.owner.name}`}
             />
             <CardActions>
               {
