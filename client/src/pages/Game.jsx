@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatButton, RaisedButton, Divider } from 'material-ui';
-import StarBorder from 'material-ui/svg-icons/toggle/star-border';
-import CAHBlackCard from '../components/shells/CAHBlackCard.jsx';
+import { FlatButton, RaisedButton } from 'material-ui';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
