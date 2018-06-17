@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { FlatButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import { GridList, GridTile } from 'material-ui/GridList';
 
 class TabbedList extends Component {
@@ -38,8 +38,8 @@ class TabbedList extends Component {
           {
             this.props.elements.length > this.itemsPerTab &&
             <div>
-              <FlatButton label={'Previous'} onClick={this.previousTab} disabled={this.state.tab === 0} />
-              <FlatButton label={'Next'} onClick={this.nextTab} disabled={tabEnd >= this.props.elements.length} />
+              <Button onClick={this.previousTab} disabled={this.state.tab === 0}>Previous</Button>
+              <Button onClick={this.nextTab} disabled={tabEnd >= this.props.elements.length}>Next</Button>
               <div>Tab {this.state.tab + 1} of {Math.ceil(this.props.elements.length / this.itemsPerTab)}</div>
             </div>
           }

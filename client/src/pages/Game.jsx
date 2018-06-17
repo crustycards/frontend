@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { FlatButton, RaisedButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
@@ -20,10 +20,10 @@ const Game = (props) => (
       <div>
         <div className='game-top'>
           <h2>Current game: {props.game.name}</h2>
-          <FlatButton label={'Leave game'} onClick={leaveGame} style={buttonStyle} />
-          {props.game.stage === 'roundEndPhase' && <FlatButton label={'Start Next Round'} onClick={startNextRound} style={buttonStyle} />}
-          {props.game.ownerId === props.currentUser.id && props.game.stage === 'notRunning' && <FlatButton label={'Start game'} onClick={startGame} style={buttonStyle} />}
-          {props.game.ownerId === props.currentUser.id && props.game.stage !== 'notRunning' && <FlatButton label={'Stop game'} onClick={stopGame} style={buttonStyle} />}
+          <Button onClick={leaveGame} style={buttonStyle}>Leave Game</Button>
+          {props.game.ownerId === props.currentUser.id && props.game.stage === 'notRunning' && <Button onClick={startGame} style={buttonStyle}>Start Game</Button>}
+          {props.game.ownerId === props.currentUser.id && props.game.stage !== 'notRunning' && <Button onClick={stopGame} style={buttonStyle}>Stop Game</Button>}
+          {props.game.stage === 'roundEndPhase' && <Button onClick={startNextRound} style={buttonStyle}>Start Next Round</Button>}
         </div>
         <div className='game-main'>
           <div className='col-narrow'>
@@ -40,7 +40,7 @@ const Game = (props) => (
       :
       <div className='content-wrap'>
         <div className='center panel'>You're not in a game.<NavLink to='/gamelist' style={{textDecoration: 'none'}}>
-          <RaisedButton label='See Games' />
+          <Button style={{marginLeft: '5px'}} variant={'outlined'} color={'primary'}>See Games</Button>
         </NavLink>
         </div>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Snackbar from 'material-ui/Snackbar';
+import { Snackbar } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { hideStatusMessage } from '../store/modules/global';
@@ -8,8 +8,9 @@ const StatusBar = (props) => (
   <Snackbar
     open={props.isVisible}
     message={props.message}
-    autoHideDuration={4000}
-    onRequestClose={props.hideStatusMessage}
+    autoHideDuration={2500}
+    onClose={props.hideStatusMessage}
+    anchorOrigin={{vertical: 'bottom', horizontal: 'left'}}
   />
 );
 
