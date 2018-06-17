@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Card, CardActions, CardHeader, CardMedia, CardTitle, CardText } from 'material-ui/Card';
-import { RaisedButton, FlatButton, CircularProgress } from 'material-ui';
+import { Card, CardActions, CardHeader } from 'material-ui/Card';
+import { Button, CircularProgress } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { joinGame, leaveGame, getGameList } from '../../gameServerInterface';
-import { setTimeout } from 'timers';
 
 class GameList extends Component {
   constructor(props) {
@@ -36,7 +35,13 @@ class GameList extends Component {
     return (
       <div>
         <h2>Games</h2>
-        <RaisedButton label='Refresh' onClick={this.refresh} />
+        <Button
+          onClick={this.refresh}
+          variant={'contained'}
+          color={'secondary'}
+        >
+          Refresh
+        </Button>
         {this.props.games.map((game, index) => (
           <Card style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}} key={index} className='card'>
             <CardHeader
@@ -46,8 +51,8 @@ class GameList extends Component {
             <CardActions>
               {
                 this.props.game && this.props.game.name === game.name ?
-                  <FlatButton label='Leave' onClick={() => { leaveGame().then(this.refresh); }} /> :
-                  <FlatButton label='Join' onClick={() => { joinGame(game.name); }} />
+                  <Button onClick={() => { leaveGame().then(this.refresh); }}>Leave</Button> :
+                  <Button onClick={() => { joinGame(game.name); }}>Join</Button>
               }
             </CardActions>
           </Card>

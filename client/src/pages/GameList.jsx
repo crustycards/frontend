@@ -1,7 +1,7 @@
 import React from 'react';
 import Creator from '../components/GameList/Creator.jsx';
 import List from '../components/GameList/List.jsx';
-import Divider from 'material-ui/Divider';
+import { Divider } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 const GameList = (props) => (

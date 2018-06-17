@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import WhiteCard from '../shells/CAHWhiteCard.jsx';
 import { vote } from '../../gameServerInterface';
-import { RaisedButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 
 class PlayedCards extends Component {
   constructor(props) {
@@ -17,10 +17,19 @@ class PlayedCards extends Component {
     if (this.props.game.stage === 'judgePhase') {
       return (
         <div className={'panel'}>
-          {this.props.currentUser.id === this.props.game.judgeId && <RaisedButton label={'Vote'} disabled={this.state.selectedSetIndex === null} onClick={() => {
-            vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
-            this.setState({selectedSetIndex: null});
-          }} />}
+          {this.props.currentUser.id === this.props.game.judgeId &&
+            <Button
+              variant={'contained'}
+              color={'secondary'}
+              disabled={this.state.selectedSetIndex === null}
+              onClick={() => {
+                vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
+                this.setState({selectedSetIndex: null});
+              }}
+            >
+              Vote
+            </Button>
+          }
           {this.props.game.whitePlayedAnonymous.map((cards, index) => (
             <div
               className={'subpanel'}

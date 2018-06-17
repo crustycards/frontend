@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Card, CardActions, CardHeader } from 'material-ui/Card';
-import { FlatButton } from 'material-ui';
+import { Button, Card, CardActions, CardHeader } from '@material-ui/core';
 import { addFriend, removeFriend } from '../../apiInterface';
 
 const UserCard = (props) => (
@@ -10,8 +9,8 @@ const UserCard = (props) => (
       title={props.user.name}
     />
     <CardActions>
-      {props.showFriendButton && <FlatButton label='Add as Friend' onClick={addFriend.bind(null, props.user.id)} />}
-      {props.showUnfriendButton && <FlatButton label='Unfriend' onClick={removeFriend.bind(null, props.user.id)} />}
+      {props.showFriendButton && <Button onClick={addFriend.bind(null, props.user.id)}>Add as Friend</Button>}
+      {props.showUnfriendButton && <Button onClick={removeFriend.bind(null, props.user.id)}>Unfriend</Button>}
     </CardActions>
   </Card>
 );

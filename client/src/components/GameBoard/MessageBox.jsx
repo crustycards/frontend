@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm, reset } from 'redux-form';
-import { Paper, RaisedButton, TextField } from 'material-ui';
+import { Paper, Button, TextField, Typography, Divider } from '@material-ui/core';
 import { sendMessage } from '../../gameServerInterface';
 
 const renderTextField = ({
@@ -11,7 +11,7 @@ const renderTextField = ({
   ...custom
 }) => (
   <TextField
-    floatingLabelText = {label}
+    label={label}
     {...input}
     {...custom}
   />
@@ -31,8 +31,19 @@ const validate = values => {
 const MessageBox = (props) => {
   return (
     <div className={'panel'}>
+      <h2 className={'center'}>Chat</h2>
+      <Divider style={{margin: '10px 0'}} />
       <div style={{maxHeight: '250px', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse'}}>
-        {props.messages.map((message, i) => <Paper key={i} style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}><b>{message.user.name + ': '}</b>{message.text}</Paper>)}
+        {props.messages.map((message, i) => (
+          <Paper
+            key={i}
+            style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}
+          >
+            <Typography variant={'body2'}>
+              <b>{message.user.name + ': '}</b>{message.text}
+            </Typography>
+          </Paper>
+        ))}
       </div>
       <form autoComplete={'off'} onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}>
         <Field
@@ -41,7 +52,14 @@ const MessageBox = (props) => {
           label='Message'
         />
         <br/>
-        <RaisedButton type={'submit'} disabled={props.pristine || props.submitting} label='Send' />
+        <Button
+          style={{marginTop: '10px'}}
+          variant={'outlined'}
+          type={'submit'}
+          disabled={props.pristine || props.submitting}
+        >
+          Send
+        </Button>
       </form>
     </div>
   );

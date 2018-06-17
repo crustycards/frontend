@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { createGame } from '../../gameServerInterface';
 import { connect } from 'react-redux';
-import { RaisedButton, TextField, Checkbox, DropDownMenu, MenuItem } from 'material-ui';
-import { List, ListItem } from 'material-ui/List';
+import { Button, TextField, Checkbox, Select, MenuItem, List, ListItem, ListItemText } from '@material-ui/core';
 import { setGameState } from '../../store/modules/game';
 
 class GameCreator extends Component {
@@ -17,12 +16,12 @@ class GameCreator extends Component {
     };
     this.maxPlayersDropdownItems = [];
     for (let i = 4; i <= 20; i++) {
-      this.maxPlayersDropdownItems.push(<MenuItem value={i} key={i} primaryText={i}></MenuItem>);
+      this.maxPlayersDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
     }
 
     this.maxScoreDropdownItems = [];
     for (let i = 4; i <= 20; i++) {
-      this.maxScoreDropdownItems.push(<MenuItem value={i} key={i} primaryText={i}></MenuItem>);
+      this.maxScoreDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
     }
 
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
@@ -54,20 +53,20 @@ class GameCreator extends Component {
           <div className='col-narrow center'>
             <TextField
               name='gameName'
-              floatingLabelText='Game Name'
+              label='Game Name'
               value={this.state.gameName} 
               onChange={this.handleGameNameChange} 
             />
             <br/>
-            <span>Max Players</span>
-            <DropDownMenu maxHeight={300} value={this.state.maxPlayers} onChange={(event, index, value) => this.setState({maxPlayers: value})}>
+            <span>Max Players: </span>
+            <Select value={this.state.maxPlayers} onChange={(e) => this.setState({maxPlayers: e.target.value})}>
               {this.maxPlayersDropdownItems}
-            </DropDownMenu>
+            </Select>
             <br/>
-            <span>Winning Score</span>
-            <DropDownMenu maxHeight={300} value={this.state.maxScore} onChange={(event, index, value) => this.setState({maxScore: value})}>
+            <span>Winning Score: </span>
+            <Select value={this.state.maxScore} onChange={(e) => this.setState({maxScore: e.target.value})}>
               {this.maxScoreDropdownItems}
-            </DropDownMenu>
+            </Select>
           </div>
           <div className='col-wide'>
             <div className='subpanel'>
@@ -76,19 +75,20 @@ class GameCreator extends Component {
                 {this.props.cardpacks.map(c => (
                   <ListItem
                     key={c.id}
-                    leftCheckbox={<Checkbox
+                  >
+                    <Checkbox
                       checked={this.state.cardpacksSelected.includes(c.id)}
-                      onCheck={this.handleSelectChange.bind(this, c.id)}
-                    />}
-                    primaryText={c.name}
-                  />
+                      onChange={this.handleSelectChange.bind(this, c.id)}
+                    />
+                    <ListItemText primary={c.name} />
+                  </ListItem>
                 ))}
               </List>
             </div>
           </div>
         </div>
         <div className='center'>
-          <RaisedButton type='submit' label='Submit' onClick={this.handleSubmit} />
+          <Button type='submit' onClick={this.handleSubmit}>Submit</Button>
         </div>
       </div>
     );

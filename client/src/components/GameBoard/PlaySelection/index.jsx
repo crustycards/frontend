@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
-import { RaisedButton } from 'material-ui';
+import { Button } from '@material-ui/core';
 import { playCards } from '../../../gameServerInterface';
 
 const PlaySelection = (props) => (
@@ -14,11 +14,14 @@ const PlaySelection = (props) => (
     <div>
       <Tray/>
       <PlayArea/>
-      <RaisedButton
-        label={'Play'}
+      <Button
+        variant={'contained'}
+        color={'secondary'}
         disabled={!props.currentBlackCard || props.queuedCardIds.length !== props.currentBlackCard.answerFields}
         onClick={() => { playCards(props.queuedCardIds); }}
-      />
+      >
+        Play
+      </Button>
     </div>
 );
 
