@@ -38,7 +38,6 @@ const generateScript = ({user = null, cardpacks = [], friends = [], requestsSent
 const api = require('../api')
 const jwt = require('jsonwebtoken')
 const Hapi = require('hapi')
-const Boom = require('boom')
 
 const server = new Hapi.Server()
 server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')})
@@ -109,13 +108,6 @@ server.route([
       } catch (err) {
         return reply(generateScript())
       }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/vendor.js',
-    handler: (request, reply) => {
-      reply(vendor)
     }
   },
   {

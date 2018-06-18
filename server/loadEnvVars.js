@@ -40,7 +40,7 @@ const applyDefaultValues = () => {
 
 const applyCommandLineArguments = () => {
   process.argv.slice(2).forEach(arg => {
-    [key, value] = arg.split('=')
+    const [key, value] = arg.split('=')
     process.env[key] = value
   })
 }

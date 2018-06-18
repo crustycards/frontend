@@ -21,7 +21,7 @@ const findOrCreate = async ({name, oAuthId, oAuthProvider}) => {
   try {
     return await get({oAuthId, oAuthProvider})
   } catch (err) {
-    return await create({name, oAuthId, oAuthProvider})
+    return create({name, oAuthId, oAuthProvider})
   }
 }
 
