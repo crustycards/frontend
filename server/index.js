@@ -16,7 +16,11 @@ const getToken = (userId) => {
   });
 };
 
-const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsReceived}) => {
+const fs = require('fs');
+const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
+const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
+
+const generateScript = ({user = null, cardpacks = [], friends = [], requestsSent = [], requestsReceived = []} = {}) => {
   return `<script>
     window.__PRELOADED_STATE__ = ${JSON.stringify(
       {
@@ -30,10 +34,6 @@ const generateScript = (html, {user, cardpacks, friends, requestsSent, requestsR
   </script>
   ${html}`
 };
-
-const fs = require('fs');
-const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
-const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
 const api             = require('../api');
 const jwt             = require('jsonwebtoken');
@@ -94,31 +94,21 @@ server.route([
     method: 'GET',
     path: '/{any*}',
     handler: async (request, reply) => {
-      let user = null;
-      let friends = [];
-      let requestsSent = [];
-      let requestsReceived = [];
-      let cardpacks = [];
-
-      let tokenData;
       try {
-        tokenData = jwt.verify(request.state[cookieName], password);
+        const tokenData = jwt.verify(request.state[cookieName], password);
         const secondsToExp = tokenData.exp - Math.floor(Date.now() / 1000);
         if (secondsToExp <= jwtExpTime - jwtRefreshTime) {
           reply.state(cookieName, getToken(tokenData.userId));
         }
+        const user = await api.User.get({id: tokenData.userId});
+        const friends = await api.Friend.getFriends(user.id);
+        const requestsSent = await api.Friend.getSentRequests(user.id);
+        const requestsReceived = await api.Friend.getReceivedRequests(user.id);
+        const cardpacks = await api.Cardpack.getByUser(user.id);
+        return reply(generateScript({user, cardpacks, friends, requestsSent, requestsReceived}));
       } catch (err) {
-        // Token has expired or does not exist
+        return reply(generateScript());
       }
-      if (tokenData) {
-        user = await api.User.get({id: tokenData.userId});
-        friends = await api.Friend.getFriends(user.id);
-        requestsSent = await api.Friend.getSentRequests(user.id);
-        requestsReceived = await api.Friend.getReceivedRequests(user.id);
-        cardpacks = await api.Cardpack.getByUser(user.id);
-      }
-      
-      reply(generateScript(html, {user, cardpacks, friends, requestsSent, requestsReceived}));
     }
   },
   {
