@@ -1,32 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React from 'react';
 import GoogleButton from '../components/GoogleButton/index.jsx';
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    if (props.currentUser) {
-      props.history.push('/');
-    }
-  }
+const Login = () => (
+  <div className='login center'>
+    <h1>Login</h1>
+    <GoogleButton className='btn' onClick={() => window.location.href = '/auth/google'} />
+  </div>
+);
 
-  googleOAuthRedirect () {
-    window.location.href = '/auth/google';
-  }
-
-  render() {
-    const navItemStyle = {textDecoration: 'none'};
-    return (
-      <div className='login center'>
-        <h1>Login</h1>
-        <GoogleButton className='btn' onClick={this.googleOAuthRedirect} />
-      </div>
-    );
-  }
-}
-
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
-});
-
-export default connect(mapStateToProps)(Login);
+export default Login;

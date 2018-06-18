@@ -19,6 +19,7 @@ import { Route, Switch } from 'react-router';
 import { DragDropContextProvider } from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 import { ConnectedRouter } from 'connected-react-router';
+import AuthRedirector from './components/AuthRedirector.jsx';
 
 import { getGameState } from './gameServerInterface';
 setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
@@ -29,6 +30,7 @@ render(
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <DragDropContextProvider backend={DragDropHTML5Backend}>
           <div>
+            <AuthRedirector/>
             <Navbar/>
             <StatusBar/>
             <Switch>
