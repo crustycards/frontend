@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-import store from './store/index.js';
+import store, { history } from './store/index.js';
 import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
@@ -14,18 +14,18 @@ import GameList from './pages/GameList.jsx';
 import Settings from './pages/Settings.jsx';
 import Navbar from './components/Navbar.jsx';
 import StatusBar from './components/StatusBar.jsx';
-import { BrowserRouter } from 'react-router-dom';
 import './styles/index.scss';
 import { Route, Switch } from 'react-router';
 import { DragDropContextProvider } from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
+import { ConnectedRouter } from 'connected-react-router';
 
 import { getGameState } from './gameServerInterface';
 setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
 
 render(
   <Provider store={store}>
-    <BrowserRouter basename='/'>
+    <ConnectedRouter history={history}>
       <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
         <DragDropContextProvider backend={DragDropHTML5Backend}>
           <div>
@@ -43,6 +43,6 @@ render(
           </div>
         </DragDropContextProvider>
       </MuiThemeProvider>
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>
   , document.getElementById('app'));
