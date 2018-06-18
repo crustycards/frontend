@@ -6,6 +6,9 @@ import { Drawer, MenuItem, AppBar, Toolbar, Typography, Button, IconButton, List
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
 import { Menu as MenuIcon, Home, ExitToApp, ViewList, VideogameAsset, Settings, ViewCarousel } from '@material-ui/icons';
+import store from '../store';
+import { push } from 'connected-react-router';
+
 const navItemStyle = {textDecoration: 'none'};
 const redirectTo = (url) => {
   window.location.replace(url);
@@ -34,7 +37,7 @@ const Navbar = (props) => (
         <Typography variant={'title'} color={'inherit'} className={props.classes.flex}>
           Cards
         </Typography>
-        <Button color={'inherit'} onClick={redirectTo.bind(null, '/game')}>
+        <Button color={'inherit'} onClick={() => store.dispatch(push('/game'))}>
           Current Game
         </Button>
       </Toolbar>
