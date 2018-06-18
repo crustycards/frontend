@@ -16,7 +16,7 @@ import Navbar from './components/Navbar.jsx';
 import StatusBar from './components/StatusBar.jsx';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/index.scss';
-import { Router, Route, browserHistory, Switch } from 'react-router';
+import { Route, Switch } from 'react-router';
 import { DragDropContextProvider } from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 
