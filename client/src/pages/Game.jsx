@@ -34,6 +34,7 @@ const Game = (props) => (
           <div className='col-wide'>
             <PlaySelection/>
             <PlayedCards/>
+            {props.game.judgeId === props.currentUser.id && <span className={'center panel'} style={{display: 'block', width: 'auto', margin: '10px', fontSize: '1.5em'}}>You are the Judge</span>}
           </div>
         </div>
       </div>

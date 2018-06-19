@@ -8,17 +8,19 @@ import { queueCard } from '../../../store/modules/game';
 
 class Tray extends Component {
   render() {
-    const {cards, queuedCardIds, queueCard, connectDropTarget, isOver, canDrop} = this.props;
+    const { isJudge, cards, queuedCardIds, queueCard, connectDropTarget, isOver, canDrop } = this.props;
 
-    return connectDropTarget(<div className='tray' style={{minHeight: '100px'}}>
-      {cards.filter(card => !queuedCardIds.includes(card.id)).map(card =>
-        <DraggableCardInHand
-          key={card.id}
-          card={card}
-          onDrop={() => queueCard(card.id)}
-        />
-      )}
-    </div>);
+    return connectDropTarget(
+      <div className='tray' style={{minHeight: '100px', backgroundColor: isJudge ? 'grey' : 'inherit'}}>
+        {cards.filter(card => !queuedCardIds.includes(card.id)).map(card =>
+          <DraggableCardInHand
+            key={card.id}
+            card={card}
+            onDrop={() => queueCard(card.id)}
+          />
+        )}
+      </div>
+    );
   }
 }
 
@@ -28,9 +30,10 @@ const DropTargetTray = DropTarget(cardInHand, {}, (connect, monitor) => ({
   canDrop: monitor.canDrop(),
 }))(Tray);
 
-const mapStateToProps = ({game}) => ({
+const mapStateToProps = ({game, user: {currentUser}}) => ({
   cards: game.hand,
-  queuedCardIds: game.queuedCardIds
+  queuedCardIds: game.queuedCardIds,
+  isJudge: currentUser.id === game.judgeId
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
