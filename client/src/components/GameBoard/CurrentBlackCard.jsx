@@ -15,7 +15,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
 
 const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
   card ?
-    <CAHBlackCard card={{...card, text: parseCardText(card.text, hand.filter(card => queuedCardIds.includes(card.id)).map(card => card.text))}} />
+    <CAHBlackCard card={{...card, text: parseCardText(card.text, queuedCardIds.map(id => hand.find(card => card.id === id).text))}} />
     :
     <div>No Black Card</div>
 );
