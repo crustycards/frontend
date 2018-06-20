@@ -45,7 +45,11 @@ export const canPlay = () => {
   const state = store.getState();
 
   const currentUserId = state.user.currentUser.id;
-  const { judgeId } = state.game;
+  const { judgeId, currentBlackCard } = state.game;
+
+  if (!currentBlackCard) {
+    return false;
+  }
 
   return currentUserId !== judgeId;
 };
