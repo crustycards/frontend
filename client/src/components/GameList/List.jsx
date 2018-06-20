@@ -1,7 +1,14 @@
 import React, { Component } from 'react';
-import { Button, CircularProgress, Card, CardActions, CardHeader } from '@material-ui/core';
+import { Button, CircularProgress, Card, CardActions, CardHeader, withStyles } from '@material-ui/core';
+import { Refresh as RefreshIcon } from '@material-ui/icons';
 import { connect } from 'react-redux';
 import { joinGame, leaveGame, getGameList } from '../../gameServerInterface';
+
+const styles = theme => ({
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  }
+});
 
 class GameList extends Component {
   constructor(props) {
@@ -35,11 +42,13 @@ class GameList extends Component {
       <div>
         <h2>Games</h2>
         <Button
+          size={'small'}
           style={{marginBottom: '5px'}}
           onClick={this.refresh}
           variant={'contained'}
           color={'secondary'}
         >
+          <RefreshIcon className={this.props.classes.leftIcon}/>
           Refresh
         </Button>
         {this.props.games.map((game, index) => (
@@ -63,9 +72,11 @@ class GameList extends Component {
   }
 }
 
+const StyledGameList = withStyles(styles)(GameList);
+
 const mapStateToProps = ({game, games}) => ({
   game,
   games
 });
 
-export default connect(mapStateToProps)(GameList);
+export default connect(mapStateToProps)(StyledGameList);
