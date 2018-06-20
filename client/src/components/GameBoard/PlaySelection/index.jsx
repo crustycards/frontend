@@ -4,32 +4,31 @@ import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
 import { Button } from '@material-ui/core';
 import { playCards } from '../../../gameServerInterface';
+import { canPlay } from '../../../store';
 
-const PlaySelection = (props) => (
-  props.currentUserId === props.currentJudgeId ?
-    <div>
-      <Tray/>
-    </div>
-    :
+const PlaySelection = ({queuedCardIds, currentBlackCard}) => {
+  return canPlay() ?
     <div>
       <Tray/>
       <PlayArea/>
       <Button
         variant={'contained'}
         color={'secondary'}
-        disabled={!props.currentBlackCard || props.queuedCardIds.length !== props.currentBlackCard.answerFields}
-        onClick={() => { playCards(props.queuedCardIds); }}
+        disabled={!currentBlackCard || queuedCardIds.length !== currentBlackCard.answerFields}
+        onClick={() => { playCards(queuedCardIds); }}
       >
         Play
       </Button>
     </div>
-);
+    :
+    <div>
+      <Tray/>
+    </div>
+};
 
-const mapStateToProps = ({game, user: {currentUser}}) => ({
-  currentUserId: currentUser.id,
-  currentJudgeId: game.judgeId,
-  queuedCardIds: game.queuedCardIds,
-  currentBlackCard: game.currentBlackCard
+const mapStateToProps = ({game: {queuedCardIds, currentBlackCard}}) => ({
+  queuedCardIds,
+  currentBlackCard
 });
 
 export default connect(mapStateToProps)(PlaySelection);

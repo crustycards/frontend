@@ -18,3 +18,34 @@ const store = createStore(
 )
 
 export default store
+
+export const hasPlayed = () => {
+  const state = store.getState();
+
+  const {
+    whitePlayed,
+    currentBlackCard
+  } = state.game;
+
+  const currentUserId = state.user.currentUser.id;
+
+  return !!(
+    whitePlayed &&
+    whitePlayed[currentUserId] &&
+    currentBlackCard &&
+    whitePlayed[currentUserId].length === currentBlackCard.answerFields
+  );
+};
+
+export const canPlay = () => {
+  if (hasPlayed()) {
+    return false;
+  }
+
+  const state = store.getState();
+
+  const currentUserId = state.user.currentUser.id;
+  const { judgeId } = state.game;
+
+  return currentUserId !== judgeId;
+};

@@ -5,13 +5,14 @@ import { DropTarget } from 'react-dnd/lib';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { queueCard } from '../../../store/modules/game';
+import { canPlay } from '../../../store';
 
 class Tray extends Component {
   render() {
     const { isJudge, cards, queuedCardIds, queueCard, connectDropTarget, isOver, canDrop } = this.props;
 
     return connectDropTarget(
-      <div className='tray' style={{minHeight: '100px', backgroundColor: isJudge ? 'grey' : 'inherit'}}>
+      <div className='tray' style={{minHeight: '100px', backgroundColor: canPlay() ? 'inherit' : 'grey'}}>
         {cards.filter(card => !queuedCardIds.includes(card.id)).map(card =>
           <DraggableCardInHand
             key={card.id}
