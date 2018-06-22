@@ -3,7 +3,7 @@ variables:
 
 test:
   stage: test
-  # image: node:carbon
+  image: node:carbon
   services:
     - docker:dind
     - node:carbon
