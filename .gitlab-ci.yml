@@ -14,7 +14,10 @@ build:
 
 test:
   stage: test
-  image: node:carbon
+  # image: node:carbon
+  services:
+    - docker:dind
+    - node:carbon
   script:
     - npm install
     - npm test
