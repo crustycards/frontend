@@ -1,29 +1,22 @@
-image: docker:stable
-
-services:
-  - docker:dind
-
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-
-build:
-  stage: build
+test:
+  stage: test
+  # image: node:carbon
+  services:
+    - docker:dind
+    - node:carbon
   script:
-    - docker build -t $IMAGE_TAG .
-
-# test:
-#   stage: test
-#   # image: node:carbon
-#   services:
-#     - node:carbon
-#   script:
-#     - npm install
-#     - npm test
+    - npm install
+    - npm test
 
 deploy:
   stage: deploy
+  image: docker:stable
+  services:
+  - docker:dind
   script:
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - docker build -t $IMAGE_TAG .
     - docker push $IMAGE_TAG
