@@ -12,15 +12,15 @@ build:
   script:
     - docker build -t $IMAGE_TAG .
 
-test:
-  stage: test
-  # image: node:carbon
-  services:
-    - docker:dind
-    - node:carbon
-  script:
-    - npm install
-    - npm test
+# test:
+#   stage: test
+#   # image: node:carbon
+#   services:
+#     - docker:dind
+#     - node:carbon
+#   script:
+#     - npm install
+#     - npm test
 
 deploy:
   stage: deploy
