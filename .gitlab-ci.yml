@@ -16,7 +16,9 @@ build:
 test:
   stage: test
   image: node:carbon
-  script: npm test
+  script:
+    - npm install
+    - npm test
 
 deploy:
   stage: deploy
