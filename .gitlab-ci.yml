@@ -1,7 +1,7 @@
-image: node:carbon
+# image: node:carbon
 
-services:
-  - docker:dind
+# services:
+#   - docker:dind
 
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
@@ -10,9 +10,12 @@ before_script:
   - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
 
 build:
-  stage: build
-  script:
-    - docker build -t $IMAGE_TAG .
+   image: docker:stable
+   services:
+    - docker:dind
+   stage: build
+    script:
+      - docker build -t $IMAGE_TAG .
 
 test:
   stage: test
@@ -20,5 +23,6 @@ test:
 
 deploy:
   stage: deploy
+  image: node:carbon
   script:
     - docker push $IMAGE_TAG
