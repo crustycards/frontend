@@ -20,4 +20,5 @@ test:
 
 deploy:
   stage: deploy
+  script:
     - docker push $IMAGE_TAG
