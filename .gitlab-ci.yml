@@ -1,3 +1,6 @@
+services:
+  - docker:dind
+
 variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_NAME
 
@@ -7,8 +10,6 @@ before_script:
 build:
   stage: build
   image: docker:stable
-  services:
-    - docker:dind
   script:
     - docker build -t $IMAGE_TAG .
 
@@ -20,7 +21,5 @@ test:
 deploy:
   stage: deploy
   image: docker:stable
-  services:
-    - docker:dind
   script:
     - docker push $IMAGE_TAG
