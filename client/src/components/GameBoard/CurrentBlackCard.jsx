@@ -3,6 +3,7 @@ import CAHBlackCard from '../shells/CAHBlackCard.jsx'
 import { Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 
+// TODO - Handle validateDOMNesting error caused by highlighted autofill text creating nested header elements
 const parseCardText = (blackCardText, whiteCardTextList) => {
   let tempText = blackCardText
   const tempWhiteTexts = [...whiteCardTextList]
