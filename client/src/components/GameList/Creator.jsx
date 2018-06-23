@@ -12,6 +12,7 @@ class GameCreator extends Component {
       gameName: '',
       maxPlayers: 8,
       maxScore: 8,
+      handSize: 6,
       cardpacksSelected: []
     };
     this.maxPlayersDropdownItems = [];
@@ -22,6 +23,11 @@ class GameCreator extends Component {
     this.maxScoreDropdownItems = [];
     for (let i = 4; i <= 20; i++) {
       this.maxScoreDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
+    }
+
+    this.handSizeDropdownItems = [];
+    for (let i = 3; i <= 20; i++) {
+      this.handSizeDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
     }
 
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
@@ -42,7 +48,7 @@ class GameCreator extends Component {
   }
 
   handleSubmit() {
-    createGame(this.state.gameName, this.state.maxPlayers, this.state.maxScore, this.state.cardpacksSelected);
+    createGame(this.state.gameName, this.state.maxPlayers, this.state.maxScore, this.state.handSize, this.state.cardpacksSelected);
   }
 
   render() {
@@ -66,6 +72,11 @@ class GameCreator extends Component {
             <span>Winning Score: </span>
             <Select value={this.state.maxScore} onChange={(e) => this.setState({maxScore: e.target.value})}>
               {this.maxScoreDropdownItems}
+            </Select>
+            <br/>
+            <span>Hand Size: </span>
+            <Select value={this.state.handSize} onChange={(e) => this.setState({handSize: e.target.value})}>
+              {this.handSizeDropdownItems}
             </Select>
           </div>
           <div className='col-wide'>

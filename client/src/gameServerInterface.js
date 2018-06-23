@@ -14,7 +14,7 @@ const user = store.getState().user.currentUser
  * @param {number[]} cardpackIds List of cardpacks to include in the game
  * @returns {Promise} Resolves to the new game state, or rejects if there is an error
  */
-export const createGame = (gameName, maxPlayers, maxScore, cardpackIds) => {
+export const createGame = (gameName, maxPlayers, maxScore, handSize, cardpackIds) => {
   if (maxPlayers < 4 || maxPlayers > 20) {
     let message = 'Max players must be between 4 and 20'
     store.dispatch(showStatusMessage(message))
@@ -35,7 +35,7 @@ export const createGame = (gameName, maxPlayers, maxScore, cardpackIds) => {
     store.dispatch(showStatusMessage(message))
     return Promise.reject(message)
   }
-  return axios.post(`/api/game/create/${user.id}`, {gameName, maxPlayers, maxScore, cardpackIds})
+  return axios.post(`/api/game/create/${user.id}`, {gameName, maxPlayers, maxScore, handSize, cardpackIds})
     .then((response) => {
       store.dispatch(setGameState(response.data))
       return response.data
