@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import api from '../../apiInterface';
 import { connect } from 'react-redux';
-import { Button, LinearProgress, Tab, Tabs } from '@material-ui/core';
+import { Button, LinearProgress, CircularProgress, Tab, Tabs } from '@material-ui/core';
 import CardAdder from './CardAdder.jsx';
 import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
 import CAHBlackCard from '../shells/CAHBlackCard.jsx';
-import fileSelect from 'file-select';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 import TabbedList from '../TabbedList.jsx';
 import SwipeableViews from 'react-swipeable-views';
+import { upload, convertToText } from '../../helpers/fileUpload';
 
 class CardpackViewer extends Component {
   constructor (props) {
@@ -25,7 +25,8 @@ class CardpackViewer extends Component {
       newCardType: 'white',
       newCardAnswerFields: 1,
       cardpack: undefined,
-      slideIndex: 0
+      slideIndex: 0,
+      isUploading: false
     };
     this.fetchCurrentCardpack();
   }
@@ -68,26 +69,21 @@ class CardpackViewer extends Component {
     download(this.state.cardpack.name, cardpackFileHandler.stringify({whiteCards: this.state.cardpack.whiteCards, blackCards: this.state.cardpack.blackCards}));
   }
 
-  uploadStringifiedCards () {
-    if (window.File && window.FileReader && window.FileList && window.Blob) {
-      fileSelect({
-        accept: 'text/*',
-        multiple: false
+  async uploadStringifiedCards () {
+    const fileTexts = await upload({type: 'text/*', multiple: true}).then(convertToText)
+
+    if (fileTexts) {
+      const { whiteCards, blackCards } = fileTexts.map(file => file.text).reduce((acc, text) => {
+        const { whiteCards, blackCards } = cardpackFileHandler.parse(text)
+        return { whiteCards: whiteCards.concat(acc.whiteCards), blackCards: blackCards.concat(acc.blackCards) }
+      }, { whiteCards: [], blackCards: [] })
+
+      this.setState({isUploading: true}, () => {
+        Promise.all([
+          this.addWhiteCards(whiteCards),
+          this.addBlackCards(blackCards)
+        ]).then(() => this.setState({isUploading: false}))
       })
-        .then((textFile) => {
-          if (textFile) {
-            let reader = new FileReader();
-            reader.onload = (result) => {
-              let text = result.currentTarget.result;
-              const { whiteCards, blackCards } = cardpackFileHandler.parse(text);
-              this.addWhiteCards(whiteCards);
-              this.addBlackCards(blackCards);
-            };
-            reader.readAsText(textFile);
-          }
-        });
-    } else {
-      alert('Your browser does not support file uploading');
     }
   }
 
@@ -122,12 +118,13 @@ class CardpackViewer extends Component {
                 </Button>
                 {
                   isOwner &&
-                  <Button onClick={this.uploadStringifiedCards}>
+                  <Button disabled={this.state.isUploading} onClick={this.uploadStringifiedCards}>
                     Upload
                   </Button>
                 }
               </div>
               : null}
+            {this.state.isUploading && <CircularProgress/>}
             <div>
               <Tabs
                 onChange={this.handleTabChange}
