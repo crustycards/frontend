@@ -19,6 +19,7 @@ const getToken = (userId) => {
 const fs = require('fs')
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString()
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString()
+const firebaseServiceWorker = fs.readFileSync(`${__dirname}/../client/src/firebase-messaging-sw.js`).toString()
 
 const generateScript = ({user = null, cardpacks = [], friends = [], requestsSent = [], requestsReceived = []} = {}) => {
   return `<script>
@@ -122,6 +123,13 @@ server.route([
     path: '/logout',
     handler: (request, reply) => {
       reply.redirect('/login').unstate(cookieName)
+    }
+  },
+  {
+    method: 'GET',
+    path: '/firebase-messaging-sw.js',
+    handler: (request, reply) => {
+      reply(firebaseServiceWorker).header('Content-Type', 'application/javascript')
     }
   }
 ])
