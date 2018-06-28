@@ -18,13 +18,47 @@ const initialState = null
  * Reducer
  */
 export default (state = initialState, {type, payload}) => {
+  let queuedCardIds
+
   switch (type) {
     case SET_GAME_STATE:
-      return payload ? {...payload, queuedCardIds: state ? state.queuedCardIds.filter(id => payload.hand.map(card => card.id).includes(id)) : []} : null
+      if (payload === null) {
+        return null
+      } else if (!payload.currentBlackCard) {
+        return {...payload, queuedCardIds: []}
+      } else if (state === null || state.queuedCardIds.length !== payload.currentBlackCard.answerFields || !state.queuedCardIds.reduce((acc, id) => (acc && (id === null || state.hand.map(card => card.id).includes(id))), true)) {
+        try {
+          console.log(state.queuedCardIds.reduce((acc, id) => (acc && (id === null || state.hand.map(card => card.id).includes(id))), true))
+        } catch (err) {}
+        const queuedCardIds = []
+        for (let i = 0; i < payload.currentBlackCard.answerFields; i++) {
+          queuedCardIds.push(null)
+        }
+        return {...payload, queuedCardIds}
+      } else {
+        return {...payload, queuedCardIds: state.queuedCardIds}
+      }
     case QUEUE_CARD:
-      return {...state, queuedCardIds: [...state.queuedCardIds, payload]}
+      if (!payload.index) {
+        const openIndex = state.queuedCardIds.findIndex(id => id === null)
+        if (openIndex === -1) {
+          return {...state, queuedCardIds: state.queuedCardIds}
+        }
+        payload.index = openIndex
+      }
+
+      if (payload.index < 0 || payload.index > state.hand.length || state.queuedCardIds.includes(payload.cardId)) {
+        return {...state, queuedCardIds: state.queuedCardIds}
+      }
+
+      queuedCardIds = [...state.queuedCardIds]
+      queuedCardIds[payload.index] = payload.cardId
+      return {...state, queuedCardIds}
     case UNQUEUE_CARD:
-      return {...state, queuedCardIds: state.queuedCardIds.filter(id => id !== payload)}
+      queuedCardIds = [...state.queuedCardIds]
+      const queuedCardIdIndex = queuedCardIds.findIndex(id => id === payload)
+      queuedCardIds[queuedCardIdIndex] = null
+      return {...state, queuedCardIds}
     case SET_BLACK_CARD:
       return {
         ...state,
