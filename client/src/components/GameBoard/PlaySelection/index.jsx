@@ -14,7 +14,7 @@ const PlaySelection = ({queuedCardIds, currentBlackCard}) => {
       <Button
         variant={'contained'}
         color={'secondary'}
-        disabled={!currentBlackCard || queuedCardIds.length !== currentBlackCard.answerFields}
+        disabled={!currentBlackCard || queuedCardIds.includes(null)}
         onClick={() => { playCards(queuedCardIds); }}
       >
         Play
