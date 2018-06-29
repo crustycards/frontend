@@ -36,7 +36,18 @@ export default (state = initialState, {type, payload}) => {
         return {...payload, queuedCardIds: state.queuedCardIds}
       }
     case QUEUE_CARD:
-      if (!payload.index) {
+      const cardIdQueueIndex = state.queuedCardIds.findIndex(id => id === payload.cardId)
+      const queueAlreadyContainsCardId = cardIdQueueIndex !== -1
+      if (queueAlreadyContainsCardId) {
+        if (payload.index === undefined) {
+          throw new Error('Payload must contain index when moving currently queued card to a new queued position')
+        }
+        queuedCardIds = [...state.queuedCardIds]
+        queuedCardIds[cardIdQueueIndex] = queuedCardIds[payload.index]
+        queuedCardIds[payload.index] = payload.cardId
+
+        return {...state, queuedCardIds}
+      } else if (!payload.index) {
         const openIndex = state.queuedCardIds.findIndex(id => id === null)
         if (openIndex === -1) {
           return {...state, queuedCardIds: state.queuedCardIds}

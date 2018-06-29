@@ -4,6 +4,8 @@ import { cardInHand } from '../../../dndTypes';
 import { DropTarget } from 'react-dnd/lib';
 import { connect } from 'react-redux';
 import { canPlay } from '../../../store';
+import { unqueueCard } from '../../../store/modules/game';
+import { bindActionCreators } from 'redux';
 
 class Tray extends Component {
   render() {
@@ -22,7 +24,7 @@ class Tray extends Component {
   }
 }
 
-const DropTargetTray = DropTarget(cardInHand, {}, (connect, monitor) => ({
+const DropTargetTray = DropTarget(cardInHand, { drop: (props, monitor) => { props.unqueueCard(monitor.getItem().cardId) } }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
@@ -33,4 +35,8 @@ const mapStateToProps = ({game}) => ({
   queuedCardIds: game.queuedCardIds
 });
 
-export default connect(mapStateToProps)(DropTargetTray);
+const mapDispatchToProps = (dispatch) => bindActionCreators({
+  unqueueCard
+}, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(DropTargetTray);

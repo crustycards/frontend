@@ -1,6 +1,6 @@
 import React from 'react'
 import { DropTarget } from 'react-dnd/lib'
-import { cardInPlayQueue } from '../../../dndTypes'
+import { cardInHand, cardInPlayQueue } from '../../../dndTypes'
 import { connect } from 'react-redux'
 import DraggableCardInPlayQueue from './DraggableCardInPlayQueue.jsx'
 import { bindActionCreators } from 'redux'
@@ -19,7 +19,7 @@ const PlaySlot = (props) => {
   }
 }
 
-const DropTargetPlaySlot = DropTarget(cardInPlayQueue, { canDrop: (props, monitor) => { return true }, drop: (props, monitor) => { props.queueCard({index: props.index, cardId: monitor.getItem().cardId}) } }, (connect, monitor) => ({
+const DropTargetPlaySlot = DropTarget([cardInHand, cardInPlayQueue], { drop: (props, monitor) => { props.queueCard({index: props.index, cardId: monitor.getItem().cardId}) } }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop()
