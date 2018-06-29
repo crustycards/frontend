@@ -13,13 +13,7 @@ class DraggableCard extends Component {
   }
 }
 
-const endDrag = (props, monitor) => {
-  if (monitor.didDrop()) {
-    props.onDrop(props.card.id);
-  }
-};
-
-const DragSourceCard = DragSource(cardInPlayQueue, {beginDrag: () => ({}), endDrag}, (connect, monitor) => ({
+const DragSourceCard = DragSource(cardInPlayQueue, {beginDrag: (props) => ({cardId: props.card.id})}, (connect, monitor) => ({
   connectDragSource: connect.dragSource(),
   isDragging: monitor.isDragging(),
 }))(DraggableCard);

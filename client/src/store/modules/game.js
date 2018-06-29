@@ -26,7 +26,7 @@ export default (state = initialState, {type, payload}) => {
         return null
       } else if (!payload.currentBlackCard) {
         return {...payload, queuedCardIds: []}
-      } else if (state === null || state.queuedCardIds.length !== payload.currentBlackCard.answerFields || !state.queuedCardIds.reduce((acc, id) => (acc && (id === null || state.hand.map(card => card.id).includes(id))), true)) {
+      } else if (state === null || state.queuedCardIds.length !== payload.currentBlackCard.answerFields || !state.queuedCardIds.reduce((acc, id) => (acc && (id === null || payload.hand.map(card => card.id).includes(id))), true)) {
         try {
           console.log(state.queuedCardIds.reduce((acc, id) => (acc && (id === null || state.hand.map(card => card.id).includes(id))), true))
         } catch (err) {}
