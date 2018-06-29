@@ -15,7 +15,7 @@ const PlaySlot = (props) => {
       onDrop={() => props.unqueueCard(card.id)}
     />
   } else {
-    return props.connectDropTarget(<div style={{textAlign: 'center', borderStyle: 'dotted', padding: '10px', margin: '5px 0'}}>Drop a card here</div>)
+    return props.connectDropTarget(<div className={'panel'} style={{textAlign: 'center', borderStyle: 'dotted', padding: '10px', margin: '5px 0'}}>Drop a card here</div>)
   }
 }
 
