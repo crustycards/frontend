@@ -9,7 +9,7 @@ import { canPlay } from '../../../store';
 
 class DraggableCard extends Component {
   render() {
-    return this.props.connectDragSource(<div onClick={() => canPlay() && this.props.queueCard(this.props.card.id)} style={{ opacity: this.props.isDragging || !canPlay() ? 0.5 : 1 }}><CAHWhiteCard {...this.props} /></div>);
+    return this.props.connectDragSource(<div onClick={() => canPlay() && this.props.queueCard({cardId: this.props.card.id})} style={{ opacity: this.props.isDragging || !canPlay() ? 0.5 : 1 }}><CAHWhiteCard {...this.props} /></div>);
   }
 }
 
