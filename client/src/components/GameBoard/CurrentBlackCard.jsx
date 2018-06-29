@@ -32,7 +32,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
   for (let i = 0; i < splitBlackText.length - 1; i++) {
     injectedBlackTextElements.push(splitBlackText[i])
     if (tempWhiteTexts[i]) {
-      injectedBlackTextElements.push(<Typography key={i} style={{display: 'inline'}} variant={'title'} color={'secondary'}>{tempWhiteTexts[i]}</Typography>)
+      injectedBlackTextElements.push(<Typography key={i} style={{display: 'inline'}} variant={'title'} component={'div'} color={'secondary'}>{tempWhiteTexts[i]}</Typography>)
     } else {
       injectedBlackTextElements.push(replacementIndicator)
     }
