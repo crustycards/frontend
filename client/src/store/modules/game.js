@@ -53,12 +53,12 @@ export default (state = initialState, {type, payload}) => {
         queuedCardIds[payload.index] = payload.cardId;
 
         return {...state, queuedCardIds};
-      } else if (!payload.index) {
+      } else if (typeof payload.index !== 'number') {
         const openIndex = state.queuedCardIds.findIndex((id) => id === null);
         if (openIndex === -1) {
           return {...state, queuedCardIds: state.queuedCardIds};
         }
-        payload.index = openIndex;
+        payload.index = openIndex; // TODO - Don't edit the payload since it screws with redux dev tools
       }
 
       if (payload.index < 0 || payload.index > state.hand.length || state.queuedCardIds.includes(payload.cardId)) {

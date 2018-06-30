@@ -9,11 +9,15 @@ import { queueCard, unqueueCard } from '../../../store/modules/game'
 const PlaySlot = (props) => {
   if (props.queuedCardIds[props.index]) {
     const card = props.cards.find(card => card.id === props.queuedCardIds[props.index])
-    return <DraggableCardInPlayQueue
-      key={card.id}
-      card={card}
-      onDrop={() => props.unqueueCard(card.id)}
-    />
+    return props.connectDropTarget(
+      <div>
+        <DraggableCardInPlayQueue
+          key={card.id}
+          card={card}
+          onDrop={() => props.unqueueCard(card.id)}
+        />
+      </div>
+    )
   } else {
     return props.connectDropTarget(<div className={'panel'} style={{textAlign: 'center', borderStyle: 'dotted', padding: '10px', margin: '5px 0'}}>Drop a card here</div>)
   }
