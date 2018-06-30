@@ -1,5 +1,7 @@
 const apiUrl = process.env.API_URL;
 
+const getQuery = (query) => query ? `?query=${query}` : '';
+
 module.exports = [
   {
     method: 'GET',
@@ -7,7 +9,9 @@ module.exports = [
     handler: (request, reply) => {
       const query = request.query.query;
 
-      reply.proxy({uri: `${apiUrl}/cardpack/search${query ? `?query=${query}` : ''}`});
+      reply.proxy({
+        uri: `${apiUrl}/cardpack/search${getQuery(query)}`
+      });
     }
   },
   {
@@ -16,7 +20,9 @@ module.exports = [
     handler: (request, reply) => {
       const query = request.query.query;
 
-      reply.proxy({uri: `${apiUrl}/cardpack/search/autocomplete${query ? `?query=${query}` : ''}`});
+      reply.proxy({
+        uri: `${apiUrl}/cardpack/search/autocomplete${getQuery(query)}`
+      });
     }
   },
   {
@@ -25,7 +31,9 @@ module.exports = [
     handler: (request, reply) => {
       const query = request.query.query;
 
-      reply.proxy({uri: `${apiUrl}/user/search${query ? `?query=${query}` : ''}`});
+      reply.proxy({
+        uri: `${apiUrl}/user/search${getQuery(query)}`
+      });
     }
   },
   {
@@ -34,7 +42,9 @@ module.exports = [
     handler: (request, reply) => {
       const query = request.query.query;
 
-      reply.proxy({uri: `${apiUrl}/user/search/autocomplete${query ? `?query=${query}` : ''}`});
+      reply.proxy({
+        uri: `${apiUrl}/user/search/autocomplete${getQuery(query)}`
+      });
     }
   }
 ];
