@@ -3,7 +3,6 @@ import CAHBlackCard from '../shells/CAHBlackCard.jsx'
 import { Typography } from '@material-ui/core'
 import { connect } from 'react-redux'
 
-// TODO - Handle validateDOMNesting error caused by highlighted autofill text creating nested header elements
 const parseCardText = (blackCardText, whiteCardTextList) => {
   let tempText = blackCardText
   const tempWhiteTexts = [...whiteCardTextList]
@@ -21,7 +20,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
 
   for (const i in tempWhiteTexts) {
     // TODO - Don't remove period if card ends in multiple ...'s
-    if (tempWhiteTexts[i].endsWith('.')) {
+    if (tempWhiteTexts[i] && tempWhiteTexts[i].endsWith('.')) {
       tempWhiteTexts[i] = tempWhiteTexts[i].slice(0, tempWhiteTexts[i].length - 1)
     }
   }
@@ -32,7 +31,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
   for (let i = 0; i < splitBlackText.length - 1; i++) {
     injectedBlackTextElements.push(splitBlackText[i])
     if (tempWhiteTexts[i]) {
-      injectedBlackTextElements.push(<Typography key={i} style={{display: 'inline'}} variant={'title'} color={'secondary'}>{tempWhiteTexts[i]}</Typography>)
+      injectedBlackTextElements.push(<Typography key={i} style={{display: 'inline'}} variant={'title'} component={'div'} color={'secondary'}>{tempWhiteTexts[i]}</Typography>)
     } else {
       injectedBlackTextElements.push(replacementIndicator)
     }
@@ -44,7 +43,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
 
 const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
   card ?
-    <CAHBlackCard card={{...card, text: parseCardText(card.text, queuedCardIds.map(id => hand.find(card => card.id === id).text))}} />
+    <CAHBlackCard card={{...card, text: parseCardText(card.text, queuedCardIds.map(id => id ? hand.find(card => card.id === id).text : null))}} />
     :
     <div>No Black Card</div>
 );

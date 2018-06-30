@@ -3,13 +3,13 @@ import DraggableCardInHand from './DraggableCardInHand.jsx';
 import { cardInHand } from '../../../dndTypes';
 import { DropTarget } from 'react-dnd/lib';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { queueCard } from '../../../store/modules/game';
 import { canPlay } from '../../../store';
+import { unqueueCard } from '../../../store/modules/game';
+import { bindActionCreators } from 'redux';
 
 class Tray extends Component {
   render() {
-    const { isJudge, cards, queuedCardIds, queueCard, connectDropTarget, isOver, canDrop } = this.props;
+    const { cards, queuedCardIds, connectDropTarget } = this.props;
 
     return connectDropTarget(
       <div className='tray' style={{minHeight: '100px', backgroundColor: canPlay() ? 'inherit' : 'grey'}}>
@@ -17,7 +17,6 @@ class Tray extends Component {
           <DraggableCardInHand
             key={card.id}
             card={card}
-            onDrop={() => queueCard(card.id)}
           />
         )}
       </div>
@@ -25,20 +24,19 @@ class Tray extends Component {
   }
 }
 
-const DropTargetTray = DropTarget(cardInHand, {}, (connect, monitor) => ({
+const DropTargetTray = DropTarget(cardInHand, { drop: (props, monitor) => { props.unqueueCard(monitor.getItem().cardId) } }, (connect, monitor) => ({
   connectDropTarget: connect.dropTarget(),
   isOver: monitor.isOver(),
   canDrop: monitor.canDrop(),
 }))(Tray);
 
-const mapStateToProps = ({game, user: {currentUser}}) => ({
+const mapStateToProps = ({game}) => ({
   cards: game.hand,
-  queuedCardIds: game.queuedCardIds,
-  isJudge: currentUser.id === game.judgeId
+  queuedCardIds: game.queuedCardIds
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
-  queueCard
-}, dispatch);
+  unqueueCard
+}, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(DropTargetTray);

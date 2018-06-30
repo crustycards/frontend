@@ -11,6 +11,16 @@ test:
     - npm install
     - npm test
 
+lint:
+  stage: test
+  image: node:carbon
+  services:
+    - docker:dind
+    - node:carbon
+  script:
+    - npm install
+    - npm run lint
+
 deploy:
   stage: deploy
   image: docker:stable

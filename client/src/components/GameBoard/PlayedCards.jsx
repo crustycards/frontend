@@ -46,12 +46,12 @@ class PlayedCards extends Component {
           ))}
         </div>
       );
-    } else if (this.props.game.stage === 'roundEndPhase') {
+    } else if (this.props.game.stage === 'roundEndPhase' || (this.props.game.stage === 'notRunning' && this.props.game.winner)) {
       return (
         <div className={'panel'}>
           {Object.keys(this.props.game.whitePlayed).map((userId, index) => (
             <div
-              style={this.props.game.winnerId === userId ? {} : {opacity: 0.5}}
+              style={this.props.game.winner.id === userId ? {} : {opacity: 0.5}}
               className={'subpanel'}
               key={index}
             >
