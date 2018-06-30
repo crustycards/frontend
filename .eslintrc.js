@@ -6,5 +6,13 @@ module.exports = {
   rules: {
     'linebreak-style': ['warn', 'windows'],
     'comma-dangle': ['error', 'never']
+  },
+  'globals': {
+    describe: false,
+    it: false
+  },
+  env: {
+    node: true,
+    browser: true
   }
 };
