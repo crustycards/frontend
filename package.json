@@ -50,9 +50,12 @@
   "dependencies": {
     "@material-ui/core": "^1.2.3",
     "@material-ui/icons": "^1.1.0",
+    "@types/material-ui": "^0.21.3",
+    "@types/query-string": "^6.1.0",
     "@types/react": "^16.4.6",
     "@types/react-dom": "^16.0.6",
     "@types/react-redux": "^6.0.3",
+    "@types/react-router": "^4.0.27",
     "assert": "^1.4.1",
     "axios": "^0.18.0",
     "babel-plugin-transform-export-extensions": "^6.22.0",

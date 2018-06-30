@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     "noImplicitAny": true,
-    "module": "es6",
+    "module": "commonjs",
+    "lib": ["es6"],
     "jsx": "react",
     "allowJs": true,
     "sourceMap": true
