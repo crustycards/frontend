@@ -88,7 +88,7 @@ export const leaveGame = () => {
 export const getGameState = () => {
   return axios.get(`/api/game/${user.id}`)
     .then((response) => {
-      store.dispatch(setGameState(response.data))
+      store.dispatch(setGameState(response.data || null))
       return response.data
     })
 }
