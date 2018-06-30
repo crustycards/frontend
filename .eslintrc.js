@@ -5,7 +5,8 @@ module.exports = {
   },
   rules: {
     'linebreak-style': ['warn', 'windows'],
-    'comma-dangle': ['error', 'never']
+    'comma-dangle': ['error', 'never'],
+    'max-len': ['error', {code: 120}] // TODO - Decrease this to ~100
   },
   'globals': {
     describe: false,
