@@ -4,7 +4,8 @@ const password = process.env.JWT_SECRET;
 const isProduction = process.env.NODE_ENV === 'production';
 const port = parseInt(process.env.PORT);
 const jwtExpTime = parseInt(process.env.JWT_TIMEOUT_SECONDS);
-const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS); // TODO - Set this variable in env file and varLoader
+// TODO - Set jwtRefreshTime in env file and varLoader
+const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS);
 const cookieName = 'session';
 
 const getToken = (userId) => {

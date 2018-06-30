@@ -14,11 +14,10 @@ export const SET_PLAYED_CARDS = 'game/SET_PLAYED_CARDS';
 
 const initialState = null;
 
-/**
- * Reducer
- */
 export default (state = initialState, {type, payload}) => {
   let queuedCardIds;
+  let cardIdQueueIndex;
+  let queueAlreadyContainsCardId;
 
   switch (type) {
     case SET_GAME_STATE:
@@ -26,7 +25,14 @@ export default (state = initialState, {type, payload}) => {
         return null;
       } else if (!payload.currentBlackCard) {
         return {...payload, queuedCardIds: []};
-      } else if (state === null || state.queuedCardIds.length !== payload.currentBlackCard.answerFields || !state.queuedCardIds.reduce((acc, id) => (acc && (id === null || payload.hand.map((card) => card.id).includes(id))), true)) {
+      } else if (
+        state === null
+        || state.queuedCardIds.length !== payload.currentBlackCard.answerFields
+        || !state.queuedCardIds.reduce(
+          (acc, id) => (acc && (id === null || payload.hand.map((card) => card.id).includes(id))),
+          true
+        )
+      ) {
         const queuedCardIds = [];
         for (let i = 0; i < payload.currentBlackCard.answerFields; i++) {
           queuedCardIds.push(null);
@@ -36,8 +42,8 @@ export default (state = initialState, {type, payload}) => {
         return {...payload, queuedCardIds: state.queuedCardIds};
       }
     case QUEUE_CARD:
-      const cardIdQueueIndex = state.queuedCardIds.findIndex((id) => id === payload.cardId);
-      const queueAlreadyContainsCardId = cardIdQueueIndex !== -1;
+      cardIdQueueIndex = state.queuedCardIds.findIndex((id) => id === payload.cardId);
+      queueAlreadyContainsCardId = cardIdQueueIndex !== -1;
       if (queueAlreadyContainsCardId) {
         if (payload.index === undefined) {
           throw new Error('Payload must contain index when moving currently queued card to a new queued position');
@@ -64,8 +70,7 @@ export default (state = initialState, {type, payload}) => {
       return {...state, queuedCardIds};
     case UNQUEUE_CARD:
       queuedCardIds = [...state.queuedCardIds];
-      const queuedCardIdIndex = queuedCardIds.findIndex((id) => id === payload);
-      queuedCardIds[queuedCardIdIndex] = null;
+      queuedCardIds[queuedCardIds.findIndex((id) => id === payload)] = null;
       return {...state, queuedCardIds};
     case SET_BLACK_CARD:
       return {
