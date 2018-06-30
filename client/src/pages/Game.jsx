@@ -35,6 +35,7 @@ const Game = (props) => (
             <PlaySelection/>
             <PlayedCards/>
             {props.game.judgeId === props.currentUser.id && <span className={'center panel'} style={{display: 'block', width: 'auto', margin: '10px', fontSize: '1.5em'}}>You are the Judge</span>}
+            {props.game.winner && props.game.stage === 'notRunning' && <span className={'center panel'} style={{display: 'block', width: 'auto', margin: '10px', fontSize: '1.5em'}}>Winner: {props.game.winner.name}</span>}
           </div>
         </div>
       </div>
