@@ -1,7 +1,8 @@
 module.exports = {
   extends: ['eslint:recommended', 'google'],
   parserOptions: {
-    ecmaVersion: 8
+    ecmaVersion: 8,
+    sourceType: 'module'
   },
   rules: {
     'linebreak-style': ['warn', 'windows'],
