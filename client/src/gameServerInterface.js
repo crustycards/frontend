@@ -11,6 +11,8 @@ const user = store.getState().user.currentUser;
  * Creates a new game session
  * @param {string} gameName Name of new game
  * @param {number} maxPlayers
+ * @param {number} maxScore
+ * @param {number} handSize
  * @param {number[]} cardpackIds List of cardpacks to include in the game
  * @return {Promise} Resolves to the new game state, or rejects if there is an error
  */
@@ -61,6 +63,7 @@ export const stopGame = () => {
 /**
  * Adds user to the game with the given name
  * @param {string} gameName The game name
+ * @return {Promise}
  */
 export const joinGame = (gameName) => {
   return axios.post(`/api/game/join/${user.id}?${queryString.stringify({gameName})}`)
@@ -72,6 +75,7 @@ export const joinGame = (gameName) => {
 
 /**
  * Leaves the current game
+ * @return {Promise}
  */
 export const leaveGame = () => {
   return axios.delete(`/api/game/players/${user.id}`)
@@ -116,15 +120,20 @@ export const playCards = (cardIds) => {
 
 /**
  * Kicks a player from the game if the kicker is the game owner
- * @param {number} playerID
+ * @param {number} playerId
+ * @return {Promise} Resolves to undefined when the operation has completed
  */
 export const kickPlayer = (playerId) => {
-  return axios.delete(`/api/game/players?${queryString.stringify({kickerId: user.id, kickeeId: playerId})}`).then(() => {});
+  return axios.delete(`/api/game/players?${queryString.stringify({
+    kickerId: user.id,
+    kickeeId: playerId
+  })}`).then(() => {});
 };
 
 /**
  * Used to vote a card for set of cards if you are the judge
- * @param {number} cardID The ID of the card (or one of the cards in a set)
+ * @param {number} cardId The ID of the card (or one of the cards in a set)
+ * @return {Promise} Resolves to undefined when the operation has completed
  */
 export const vote = (cardId) => {
   return axios.put(`/api/game/vote/${user.id}?${queryString.stringify({cardId})}`).then(() => {});
@@ -132,6 +141,7 @@ export const vote = (cardId) => {
 
 /**
  * Starts next round of the game
+ * @return {Promise} Resolves to undefined when the operation has completed
  */
 export const startNextRound = () => {
   return axios.put(`/api/game/continue/${user.id}`).then(() => {});
