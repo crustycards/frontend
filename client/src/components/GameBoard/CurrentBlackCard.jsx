@@ -45,7 +45,7 @@ const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
   card ?
     <CAHBlackCard card={{...card, text: parseCardText(card.text, queuedCardIds.map(id => id ? hand.find(card => card.id === id).text : null))}} />
     :
-    <div>No Black Card</div>
+    <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING'}} />
 );
 
 const mapStateToProps = ({game}) => ({

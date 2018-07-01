@@ -21,9 +21,12 @@ const CAHBlackCard = (props) => {
         <Typography align={'left'} gutterBottom variant={'title'}>
           {props.card.text}
         </Typography>
-        <Typography align={'left'} color={'textSecondary'} variant={'subheading'}>
-          {`Answers: ${props.card.answerFields}`}
-        </Typography>
+        {
+          !props.hideAnswerCount &&
+          <Typography align={'left'} color={'textSecondary'} variant={'subheading'}>
+            {`Answers: ${props.card.answerFields}`}
+          </Typography>
+        }
       </CardContent>
       <CardActions>
         {props.isOwner && <Button onClick={removeCard}>Delete</Button>}
