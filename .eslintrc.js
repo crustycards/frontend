@@ -3,7 +3,11 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
-    experimentalObjectRestSpread: true
+    experimentalObjectRestSpread: true,
+    ecmaFeatures: {
+      jsx: true,
+      modules: true
+    }
   },
   rules: {
     'linebreak-style': ['warn', 'windows'],
