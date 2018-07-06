@@ -1,10 +1,10 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
-import { Button } from '@material-ui/core';
-import { playCards, unPlayCards } from '../../../gameServerInterface';
-import { canPlay, hasPlayed } from '../../../store';
+import {Button} from '@material-ui/core';
+import {playCards, unPlayCards} from '../../../gameServerInterface';
+import {canPlay, hasPlayed} from '../../../store';
 
 const PlaySelection = ({queuedCardIds, stage, whitePlayed, currentBlackCard, currentUser, judgeId}) => {
   return canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ?
@@ -15,7 +15,9 @@ const PlaySelection = ({queuedCardIds, stage, whitePlayed, currentBlackCard, cur
         variant={'contained'}
         color={'secondary'}
         disabled={queuedCardIds.includes(null)}
-        onClick={() => { playCards(queuedCardIds); }}
+        onClick={() => {
+          playCards(queuedCardIds);
+        }}
       >
         Play
       </Button>
@@ -28,12 +30,14 @@ const PlaySelection = ({queuedCardIds, stage, whitePlayed, currentBlackCard, cur
         <Button
           variant={'contained'}
           color={'secondary'}
-          onClick={() => { unPlayCards(); }}
+          onClick={() => {
+            unPlayCards();
+          }}
         >
           Revert Play
         </Button>
       }
-    </div>
+    </div>;
 };
 
 const mapStateToProps = ({game: {queuedCardIds, stage, whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({

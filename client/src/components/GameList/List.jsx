@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
-import { Button, CircularProgress, Card, CardActions, CardHeader, withStyles } from '@material-ui/core';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
-import { connect } from 'react-redux';
-import { joinGame, leaveGame, getGameList } from '../../gameServerInterface';
+import React, {Component} from 'react';
+import {Button, CircularProgress, Card, CardActions, CardHeader, withStyles} from '@material-ui/core';
+import {Refresh as RefreshIcon} from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {joinGame, leaveGame, getGameList} from '../../gameServerInterface';
 
-const styles = theme => ({
+const styles = (theme) => ({
   leftIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   }
 });
 
