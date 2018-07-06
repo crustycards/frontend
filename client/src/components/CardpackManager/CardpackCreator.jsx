@@ -1,12 +1,12 @@
 import React from 'react';
-import { Field, reduxForm, reset } from 'redux-form';
-import { TextField, Button } from '@material-ui/core';
+import {Field, reduxForm, reset} from 'redux-form';
+import {TextField, Button} from '@material-ui/core';
 import api from '../../apiInterface';
 
 const renderTextField = ({
   input,
   label,
-  meta: { touched, error },
+  meta: {touched, error},
   ...custom
 }) => (
   <TextField
@@ -17,10 +17,10 @@ const renderTextField = ({
   />
 );
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
   const requiredFields = ['cardpackName'];
-  requiredFields.forEach(field => {
+  requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = 'Required';
     }
