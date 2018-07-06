@@ -9,7 +9,8 @@ import { canPlay } from '../../../store';
 
 class DraggableCard extends Component {
   render() {
-    return this.props.connectDragSource(<div onClick={() => canPlay() && this.props.queueCard({cardId: this.props.card.id})} style={{ opacity: this.props.isDragging || !canPlay() ? 0.5 : 1 }}><CAHWhiteCard {...this.props} /></div>);
+    const { whitePlayed, currentBlackCard, currentUser, judgeId } = this.props;
+    return this.props.connectDragSource(<div onClick={() => canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) && this.props.queueCard({cardId: this.props.card.id})} style={{ opacity: this.props.isDragging || !canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ? 0.5 : 1 }}><CAHWhiteCard {...this.props} /></div>);
   }
 }
 
@@ -18,9 +19,11 @@ const DragSourceCard = DragSource(cardInPlayQueue, {beginDrag: (props) => ({card
   isDragging: monitor.isDragging(),
 }))(DraggableCard);
 
-const mapStateToProps = ({game, user: {currentUser}}) => ({
-  currentUserId: currentUser.id,
-  currentJudgeId: game.judgeId
+const mapStateToProps = ({game: {whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
+  whitePlayed,
+  currentBlackCard,
+  currentUser,
+  judgeId
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

@@ -9,10 +9,10 @@ import { bindActionCreators } from 'redux';
 
 class Tray extends Component {
   render() {
-    const { cards, queuedCardIds, connectDropTarget } = this.props;
+    const { cards, queuedCardIds, connectDropTarget, whitePlayed, currentBlackCard, currentUser, judgeId } = this.props;
 
     return connectDropTarget(
-      <div className='tray' style={{minHeight: '100px', backgroundColor: canPlay() ? 'inherit' : 'grey'}}>
+      <div className='tray' style={{minHeight: '100px', backgroundColor: canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ? 'inherit' : 'grey'}}>
         {cards.filter(card => !queuedCardIds.includes(card.id)).map(card =>
           <DraggableCardInHand
             key={card.id}
@@ -30,9 +30,13 @@ const DropTargetTray = DropTarget(cardInHand, { drop: (props, monitor) => { prop
   canDrop: monitor.canDrop(),
 }))(Tray);
 
-const mapStateToProps = ({game}) => ({
-  cards: game.hand,
-  queuedCardIds: game.queuedCardIds
+const mapStateToProps = ({game: { hand, queuedCardIds, whitePlayed, currentBlackCard, judgeId }, user: {currentUser}}) => ({
+  cards: hand,
+  queuedCardIds,
+  whitePlayed,
+  currentBlackCard,
+  currentUser,
+  judgeId
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
