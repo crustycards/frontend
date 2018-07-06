@@ -31,7 +31,17 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
   for (let i = 0; i < splitBlackText.length - 1; i++) {
     injectedBlackTextElements.push(splitBlackText[i]);
     if (tempWhiteTexts[i]) {
-      injectedBlackTextElements.push(<Typography key={i} style={{display: 'inline'}} variant={'title'} component={'div'} color={'secondary'}>{tempWhiteTexts[i]}</Typography>);
+      injectedBlackTextElements.push(
+        <Typography
+          key={i}
+          style={{display: 'inline'}}
+          variant={'title'}
+          component={'div'}
+          color={'secondary'}
+        >
+          {tempWhiteTexts[i]}
+        </Typography>
+      );
     } else {
       injectedBlackTextElements.push(replacementIndicator);
     }
@@ -43,7 +53,14 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
 
 const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
   card ?
-    <CAHBlackCard card={{...card, text: parseCardText(card.text, queuedCardIds.map((id) => id ? hand.find((card) => card.id === id).text : null))}} />
+    <CAHBlackCard
+      card={{
+        ...card,
+        text: parseCardText(card.text, queuedCardIds.map((id) =>
+          (id ? hand.find((card) => card.id === id).text : null)
+        ))
+      }}
+    />
     :
     <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING'}} />
 );
