@@ -60,8 +60,12 @@ class GameList extends Component {
             <CardActions>
               {
                 this.props.game && this.props.game.name === game.name ?
-                  <Button onClick={() => { leaveGame().then(this.refresh); }}>Leave</Button> :
-                  <Button onClick={() => { joinGame(game.name); }}>Join</Button>
+                  <Button onClick={() => {
+                    leaveGame().then(this.refresh);
+                  }}>Leave</Button> :
+                  <Button onClick={() => {
+                    joinGame(game.name);
+                  }}>Join</Button>
               }
             </CardActions>
           </Card>
