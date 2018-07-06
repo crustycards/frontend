@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { createGame } from '../../gameServerInterface';
-import { connect } from 'react-redux';
-import { Button, TextField, Checkbox, Select, MenuItem, List, ListItem, ListItemText } from '@material-ui/core';
-import { setGameState } from '../../store/modules/game';
+import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {createGame} from '../../gameServerInterface';
+import {connect} from 'react-redux';
+import {Button, TextField, Checkbox, Select, MenuItem, List, ListItem, ListItemText} from '@material-ui/core';
+import {setGameState} from '../../store/modules/game';
 
 class GameCreator extends Component {
   constructor(props) {
@@ -41,7 +41,7 @@ class GameCreator extends Component {
 
   handleSelectChange(id) {
     if (this.state.cardpacksSelected.includes(id)) {
-      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter(cId => cId !== id)});
+      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
     } else {
       this.setState({cardpacksSelected: [...this.state.cardpacksSelected, id]});
     }
@@ -60,8 +60,8 @@ class GameCreator extends Component {
             <TextField
               name='gameName'
               label='Game Name'
-              value={this.state.gameName} 
-              onChange={this.handleGameNameChange} 
+              value={this.state.gameName}
+              onChange={this.handleGameNameChange}
             />
             <br/>
             <span>Max Players: </span>
@@ -83,7 +83,7 @@ class GameCreator extends Component {
             <div className='subpanel'>
               <h3>Cardpacks</h3>
               <List>
-                {this.props.cardpacks.map(c => (
+                {this.props.cardpacks.map((c) => (
                   <ListItem
                     key={c.id}
                   >

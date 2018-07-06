@@ -1,7 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@material-ui/core';
-import { Star, Check } from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {List, ListItem, ListItemText, ListItemIcon, ListSubheader} from '@material-ui/core';
+import {Star, Check} from '@material-ui/icons';
 
 const styles = {
   overflowY: 'auto',

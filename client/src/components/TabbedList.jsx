@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { Button } from '@material-ui/core';
-import { GridList, GridTile } from 'material-ui/GridList';
+import {Button} from '@material-ui/core';
+import {GridList, GridTile} from 'material-ui/GridList';
 
 class TabbedList extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.itemsPerTab = props.itemsPerTab || 20;
     this.columns = props.columns || 4;
@@ -15,15 +15,15 @@ class TabbedList extends Component {
     };
   }
 
-  nextTab () {
+  nextTab() {
     this.setState({tab: this.state.tab + 1});
   }
 
-  previousTab () {
+  previousTab() {
     this.setState({tab: this.state.tab - 1});
   }
 
-  render () {
+  render() {
     const visibleElements = [];
 
     let tabStart = this.state.tab * this.itemsPerTab;

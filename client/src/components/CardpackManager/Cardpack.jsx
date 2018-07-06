@@ -1,7 +1,7 @@
 import React from 'react';
 import api from '../../apiInterface';
-import { NavLink } from 'react-router-dom';
-import { Button, Card, CardHeader, CardActions } from '@material-ui/core';
+import {NavLink} from 'react-router-dom';
+import {Button, Card, CardHeader, CardActions} from '@material-ui/core';
 import time from 'time-converter';
 const navItemStyle = {textDecoration: 'none'};
 

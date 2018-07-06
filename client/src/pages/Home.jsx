@@ -1,5 +1,5 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import FriendsList from '../components/FriendsList.jsx';
 import FriendRequestsSent from '../components/FriendRequestsSent.jsx';
 import FriendRequestsReceived from '../components/FriendRequestsReceived.jsx';

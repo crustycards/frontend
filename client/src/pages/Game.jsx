@@ -1,13 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Button } from '@material-ui/core';
+import {connect} from 'react-redux';
+import {Button} from '@material-ui/core';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
 import MessageBox from '../components/GameBoard/MessageBox.jsx';
 import PlayedCards from '../components/GameBoard/PlayedCards.jsx';
-import { NavLink } from 'react-router-dom';
-import { startGame, stopGame, leaveGame, startNextRound } from '../gameServerInterface';
+import {NavLink} from 'react-router-dom';
+import {startGame, stopGame, leaveGame, startNextRound} from '../gameServerInterface';
 
 const buttonStyle = {
   height: '36px',
@@ -40,7 +40,7 @@ const Game = (props) => (
           </div>
           <div className='col-wide'>
             {props.game.hand && <PlaySelection/>}
-            {props.game.queuedPlayers.map(user => user.id).includes(props.currentUser.id) && <span className={'center panel'} style={gameAlertStyle}>Waiting until the next round to join game...</span>}
+            {props.game.queuedPlayers.map((user) => user.id).includes(props.currentUser.id) && <span className={'center panel'} style={gameAlertStyle}>Waiting until the next round to join game...</span>}
             <PlayedCards/>
             {props.game.judgeId === props.currentUser.id && <span className={'center panel'} style={gameAlertStyle}>You are the Judge</span>}
             {props.game.winner && props.game.stage === 'notRunning' && <span className={'center panel'} style={gameAlertStyle}>Winner: {props.game.winner.name}</span>}

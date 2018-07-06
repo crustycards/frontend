@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import WhiteCard from '../shells/CAHWhiteCard.jsx';
-import { vote } from '../../gameServerInterface';
-import { Button } from '@material-ui/core';
+import {vote} from '../../gameServerInterface';
+import {Button} from '@material-ui/core';
 
 class PlayedCards extends Component {
   constructor(props) {
@@ -55,7 +55,7 @@ class PlayedCards extends Component {
               className={'subpanel'}
               key={index}
             >
-              <div>{this.props.game.players.find(player => player.id === userId) ? this.props.game.players.find(player => player.id === userId).name : 'This user has left the game'}</div>
+              <div>{this.props.game.players.find((player) => player.id === userId) ? this.props.game.players.find((player) => player.id === userId).name : 'This user has left the game'}</div>
               {this.props.game.whitePlayed[userId].map((card, index) => <WhiteCard card={card} key={index} />)}
             </div>
           ))}

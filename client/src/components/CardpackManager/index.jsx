@@ -1,19 +1,18 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import CardpackCreator from './CardpackCreator.jsx';
 import Cardpack from './Cardpack.jsx';
 
 class CardpackManager extends Component {
-
-  componentDidMount () {
+  componentDidMount() {
     this.intervalId = setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.intervalId);
   }
 
-  render () {
+  render() {
     return (
       <div className='panel'>
         <div>Cardpack Manager</div>
@@ -28,7 +27,6 @@ class CardpackManager extends Component {
       </div>
     );
   }
-
 }
 
 const mapStateToProps = ({user: {cardpacks}}) => ({

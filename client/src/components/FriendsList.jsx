@@ -1,6 +1,6 @@
 import React from 'react';
 import User from './shells/UserCard.jsx';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 const FriendsList = ({friends}) => (
   <div className="panel">

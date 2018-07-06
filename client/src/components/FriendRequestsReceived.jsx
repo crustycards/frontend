@@ -1,6 +1,6 @@
 import React from 'react';
 import ReceivedFriendRequest from './ReceivedFriendRequest.jsx';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 const FriendRequestsReceived = ({requestsReceived}) => (
   <div className="panel">

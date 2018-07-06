@@ -1,8 +1,8 @@
 import React from 'react';
-import { Snackbar } from '@material-ui/core';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { hideStatusMessage } from '../store/modules/global';
+import {Snackbar} from '@material-ui/core';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {hideStatusMessage} from '../store/modules/global';
 
 const StatusBar = (props) => (
   <Snackbar

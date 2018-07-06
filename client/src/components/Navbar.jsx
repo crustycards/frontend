@@ -1,13 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { openNavbar, closeNavbar } from '../store/modules/global';
-import { Drawer, MenuItem, AppBar, Toolbar, Typography, Button, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
-import { Menu as MenuIcon, Home, ExitToApp, ViewList, VideogameAsset, Settings, ViewCarousel } from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {openNavbar, closeNavbar} from '../store/modules/global';
+import {Drawer, MenuItem, AppBar, Toolbar, Typography, Button, IconButton, ListItemIcon, ListItemText} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import {NavLink} from 'react-router-dom';
+import {Menu as MenuIcon, Home, ExitToApp, ViewList, VideogameAsset, Settings, ViewCarousel} from '@material-ui/icons';
 import store from '../store';
-import { push } from 'connected-react-router';
+import {push} from 'connected-react-router';
 
 const navItemStyle = {textDecoration: 'none'};
 const redirectTo = (url) => {
@@ -16,14 +16,14 @@ const redirectTo = (url) => {
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20,
+    marginRight: 20
   }
 };
 
