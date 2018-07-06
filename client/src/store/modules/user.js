@@ -9,12 +9,18 @@ export const SET_FRIENDS = 'user/SET_FRIENDS';
 
 const preloadedState = window.__PRELOADED_STATE__;
 
-const initialState = {
+const initialState = preloadedState ? {
   currentUser: preloadedState.currentUser,
   cardpacks: preloadedState.cardpacks,
   friends: preloadedState.friends,
   requestsSent: preloadedState.requestsSent,
   requestsReceived: preloadedState.requestsReceived
+} : {
+  currentUser: null,
+  cardpacks: [],
+  friends: [],
+  requestsSent: [],
+  requestsReceived: []
 };
 
 export default (state = initialState, {type, payload}) => {

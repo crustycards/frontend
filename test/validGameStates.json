@@ -1,0 +1,87 @@
+[
+  {
+    "user": {},
+    "game": null
+  },
+  {
+    "user": {
+      "currentUser": {
+        "id": "5b2da6162ab79c0001615950",
+        "name": "Thomas Volk"
+      }
+    },
+    "game": {
+      "name": "Test",
+      "maxPlayers": 8,
+      "maxScore": 8,
+      "stage": "playPhase",
+      "hand": [
+        {
+          "id": "5b32e3a72ab79c0001a08145",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "The truth."
+        },
+        {
+          "id": "5b32e3972ab79c0001a078d1",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "The Hemsworth brothers."
+        },
+        {
+          "id": "5b32e3962ab79c0001a077ce",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "Pixelated bukkake."
+        },
+        {
+          "id": "5b32e39c2ab79c0001a07b73",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "This guy!"
+        },
+        {
+          "id": "5b32e39a2ab79c0001a07a49",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "Putting more black people in jail."
+        },
+        {
+          "id": "5b32e38f2ab79c0001a07189",
+          "cardpackId": "5b32e3872ab79c0001a06b45",
+          "text": "An eager nerd with a crappy taint."
+        }
+      ],
+      "players": [
+        {
+          "id": "5b2da6162ab79c0001615950",
+          "name": "Thomas Volk",
+          "score": 0
+        },
+        {
+          "id": "5b3d1bb22ab79c0001d0fe6a",
+          "name": "Steve",
+          "score": 0
+        },
+        {
+          "id": "5b2da68c2ab79c0001615f45",
+          "name": "Thomas Volk",
+          "score": 0
+        }
+      ],
+      "queuedPlayers": [],
+      "bannedPlayers": [],
+      "judgeId": "5b2da68c2ab79c0001615f45",
+      "ownerId": "5b2da6162ab79c0001615950",
+      "whitePlayed": {},
+      "whitePlayedAnonymous": null,
+      "currentBlackCard": {
+        "id": "5b32e3902ab79c0001a07322",
+        "cardpackId": "5b32e3872ab79c0001a06b45",
+        "text": "The world would be a better place is ______ and ______ happened.",
+        "answerFields": 2
+      },
+      "winner": null,
+      "messages": [],
+      "queuedCardIds": [
+        null,
+        null
+      ]
+    }
+  }
+]
