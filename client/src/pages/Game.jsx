@@ -14,6 +14,13 @@ const buttonStyle = {
   margin: '10px'
 };
 
+const gameAlertStyle = {
+  display: 'block',
+  width: 'auto',
+  margin: '10px',
+  fontSize: '1.5em'
+};
+
 const Game = (props) => (
   <div>
     {props.game ?
@@ -32,10 +39,11 @@ const Game = (props) => (
             <MessageBox/>
           </div>
           <div className='col-wide'>
-            <PlaySelection/>
+            {props.game.hand && <PlaySelection/>}
+            {props.game.queuedPlayers.map(user => user.id).includes(props.currentUser.id) && <span className={'center panel'} style={gameAlertStyle}>Waiting until the next round to join game...</span>}
             <PlayedCards/>
-            {props.game.judgeId === props.currentUser.id && <span className={'center panel'} style={{display: 'block', width: 'auto', margin: '10px', fontSize: '1.5em'}}>You are the Judge</span>}
-            {props.game.winner && props.game.stage === 'notRunning' && <span className={'center panel'} style={{display: 'block', width: 'auto', margin: '10px', fontSize: '1.5em'}}>Winner: {props.game.winner.name}</span>}
+            {props.game.judgeId === props.currentUser.id && <span className={'center panel'} style={gameAlertStyle}>You are the Judge</span>}
+            {props.game.winner && props.game.stage === 'notRunning' && <span className={'center panel'} style={gameAlertStyle}>Winner: {props.game.winner.name}</span>}
           </div>
         </div>
       </div>
