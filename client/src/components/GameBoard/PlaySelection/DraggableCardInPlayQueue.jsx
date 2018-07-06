@@ -6,6 +6,14 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {unqueueCard} from '../../../store/modules/game';
 
+@DragSource(
+  cardInHand,
+  {beginDrag: (props) => ({cardId: props.card.id})},
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)
 class DraggableCard extends Component {
   render() {
     return this.props.connectDragSource(
@@ -19,17 +27,8 @@ class DraggableCard extends Component {
   }
 }
 
-const DragSourceCard = DragSource(
-  cardInHand,
-  {beginDrag: (props) => ({cardId: props.card.id})},
-  (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  })
-)(DraggableCard);
-
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   unqueueCard
 }, dispatch);
 
-export default connect(null, mapDispatchToProps)(DragSourceCard);
+export default connect(null, mapDispatchToProps)(DraggableCard);

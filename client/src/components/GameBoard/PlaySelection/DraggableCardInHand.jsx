@@ -7,6 +7,14 @@ import {bindActionCreators} from 'redux';
 import {queueCard} from '../../../store/modules/game';
 import {canPlay} from '../../../store';
 
+@DragSource(
+  cardInPlayQueue,
+  {beginDrag: (props) => ({cardId: props.card.id})},
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)
 class DraggableCard extends Component {
   render() {
     const {whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
@@ -33,15 +41,6 @@ class DraggableCard extends Component {
   }
 }
 
-const DragSourceCard = DragSource(
-  cardInPlayQueue,
-  {beginDrag: (props) => ({cardId: props.card.id})},
-  (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  })
-)(DraggableCard);
-
 const mapStateToProps = ({game: {whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
   whitePlayed,
   currentBlackCard,
@@ -53,4 +52,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   queueCard
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(DragSourceCard);
+export default connect(mapStateToProps, mapDispatchToProps)(DraggableCard);

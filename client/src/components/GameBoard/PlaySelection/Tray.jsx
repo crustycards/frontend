@@ -7,6 +7,13 @@ import {canPlay} from '../../../store';
 import {unqueueCard} from '../../../store/modules/game';
 import {bindActionCreators} from 'redux';
 
+@DropTarget(cardInHand, {drop: (props, monitor) => {
+  props.unqueueCard(monitor.getItem().cardId);
+}}, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))
 class Tray extends Component {
   render() {
     const {cards, queuedCardIds, connectDropTarget, whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
@@ -35,14 +42,6 @@ class Tray extends Component {
   }
 }
 
-const DropTargetTray = DropTarget(cardInHand, {drop: (props, monitor) => {
- props.unqueueCard(monitor.getItem().cardId);
-}}, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))(Tray);
-
 const mapStateToProps = ({
   game: {
     hand,
@@ -67,4 +66,4 @@ const mapDispatchToProps = (dispatch) => bindActionCreators({
   unqueueCard
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(DropTargetTray);
+export default connect(mapStateToProps, mapDispatchToProps)(Tray);
