@@ -119,6 +119,14 @@ export const playCards = (cardIds) => {
 };
 
 /**
+ * Reverts the user's played cards
+ * @return {Promise} Resolves to an error (or null if it succeeded)
+ */
+export const unPlayCards = () => {
+  return axios.delete(`/api/game/play/${user.id}`).then(() => {});
+};
+
+/**
  * Kicks a player from the game if the kicker is the game owner
  * @param {number} playerId
  * @return {Promise} Resolves to undefined when the operation has completed
