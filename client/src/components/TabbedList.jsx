@@ -29,18 +29,18 @@ class TabbedList extends Component {
     let tabStart = this.state.tab * this.itemsPerTab;
     let tabEnd = tabStart + this.itemsPerTab;
     for (let i = tabStart; i < tabEnd; i++) {
-      visibleElements.push(<GridTile key={i} style={{height: 'auto'}}>{this.props.elements[i]}</GridTile>);
+      visibleElements.push(<GridTile key={i} style={{height: 'auto'}}>{this.props.children[i]}</GridTile>);
     }
 
     return (
       <div className='panel'>
         <div className='center'>
           {
-            this.props.elements.length > this.itemsPerTab &&
+            this.props.children.length > this.itemsPerTab &&
             <div>
               <Button onClick={this.previousTab} disabled={this.state.tab === 0}>Previous</Button>
-              <Button onClick={this.nextTab} disabled={tabEnd >= this.props.elements.length}>Next</Button>
-              <div>Tab {this.state.tab + 1} of {Math.ceil(this.props.elements.length / this.itemsPerTab)}</div>
+              <Button onClick={this.nextTab} disabled={tabEnd >= this.props.children.length}>Next</Button>
+              <div>Tab {this.state.tab + 1} of {Math.ceil(this.props.children.length / this.itemsPerTab)}</div>
             </div>
           }
         </div>
@@ -54,8 +54,7 @@ class TabbedList extends Component {
 
 TabbedList.propTypes = {
   itemsPerTab: PropTypes.number,
-  columns: PropTypes.number,
-  elements: PropTypes.arrayOf(PropTypes.element)
+  columns: PropTypes.number
 };
 
 export default TabbedList;

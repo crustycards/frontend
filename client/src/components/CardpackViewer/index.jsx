@@ -167,9 +167,10 @@ class CardpackViewer extends Component {
                 index={this.state.slideIndex}
                 onChangeIndex={this.handleTabChange}
               >
-                <TabbedList
-                  elements={this.state.cardpack.whiteCards.map((card) =>
+                <TabbedList>
+                  {this.state.cardpack.whiteCards.map((card, index) =>
                     <CAHWhiteCard
+                      key={index}
                       card={card}
                       isOwner={isOwner}
                       onDelete={(cardId) => this.setState({
@@ -180,12 +181,14 @@ class CardpackViewer extends Component {
                       })}
                     />
                   )}
-                />
+                </TabbedList>
                 <TabbedList
                   columns={3}
                   itemsPerTab={12}
-                  elements={this.state.cardpack.blackCards.map((card, index) =>
+                >
+                  {this.state.cardpack.blackCards.map((card, index) =>
                     <CAHBlackCard
+                      key={index}
                       card={card}
                       isOwner={isOwner}
                       onDelete={(cardId) => this.setState({
@@ -196,7 +199,7 @@ class CardpackViewer extends Component {
                       })}
                     />
                   )}
-                />
+                </TabbedList>
               </SwipeableViews>
             </div>
           </div>
