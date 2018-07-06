@@ -52,7 +52,11 @@ class GameList extends Component {
           Refresh
         </Button>
         {this.props.games.map((game, index) => (
-          <Card style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}} key={index} className='card'>
+          <Card
+            style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}}
+            key={index}
+            className='card'
+          >
             <CardHeader
               title={game.name}
               subheader={`Host: ${game.owner.name}`}

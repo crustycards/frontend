@@ -44,7 +44,9 @@ class TabbedList extends Component {
             </div>
           }
         </div>
-        <GridList children={visibleElements} cols={this.columns} cellHeight='auto' />
+        <GridList cols={this.columns} cellHeight='auto'>
+          {visibleElements}
+        </GridList>
       </div>
     );
   }

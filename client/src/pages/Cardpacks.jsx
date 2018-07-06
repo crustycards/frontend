@@ -5,7 +5,12 @@ import queryString from 'query-string';
 
 const Cardpack = (props) => (
   <div className='content-wrap'>
-    {queryString.parse(props.location.search).id ? <CardpackViewer cardpackId={queryString.parse(props.location.search).id} /> : <CardpackManager/>}
+    {
+      queryString.parse(props.location.search).id ?
+        <CardpackViewer cardpackId={queryString.parse(props.location.search).id} />
+        :
+        <CardpackManager/>
+    }
   </div>
 );
 
