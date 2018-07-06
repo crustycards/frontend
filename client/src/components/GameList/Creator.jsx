@@ -48,7 +48,13 @@ class GameCreator extends Component {
   }
 
   handleSubmit() {
-    createGame(this.state.gameName, this.state.maxPlayers, this.state.maxScore, this.state.handSize, this.state.cardpacksSelected);
+    createGame(
+      this.state.gameName,
+      this.state.maxPlayers,
+      this.state.maxScore,
+      this.state.handSize,
+      this.state.cardpacksSelected
+    );
   }
 
   render() {

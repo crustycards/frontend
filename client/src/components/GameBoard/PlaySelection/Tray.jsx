@@ -12,7 +12,18 @@ class Tray extends Component {
     const {cards, queuedCardIds, connectDropTarget, whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
 
     return connectDropTarget(
-      <div className='tray' style={{minHeight: '100px', backgroundColor: canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ? 'inherit' : 'grey'}}>
+      <div
+        className='tray'
+        style={{
+          minHeight: '100px',
+          backgroundColor: canPlay({
+            whitePlayed,
+            currentBlackCard,
+            currentUser,
+            judgeId
+          }) ? 'inherit' : 'grey'
+        }}
+      >
         {cards.filter((card) => !queuedCardIds.includes(card.id)).map((card) =>
           <DraggableCardInHand
             key={card.id}
@@ -32,7 +43,18 @@ const DropTargetTray = DropTarget(cardInHand, {drop: (props, monitor) => {
   canDrop: monitor.canDrop()
 }))(Tray);
 
-const mapStateToProps = ({game: {hand, queuedCardIds, whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
+const mapStateToProps = ({
+  game: {
+    hand,
+    queuedCardIds,
+    whitePlayed,
+    currentBlackCard,
+    judgeId
+  },
+  user: {
+    currentUser
+  }
+}) => ({
   cards: hand,
   queuedCardIds,
   whitePlayed,

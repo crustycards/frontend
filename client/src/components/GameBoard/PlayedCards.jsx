@@ -39,14 +39,29 @@ class PlayedCards extends Component {
                   this.setState({selectedSetIndex: index});
                 }
               }}
-              style={index === this.state.selectedSetIndex ? {background: 'green', transition: 'background .25s ease'} : {transition: 'background .2s ease'}}
+              style={index === this.state.selectedSetIndex ?
+                {
+                  background: 'green',
+                  transition: 'background .25s ease'
+                }
+                :
+                {
+                  transition: 'background .2s ease'
+                }
+              }
             >
               {cards.map((card, index) => <WhiteCard card={card} key={index} />)}
             </div>
           ))}
         </div>
       );
-    } else if (this.props.game.stage === 'roundEndPhase' || (this.props.game.stage === 'notRunning' && this.props.game.winner)) {
+    } else if (
+      this.props.game.stage === 'roundEndPhase' ||
+      (
+        this.props.game.stage === 'notRunning' &&
+        this.props.game.winner
+      )
+    ) {
       return (
         <div className={'panel'}>
           {Object.keys(this.props.game.whitePlayed).map((userId, index) => (
@@ -55,7 +70,14 @@ class PlayedCards extends Component {
               className={'subpanel'}
               key={index}
             >
-              <div>{this.props.game.players.find((player) => player.id === userId) ? this.props.game.players.find((player) => player.id === userId).name : 'This user has left the game'}</div>
+              <div>
+                {
+                  this.props.game.players.find((player) => player.id === userId) ?
+                    this.props.game.players.find((player) => player.id === userId).name
+                    :
+                    'This user has left the game'
+                }
+              </div>
               {this.props.game.whitePlayed[userId].map((card, index) => <WhiteCard card={card} key={index} />)}
             </div>
           ))}

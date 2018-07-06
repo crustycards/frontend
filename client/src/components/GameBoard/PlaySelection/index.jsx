@@ -40,7 +40,18 @@ const PlaySelection = ({queuedCardIds, stage, whitePlayed, currentBlackCard, cur
     </div>;
 };
 
-const mapStateToProps = ({game: {queuedCardIds, stage, whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
+const mapStateToProps = ({
+  game: {
+    queuedCardIds,
+    stage,
+    whitePlayed,
+    currentBlackCard,
+    judgeId
+  },
+  user: {
+    currentUser
+  }
+}) => ({
   queuedCardIds,
   stage,
   whitePlayed,

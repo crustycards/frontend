@@ -43,14 +43,30 @@ class CardpackViewer extends Component {
 
   addWhiteCards(cards) {
     return api.createWhiteCards(this.cardpackId, cards).then((createdCards) => {
-      this.setState({cardpack: {...this.state.cardpack, whiteCards: [...this.state.cardpack.whiteCards, ...createdCards]}});
+      this.setState({
+        cardpack: {
+          ...this.state.cardpack,
+          whiteCards: [
+            ...this.state.cardpack.whiteCards,
+            ...createdCards
+          ]
+        }
+      });
       return createdCards;
     });
   }
 
   addBlackCards(cards) {
     return api.createBlackCards(this.cardpackId, cards).then((createdCards) => {
-      this.setState({cardpack: {...this.state.cardpack, blackCards: [...this.state.cardpack.blackCards, ...createdCards]}});
+      this.setState({
+        cardpack: {
+          ...this.state.cardpack,
+          blackCards: [
+            ...this.state.cardpack.blackCards,
+            ...createdCards
+          ]
+        }
+      });
       return createdCards;
     });
   }
@@ -66,7 +82,10 @@ class CardpackViewer extends Component {
       document.body.removeChild(element);
     };
     // Start file download.
-    download(this.state.cardpack.name, cardpackFileHandler.stringify({whiteCards: this.state.cardpack.whiteCards, blackCards: this.state.cardpack.blackCards}));
+    download(this.state.cardpack.name, cardpackFileHandler.stringify({
+      whiteCards: this.state.cardpack.whiteCards,
+      blackCards: this.state.cardpack.blackCards
+    }));
   }
 
   async uploadStringifiedCards() {
@@ -98,7 +117,10 @@ class CardpackViewer extends Component {
       );
     }
 
-    let isOwner = this.props.currentUser && this.state.cardpack && this.state.cardpack.owner && this.props.currentUser.id === this.state.cardpack.owner.id;
+    let isOwner = this.props.currentUser &&
+      this.state.cardpack &&
+      this.state.cardpack.owner &&
+      this.props.currentUser.id === this.state.cardpack.owner.id;
 
     return (
       <div className='panel'>
@@ -107,7 +129,15 @@ class CardpackViewer extends Component {
             <div className='center'>{this.state.cardpack.name}</div>
             {isOwner && <CardAdder
               addCard={(cardData) => {
-                cardData.type === 'white' ? this.addWhiteCards([{text: cardData.text}]) : this.addBlackCards([{text: cardData.text, answerFields: cardData.answerFields}]);
+                cardData.type === 'white' ?
+                  this.addWhiteCards([{text: cardData.text}])
+                  :
+                  this.addBlackCards([
+                    {
+                      text: cardData.text,
+                      answerFields: cardData.answerFields
+                    }
+                  ]);
               }}
               type={this.state.slideIndex ? 'black' : 'white'}
             />}
@@ -137,8 +167,36 @@ class CardpackViewer extends Component {
                 index={this.state.slideIndex}
                 onChangeIndex={this.handleTabChange}
               >
-                <TabbedList elements={this.state.cardpack.whiteCards.map((card) => <CAHWhiteCard card={card} isOwner={isOwner} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, whiteCards: this.state.cardpack.whiteCards.filter((card) => card.id !== cardId)}})} />)} />
-                <TabbedList columns={3} itemsPerTab={12} elements={this.state.cardpack.blackCards.map((card) => <CAHBlackCard card={card} isOwner={isOwner} onDelete={(cardId) => this.setState({cardpack: {...this.state.cardpack, blackCards: this.state.cardpack.blackCards.filter((card) => card.id !== cardId)}})} />)} />
+                <TabbedList
+                  elements={this.state.cardpack.whiteCards.map((card) =>
+                    <CAHWhiteCard
+                      card={card}
+                      isOwner={isOwner}
+                      onDelete={(cardId) => this.setState({
+                        cardpack: {
+                          ...this.state.cardpack,
+                          whiteCards: this.state.cardpack.whiteCards.filter((card) => card.id !== cardId)
+                        }
+                      })}
+                    />
+                  )}
+                />
+                <TabbedList
+                  columns={3}
+                  itemsPerTab={12}
+                  elements={this.state.cardpack.blackCards.map((card, index) =>
+                    <CAHBlackCard
+                      card={card}
+                      isOwner={isOwner}
+                      onDelete={(cardId) => this.setState({
+                        cardpack: {
+                          ...this.state.cardpack,
+                          blackCards: this.state.cardpack.blackCards.filter((card) => card.id !== cardId)
+                        }
+                      })}
+                    />
+                  )}
+                />
               </SwipeableViews>
             </div>
           </div>

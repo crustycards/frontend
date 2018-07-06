@@ -45,7 +45,13 @@ class CardAdder extends Component {
     return (
       <div>
         <div className='col-narrow'>
-          <TextField onKeyPress={this.handleKeyPress} label='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} />
+          <TextField
+            onKeyPress={this.handleKeyPress}
+            label='Name'
+            type='text'
+            value={this.state.newCardName}
+            onChange={this.handleInputChange.bind(this, 'newCardName')}
+          />
           <Button
             disabled={!this.state.newCardName}
             className={'btn'}

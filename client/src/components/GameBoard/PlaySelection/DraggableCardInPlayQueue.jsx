@@ -8,14 +8,25 @@ import {unqueueCard} from '../../../store/modules/game';
 
 class DraggableCard extends Component {
   render() {
-    return this.props.connectDragSource(<div onClick={() => this.props.unqueueCard(this.props.card.id)} style={{opacity: this.props.isDragging ? 0.5 : 1}}><CAHWhiteCard {...this.props} /></div>);
+    return this.props.connectDragSource(
+      <div
+        onClick={() => this.props.unqueueCard(this.props.card.id)}
+        style={{opacity: this.props.isDragging ? 0.5 : 1}}
+      >
+        <CAHWhiteCard {...this.props} />
+      </div>
+    );
   }
 }
 
-const DragSourceCard = DragSource(cardInHand, {beginDrag: (props) => ({cardId: props.card.id})}, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))(DraggableCard);
+const DragSourceCard = DragSource(
+  cardInHand,
+  {beginDrag: (props) => ({cardId: props.card.id})},
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)(DraggableCard);
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
   unqueueCard

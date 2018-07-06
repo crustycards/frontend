@@ -10,14 +10,37 @@ import {canPlay} from '../../../store';
 class DraggableCard extends Component {
   render() {
     const {whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
-    return this.props.connectDragSource(<div onClick={() => canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) && this.props.queueCard({cardId: this.props.card.id})} style={{opacity: this.props.isDragging || !canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ? 0.5 : 1}}><CAHWhiteCard {...this.props} /></div>);
+    return this.props.connectDragSource(
+      <div
+        onClick={() => (
+          canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) &&
+          this.props.queueCard({cardId: this.props.card.id})
+        )}
+        style={{
+          opacity: (this.props.isDragging ||
+            !canPlay({
+              whitePlayed,
+              currentBlackCard,
+              currentUser,
+              judgeId
+            }) ? 0.5 : 1
+          )
+        }}
+      >
+        <CAHWhiteCard {...this.props} />
+      </div>
+    );
   }
 }
 
-const DragSourceCard = DragSource(cardInPlayQueue, {beginDrag: (props) => ({cardId: props.card.id})}, (connect, monitor) => ({
-  connectDragSource: connect.dragSource(),
-  isDragging: monitor.isDragging()
-}))(DraggableCard);
+const DragSourceCard = DragSource(
+  cardInPlayQueue,
+  {beginDrag: (props) => ({cardId: props.card.id})},
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)(DraggableCard);
 
 const mapStateToProps = ({game: {whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
   whitePlayed,

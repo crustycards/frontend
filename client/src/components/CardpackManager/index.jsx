@@ -5,7 +5,8 @@ import Cardpack from './Cardpack.jsx';
 
 class CardpackManager extends Component {
   componentDidMount() {
-    this.intervalId = setInterval(this.forceUpdate.bind(this), 1000); // Refreshes the 'created at' relative time of all cardpacks
+    // Refreshes the 'created at' relative time of all cardpacks
+    this.intervalId = setInterval(this.forceUpdate.bind(this), 1000);
   }
 
   componentWillUnmount() {
