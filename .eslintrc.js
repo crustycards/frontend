@@ -1,5 +1,5 @@
 module.exports = {
-  extends: ['eslint:recommended', 'google'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'google'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
