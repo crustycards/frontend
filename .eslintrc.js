@@ -9,10 +9,16 @@ module.exports = {
       modules: true
     }
   },
+  parser: 'babel-eslint',
   rules: {
     'linebreak-style': ['warn', 'windows'],
     'comma-dangle': ['error', 'never'],
-    'max-len': ['error', {code: 120}] // TODO - Decrease this to ~100
+    'require-jsdoc': [0], // TODO - Remove
+    'max-len': ['error', {code: 120}], // TODO - Decrease this to ~100
+    'react/display-name': false, // TODO - Remove
+    'react/prop-types': false, // TODO - Remove
+    'new-cap': 0, // TODO - Remove
+    'no-constant-condition': 0 // TODO - Remove
   },
   'globals': {
     describe: false,
