@@ -1,8 +1,6 @@
 const fileHandler = require('../../../client/src/helpers/cardpackFileHandler');
 const {expect} = require('chai');
 
-// TODO - Fix commented unit tests
-
 let dummyCards = {whiteCards: [], blackCards: []};
 
 for (let i = 0; i < 10; i++) {
