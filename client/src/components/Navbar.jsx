@@ -66,7 +66,7 @@ const Navbar = (props) => (
       </Toolbar>
     </AppBar>
     <Drawer open={props.isOpen} onClose={() => props.closeNavbar(false)}>
-      {props.currentUser ?
+      {props.user ?
         <div>
           <NavLink to='/' style={navItemStyle}>
             <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
@@ -132,9 +132,9 @@ const Navbar = (props) => (
 
 const StyledNavbar = withStyles(styles)(Navbar);
 
-const mapStateToProps = ({global, user}) => ({
-  isOpen: global.navbarOpen,
-  currentUser: user.currentUser
+const mapStateToProps = ({global: {navbarOpen, user}}) => ({
+  isOpen: navbarOpen,
+  user
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

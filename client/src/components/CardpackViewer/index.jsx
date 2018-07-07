@@ -120,10 +120,10 @@ class CardpackViewer extends Component {
       );
     }
 
-    let isOwner = this.props.currentUser &&
+    let isOwner = this.props.user &&
       this.state.cardpack &&
       this.state.cardpack.owner &&
-      this.props.currentUser.id === this.state.cardpack.owner.id;
+      this.props.user.id === this.state.cardpack.owner.id;
 
     return (
       <div className='panel'>
@@ -217,8 +217,6 @@ class CardpackViewer extends Component {
   }
 }
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
-});
+const mapStateToProps = ({global: {user}}) => ({user});
 
 export default connect(mapStateToProps)(CardpackViewer);

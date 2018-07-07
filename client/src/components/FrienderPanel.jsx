@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {searchUsers, autocompleteUserSearch} from '../apiInterface';
-import {connect} from 'react-redux';
 import {AutoComplete} from 'material-ui';
 import {Button} from '@material-ui/core';
 import UserCard from './shells/UserCard.jsx';
@@ -84,8 +83,4 @@ class FrienderPanel extends Component {
   }
 }
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
-});
-
-export default connect(mapStateToProps)(FrienderPanel);
+export default FrienderPanel;

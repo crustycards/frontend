@@ -5,7 +5,7 @@ import {showStatusMessage} from './store/modules/global';
 import axios from 'axios';
 import queryString from 'query-string';
 
-const user = store.getState().user.currentUser;
+const user = store.getState().global.user;
 
 /**
  * Creates a new game session

@@ -4,7 +4,10 @@ export const SET_NAVBAR = 'global/SET_NAVBAR';
 export const SHOW_STATUS_MESSAGE = 'global/SHOW_STATUS_MESSAGE';
 export const HIDE_STATUS_MESSAGE = 'global/HIDE_STATUS_MESSAGE';
 
+const {user} = window.__PRELOADED_STATE__;
+
 const initialState = {
+  user,
   navbarOpen: false,
   statusMessage: '',
   statusVisible: false
