@@ -16,7 +16,15 @@ import {bindActionCreators} from 'redux';
 }))
 class Tray extends Component {
   render() {
-    const {cards, queuedCardIds, connectDropTarget, whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
+    const {
+      cards,
+      queuedCardIds,
+      connectDropTarget,
+      whitePlayed,
+      currentBlackCard,
+      currentUser,
+      judgeId
+    } = this.props;
 
     return connectDropTarget(
       <div

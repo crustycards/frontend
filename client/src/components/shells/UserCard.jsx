@@ -9,8 +9,22 @@ const UserCard = (props) => (
       title={props.user.name}
     />
     <CardActions>
-      {props.showFriendButton && <Button onClick={addFriend.bind(null, props.user.id)}>Add as Friend</Button>}
-      {props.showUnfriendButton && <Button onClick={removeFriend.bind(null, props.user.id)}>Unfriend</Button>}
+      {
+        props.showFriendButton &&
+        <Button
+          onClick={addFriend.bind(null, props.user.id)}
+        >
+          Add as Friend
+        </Button>
+      }
+      {
+        props.showUnfriendButton &&
+        <Button
+          onClick={removeFriend.bind(null, props.user.id)}
+        >
+          Unfriend
+        </Button>
+      }
     </CardActions>
   </Card>
 );

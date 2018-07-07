@@ -78,7 +78,12 @@ class PlayedCards extends Component {
                     'This user has left the game'
                 }
               </div>
-              {this.props.game.whitePlayed[userId].map((card, index) => <WhiteCard card={card} key={index} />)}
+              {this.props.game.whitePlayed[userId].map((card, index) => (
+                <WhiteCard
+                  card={card}
+                  key={index}
+                />
+              ))}
             </div>
           ))}
         </div>

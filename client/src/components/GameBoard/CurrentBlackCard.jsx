@@ -10,7 +10,10 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
   const replacementIndicator = '_____';
 
   while (true) {
-    const reducedUnderscoreText = tempText.replace(replacementIndicator + '_', replacementIndicator);
+    const reducedUnderscoreText = tempText.replace(
+      replacementIndicator + '_',
+      replacementIndicator
+    );
     if (reducedUnderscoreText === tempText) {
       break;
     } else {

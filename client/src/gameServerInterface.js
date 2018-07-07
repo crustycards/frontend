@@ -37,7 +37,16 @@ export const createGame = (gameName, maxPlayers, maxScore, handSize, cardpackIds
     store.dispatch(showStatusMessage(message));
     return Promise.reject(message);
   }
-  return axios.post(`/api/game/create/${user.id}`, {gameName, maxPlayers, maxScore, handSize, cardpackIds})
+  return axios.post(
+    `/api/game/create/${user.id}`,
+    {
+      gameName,
+      maxPlayers,
+      maxScore,
+      handSize,
+      cardpackIds
+    }
+  )
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -156,7 +165,11 @@ export const startNextRound = () => {
 };
 
 export const sendMessage = (message) => {
-  return axios.put(`/api/game/messages/${user.id}`, message, {headers: {'Content-Type': 'text/plain'}})
+  return axios.put(
+    `/api/game/messages/${user.id}`,
+    message,
+    {headers: {'Content-Type': 'text/plain'}}
+  )
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;

@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {Button, CircularProgress, Card, CardActions, CardHeader, withStyles} from '@material-ui/core';
+import {
+  Button,
+  CircularProgress,
+  Card,
+  CardActions,
+  CardHeader,
+  withStyles
+} from '@material-ui/core';
 import {Refresh as RefreshIcon} from '@material-ui/icons';
 import {connect} from 'react-redux';
 import {joinGame, leaveGame, getGameList} from '../../gameServerInterface';
@@ -53,7 +60,13 @@ class GameList extends Component {
         </Button>
         {this.props.games.map((game, index) => (
           <Card
-            style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}}
+            style={
+              this.props.game &&
+              this.props.game.name === game.name ?
+                {filter: 'brightness(90%)'}
+                :
+                {}
+            }
             key={index}
             className='card'
           >
@@ -74,7 +87,14 @@ class GameList extends Component {
             </CardActions>
           </Card>
         ))}
-        {this.props.games.length === 0 && <div className='center'><span>There are no open games to join</span></div>}
+        {
+          this.props.games.length === 0 &&
+          <div className='center'>
+            <span>
+              There are no open games to join
+            </span>
+          </div>
+        }
       </div>
     );
   }

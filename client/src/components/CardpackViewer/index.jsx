@@ -94,7 +94,10 @@ class CardpackViewer extends Component {
     if (fileTexts) {
       const {whiteCards, blackCards} = fileTexts.map((file) => file.text).reduce((acc, text) => {
         const {whiteCards, blackCards} = cardpackFileHandler.parse(text);
-        return {whiteCards: whiteCards.concat(acc.whiteCards), blackCards: blackCards.concat(acc.blackCards)};
+        return {
+          whiteCards: whiteCards.concat(acc.whiteCards),
+          blackCards: blackCards.concat(acc.blackCards)
+        };
       }, {whiteCards: [], blackCards: []});
 
       this.setState({isUploading: true}, () => {
@@ -176,7 +179,9 @@ class CardpackViewer extends Component {
                       onDelete={(cardId) => this.setState({
                         cardpack: {
                           ...this.state.cardpack,
-                          whiteCards: this.state.cardpack.whiteCards.filter((card) => card.id !== cardId)
+                          whiteCards: this.state.cardpack.whiteCards.filter(
+                            (card) => card.id !== cardId
+                          )
                         }
                       })}
                     />
@@ -194,7 +199,9 @@ class CardpackViewer extends Component {
                       onDelete={(cardId) => this.setState({
                         cardpack: {
                           ...this.state.cardpack,
-                          blackCards: this.state.cardpack.blackCards.filter((card) => card.id !== cardId)
+                          blackCards: this.state.cardpack.blackCards.filter(
+                            (card) => card.id !== cardId
+                          )
                         }
                       })}
                     />

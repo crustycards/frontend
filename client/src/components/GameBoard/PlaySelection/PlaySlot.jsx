@@ -16,7 +16,9 @@ import {queueCard, unqueueCard} from '../../../store/modules/game';
 class PlaySlot extends Component {
   render() {
     if (this.props.queuedCardIds[this.props.index]) {
-      const card = this.props.cards.find((card) => card.id === this.props.queuedCardIds[this.props.index]);
+      const card = this.props.cards.find(
+        (card) => card.id === this.props.queuedCardIds[this.props.index]
+      );
       return this.props.connectDropTarget(
         <div>
           <DraggableCardInPlayQueue

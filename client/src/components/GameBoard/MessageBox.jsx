@@ -33,7 +33,14 @@ const MessageBox = (props) => {
     <div className={'panel'}>
       <h2 className={'center'}>Chat</h2>
       <Divider style={{margin: '10px 0'}} />
-      <div style={{maxHeight: '250px', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse'}}>
+      <div
+        style={{
+          maxHeight: '250px',
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column-reverse'
+        }}
+      >
         {props.messages.map((message, i) => (
           <Paper
             key={i}
@@ -45,7 +52,10 @@ const MessageBox = (props) => {
           </Paper>
         ))}
       </div>
-      <form autoComplete={'off'} onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}>
+      <form
+        autoComplete={'off'}
+        onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}
+      >
         <Field
           name='messageText'
           component={renderTextField}

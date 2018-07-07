@@ -21,20 +21,24 @@ const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
-const generateScript = ({user = null, cardpacks = [], friends = [], requestsSent = [], requestsReceived = []} = {}) => {
-  return `<script>
-    window.__PRELOADED_STATE__ = ${JSON.stringify(
-    {
+const generateScript = ({
+  user = null,
+  cardpacks = [],
+  friends = [],
+  requestsSent = [],
+  requestsReceived = []
+} = {}) => (
+  `<script>
+    window.__PRELOADED_STATE__ = ${JSON.stringify({
       currentUser: user,
       friends,
       requestsSent,
       requestsReceived,
       cardpacks
-    }
-  )}
+    })}
   </script>
-  ${html}`;
-};
+  ${html}`
+);
 
 const api = require('../api');
 const jwt = require('jsonwebtoken');

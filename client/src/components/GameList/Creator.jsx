@@ -2,7 +2,16 @@ import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {createGame} from '../../gameServerInterface';
 import {connect} from 'react-redux';
-import {Button, TextField, Checkbox, Select, MenuItem, List, ListItem, ListItemText} from '@material-ui/core';
+import {
+  Button,
+  TextField,
+  Checkbox,
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemText
+} from '@material-ui/core';
 import {setGameState} from '../../store/modules/game';
 
 class GameCreator extends Component {
@@ -71,17 +80,26 @@ class GameCreator extends Component {
             />
             <br/>
             <span>Max Players: </span>
-            <Select value={this.state.maxPlayers} onChange={(e) => this.setState({maxPlayers: e.target.value})}>
+            <Select
+              value={this.state.maxPlayers}
+              onChange={(e) => this.setState({maxPlayers: e.target.value})}
+            >
               {this.maxPlayersDropdownItems}
             </Select>
             <br/>
             <span>Winning Score: </span>
-            <Select value={this.state.maxScore} onChange={(e) => this.setState({maxScore: e.target.value})}>
+            <Select
+              value={this.state.maxScore}
+              onChange={(e) => this.setState({maxScore: e.target.value})}
+            >
               {this.maxScoreDropdownItems}
             </Select>
             <br/>
             <span>Hand Size: </span>
-            <Select value={this.state.handSize} onChange={(e) => this.setState({handSize: e.target.value})}>
+            <Select
+              value={this.state.handSize}
+              onChange={(e) => this.setState({handSize: e.target.value})}
+            >
               {this.handSizeDropdownItems}
             </Select>
           </div>

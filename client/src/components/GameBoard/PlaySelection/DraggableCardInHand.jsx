@@ -41,7 +41,16 @@ class DraggableCard extends Component {
   }
 }
 
-const mapStateToProps = ({game: {whitePlayed, currentBlackCard, judgeId}, user: {currentUser}}) => ({
+const mapStateToProps = ({
+  game: {
+    whitePlayed,
+    currentBlackCard,
+    judgeId
+  },
+  user: {
+    currentUser
+  }
+}) => ({
   whitePlayed,
   currentBlackCard,
   currentUser,

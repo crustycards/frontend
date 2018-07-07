@@ -27,7 +27,11 @@ class FrienderPanel extends Component {
   handleInputChange(searchQuery) {
     this.setState({searchQuery});
     if (searchQuery.length) {
-      autocompleteUserSearch(searchQuery).then((autocompleteOptions) => this.setState({autocompleteOptions}));
+      // TODO - Use debouncing observable here
+      autocompleteUserSearch(searchQuery)
+        .then((autocompleteOptions) =>
+          this.setState({autocompleteOptions})
+        );
     } else {
       this.setState({autocompleteOptions: []});
     }

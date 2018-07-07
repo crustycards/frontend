@@ -105,8 +105,19 @@ const Game = (props) => (
       </div>
       :
       <div className='content-wrap'>
-        <div className='center panel'>{`You're not in a game.`}<NavLink to='/gamelist' style={{textDecoration: 'none'}}>
-          <Button style={{marginLeft: '5px'}} variant={'outlined'} color={'primary'}>See Games</Button>
+        <div className='center panel'>
+          {`You're not in a game.`}
+          <NavLink
+            to='/gamelist'
+            style={{textDecoration: 'none'}}
+          >
+          <Button
+            style={{marginLeft: '5px'}}
+            variant={'outlined'}
+            color={'primary'}
+          >
+            See Games
+          </Button>
         </NavLink>
         </div>
       </div>

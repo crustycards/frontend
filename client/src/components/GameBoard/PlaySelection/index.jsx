@@ -6,7 +6,14 @@ import {Button} from '@material-ui/core';
 import {playCards, unPlayCards} from '../../../gameServerInterface';
 import {canPlay, hasPlayed} from '../../../store';
 
-const PlaySelection = ({queuedCardIds, stage, whitePlayed, currentBlackCard, currentUser, judgeId}) => {
+const PlaySelection = ({
+  queuedCardIds,
+  stage,
+  whitePlayed,
+  currentBlackCard,
+  currentUser,
+  judgeId
+}) => {
   return canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ?
     <div>
       <Tray/>
