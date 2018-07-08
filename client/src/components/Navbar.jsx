@@ -21,7 +21,8 @@ import {
   ExitToApp,
   ViewList,
   VideogameAsset,
-  Settings
+  Settings,
+  Person
 } from '@material-ui/icons';
 import store from '../store';
 import {push} from 'connected-react-router';
@@ -73,6 +74,14 @@ const Navbar = (props) => (
                 <Home/>
               </ListItemIcon>
               <ListItemText inset primary={'Home'} />
+            </MenuItem>
+          </NavLink>
+          <NavLink to={`/user?id=${props.user.id}`} style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
+              <ListItemIcon className={props.classes.icon}>
+                <Person/>
+              </ListItemIcon>
+              <ListItemText inset primary={'Profile'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/game' style={navItemStyle}>
