@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import queryString from 'query-string';
 import {getUser, getCardpacksByUser} from '../apiInterface';
 import {CircularProgress} from '@material-ui/core';
+import CardpackList from '../components/CardpackList/index.jsx';
 
 class User extends Component {
   constructor(props) {
@@ -37,10 +38,13 @@ class User extends Component {
     }
 
     return (
-      <div className='content-wrap'>
-        {this.state.user.name}
-        <br/>
-        {this.state.cardpacks.map((cardpack) => (cardpack.name)).join(', ')}
+      <div>
+        <div className={'col-narrow'}>
+          {this.state.user.name}
+        </div>
+        <div className={'col-wide'}>
+          <CardpackList cardpacks={this.state.cardpacks}/>
+        </div>
       </div>
     );
   }
