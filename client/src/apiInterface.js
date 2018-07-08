@@ -3,10 +3,10 @@ import store from './store';
 
 const user = store.getState().global.user;
 
-// const getUser = (id) => {
-//   return axios.get(`/api/user/${id}`)
-//     .then((res) => res.data);
-// };
+module.exports.getUser = (id) => {
+  return axios.get(`/api/user/${id}`)
+    .then((res) => res.data);
+};
 
 module.exports.deleteWhiteCard = (cardId) => {
   return axios.delete(`/api/cards/white/${cardId}`)
