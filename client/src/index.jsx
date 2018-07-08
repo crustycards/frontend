@@ -6,7 +6,8 @@ import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Home from './pages/Home.jsx';
-import Cardpacks from './pages/Cardpacks.jsx';
+import Cardpack from './pages/Cardpack.jsx';
+import User from './pages/User.jsx';
 import Login from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Game from './pages/Game.jsx';
@@ -35,7 +36,8 @@ render(
             <StatusBar/>
             <Switch>
               <Route exact path='/' component={Home}/>
-              <Route exact path='/cardpacks' component={Cardpacks}/>
+              <Route exact path='/cardpack' component={Cardpack}/>
+              <Route exact path='/user' component={User}/>
               <Route exact path='/login' component={Login}/>
               <Route exact path='/game' component={Game}/>
               <Route exact path='/gamelist' component={GameList}/>
