@@ -34,7 +34,7 @@ class Tray extends Component {
           backgroundColor: canPlay({
             whitePlayed,
             currentBlackCard,
-            currentUser: user,
+            user,
             judgeId
           }) ? 'inherit' : 'grey'
         }}

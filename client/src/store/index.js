@@ -19,25 +19,25 @@ const store = createStore(
 
 export default store;
 
-export const hasPlayed = ({whitePlayed, currentBlackCard, currentUser}) => {
+export const hasPlayed = ({whitePlayed, currentBlackCard, user}) => {
   return !!(
     whitePlayed &&
-    whitePlayed[currentUser.id] &&
+    whitePlayed[user.id] &&
     currentBlackCard &&
-    whitePlayed[currentUser.id].length === currentBlackCard.answerFields
+    whitePlayed[user.id].length === currentBlackCard.answerFields
   );
 };
 
-export const canPlay = ({whitePlayed, currentBlackCard, currentUser, judgeId}) => {
-  if (hasPlayed({whitePlayed, currentBlackCard, currentUser})) {
+export const canPlay = ({whitePlayed, currentBlackCard, user, judgeId}) => {
+  if (hasPlayed({whitePlayed, currentBlackCard, user})) {
     return false;
   }
 
-  const currentUserId = currentUser.id;
+  const userId = user.id;
 
   if (!currentBlackCard) {
     return false;
   }
 
-  return currentUserId !== judgeId;
+  return userId !== judgeId;
 };

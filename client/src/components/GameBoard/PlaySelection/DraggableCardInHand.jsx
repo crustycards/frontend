@@ -21,7 +21,7 @@ class DraggableCard extends Component {
     return this.props.connectDragSource(
       <div
         onClick={() => (
-          canPlay({whitePlayed, currentBlackCard, currentUser: user, judgeId}) &&
+          canPlay({whitePlayed, currentBlackCard, user, judgeId}) &&
           this.props.queueCard({cardId: this.props.card.id})
         )}
         style={{
@@ -29,7 +29,7 @@ class DraggableCard extends Component {
             !canPlay({
               whitePlayed,
               currentBlackCard,
-              currentUser: user,
+              user,
               judgeId
             }) ? 0.5 : 1
           )
