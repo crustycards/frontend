@@ -21,8 +21,7 @@ import {
   ExitToApp,
   ViewList,
   VideogameAsset,
-  Settings,
-  ViewCarousel
+  Settings
 } from '@material-ui/icons';
 import store from '../store';
 import {push} from 'connected-react-router';
@@ -90,14 +89,6 @@ const Navbar = (props) => (
                 <ViewList/>
               </ListItemIcon>
               <ListItemText inset primary={'Find a Game'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/cardpacks' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
-              <ListItemIcon className={props.classes.icon}>
-                <ViewCarousel/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Cardpacks'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/settings' style={navItemStyle}>
