@@ -44,8 +44,10 @@ class User extends Component {
           {this.state.user.name}
         </div>
         <div className={'col-wide'}>
-          <CardpackCreator/>
-          <CardpackList cardpacks={this.state.cardpacks}/>
+          <CardpackCreator onSubmit={(cardpack) => {
+            this.setState({cardpacks: this.state.cardpacks.concat(cardpack)});
+          }} />
+          <CardpackList cardpacks={this.state.cardpacks} />
         </div>
       </div>
     );

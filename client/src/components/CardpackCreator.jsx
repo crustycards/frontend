@@ -1,6 +1,6 @@
-import React from 'react';
+import React, {Component} from 'react';
 import {Field, reduxForm, reset} from 'redux-form';
-import {TextField, Button} from '@material-ui/core';
+import {TextField, Button, CircularProgress} from '@material-ui/core';
 import api from '../apiInterface';
 
 const renderTextField = ({
@@ -28,25 +28,46 @@ const validate = (values) => {
   return errors;
 };
 
-const createCardpack = ({cardpackName}) => {
-  api.createCardpack(cardpackName);
-};
+class CardpackCreator extends Component {
+  constructor(props) {
+    super(props);
 
-const CardpackCreator = (props) => {
-  return (
-    <form autoComplete={'off'} onSubmit={props.handleSubmit(createCardpack)}>
-      <Field
-        name='cardpackName'
-        component={renderTextField}
-        label='Cardpack Name'
-      />
-      <br/>
-      <Button type={'submit'} disabled={props.pristine || props.submitting}>
-        Create Cardpack
-      </Button>
-    </form>
-  );
-};
+    this.createCardpack = this.createCardpack.bind(this);
+
+    this.state = {
+      isLoading: false
+    };
+  }
+
+  createCardpack({cardpackName}) {
+    this.setState({isLoading: true});
+    const cardpackCreation = api.createCardpack(cardpackName);
+    cardpackCreation.then(() => {
+      this.setState({isLoading: false});
+    });
+    this.props.onSubmit && cardpackCreation.then((cardpack) => this.props.onSubmit(cardpack));
+  }
+
+  render() {
+    return (
+      <form autoComplete={'off'} onSubmit={this.props.handleSubmit(this.createCardpack)}>
+        <Field
+          name='cardpackName'
+          component={renderTextField}
+          label='Cardpack Name'
+        />
+        <br/>
+        <Button
+          type={'submit'}
+          disabled={this.props.pristine || this.props.submitting || this.state.isLoading}
+        >
+          Create Cardpack
+        </Button>
+        {this.state.isLoading && <CircularProgress size={25} style={{verticalAlign: 'sub'}} />}
+      </form>
+    );
+  }
+}
 
 const onSubmitSuccess = (result, dispatch) =>
   dispatch(reset('cardpackCreator'));
