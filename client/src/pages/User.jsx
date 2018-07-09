@@ -3,6 +3,7 @@ import queryString from 'query-string';
 import {getUser, getCardpacksByUser} from '../apiInterface';
 import {CircularProgress} from '@material-ui/core';
 import CardpackList from '../components/CardpackList/index.jsx';
+import CardpackCreator from '../components/CardpackCreator.jsx';
 
 class User extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class User extends Component {
           {this.state.user.name}
         </div>
         <div className={'col-wide'}>
+          <CardpackCreator/>
           <CardpackList cardpacks={this.state.cardpacks}/>
         </div>
       </div>
