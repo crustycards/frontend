@@ -17,9 +17,12 @@ const Cardpack = (props) => (
           View
         </Button>
       </NavLink>
-      <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
-        Delete
-      </Button>
+      {
+        props.canDelete &&
+        <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
+          Delete
+        </Button>
+      }
     </CardActions>
   </Card>
 );

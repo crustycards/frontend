@@ -4,12 +4,15 @@ import {getUser, getCardpacksByUser} from '../apiInterface';
 import {CircularProgress} from '@material-ui/core';
 import CardpackList from '../components/CardpackList/index.jsx';
 import CardpackCreator from '../components/CardpackCreator.jsx';
+import {connect} from 'react-redux';
 
 class User extends Component {
   constructor(props) {
     super(props);
 
     const userId = queryString.parse(props.location.search).id;
+
+    this.isCurrentUser = this.props.user.id === userId;
 
     this.state = {
       isLoading: true,
@@ -44,14 +47,19 @@ class User extends Component {
           {this.state.user.name}
         </div>
         <div className={'col-wide'}>
-          <CardpackCreator onSubmit={(cardpack) => {
-            this.setState({cardpacks: this.state.cardpacks.concat(cardpack)});
-          }} />
-          <CardpackList cardpacks={this.state.cardpacks} />
+          {
+            this.isCurrentUser &&
+            <CardpackCreator onSubmit={(cardpack) => {
+              this.setState({cardpacks: this.state.cardpacks.concat(cardpack)});
+            }} />
+          }
+          <CardpackList cardpacks={this.state.cardpacks} canDelete={this.isCurrentUser} />
         </div>
       </div>
     );
   }
 }
 
-export default User;
+const mapStateToProps = ({global: {user}}) => ({user});
+
+export default connect(mapStateToProps)(User);

@@ -7,6 +7,7 @@ const CardpackList = (props) => (
       <Cardpack
         key={index}
         cardpack={cardpack}
+        canDelete={props.canDelete}
       />
     ))}
   </div>
