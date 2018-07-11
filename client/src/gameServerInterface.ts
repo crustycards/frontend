@@ -16,7 +16,13 @@ const user = store.getState().global.user;
  * @param {number[]} cardpackIds List of cardpacks to include in the game
  * @return {Promise} Resolves to the new game state, or rejects if there is an error
  */
-export const createGame = (gameName: string, maxPlayers: number, maxScore: number, handSize: number, cardpackIds: Array<string>) => {
+export const createGame = (
+  gameName: string,
+  maxPlayers: number,
+  maxScore: number,
+  handSize: number,
+  cardpackIds: Array<string>
+) => {
   if (maxPlayers < 4 || maxPlayers > 20) {
     let message = 'Max players must be between 4 and 20';
     store.dispatch(showStatusMessage(message));
@@ -124,7 +130,7 @@ export const getGameList = () => {
  * @return {Promise} Resolves to an error (or null if it succeeded)
  */
 export const playCards = (cardIds: Array<string>) => {
-  return axios.put(`/api/game/play/${user.id}`, cardIds).then(() => {})
+  return axios.put(`/api/game/play/${user.id}`, cardIds).then(() => {});
 };
 
 /**
@@ -144,8 +150,8 @@ export const kickPlayer = (playerId: string) => {
   return axios.delete(`/api/game/players?${queryString.stringify({
     kickerId: user.id,
     kickeeId: playerId
-  })}`).then(() => {})
-}
+  })}`).then(() => {});
+};
 
 /**
  * Used to vote a card for set of cards if you are the judge
@@ -153,8 +159,8 @@ export const kickPlayer = (playerId: string) => {
  * @return {Promise} Resolves to undefined when the operation has completed
  */
 export const vote = (cardId: string) => {
-  return axios.put(`/api/game/vote/${user.id}?${queryString.stringify({cardId})}`).then(() => {})
-}
+  return axios.put(`/api/game/vote/${user.id}?${queryString.stringify({cardId})}`).then(() => {});
+};
 
 /**
  * Starts next round of the game
