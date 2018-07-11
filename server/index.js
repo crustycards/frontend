@@ -22,20 +22,10 @@ const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString(
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
 const generateScript = ({
-  user = null,
-  cardpacks = [],
-  friends = [],
-  requestsSent = [],
-  requestsReceived = []
+  user = null
 } = {}) => (
   `<script>
-    window.__PRELOADED_STATE__ = ${JSON.stringify({
-      currentUser: user,
-      friends,
-      requestsSent,
-      requestsReceived,
-      cardpacks
-    })}
+    window.__PRELOADED_STATE__ = ${JSON.stringify({user})}
   </script>
   ${html}`
 );
@@ -105,11 +95,7 @@ server.route([
           reply.state(cookieName, getToken(tokenData.userId));
         }
         const user = await api.User.get({id: tokenData.userId});
-        const friends = await api.Friend.getFriends(user.id);
-        const requestsSent = await api.Friend.getSentRequests(user.id);
-        const requestsReceived = await api.Friend.getReceivedRequests(user.id);
-        const cardpacks = await api.Cardpack.getByUser(user.id);
-        return reply(generateScript({user, cardpacks, friends, requestsSent, requestsReceived}));
+        return reply(generateScript({user}));
       } catch (err) {
         return reply(generateScript());
       }

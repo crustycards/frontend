@@ -22,7 +22,7 @@ class Tray extends Component {
       connectDropTarget,
       whitePlayed,
       currentBlackCard,
-      currentUser,
+      user,
       judgeId
     } = this.props;
 
@@ -34,7 +34,7 @@ class Tray extends Component {
           backgroundColor: canPlay({
             whitePlayed,
             currentBlackCard,
-            currentUser,
+            user,
             judgeId
           }) ? 'inherit' : 'grey'
         }}
@@ -58,15 +58,15 @@ const mapStateToProps = ({
     currentBlackCard,
     judgeId
   },
-  user: {
-    currentUser
+  global: {
+    user
   }
 }) => ({
   cards: hand,
   queuedCardIds,
   whitePlayed,
   currentBlackCard,
-  currentUser,
+  user,
   judgeId
 });
 

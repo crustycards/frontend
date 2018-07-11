@@ -4,9 +4,9 @@ import {Redirect} from 'react-router-dom';
 
 class AuthRedirector extends Component {
   render() {
-    if (this.props.currentUser && this.props.path === '/login') {
+    if (this.props.user && this.props.path === '/login') {
       return <Redirect to={'/'} />;
-    } else if (!this.props.currentUser && this.props.path !== '/login') {
+    } else if (!this.props.user && this.props.path !== '/login') {
       return <Redirect to={'/login'} />;
     } else {
       return null;
@@ -14,8 +14,8 @@ class AuthRedirector extends Component {
   }
 }
 
-const mapStateToProps = ({user, router}) => ({
-  currentUser: user.currentUser,
+const mapStateToProps = ({global: {user}, router}) => ({
+  user,
   path: router.location.pathname
 });
 

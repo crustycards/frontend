@@ -17,11 +17,11 @@ import {canPlay} from '../../../store';
 )
 class DraggableCard extends Component {
   render() {
-    const {whitePlayed, currentBlackCard, currentUser, judgeId} = this.props;
+    const {whitePlayed, currentBlackCard, user, judgeId} = this.props;
     return this.props.connectDragSource(
       <div
         onClick={() => (
-          canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) &&
+          canPlay({whitePlayed, currentBlackCard, user, judgeId}) &&
           this.props.queueCard({cardId: this.props.card.id})
         )}
         style={{
@@ -29,7 +29,7 @@ class DraggableCard extends Component {
             !canPlay({
               whitePlayed,
               currentBlackCard,
-              currentUser,
+              user,
               judgeId
             }) ? 0.5 : 1
           )
@@ -47,13 +47,13 @@ const mapStateToProps = ({
     currentBlackCard,
     judgeId
   },
-  user: {
-    currentUser
+  global: {
+    user
   }
 }) => ({
   whitePlayed,
   currentBlackCard,
-  currentUser,
+  user,
   judgeId
 });
 

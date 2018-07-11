@@ -22,7 +22,7 @@ import {
   ViewList,
   VideogameAsset,
   Settings,
-  ViewCarousel
+  Person
 } from '@material-ui/icons';
 import store from '../store';
 import {push} from 'connected-react-router';
@@ -66,7 +66,7 @@ const Navbar = (props) => (
       </Toolbar>
     </AppBar>
     <Drawer open={props.isOpen} onClose={() => props.closeNavbar(false)}>
-      {props.currentUser ?
+      {props.user ?
         <div>
           <NavLink to='/' style={navItemStyle}>
             <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
@@ -74,6 +74,14 @@ const Navbar = (props) => (
                 <Home/>
               </ListItemIcon>
               <ListItemText inset primary={'Home'} />
+            </MenuItem>
+          </NavLink>
+          <NavLink to={`/user?id=${props.user.id}`} style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
+              <ListItemIcon className={props.classes.icon}>
+                <Person/>
+              </ListItemIcon>
+              <ListItemText inset primary={'Profile'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/game' style={navItemStyle}>
@@ -90,14 +98,6 @@ const Navbar = (props) => (
                 <ViewList/>
               </ListItemIcon>
               <ListItemText inset primary={'Find a Game'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/cardpacks' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
-              <ListItemIcon className={props.classes.icon}>
-                <ViewCarousel/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Cardpacks'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/settings' style={navItemStyle}>
@@ -132,9 +132,9 @@ const Navbar = (props) => (
 
 const StyledNavbar = withStyles(styles)(Navbar);
 
-const mapStateToProps = ({global, user}) => ({
-  isOpen: global.navbarOpen,
-  currentUser: user.currentUser
+const mapStateToProps = ({global: {navbarOpen, user}}) => ({
+  isOpen: navbarOpen,
+  user
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({

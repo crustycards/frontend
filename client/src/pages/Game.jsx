@@ -34,7 +34,7 @@ const Game = (props) => (
             Leave Game
           </Button>
           {
-            props.game.ownerId === props.currentUser.id &&
+            props.game.ownerId === props.user.id &&
             props.game.stage === 'notRunning' &&
             <Button
               onClick={startGame}
@@ -44,7 +44,7 @@ const Game = (props) => (
             </Button>
           }
           {
-            props.game.ownerId === props.currentUser.id &&
+            props.game.ownerId === props.user.id &&
             props.game.stage !== 'notRunning' &&
             <Button
               onClick={stopGame}
@@ -72,7 +72,7 @@ const Game = (props) => (
           <div className='col-wide'>
             {props.game.hand && <PlaySelection/>}
             {
-              props.game.queuedPlayers.map((user) => user.id).includes(props.currentUser.id) &&
+              props.game.queuedPlayers.map((user) => user.id).includes(props.user.id) &&
               <span
                 className={'center panel'}
                 style={gameAlertStyle}
@@ -82,7 +82,7 @@ const Game = (props) => (
             }
             <PlayedCards/>
             {
-              props.game.judgeId === props.currentUser.id &&
+              props.game.judgeId === props.user.id &&
               <span
                 className={'center panel'}
                 style={gameAlertStyle}
@@ -125,6 +125,6 @@ const Game = (props) => (
   </div>
 );
 
-const mapStateToProps = ({game, user: {currentUser}}) => ({game, currentUser});
+const mapStateToProps = ({game, global: {user}}) => ({game, user});
 
 export default connect(mapStateToProps)(Game);

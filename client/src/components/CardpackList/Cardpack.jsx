@@ -12,14 +12,17 @@ const Cardpack = (props) => (
       subheader={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
     />
     <CardActions>
-      <NavLink to={`/cardpacks?id=${props.cardpack.id}`} style={navItemStyle}>
+      <NavLink to={`/cardpack?id=${props.cardpack.id}`} style={navItemStyle}>
         <Button>
-          Edit
+          View
         </Button>
       </NavLink>
-      <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
-        Delete
-      </Button>
+      {
+        props.canDelete &&
+        <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
+          Delete
+        </Button>
+      }
     </CardActions>
   </Card>
 );

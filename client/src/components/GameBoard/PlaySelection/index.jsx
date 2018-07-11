@@ -11,10 +11,10 @@ const PlaySelection = ({
   stage,
   whitePlayed,
   currentBlackCard,
-  currentUser,
+  user,
   judgeId
 }) => {
-  return canPlay({whitePlayed, currentBlackCard, currentUser, judgeId}) ?
+  return canPlay({whitePlayed, currentBlackCard, user, judgeId}) ?
     <div>
       <Tray/>
       <PlayArea/>
@@ -33,7 +33,7 @@ const PlaySelection = ({
     <div>
       <Tray/>
       {
-        hasPlayed({whitePlayed, currentBlackCard, currentUser}) && stage === 'playPhase' &&
+        hasPlayed({whitePlayed, currentBlackCard, user}) && stage === 'playPhase' &&
         <Button
           variant={'contained'}
           color={'secondary'}
@@ -55,15 +55,15 @@ const mapStateToProps = ({
     currentBlackCard,
     judgeId
   },
-  user: {
-    currentUser
+  global: {
+    user
   }
 }) => ({
   queuedCardIds,
   stage,
   whitePlayed,
   currentBlackCard,
-  currentUser,
+  user,
   judgeId
 });
 

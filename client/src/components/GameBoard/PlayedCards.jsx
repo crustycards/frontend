@@ -17,7 +17,7 @@ class PlayedCards extends Component {
     if (this.props.game.stage === 'judgePhase') {
       return (
         <div className={'panel'}>
-          {this.props.currentUser.id === this.props.game.judgeId &&
+          {this.props.user.id === this.props.game.judgeId &&
             <Button
               variant={'contained'}
               color={'secondary'}
@@ -35,7 +35,7 @@ class PlayedCards extends Component {
               className={'subpanel'}
               key={index}
               onClick={() => {
-                if (this.props.currentUser.id === this.props.game.judgeId) {
+                if (this.props.user.id === this.props.game.judgeId) {
                   this.setState({selectedSetIndex: index});
                 }
               }}
@@ -94,6 +94,6 @@ class PlayedCards extends Component {
   }
 }
 
-const mapStateToProps = ({game, user: {currentUser}}) => ({game, currentUser});
+const mapStateToProps = ({game, global: {user}}) => ({game, user});
 
 export default connect(mapStateToProps)(PlayedCards);

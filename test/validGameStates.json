@@ -1,11 +1,13 @@
 [
   {
-    "user": {},
+    "global": {
+      "user": null
+    },
     "game": null
   },
   {
-    "user": {
-      "currentUser": {
+    "global": {
+      "user": {
         "id": "5b2da6162ab79c0001615950",
         "name": "Thomas Volk"
       }
