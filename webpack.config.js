@@ -1,7 +1,7 @@
-const path = require('path')
-const SRC_DIR = path.join(__dirname, '/client/src')
-const DIST_DIR = path.join(__dirname, '/client/dist')
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin')
+const path = require('path');
+const SRC_DIR = path.join(__dirname, '/client/src');
+const DIST_DIR = path.join(__dirname, '/client/dist');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   entry: ['babel-polyfill', `${SRC_DIR}/index.tsx`],
@@ -16,7 +16,8 @@ module.exports = {
         include: SRC_DIR,
         loader: 'babel-loader',
         query: {
-          presets: ['react', 'es2015', 'stage-2']
+          presets: ['react', 'es2015', 'stage-2'],
+          plugins: ['transform-decorators-legacy']
         }
       },
       {
@@ -57,4 +58,4 @@ module.exports = {
   plugins: [
     new ForkTsCheckerWebpackPlugin()
   ]
-}
+};

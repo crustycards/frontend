@@ -1,55 +1,43 @@
-import { createStore, applyMiddleware, compose } from 'redux'
-import rootReducer from './modules'
-import { createBrowserHistory } from 'history'
-import { connectRouter, routerMiddleware } from 'connected-react-router'
+import {createStore, applyMiddleware, compose} from 'redux';
+import rootReducer from './modules';
+import {createBrowserHistory} from 'history';
+import {connectRouter, routerMiddleware} from 'connected-react-router';
 
-export const history = createBrowserHistory()
-const enhancers = [applyMiddleware(routerMiddleware(history))]
+export const history = createBrowserHistory();
+const enhancers = [applyMiddleware(routerMiddleware(history))];
 
 // This block of code hooks up Redux DevTools if exists
-const devToolsExtension = window.devToolsExtension
+const devToolsExtension = window.devToolsExtension;
 if (typeof devToolsExtension === 'function') {
-  enhancers.push(devToolsExtension())
+  enhancers.push(devToolsExtension());
 }
 
 const store = createStore(
   connectRouter(history)(rootReducer),
   compose(...enhancers)
-)
+);
 
-export default store
+export default store;
 
-export const hasPlayed = () => {
-  const state = store.getState()
-
-  const {
-    whitePlayed,
-    currentBlackCard
-  } = state.game
-
-  const currentUserId = state.user.currentUser.id
-
+export const hasPlayed = ({whitePlayed, currentBlackCard, user}) => {
   return !!(
     whitePlayed &&
-    whitePlayed[currentUserId] &&
+    whitePlayed[user.id] &&
     currentBlackCard &&
-    whitePlayed[currentUserId].length === currentBlackCard.answerFields
-  )
-}
+    whitePlayed[user.id].length === currentBlackCard.answerFields
+  );
+};
 
-export const canPlay = () => {
-  if (hasPlayed()) {
-    return false
+export const canPlay = ({whitePlayed, currentBlackCard, user, judgeId}) => {
+  if (hasPlayed({whitePlayed, currentBlackCard, user})) {
+    return false;
   }
 
-  const state = store.getState()
-
-  const currentUserId = state.user.currentUser.id
-  const { judgeId, currentBlackCard } = state.game
+  const userId = user.id;
 
   if (!currentBlackCard) {
-    return false
+    return false;
   }
 
-  return currentUserId !== judgeId
-}
+  return userId !== judgeId;
+};

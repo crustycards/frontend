@@ -1,6 +1,6 @@
 import React from 'react';
 import api from '../apiInterface';
-import { Button, Card, CardActions, CardHeader } from '@material-ui/core';
+import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
 
 const ReceivedFriendRequest = (props) => (
   <Card className='card'>

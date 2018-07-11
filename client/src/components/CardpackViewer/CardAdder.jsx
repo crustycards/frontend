@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { FormControl, InputLabel, TextField, Select, Button, MenuItem } from '@material-ui/core';
+import React, {Component} from 'react';
+import {FormControl, InputLabel, TextField, Select, Button, MenuItem} from '@material-ui/core';
 
 class CardAdder extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -14,23 +14,23 @@ class CardAdder extends Component {
     };
   }
 
-  handleKeyPress (e) {
+  handleKeyPress(e) {
     if (e.key === 'Enter') {
       this.addCurrentCard();
     }
   }
 
-  handleInputChange (property, e) {
+  handleInputChange(property, e) {
     let stateChange = {};
     stateChange[property] = e.target.value;
     this.setState(stateChange);
   }
 
-  changeAnswerField (e) {
+  changeAnswerField(e) {
     this.setState({newCardAnswerFields: e.target.value});
   }
 
-  addCurrentCard () {
+  addCurrentCard() {
     if (this.state.newCardName) {
       this.props.addCard({
         text: this.state.newCardName,
@@ -41,11 +41,17 @@ class CardAdder extends Component {
     }
   }
 
-  render () {
+  render() {
     return (
       <div>
         <div className='col-narrow'>
-          <TextField onKeyPress={this.handleKeyPress} label='Name' type='text' value={this.state.newCardName} onChange={this.handleInputChange.bind(this, 'newCardName')} />
+          <TextField
+            onKeyPress={this.handleKeyPress}
+            label='Name'
+            type='text'
+            value={this.state.newCardName}
+            onChange={this.handleInputChange.bind(this, 'newCardName')}
+          />
           <Button
             disabled={!this.state.newCardName}
             className={'btn'}

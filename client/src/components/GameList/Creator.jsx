@@ -1,9 +1,18 @@
-import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
-import { createGame } from '../../gameServerInterface';
-import { connect } from 'react-redux';
-import { Button, TextField, Checkbox, Select, MenuItem, List, ListItem, ListItemText } from '@material-ui/core';
-import { setGameState } from '../../store/modules/game';
+import React, {Component} from 'react';
+import {bindActionCreators} from 'redux';
+import {createGame} from '../../gameServerInterface';
+import {connect} from 'react-redux';
+import {
+  Button,
+  TextField,
+  Checkbox,
+  Select,
+  MenuItem,
+  List,
+  ListItem,
+  ListItemText
+} from '@material-ui/core';
+import {setGameState} from '../../store/modules/game';
 
 class GameCreator extends Component {
   constructor(props) {
@@ -41,14 +50,20 @@ class GameCreator extends Component {
 
   handleSelectChange(id) {
     if (this.state.cardpacksSelected.includes(id)) {
-      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter(cId => cId !== id)});
+      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
     } else {
       this.setState({cardpacksSelected: [...this.state.cardpacksSelected, id]});
     }
   }
 
   handleSubmit() {
-    createGame(this.state.gameName, this.state.maxPlayers, this.state.maxScore, this.state.handSize, this.state.cardpacksSelected);
+    createGame(
+      this.state.gameName,
+      this.state.maxPlayers,
+      this.state.maxScore,
+      this.state.handSize,
+      this.state.cardpacksSelected
+    );
   }
 
   render() {
@@ -60,22 +75,31 @@ class GameCreator extends Component {
             <TextField
               name='gameName'
               label='Game Name'
-              value={this.state.gameName} 
-              onChange={this.handleGameNameChange} 
+              value={this.state.gameName}
+              onChange={this.handleGameNameChange}
             />
             <br/>
             <span>Max Players: </span>
-            <Select value={this.state.maxPlayers} onChange={(e) => this.setState({maxPlayers: e.target.value})}>
+            <Select
+              value={this.state.maxPlayers}
+              onChange={(e) => this.setState({maxPlayers: e.target.value})}
+            >
               {this.maxPlayersDropdownItems}
             </Select>
             <br/>
             <span>Winning Score: </span>
-            <Select value={this.state.maxScore} onChange={(e) => this.setState({maxScore: e.target.value})}>
+            <Select
+              value={this.state.maxScore}
+              onChange={(e) => this.setState({maxScore: e.target.value})}
+            >
               {this.maxScoreDropdownItems}
             </Select>
             <br/>
             <span>Hand Size: </span>
-            <Select value={this.state.handSize} onChange={(e) => this.setState({handSize: e.target.value})}>
+            <Select
+              value={this.state.handSize}
+              onChange={(e) => this.setState({handSize: e.target.value})}
+            >
               {this.handSizeDropdownItems}
             </Select>
           </div>
@@ -83,7 +107,7 @@ class GameCreator extends Component {
             <div className='subpanel'>
               <h3>Cardpacks</h3>
               <List>
-                {this.props.cardpacks.map(c => (
+                {this.props.cardpacks.map((c) => (
                   <ListItem
                     key={c.id}
                   >

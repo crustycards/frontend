@@ -1,12 +1,19 @@
-import React, { Component } from 'react';
-import { Button, CircularProgress, Card, CardActions, CardHeader, withStyles } from '@material-ui/core';
-import { Refresh as RefreshIcon } from '@material-ui/icons';
-import { connect } from 'react-redux';
-import { joinGame, leaveGame, getGameList } from '../../gameServerInterface';
+import React, {Component} from 'react';
+import {
+  Button,
+  CircularProgress,
+  Card,
+  CardActions,
+  CardHeader,
+  withStyles
+} from '@material-ui/core';
+import {Refresh as RefreshIcon} from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {joinGame, leaveGame, getGameList} from '../../gameServerInterface';
 
-const styles = theme => ({
+const styles = (theme) => ({
   leftIcon: {
-    marginRight: theme.spacing.unit,
+    marginRight: theme.spacing.unit
   }
 });
 
@@ -52,7 +59,17 @@ class GameList extends Component {
           Refresh
         </Button>
         {this.props.games.map((game, index) => (
-          <Card style={this.props.game && this.props.game.name === game.name ? {filter: 'brightness(90%)'} : {}} key={index} className='card'>
+          <Card
+            style={
+              this.props.game &&
+              this.props.game.name === game.name ?
+                {filter: 'brightness(90%)'}
+                :
+                {}
+            }
+            key={index}
+            className='card'
+          >
             <CardHeader
               title={game.name}
               subheader={`Host: ${game.owner.name}`}
@@ -60,13 +77,24 @@ class GameList extends Component {
             <CardActions>
               {
                 this.props.game && this.props.game.name === game.name ?
-                  <Button onClick={() => { leaveGame().then(this.refresh); }}>Leave</Button> :
-                  <Button onClick={() => { joinGame(game.name); }}>Join</Button>
+                  <Button onClick={() => {
+                    leaveGame().then(this.refresh);
+                  }}>Leave</Button> :
+                  <Button onClick={() => {
+                    joinGame(game.name);
+                  }}>Join</Button>
               }
             </CardActions>
           </Card>
         ))}
-        {this.props.games.length === 0 && <div className='center'><span>There are no open games to join</span></div>}
+        {
+          this.props.games.length === 0 &&
+          <div className='center'>
+            <span>
+              There are no open games to join
+            </span>
+          </div>
+        }
       </div>
     );
   }

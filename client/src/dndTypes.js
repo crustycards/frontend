@@ -1,2 +1,2 @@
-export const cardInHand = 'cardInHand'
-export const cardInPlayQueue = 'cardInPlayQueue'
+export const cardInHand = 'cardInHand';
+export const cardInPlayQueue = 'cardInPlayQueue';

@@ -1,7 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { List, ListItem, ListItemText, ListItemIcon, ListSubheader } from '@material-ui/core';
-import { Star, Check } from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {List, ListItem, ListItemText, ListItemIcon, ListSubheader} from '@material-ui/core';
+import {Star, Check} from '@material-ui/icons';
 
 const styles = {
   overflowY: 'auto',
@@ -72,8 +72,24 @@ const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, curr
   <div className={'panel'}>
     <List subheader={<ListSubheader>Players</ListSubheader>} style={styles}>
       {players.map((player, index) => {
-        return <div key={index}>{renderPlayer(player, ownerId, judgeId, whitePlayed && whitePlayed[player.id] && currentBlackCard && whitePlayed[player.id].length === currentBlackCard.answerFields)}</div>;
-      }).concat(queuedPlayers.map((player, index) => <div key={index + players.length}>{renderQueuedPlayer(player)}</div>))}
+        return (<div key={index}>
+          {renderPlayer(
+            player,
+            ownerId,
+            judgeId,
+            (
+              whitePlayed &&
+              whitePlayed[player.id] &&
+              currentBlackCard &&
+              whitePlayed[player.id].length === currentBlackCard.answerFields
+            )
+          )}
+        </div>);
+      }).concat(queuedPlayers.map((player, index) =>
+        <div key={index + players.length}>
+          {renderQueuedPlayer(player)}
+        </div>
+      ))}
     </List>
   </div>
 );

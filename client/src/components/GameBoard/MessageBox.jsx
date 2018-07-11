@@ -1,13 +1,13 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Field, reduxForm, reset } from 'redux-form';
-import { Paper, Button, TextField, Typography, Divider } from '@material-ui/core';
-import { sendMessage } from '../../gameServerInterface';
+import {connect} from 'react-redux';
+import {Field, reduxForm, reset} from 'redux-form';
+import {Paper, Button, TextField, Typography, Divider} from '@material-ui/core';
+import {sendMessage} from '../../gameServerInterface';
 
 const renderTextField = ({
   input,
   label,
-  meta: { touched, error },
+  meta: {touched, error},
   ...custom
 }) => (
   <TextField
@@ -17,10 +17,10 @@ const renderTextField = ({
   />
 );
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
   const requiredFields = ['messageText'];
-  requiredFields.forEach(field => {
+  requiredFields.forEach((field) => {
     if (!values[field]) {
       errors[field] = 'Required';
     }
@@ -33,7 +33,14 @@ const MessageBox = (props) => {
     <div className={'panel'}>
       <h2 className={'center'}>Chat</h2>
       <Divider style={{margin: '10px 0'}} />
-      <div style={{maxHeight: '250px', overflow: 'auto', display: 'flex', flexDirection: 'column-reverse'}}>
+      <div
+        style={{
+          maxHeight: '250px',
+          overflow: 'auto',
+          display: 'flex',
+          flexDirection: 'column-reverse'
+        }}
+      >
         {props.messages.map((message, i) => (
           <Paper
             key={i}
@@ -45,7 +52,10 @@ const MessageBox = (props) => {
           </Paper>
         ))}
       </div>
-      <form autoComplete={'off'} onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}>
+      <form
+        autoComplete={'off'}
+        onSubmit={props.handleSubmit(({messageText}) => sendMessage(messageText))}
+      >
         <Field
           name='messageText'
           component={renderTextField}

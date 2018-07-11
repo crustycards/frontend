@@ -1,13 +1,31 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { openNavbar, closeNavbar } from '../store/modules/global';
-import { Drawer, MenuItem, AppBar, Toolbar, Typography, Button, IconButton, ListItemIcon, ListItemText } from '@material-ui/core';
-import { withStyles } from '@material-ui/core/styles';
-import { NavLink } from 'react-router-dom';
-import { Menu as MenuIcon, Home, ExitToApp, ViewList, VideogameAsset, Settings, ViewCarousel } from '@material-ui/icons';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {openNavbar, closeNavbar} from '../store/modules/global';
+import {
+  Drawer,
+  MenuItem,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  ListItemIcon,
+  ListItemText
+} from '@material-ui/core';
+import {withStyles} from '@material-ui/core/styles';
+import {NavLink} from 'react-router-dom';
+import {
+  Menu as MenuIcon,
+  Home,
+  ExitToApp,
+  ViewList,
+  VideogameAsset,
+  Settings,
+  Person
+} from '@material-ui/icons';
 import store from '../store';
-import { push } from 'connected-react-router';
+import {push} from 'connected-react-router';
 
 const navItemStyle = {textDecoration: 'none'};
 const redirectTo = (url) => {
@@ -16,14 +34,14 @@ const redirectTo = (url) => {
 
 const styles = {
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   flex: {
-    flex: 1,
+    flex: 1
   },
   menuButton: {
     marginLeft: -12,
-    marginRight: 20,
+    marginRight: 20
   }
 };
 
@@ -31,7 +49,12 @@ const Navbar = (props) => (
   <div>
     <AppBar position={'static'}>
       <Toolbar>
-        <IconButton className={props.classes.menuButton} color={'inherit'} aria-label={'Menu'} onClick={props.openNavbar}>
+        <IconButton
+          className={props.classes.menuButton}
+          color={'inherit'}
+          aria-label={'Menu'}
+          onClick={props.openNavbar}
+        >
           <MenuIcon/>
         </IconButton>
         <Typography variant={'title'} color={'inherit'} className={props.classes.flex}>
@@ -43,7 +66,7 @@ const Navbar = (props) => (
       </Toolbar>
     </AppBar>
     <Drawer open={props.isOpen} onClose={() => props.closeNavbar(false)}>
-      {props.currentUser ?
+      {props.user ?
         <div>
           <NavLink to='/' style={navItemStyle}>
             <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
@@ -51,6 +74,14 @@ const Navbar = (props) => (
                 <Home/>
               </ListItemIcon>
               <ListItemText inset primary={'Home'} />
+            </MenuItem>
+          </NavLink>
+          <NavLink to={`/user?id=${props.user.id}`} style={navItemStyle}>
+            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
+              <ListItemIcon className={props.classes.icon}>
+                <Person/>
+              </ListItemIcon>
+              <ListItemText inset primary={'Profile'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/game' style={navItemStyle}>
@@ -67,14 +98,6 @@ const Navbar = (props) => (
                 <ViewList/>
               </ListItemIcon>
               <ListItemText inset primary={'Find a Game'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/cardpacks' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar} className={props.classes.menuItem}>
-              <ListItemIcon className={props.classes.icon}>
-                <ViewCarousel/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Cardpacks'} />
             </MenuItem>
           </NavLink>
           <NavLink to='/settings' style={navItemStyle}>
@@ -109,9 +132,9 @@ const Navbar = (props) => (
 
 const StyledNavbar = withStyles(styles)(Navbar);
 
-const mapStateToProps = ({global, user}) => ({
-  isOpen: global.navbarOpen,
-  currentUser: user.currentUser
+const mapStateToProps = ({global: {navbarOpen, user}}) => ({
+  isOpen: navbarOpen,
+  user
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
