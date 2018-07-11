@@ -8,7 +8,7 @@
     "build-prod": "webpack --mode production",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
-    "lint": "eslint . --ext .js --ext .jsx",
+    "lint": "eslint . --ext .js --ext .jsx --ext .ts --ext .tsx",
     "lint-clean": "npm run lint -- --fix",
     "lint-init": "eslint --init",
     "test": "jest",
@@ -49,6 +49,7 @@
     "style-loader": "^0.21.0",
     "ts-loader": "^4.4.2",
     "typescript": "^2.9.2",
+    "typescript-eslint-parser": "^16.0.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8"
   },
