@@ -53,7 +53,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.json']
+    extensions: ['.js', '.jsx', '.tsx', '.ts', '.json']
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin({memoryLimit: 512})
