@@ -17,6 +17,7 @@
   "author": "Thomas Volk",
   "license": "BOII",
   "devDependencies": {
+    "@types/jest": "^23.1.5",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
     "babel-jest": "^23.2.0",
@@ -47,6 +48,7 @@
     "node-sass": "^4.9.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
+    "ts-jest": "^23.0.0",
     "ts-loader": "^4.4.2",
     "typescript": "^2.9.2",
     "typescript-eslint-parser": "^16.0.1",
@@ -99,7 +101,16 @@
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "testRegex": "/*.test.(js|jsx|ts|tsx)?$"
   }
 }
