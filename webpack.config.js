@@ -56,6 +56,6 @@ module.exports = {
     extensions: ['.js', '.jsx', '.tsx', '.ts', '.json']
   },
   plugins: [
-    new ForkTsCheckerWebpackPlugin({memoryLimit: 512})
+    new ForkTsCheckerWebpackPlugin()
   ]
 };
