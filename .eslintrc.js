@@ -28,5 +28,11 @@ module.exports = {
     node: true,
     browser: true,
     es6: true
-  }
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: 'typescript-eslint-parser'
+    }
+  ]
 };

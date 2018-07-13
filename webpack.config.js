@@ -1,9 +1,10 @@
 const path = require('path');
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
-  entry: ['babel-polyfill', `${SRC_DIR}/index.jsx`],
+  entry: ['babel-polyfill', `${SRC_DIR}/index.tsx`],
   output: {
     filename: 'bundle.js',
     path: DIST_DIR
@@ -17,6 +18,15 @@ module.exports = {
         query: {
           presets: ['react', 'es2015', 'stage-2'],
           plugins: ['transform-decorators-legacy']
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        use: {
+          loader: 'ts-loader',
+          options: {
+            transpileOnly: true
+          }
         }
       },
       {
@@ -41,5 +51,11 @@ module.exports = {
         }
       }
     ]
-  }
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.tsx', '.ts', '.json']
+  },
+  plugins: [
+    new ForkTsCheckerWebpackPlugin()
+  ]
 };

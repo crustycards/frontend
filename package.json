@@ -8,7 +8,7 @@
     "build-prod": "webpack --mode production",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
-    "lint": "eslint . --ext .js --ext .jsx",
+    "lint": "eslint . --ext .js --ext .jsx --ext .ts --ext .tsx",
     "lint-clean": "npm run lint -- --fix",
     "lint-init": "eslint --init",
     "test": "jest",
@@ -17,6 +17,7 @@
   "author": "Thomas Volk",
   "license": "BOII",
   "devDependencies": {
+    "@types/jest": "^23.1.5",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
     "babel-jest": "^23.2.0",
@@ -40,18 +41,29 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-react": "^7.10.0",
     "eslint-plugin-standard": "^3.1.0",
+    "fork-ts-checker-webpack-plugin": "^0.4.2",
     "jest": "^23.3.0",
     "jest-cli": "^23.3.0",
     "jest-environment-jsdom": "^23.3.0",
     "node-sass": "^4.9.1",
     "sass-loader": "^7.0.3",
     "style-loader": "^0.21.0",
+    "ts-jest": "^23.0.0",
+    "ts-loader": "^4.4.2",
+    "typescript": "^2.9.2",
+    "typescript-eslint-parser": "^16.0.1",
     "webpack": "^4.15.1",
     "webpack-cli": "^3.0.8"
   },
   "dependencies": {
     "@material-ui/core": "^1.3.1",
     "@material-ui/icons": "^1.1.0",
+    "@types/material-ui": "^0.21.3",
+    "@types/query-string": "^6.1.0",
+    "@types/react": "^16.4.6",
+    "@types/react-dom": "^16.0.6",
+    "@types/react-redux": "^6.0.3",
+    "@types/react-router": "^4.0.27",
     "assert": "^1.4.1",
     "axios": "^0.18.0",
     "babel-plugin-transform-export-extensions": "^6.22.0",
@@ -89,7 +101,16 @@
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
     "transform": {
-      "^.+\\.jsx?$": "babel-jest"
-    }
+      "^.+\\.jsx?$": "babel-jest",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "ts",
+      "tsx",
+      "json"
+    ],
+    "testRegex": "/*.test.(js|jsx|ts|tsx)?$"
   }
 }
