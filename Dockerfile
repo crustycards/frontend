@@ -1,6 +1,7 @@
-FROM node:carbon
+FROM node:alpine
 EXPOSE 80
-COPY ./ ./
+COPY ./ ./app
+WORKDIR app
 RUN npm install
 RUN npm run build-prod
 CMD ["npm", "start"]
