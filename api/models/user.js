@@ -2,7 +2,11 @@ const axios = require('axios');
 const api = process.env.API_URL;
 
 const get = async ({id, oAuthId, oAuthProvider}) => {
-  if ((!id && !oAuthId && !oAuthProvider) || (id && oAuthId && oAuthProvider) || (!!oAuthId ^ !!oAuthProvider)) {
+  if (
+    (!id && !oAuthId && !oAuthProvider) ||
+    (id && oAuthId && oAuthProvider) ||
+    (!!oAuthId ^ !!oAuthProvider)
+  ) {
     throw new Error('Must provide either oAuth data or user Id');
   }
   const response = await axios.get(`${api}/user`, {params: {id, oAuthId, oAuthProvider}});

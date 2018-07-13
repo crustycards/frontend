@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import pressed from './pressed.png';
 import unpressed from './unpressed.png';
 
 class GoogleButton extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.onClick = this.onClick.bind(this);
     this.clickRelease = this.clickRelease.bind(this);
@@ -18,15 +18,15 @@ class GoogleButton extends Component {
     };
   }
 
-  onClick () {
+  onClick() {
     this.props.onClick();
     this.setState({imageSrc: pressed});
   }
-  clickRelease () {
+  clickRelease() {
     this.setState({imageSrc: unpressed});
   }
 
-  render () {
+  render() {
     return <input
       onMouseDown={this.onClick}
       onMouseUp={this.clickRelease}

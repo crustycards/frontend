@@ -46,22 +46,29 @@ export default (state = initialState, {type, payload}) => {
       queueAlreadyContainsCardId = cardIdQueueIndex !== -1;
       if (queueAlreadyContainsCardId) {
         if (payload.index === undefined) {
-          throw new Error('Payload must contain index when moving currently queued card to a new queued position');
+          throw new Error(
+            'Payload must contain index when moving currently queued card to a new queued position'
+          );
         }
         queuedCardIds = [...state.queuedCardIds];
         queuedCardIds[cardIdQueueIndex] = queuedCardIds[payload.index];
         queuedCardIds[payload.index] = payload.cardId;
 
         return {...state, queuedCardIds};
-      } else if (!payload.index) {
+      } else if (typeof payload.index !== 'number') {
         const openIndex = state.queuedCardIds.findIndex((id) => id === null);
         if (openIndex === -1) {
           return {...state, queuedCardIds: state.queuedCardIds};
         }
+        // TODO - Don't edit the payload in the line below since it screws with redux dev tools
         payload.index = openIndex;
       }
 
-      if (payload.index < 0 || payload.index > state.hand.length || state.queuedCardIds.includes(payload.cardId)) {
+      if (
+        payload.index < 0 ||
+        payload.index > state.hand.length ||
+        state.queuedCardIds.includes(payload.cardId)
+      ) {
         return {...state, queuedCardIds: state.queuedCardIds};
       }
 

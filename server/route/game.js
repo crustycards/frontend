@@ -70,6 +70,14 @@ module.exports = [
     config: {payload: {parse: false}}
   },
   {
+    method: 'DELETE',
+    path: '/api/game/play/{userId}',
+    handler: (request, reply) => {
+      reply.proxy({uri: `${gameUrl}/{userId}/game/play`});
+    },
+    config: {payload: {parse: false}}
+  },
+  {
     method: 'POST',
     path: '/api/game/start/{userId}',
     handler: (request, reply) => {

@@ -3,9 +3,9 @@ import {setGameState} from './store/modules/game';
 import {setGameList} from './store/modules/games';
 import {showStatusMessage} from './store/modules/global';
 import axios from 'axios';
-import queryString from 'query-string';
+import * as queryString from 'query-string';
 
-const user = store.getState().user.currentUser;
+const user = store.getState().global.user;
 
 /**
  * Creates a new game session
@@ -16,7 +16,13 @@ const user = store.getState().user.currentUser;
  * @param {number[]} cardpackIds List of cardpacks to include in the game
  * @return {Promise} Resolves to the new game state, or rejects if there is an error
  */
-export const createGame = (gameName, maxPlayers, maxScore, handSize, cardpackIds) => {
+export const createGame = (
+  gameName: string,
+  maxPlayers: number,
+  maxScore: number,
+  handSize: number,
+  cardpackIds: Array<string>
+) => {
   if (maxPlayers < 4 || maxPlayers > 20) {
     let message = 'Max players must be between 4 and 20';
     store.dispatch(showStatusMessage(message));
@@ -37,7 +43,16 @@ export const createGame = (gameName, maxPlayers, maxScore, handSize, cardpackIds
     store.dispatch(showStatusMessage(message));
     return Promise.reject(message);
   }
-  return axios.post(`/api/game/create/${user.id}`, {gameName, maxPlayers, maxScore, handSize, cardpackIds})
+  return axios.post(
+    `/api/game/create/${user.id}`,
+    {
+      gameName,
+      maxPlayers,
+      maxScore,
+      handSize,
+      cardpackIds
+    }
+  )
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;
@@ -65,7 +80,7 @@ export const stopGame = () => {
  * @param {string} gameName The game name
  * @return {Promise}
  */
-export const joinGame = (gameName) => {
+export const joinGame = (gameName: string) => {
   return axios.post(`/api/game/join/${user.id}?${queryString.stringify({gameName})}`)
     .then((response) => {
       store.dispatch(setGameState(response.data));
@@ -114,8 +129,16 @@ export const getGameList = () => {
  * @param {number[]} cardIds The ids of the cards to play
  * @return {Promise} Resolves to an error (or null if it succeeded)
  */
-export const playCards = (cardIds) => {
+export const playCards = (cardIds: Array<string>) => {
   return axios.put(`/api/game/play/${user.id}`, cardIds).then(() => {});
+};
+
+/**
+ * Reverts the user's played cards
+ * @return {Promise} Resolves to an error (or null if it succeeded)
+ */
+export const unPlayCards = () => {
+  return axios.delete(`/api/game/play/${user.id}`).then(() => {});
 };
 
 /**
@@ -123,7 +146,7 @@ export const playCards = (cardIds) => {
  * @param {number} playerId
  * @return {Promise} Resolves to undefined when the operation has completed
  */
-export const kickPlayer = (playerId) => {
+export const kickPlayer = (playerId: string) => {
   return axios.delete(`/api/game/players?${queryString.stringify({
     kickerId: user.id,
     kickeeId: playerId
@@ -135,7 +158,7 @@ export const kickPlayer = (playerId) => {
  * @param {number} cardId The ID of the card (or one of the cards in a set)
  * @return {Promise} Resolves to undefined when the operation has completed
  */
-export const vote = (cardId) => {
+export const vote = (cardId: string) => {
   return axios.put(`/api/game/vote/${user.id}?${queryString.stringify({cardId})}`).then(() => {});
 };
 
@@ -147,8 +170,12 @@ export const startNextRound = () => {
   return axios.put(`/api/game/continue/${user.id}`).then(() => {});
 };
 
-export const sendMessage = (message) => {
-  return axios.put(`/api/game/messages/${user.id}`, message, {headers: {'Content-Type': 'text/plain'}})
+export const sendMessage = (message: string) => {
+  return axios.put(
+    `/api/game/messages/${user.id}`,
+    message,
+    {headers: {'Content-Type': 'text/plain'}}
+  )
     .then((response) => {
       store.dispatch(setGameState(response.data));
       return response.data;

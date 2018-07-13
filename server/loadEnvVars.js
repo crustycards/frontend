@@ -2,7 +2,15 @@ const dotEnv = require('dotenv');
 const {getDockerSecrets} = require('get-docker-secrets');
 const assert = require('assert');
 
-const requiredVars = ['NODE_ENV', 'GOOGLE_CLIENT_ID', 'GOOGLE_CLIENT_SECRET', 'callbackURL', 'JWT_SECRET', 'API_URL'];
+const requiredVars = [
+  'NODE_ENV',
+  'GOOGLE_CLIENT_ID',
+  'GOOGLE_CLIENT_SECRET',
+  'callbackURL',
+  'JWT_SECRET',
+  'API_URL'
+];
+
 const assertVarsExist = () => {
   let missingVars = [];
   requiredVars.forEach((varName) => {

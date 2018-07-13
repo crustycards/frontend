@@ -1,15 +1,25 @@
 module.exports = {
-  extends: ['eslint:recommended', 'google'],
+  extends: ['eslint:recommended', 'plugin:react/recommended', 'google'],
   parserOptions: {
     ecmaVersion: 2018,
     sourceType: 'module',
-    experimentalObjectRestSpread: true
+    experimentalObjectRestSpread: true,
+    ecmaFeatures: {
+      jsx: true,
+      modules: true
+    }
   },
+  parser: 'babel-eslint',
   rules: {
     'linebreak-style': ['warn', 'windows'],
     'comma-dangle': ['error', 'never'],
-    'max-len': ['error', {code: 120}], // TODO - Decrease this to ~100
-    'no-console': 1
+    'require-jsdoc': [0], // TODO - Remove
+    'max-len': ['error', {code: 100}], // TODO - Decrease this to ~100
+    'no-console': 1,
+    'react/display-name': false, // TODO - Remove
+    'react/prop-types': false, // TODO - Remove
+    'new-cap': 0, // TODO - Remove
+    'no-constant-condition': 0 // TODO - Remove
   },
   'globals': {
     describe: false,
@@ -19,5 +29,11 @@ module.exports = {
     node: true,
     browser: true,
     es6: true
-  }
+  },
+  overrides: [
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: 'typescript-eslint-parser'
+    }
+  ]
 };

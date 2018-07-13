@@ -1,12 +1,11 @@
-import React, { Component } from 'react';
-import { searchUsers, autocompleteUserSearch } from '../apiInterface';
-import { connect } from 'react-redux';
-import { AutoComplete } from 'material-ui';
-import { Button } from '@material-ui/core';
+import React, {Component} from 'react';
+import {searchUsers, autocompleteUserSearch} from '../apiInterface';
+import {AutoComplete} from 'material-ui';
+import {Button} from '@material-ui/core';
 import UserCard from './shells/UserCard.jsx';
 
 class FrienderPanel extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       searchQuery: '',
@@ -21,25 +20,29 @@ class FrienderPanel extends Component {
 
   searchUsers() {
     searchUsers(this.state.searchQuery)
-      .then(searchedUsers => this.setState({searchedUsers, hasSearched: true}));
+      .then((searchedUsers) => this.setState({searchedUsers, hasSearched: true}));
   }
 
-  handleInputChange (searchQuery) {
+  handleInputChange(searchQuery) {
     this.setState({searchQuery});
     if (searchQuery.length) {
-      autocompleteUserSearch(searchQuery).then(autocompleteOptions => this.setState({autocompleteOptions}));
+      // TODO - Use debouncing observable here
+      autocompleteUserSearch(searchQuery)
+        .then((autocompleteOptions) =>
+          this.setState({autocompleteOptions})
+        );
     } else {
       this.setState({autocompleteOptions: []});
     }
   }
 
-  handleKeyPress (e) {
+  handleKeyPress(e) {
     if (e.key === 'Enter') {
       this.searchUsers();
     }
   }
 
-  render () {
+  render() {
     return (
       <div className='panel'>
         <div>Search Users</div>
@@ -80,8 +83,4 @@ class FrienderPanel extends Component {
   }
 }
 
-const mapStateToProps = ({user}) => ({
-  currentUser: user.currentUser
-});
-
-export default connect(mapStateToProps)(FrienderPanel);
+export default FrienderPanel;

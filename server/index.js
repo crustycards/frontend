@@ -22,20 +22,14 @@ const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString(
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 const firebaseServiceWorker = fs.readFileSync(`${__dirname}/../client/src/firebase-messaging-sw.js`).toString();
 
-const generateScript = ({user = null, cardpacks = [], friends = [], requestsSent = [], requestsReceived = []} = {}) => {
-  return `<script>
-    window.__PRELOADED_STATE__ = ${JSON.stringify(
-    {
-      currentUser: user,
-      friends,
-      requestsSent,
-      requestsReceived,
-      cardpacks
-    }
-  )}
+const generateScript = ({
+  user = null
+} = {}) => (
+  `<script>
+    window.__PRELOADED_STATE__ = ${JSON.stringify({user})}
   </script>
-  ${html}`;
-};
+  ${html}`
+);
 
 const api = require('../api');
 const jwt = require('jsonwebtoken');
@@ -102,11 +96,7 @@ server.route([
           reply.state(cookieName, getToken(tokenData.userId));
         }
         const user = await api.User.get({id: tokenData.userId});
-        const friends = await api.Friend.getFriends(user.id);
-        const requestsSent = await api.Friend.getSentRequests(user.id);
-        const requestsReceived = await api.Friend.getReceivedRequests(user.id);
-        const cardpacks = await api.Cardpack.getByUser(user.id);
-        return reply(generateScript({user, cardpacks, friends, requestsSent, requestsReceived}));
+        return reply(generateScript({user}));
       } catch (err) {
         return reply(generateScript());
       }

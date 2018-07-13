@@ -1,10 +1,9 @@
 import axios from 'axios';
 import store from './store';
-import {addCardpack, removeCardpack, removeFriend, addFriend} from './store/modules/user';
 
-const user = store.getState().user.currentUser;
+const user = store.getState().global.user;
 
-const getUser = (id) => {
+module.exports.getUser = (id) => {
   return axios.get(`/api/user/${id}`)
     .then((res) => res.data);
 };
@@ -21,24 +20,21 @@ module.exports.deleteBlackCard = (cardId) => {
 
 module.exports.deleteCardpack = (cardpackId) => {
   return axios.delete(`/api/cardpack/${cardpackId}`)
-    .then((res) => res.data)
-    .then((data) => {
-      store.dispatch(removeCardpack(cardpackId));
-      return data;
-    });
+    .then((res) => res.data);
 };
 
 module.exports.createCardpack = (name) => {
   return axios.put(`/api/cardpacks/${user.id}`, {name})
-    .then((res) => res.data)
-    .then((cardpack) => {
-      store.dispatch(addCardpack(cardpack));
-      return cardpack;
-    });
+    .then((res) => res.data);
 };
 
 module.exports.getCardpack = (id) => {
   return axios.get(`/api/cardpack/${id}`)
+    .then((res) => res.data);
+};
+
+module.exports.getCardpacksByUser = (userId) => {
+  return axios.get(`/api/cardpacks/${userId}`)
     .then((res) => res.data);
 };
 
@@ -54,23 +50,12 @@ module.exports.createBlackCards = (cardpackId, cards) => {
 
 module.exports.removeFriend = (friendId) => {
   return axios.delete(`/api/user/friends?userId=${user.id}&friendId=${friendId}`)
-    .then((res) => res.data)
-    .then((data) => {
-      store.dispatch(removeFriend(friendId));
-      return data;
-    });
+    .then((res) => res.data);
 };
 
 module.exports.addFriend = (friendId) => {
   return axios.put(`/api/user/friends?userId=${user.id}&friendId=${friendId}`)
-    .then((res) => res.data)
-    .then((data) => {
-      return getUser(friendId)
-        .then((user) => {
-          store.dispatch(addFriend(user));
-          return data;
-        });
-    });
+    .then((res) => res.data);
 };
 
 module.exports.searchUsers = (query) => {
