@@ -1,8 +1,7 @@
 const firebase = require('firebase');
 
 const config = {
-  apiKey: 'place_key_here', // TODO - Set API key
-  messagingSenderId: '203333096571'
+  messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID
 };
 
 const init = () => {
