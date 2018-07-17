@@ -7,8 +7,8 @@ const cookieName = 'session';
 const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
-const firebaseServiceWorker = fs.readFileSync(
-  `${__dirname}/../client/src/firebase-messaging-sw.js`
+const serviceWorker = fs.readFileSync(
+  `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
 ).toString();
 
 const generateScript = ({
@@ -107,7 +107,7 @@ server.route([
     method: 'GET',
     path: '/firebase-messaging-sw.js',
     handler: (request, reply) => {
-      reply(firebaseServiceWorker).header('Content-Type', 'application/javascript');
+      reply(serviceWorker).header('Content-Type', 'application/javascript');
     }
   }
 ]);
