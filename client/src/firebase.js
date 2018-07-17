@@ -1,4 +1,5 @@
 const firebase = require('firebase');
+const {linkSessionToFirebase} = require('./apiInterface');
 
 const config = {
   messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID
@@ -9,11 +10,8 @@ const init = () => {
   const messaging = firebase.messaging();
   messaging.requestPermission()
     .catch(() => console.log('Denied permission for notifications'))
-    .then(() => {
-      console.log('Granted permission for notifications');
-      return messaging.getToken();
-    })
-    .then((token) => console.log(token));
+    .then(() => messaging.getToken())
+    .then(linkSessionToFirebase);
 
   messaging.onMessage((payload) => console.log('Message:', payload));
 };

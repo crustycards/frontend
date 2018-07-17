@@ -17,14 +17,8 @@ const deleteSession = (sessionId) => {
     .then(() => {});
 };
 
-const linkSessionToFirebase = (sessionId, firebaseToken) => {
-  return axios.put(`${auth}/session/${sessionId}?token=${firebaseToken}`)
-    .then(() => {});
-};
-
 module.exports = {
   createSession,
   getSession,
-  deleteSession,
-  linkSessionToFirebase
+  deleteSession
 };
