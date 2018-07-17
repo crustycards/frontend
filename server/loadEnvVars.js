@@ -6,9 +6,12 @@ const requiredVars = [
   'NODE_ENV',
   'GOOGLE_CLIENT_ID',
   'GOOGLE_CLIENT_SECRET',
+  'OAUTH_ENCRYPTION_PASSWORD',
   'callbackURL',
   'JWT_SECRET',
-  'API_URL'
+  'API_URL',
+  'GAME_SERVER_URL',
+  'AUTH_SERVER_URL'
 ];
 
 const assertVarsExist = () => {
