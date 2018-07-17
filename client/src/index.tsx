@@ -21,9 +21,9 @@ import {DragDropContextProvider} from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 import {ConnectedRouter} from 'connected-react-router';
 import AuthRedirector from './components/AuthRedirector.jsx';
-import { init as initFirebase } from './firebase';
+import {init as initFirebase} from './firebase';
 
-initFirebase()
+initFirebase();
 
 import {getGameState} from './gameServerInterface';
 setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
