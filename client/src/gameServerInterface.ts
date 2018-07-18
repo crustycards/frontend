@@ -181,3 +181,8 @@ export const sendMessage = (message: string) => {
       return response.data;
     });
 };
+
+export const getCardpacks = (userId: string = user.id) => {
+  return axios.get(`/api/cardpacks/${userId}`)
+    .then((response) => response.data);
+};

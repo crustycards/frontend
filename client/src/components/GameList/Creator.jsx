@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {bindActionCreators} from 'redux';
-import {createGame} from '../../gameServerInterface';
-import {connect} from 'react-redux';
+import {createGame, getCardpacks} from '../../gameServerInterface';
 import {
   Button,
   TextField,
@@ -10,9 +8,9 @@ import {
   MenuItem,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  CircularProgress
 } from '@material-ui/core';
-import {setGameState} from '../../store/modules/game';
 
 class GameCreator extends Component {
   constructor(props) {
@@ -22,7 +20,8 @@ class GameCreator extends Component {
       maxPlayers: 8,
       maxScore: 8,
       handSize: 6,
-      cardpacksSelected: []
+      cardpacksSelected: [],
+      isLoading: true
     };
     this.maxPlayersDropdownItems = [];
     for (let i = 4; i <= 20; i++) {
@@ -42,6 +41,14 @@ class GameCreator extends Component {
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+
+    this.loadCardpacks();
+  }
+
+  loadCardpacks() {
+    getCardpacks().then((cardpacks) => {
+      this.setState({cardpacks, isLoading: false});
+    });
   }
 
   handleGameNameChange(e) {
@@ -106,19 +113,23 @@ class GameCreator extends Component {
           <div className='col-wide'>
             <div className='subpanel'>
               <h3>Cardpacks</h3>
-              <List>
-                {this.props.cardpacks.map((c) => (
-                  <ListItem
-                    key={c.id}
-                  >
-                    <Checkbox
-                      checked={this.state.cardpacksSelected.includes(c.id)}
-                      onChange={this.handleSelectChange.bind(this, c.id)}
-                    />
-                    <ListItemText primary={c.name} />
-                  </ListItem>
-                ))}
-              </List>
+              {this.state.isLoading ?
+                <CircularProgress/>
+                :
+                <List>
+                  {this.state.cardpacks.map((c) => (
+                    <ListItem
+                      key={c.id}
+                    >
+                      <Checkbox
+                        checked={this.state.cardpacksSelected.includes(c.id)}
+                        onChange={this.handleSelectChange.bind(this, c.id)}
+                      />
+                      <ListItemText primary={c.name} />
+                    </ListItem>
+                  ))}
+                </List>
+              }
             </div>
           </div>
         </div>
@@ -130,12 +141,4 @@ class GameCreator extends Component {
   }
 }
 
-const mapStateToProps = ({user}) => ({
-  cardpacks: user.cardpacks
-});
-
-const mapDispatchToProps = (dispatch) => bindActionCreators({
-  setGameState
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(GameCreator);
+export default GameCreator;
