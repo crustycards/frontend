@@ -77,3 +77,8 @@ module.exports.autocompleteCardpackSearch = (query) => {
   return axios.get(`/api/cardpack/search/autocomplete?query=${query}`)
     .then((res) => res.data);
 };
+
+module.exports.linkSessionToFirebase = (firebaseToken) => {
+  return axios.put(`/api/session?token=${firebaseToken}`)
+    .then((res) => res.data);
+};

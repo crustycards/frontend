@@ -1,25 +1,15 @@
 require('./loadEnvVars')();
 
-const password = process.env.JWT_SECRET;
 const isProduction = process.env.NODE_ENV === 'production';
 const port = parseInt(process.env.PORT);
-const jwtExpTime = parseInt(process.env.JWT_TIMEOUT_SECONDS);
-// TODO - Set jwtRefreshTime in env file and varLoader
-const jwtRefreshTime = parseInt(process.env.JWT_MIN_REFRESH_DELAY_SECONDS);
 const cookieName = 'session';
-
-const getToken = (userId) => {
-  if (!userId) {
-    throw new Error('Missing user ID');
-  }
-  return jwt.sign({userId}, password, {
-    expiresIn: jwtExpTime
-  });
-};
 
 const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
+const serviceWorker = fs.readFileSync(
+  `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
+).toString();
 
 const generateScript = ({
   user = null
@@ -31,8 +21,8 @@ const generateScript = ({
 );
 
 const api = require('../api');
-const jwt = require('jsonwebtoken');
 const Hapi = require('hapi');
+const {Auth} = require('../api');
 
 const server = new Hapi.Server();
 server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')});
@@ -40,7 +30,7 @@ server.connection({port, host: process.env.HOST || (isProduction ? undefined : '
 server.register(require('bell'), (err) => {
   server.auth.strategy('google', 'bell', {
     provider: 'google',
-    password,
+    password: process.env.OAUTH_ENCRYPTION_PASSWORD,
     clientId: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     location: process.env.OAUTH_REDIRECT_DOMAIN || server.info.uri,
@@ -73,8 +63,9 @@ server.register(require('bell'), (err) => {
           oAuthProvider: request.auth.credentials.provider
         };
         try {
-          let resUser = await api.User.findOrCreate(userData);
-          return reply.redirect('/').state(cookieName, getToken(resUser.id));
+          const resUser = await api.User.findOrCreate(userData);
+          const session = await Auth.createSession(resUser.id);
+          return reply.redirect('/').state(cookieName, session.id);
         } catch (err) {
           console.log(err);
         }
@@ -89,12 +80,8 @@ server.route([
     path: '/{any*}',
     handler: async (request, reply) => {
       try {
-        const tokenData = jwt.verify(request.state[cookieName], password);
-        const secondsToExp = tokenData.exp - Math.floor(Date.now() / 1000);
-        if (secondsToExp <= jwtExpTime - jwtRefreshTime) {
-          reply.state(cookieName, getToken(tokenData.userId));
-        }
-        const user = await api.User.get({id: tokenData.userId});
+        const session = await Auth.getSession(request.state[cookieName]);
+        const user = await api.User.get({id: session.userId});
         return reply(generateScript({user}));
       } catch (err) {
         return reply(generateScript());
@@ -111,8 +98,16 @@ server.route([
   {
     method: 'GET',
     path: '/logout',
-    handler: (request, reply) => {
+    handler: async (request, reply) => {
+      await Auth.deleteSession(request.state[cookieName]);
       reply.redirect('/login').unstate(cookieName);
+    }
+  },
+  {
+    method: 'GET',
+    path: '/firebase-messaging-sw.js',
+    handler: (request, reply) => {
+      reply(serviceWorker).header('Content-Type', 'application/javascript');
     }
   }
 ]);
