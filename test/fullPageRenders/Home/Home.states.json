@@ -1,0 +1,22 @@
+[
+  {
+    "global": {
+      "user": {
+        "id": "5b4d3c33adbe1d0001d91aaf",
+        "name": "Thomas Volk"
+      },
+      "navbarOpen": false,
+      "statusMessage": "",
+      "statusVisible": false
+    },
+    "game": null,
+    "games": [],
+    "form": {},
+    "router": {
+      "location": {
+        "pathname": "/",
+        "search": "?id=1234"
+      }
+    }
+  }
+]
