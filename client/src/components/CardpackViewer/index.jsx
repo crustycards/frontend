@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import api from '../../apiInterface';
+import api from '../../api/apiInterface';
 import {connect} from 'react-redux';
 import {Button, LinearProgress, CircularProgress, Tab, Tabs} from '@material-ui/core';
 import CardAdder from './CardAdder.jsx';

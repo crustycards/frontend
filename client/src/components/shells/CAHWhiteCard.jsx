@@ -1,6 +1,6 @@
 import React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
-import {deleteWhiteCard} from '../../apiInterface';
+import {deleteWhiteCard} from '../../api/apiInterface';
 
 const CAHWhiteCard = (props) => {
   const removeCard = () => {

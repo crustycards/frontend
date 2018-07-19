@@ -1,5 +1,5 @@
 import React from 'react';
-import api from '../../apiInterface';
+import api from '../../api/apiInterface';
 import {NavLink} from 'react-router-dom';
 import {Button, Card, CardHeader, CardActions} from '@material-ui/core';
 import time from 'time-converter';

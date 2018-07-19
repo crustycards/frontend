@@ -1,5 +1,5 @@
 const firebase = require('firebase');
-const {linkSessionToFirebase} = require('./apiInterface');
+const {linkSessionToFirebase} = require('./api/apiInterface');
 
 const config = {
   messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID

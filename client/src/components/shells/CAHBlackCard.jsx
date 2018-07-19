@@ -1,7 +1,7 @@
 import React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import {deleteBlackCard} from '../../apiInterface';
+import {deleteBlackCard} from '../../api/apiInterface';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Field, reduxForm, reset} from 'redux-form';
 import {TextField, Button, CircularProgress} from '@material-ui/core';
-import api from '../apiInterface';
+import api from '../api/apiInterface';
 
 const renderTextField = ({
   input,

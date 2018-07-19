@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {searchUsers, autocompleteUserSearch} from '../apiInterface';
+import {searchUsers, autocompleteUserSearch} from '../api/apiInterface';
 import {AutoComplete} from 'material-ui';
 import {Button} from '@material-ui/core';
 import UserCard from './shells/UserCard.jsx';
