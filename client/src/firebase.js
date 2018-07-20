@@ -1,5 +1,6 @@
-const firebase = require('firebase');
-const {linkSessionToFirebase} = require('./api/apiInterface');
+import * as firebase from 'firebase/app';
+import 'firebase/messaging';
+import {linkSessionToFirebase} from './api/apiInterface';
 
 const config = {
   messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID

@@ -7,7 +7,7 @@ import {
   CardHeader,
   withStyles
 } from '@material-ui/core';
-import {Refresh as RefreshIcon} from '@material-ui/icons';
+import RefreshIcon from '@material-ui/icons/Refresh';
 import {connect} from 'react-redux';
 import {joinGame, leaveGame, getGameList} from '../../gameServerInterface';
 

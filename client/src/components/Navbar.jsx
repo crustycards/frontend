@@ -15,15 +15,13 @@ import {
 } from '@material-ui/core';
 import {withStyles} from '@material-ui/core/styles';
 import {NavLink} from 'react-router-dom';
-import {
-  Menu as MenuIcon,
-  Home,
-  ExitToApp,
-  ViewList,
-  VideogameAsset,
-  Settings,
-  Person
-} from '@material-ui/icons';
+import MenuIcon from '@material-ui/icons/Menu';
+import Home from '@material-ui/icons/Home';
+import ExitToApp from '@material-ui/icons/ExitToApp';
+import ViewList from '@material-ui/icons/ViewList';
+import VideogameAsset from '@material-ui/icons/VideogameAsset';
+import Settings from '@material-ui/icons/Settings';
+import Person from '@material-ui/icons/Person';
 import store from '../store';
 import {push} from 'connected-react-router';
 
