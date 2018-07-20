@@ -79,7 +79,6 @@
     "h2o2": "^6.1.0",
     "hapi": "^16.6.2",
     "history": "^4.7.2",
-    "jsonwebtoken": "^8.3.0",
     "material-ui": "^0.20.1",
     "prop-types": "^15.6.2",
     "query-string": "^6.1.0",
