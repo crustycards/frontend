@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {searchUsers, autocompleteUserSearch} from '../api/apiInterface';
-import {AutoComplete} from 'material-ui';
+import AutoComplete from 'material-ui/AutoComplete';
 import {Button} from '@material-ui/core';
 import UserCard from './shells/UserCard.jsx';
 
