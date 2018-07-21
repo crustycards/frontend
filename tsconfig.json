@@ -5,7 +5,8 @@
     "lib": ["es6", "dom"],
     "jsx": "react",
     "allowJs": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules"
