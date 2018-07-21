@@ -46,73 +46,73 @@ export default class HttpGameApi implements GameApi {
       .then((response) => {
         return response.data;
       });
-  };
-  
+  }
+
   startGame() {
     return axios.post(`/api/game/start/${this.userId}`)
       .then((response) => {
         return response.data;
       });
-  };
-  
+  }
+
   stopGame() {
     return axios.post(`/api/game/stop/${this.userId}`)
       .then((response) => {
         return response.data;
       });
-  };
+  }
 
   joinGame(gameName: string) {
     return axios.post(`/api/game/join/${this.userId}?${queryString.stringify({gameName})}`)
       .then((response) => {
         return response.data;
       });
-  };
+  }
 
   leaveGame() {
     return axios.delete(`/api/game/players/${this.userId}`)
       .then((response) => {
         return response.data;
       });
-  };
+  }
 
   getGameState() {
     return axios.get(`/api/game/${this.userId}`)
       .then((response) => {
         return response.data;
       });
-  };
+  }
 
   getGameList() {
     return axios.get('/api/games')
       .then((response) => {
         return response.data;
       });
-  };
+  }
 
   playCards(cardIds: Array<string>) {
     return axios.put(`/api/game/play/${this.userId}`, cardIds).then(() => {});
-  };
+  }
 
   unPlayCards() {
     return axios.delete(`/api/game/play/${this.userId}`).then(() => {});
-  };
+  }
 
   kickPlayer(playerId: string) {
     return axios.delete(`/api/game/players?${queryString.stringify({
       kickerId: this.userId,
       kickeeId: playerId
     })}`).then(() => {});
-  };
+  }
 
   vote(cardId: string) {
     return axios.put(`/api/game/vote/${this.userId}?${queryString.stringify({cardId})}`).then(() => {});
-  };
+  }
 
   startNextRound() {
     return axios.put(`/api/game/continue/${this.userId}`).then(() => {});
-  };
-  
+  }
+
   sendMessage(message: string) {
     return axios.put(
       `/api/game/messages/${this.userId}`,
@@ -122,5 +122,5 @@ export default class HttpGameApi implements GameApi {
       .then((response) => {
         return response.data;
       });
-  };
+  }
 }
