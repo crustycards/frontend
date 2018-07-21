@@ -2,6 +2,7 @@ const path = require('path');
 const SRC_DIR = path.join(__dirname, '/client/src');
 const DIST_DIR = path.join(__dirname, '/client/dist');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
   entry: ['babel-polyfill', `${SRC_DIR}/index.tsx`],
@@ -57,5 +58,6 @@ module.exports = {
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin()
+    // new BundleAnalyzerPlugin() // Uncomment for bundle analysis
   ]
 };
