@@ -35,3 +35,11 @@ export class Cardpack {
   blackCards: Array<BlackCard>
   createdAt: Date
 }
+
+export class GameData {
+  // TODO - Add data fields
+}
+
+export class GameInfo {
+  // TODO - Add data fields
+}
