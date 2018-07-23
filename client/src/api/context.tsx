@@ -1,21 +1,16 @@
 import * as React from 'react';
 import { Subtract } from 'utility-types';
 
-import ApiInterface from './apiInterface';
-import GameApiInterface from './gameApiInterface';
+import Api from './model/api';
 
-import HttpApi from './httpApi';
-import HttpGameApi from './httpGameApi';
+import HttpMainApi from './http/httpMainApi';
+import HttpGameApi from './http/httpGameApi';
 
 interface InjectedApiProps {
-  api: ApiInterface
-  gameApi: GameApiInterface
+  api: Api
 }
 
-const Context = React.createContext<InjectedApiProps>({
-  api: new HttpApi(''),
-  gameApi: new HttpGameApi('')
-});
+const Context = React.createContext<Api>(undefined);
 
 export const Provider = Context.Provider;
 export const Consumer = Context.Consumer;
@@ -25,7 +20,7 @@ export const ApiContextWrapper = <P extends InjectedApiProps>(Component: React.C
     render() {
       return (
         <Consumer>
-          {({api, gameApi}) => (<Component api={api} gameApi={gameApi} {...this.props} {...this.state}/>)}
+          {(api) => (<Component api={api} {...this.props} {...this.state}/>)}
         </Consumer>
       );
     }
