@@ -3,9 +3,6 @@ import { Subtract } from 'utility-types';
 
 import Api from './model/api';
 
-import HttpMainApi from './http/httpMainApi';
-import HttpGameApi from './http/httpGameApi';
-
 interface InjectedApiProps {
   api: Api
 }
