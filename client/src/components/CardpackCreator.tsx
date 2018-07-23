@@ -1,7 +1,9 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {Field, reduxForm, reset} from 'redux-form';
 import {TextField, Button, CircularProgress} from '@material-ui/core';
-import api from '../api/apiInterface';
+import {ApiContextWrapper} from '../api/context';
+import Api from '../api/model/api';
 
 const renderTextField = ({
   input,
@@ -28,8 +30,17 @@ const validate = (values) => {
   return errors;
 };
 
-class CardpackCreator extends Component {
-  constructor(props) {
+interface CardpackCreatorProps {
+  api: Api
+  onSubmit: string
+}
+
+interface CardpackCreatorState {
+  isLoading: boolean
+}
+
+class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorState> {
+  constructor(props: CardpackCreatorProps) {
     super(props);
 
     this.createCardpack = this.createCardpack.bind(this);
@@ -41,7 +52,7 @@ class CardpackCreator extends Component {
 
   createCardpack({cardpackName}) {
     this.setState({isLoading: true});
-    const cardpackCreation = api.createCardpack(cardpackName);
+    const cardpackCreation = this.props.api.main.createCardpack(cardpackName);
     cardpackCreation.then(() => {
       this.setState({isLoading: false});
     });
@@ -69,6 +80,8 @@ class CardpackCreator extends Component {
   }
 }
 
+const ContextLinkedCardpackCreator = ApiContextWrapper(CardpackCreator);
+
 const onSubmitSuccess = (result, dispatch) =>
   dispatch(reset('cardpackCreator'));
 
@@ -76,4 +89,4 @@ export default reduxForm({
   form: 'cardpackCreator',
   validate,
   onSubmitSuccess
-})(CardpackCreator);
+})(ContextLinkedCardpackCreator);
