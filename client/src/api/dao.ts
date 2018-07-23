@@ -36,10 +36,36 @@ export class Cardpack {
   createdAt: Date
 }
 
+export class Player extends User {
+  score: number
+}
+
+export class Message {
+  user: User
+  text: string
+}
+
 export class GameData {
-  // TODO - Add data fields
+  name: string
+  maxPlayers: number
+  maxScore: number
+  stage: string
+  hand: Array<WhiteCard>
+  players: Array<Player>
+  queuedPlayers: Array<Player>
+  bannedPlayers: Array<User>
+  judgeId: string
+  ownerId: string
+  whitePlayed: Map<string, Array<WhiteCard>>
+  whitePlayedAnonymous: Array<Array<WhiteCard>>
+  currentBlackCard: BlackCard
+  winner: User
+  messages: Array<Message>
 }
 
 export class GameInfo {
-  // TODO - Add data fields
+  name: string
+  playerCount: number
+  maxPlayers: number
+  owner: User
 }
