@@ -1,13 +1,15 @@
-import React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@material-ui/core';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
 import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
-import MessageBox from '../components/GameBoard/MessageBox.jsx';
+import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards.jsx';
 import {NavLink} from 'react-router-dom';
-import {startGame, stopGame, leaveGame, startNextRound} from '../gameServerInterface';
+import {GameData, User} from '../api/dao';
+import Api from '../api/model/api';
+import {ApiContextWrapper} from '../api/context';
 
 const buttonStyle = {
   height: '36px',
@@ -21,14 +23,20 @@ const gameAlertStyle = {
   fontSize: '1.5em'
 };
 
-const Game = (props) => (
+interface GameProps {
+  game: GameData
+  user: User
+  api: Api
+}
+
+const Game = (props: GameProps) => (
   <div>
     {props.game ?
       <div>
         <div className='game-top'>
           <h2>Current game: {props.game.name}</h2>
           <Button
-            onClick={leaveGame}
+            onClick={props.api.game.leaveGame}
             style={buttonStyle}
           >
             Leave Game
@@ -37,7 +45,7 @@ const Game = (props) => (
             props.game.ownerId === props.user.id &&
             props.game.stage === 'notRunning' &&
             <Button
-              onClick={startGame}
+              onClick={props.api.game.startGame}
               style={buttonStyle}
             >
               Start Game
@@ -47,7 +55,7 @@ const Game = (props) => (
             props.game.ownerId === props.user.id &&
             props.game.stage !== 'notRunning' &&
             <Button
-              onClick={stopGame}
+              onClick={props.api.game.stopGame}
               style={buttonStyle}
             >
               Stop Game
@@ -56,7 +64,7 @@ const Game = (props) => (
           {
             props.game.stage === 'roundEndPhase' &&
             <Button
-              onClick={startNextRound}
+              onClick={props.api.game.startNextRound}
               style={buttonStyle}
             >
               Start Next Round
@@ -125,6 +133,8 @@ const Game = (props) => (
   </div>
 );
 
+const ContextLinkedGame = ApiContextWrapper(Game);
+
 const mapStateToProps = ({game, global: {user}}) => ({game, user});
 
-export default connect(mapStateToProps)(Game);
+export default connect(mapStateToProps)(ContextLinkedGame);
