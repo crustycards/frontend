@@ -21,9 +21,7 @@ class CardAdder extends Component {
   }
 
   handleInputChange(property, e) {
-    let stateChange = {};
-    stateChange[property] = e.target.value;
-    this.setState(stateChange);
+    this.setState({[property]: e.target.value});
   }
 
   changeAnswerField(e) {
