@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import WhiteCard from '../shells/CAHWhiteCard.jsx';
-import {vote} from '../../gameServerInterface';
 import {Button} from '@material-ui/core';
+import {ApiContextWrapper} from '../../api/context';
 
 class PlayedCards extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class PlayedCards extends Component {
               color={'secondary'}
               disabled={this.state.selectedSetIndex === null}
               onClick={() => {
-                vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
+                this.props.api.game.vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
                 this.setState({selectedSetIndex: null});
               }}
             >
@@ -94,6 +94,8 @@ class PlayedCards extends Component {
   }
 }
 
+const ContextLinkedPlayedCards = ApiContextWrapper(PlayedCards);
+
 const mapStateToProps = ({game, global: {user}}) => ({game, user});
 
-export default connect(mapStateToProps)(PlayedCards);
+export default connect(mapStateToProps)(ContextLinkedPlayedCards);
