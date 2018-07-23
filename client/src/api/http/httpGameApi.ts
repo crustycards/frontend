@@ -1,12 +1,15 @@
 import axios from 'axios';
 import * as queryString from 'query-string';
 import GameApi from '../model/gameApi';
+import * as _ from 'underscore';
 
 export default class HttpGameApi implements GameApi {
   private userId: string
 
   constructor(currentUserId: string) {
     this.userId = currentUserId;
+
+    _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
   createGame(

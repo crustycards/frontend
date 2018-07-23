@@ -1,12 +1,15 @@
 import axios from 'axios';
 import MainApi from '../model/mainApi';
 import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from '../dao';
+import * as _ from 'underscore';
 
 export default class HttpMainApi implements MainApi {
   private userId: string
 
   constructor(currentUserId: string) {
     this.userId = currentUserId;
+
+    _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
   getUser(id: string = this.userId) {
@@ -39,7 +42,7 @@ export default class HttpMainApi implements MainApi {
       .then((res) => res.data);
   }
 
-  getCardpacksByUser(userId: string) {
+  getCardpacksByUser(userId: string = this.userId) {
     return axios.get<Array<Cardpack>>(`/api/cardpacks/${userId}`)
       .then((res) => res.data);
   }
