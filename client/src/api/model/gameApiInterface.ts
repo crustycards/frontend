@@ -1,6 +1,6 @@
 import {GameData, GameInfo} from './dao';
 
-interface GameApiInterface {
+interface GameApi {
   createGame(
     gameName: string,
     maxPlayers: number,
@@ -22,4 +22,4 @@ interface GameApiInterface {
   sendMessage(text: string): Promise<GameData>
 }
 
-export default GameApiInterface;
+export default GameApi;

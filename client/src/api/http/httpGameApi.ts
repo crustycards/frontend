@@ -1,5 +1,5 @@
 import axios from 'axios';
-import queryString from 'query-string';
+import * as queryString from 'query-string';
 import GameApi from './gameApiInterface';
 import {} from './dao';
 

@@ -1,6 +1,6 @@
 import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from './dao';
 
-interface ApiInterface {
+interface MainApi {
   getUser(id: string): Promise<User>
   deleteWhiteCard(cardId: string): Promise<void>
   deleteBlackCard(cardId: string): Promise<void>
@@ -19,4 +19,4 @@ interface ApiInterface {
   linkSessionToFirebase(firebaseToken: string): Promise<void>
 }
 
-export default ApiInterface;
+export default MainApi;
