@@ -54,7 +54,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.tsx', '.ts', '.json']
+    extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
   },
   plugins: [
     new ForkTsCheckerWebpackPlugin()
