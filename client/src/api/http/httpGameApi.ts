@@ -1,7 +1,6 @@
 import axios from 'axios';
 import * as queryString from 'query-string';
-import GameApi from './gameApiInterface';
-import {} from './dao';
+import GameApi from '../model/gameApi';
 
 export default class HttpGameApi implements GameApi {
   private userId: string

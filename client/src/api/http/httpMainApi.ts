@@ -1,8 +1,8 @@
 import axios from 'axios';
-import Api from './apiInterface';
-import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from './dao';
+import MainApi from '../model/mainApi';
+import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from '../dao';
 
-export default class HttpApi implements Api {
+export default class HttpMainApi implements MainApi {
   private userId: string
 
   constructor(currentUserId: string) {
