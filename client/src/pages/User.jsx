@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import queryString from 'query-string';
-import {getUser, getCardpacksByUser} from '../api/apiInterface';
+import mainApi from '../api/apiInterface';
 import {CircularProgress} from '@material-ui/core';
 import CardpackList from '../components/CardpackList/index.jsx';
 import CardpackCreator from '../components/CardpackCreator.jsx';
 import {connect} from 'react-redux';
+
+const {getUser, getCardpacksByUser} = mainApi;
 
 class User extends Component {
   constructor(props) {

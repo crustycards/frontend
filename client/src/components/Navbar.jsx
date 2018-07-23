@@ -22,7 +22,7 @@ import ViewList from '@material-ui/icons/ViewList';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import Settings from '@material-ui/icons/Settings';
 import Person from '@material-ui/icons/Person';
-import store from '../store';
+import {store} from '../globaldeps';
 import {push} from 'connected-react-router';
 
 const navItemStyle = {textDecoration: 'none'};

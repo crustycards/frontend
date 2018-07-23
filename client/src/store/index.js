@@ -2,21 +2,21 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from './modules';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
 
-const enhancers = [applyMiddleware(routerMiddleware(history))];
+export default ({history, preloadedState = {}}) => {
+  const enhancers = [applyMiddleware(routerMiddleware(history))];
 
-// This block of code hooks up Redux DevTools if exists
-const devToolsExtension = window.devToolsExtension;
-if (typeof devToolsExtension === 'function') {
-  enhancers.push(devToolsExtension());
-}
+  // This block of code hooks up Redux DevTools if exists
+  const devToolsExtension = window.devToolsExtension;
+  if (typeof devToolsExtension === 'function') {
+    enhancers.push(devToolsExtension());
+  }
 
-export default ({history, preloadedState = {}}) => (
-  createStore(
+  return createStore(
     connectRouter(history)(rootReducer),
     preloadedState,
     compose(...enhancers)
-  )
-);
+  );
+};
 
 export const hasPlayed = ({whitePlayed, currentBlackCard, user}) => {
   return !!(
