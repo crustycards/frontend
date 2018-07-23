@@ -18,6 +18,7 @@
   "license": "BOII",
   "devDependencies": {
     "@types/jest": "^23.1.5",
+    "@types/react-router-dom": "^4.3.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.5",
     "babel-jest": "^23.2.0",
@@ -100,7 +101,8 @@
     "redux-observable": "^1.0.0",
     "time-converter": "0.0.1",
     "underscore": "^1.9.1",
-    "url-loader": "^1.0.1"
+    "url-loader": "^1.0.1",
+    "utility-types": "^2.0.0"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
