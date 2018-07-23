@@ -3,8 +3,10 @@ import {connect} from 'react-redux';
 import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
 import {Button} from '@material-ui/core';
-import {playCards, unPlayCards} from '../../../gameServerInterface';
+import gameApi from '../../../api/gameServerInterface';
 import {canPlay, hasPlayed} from '../../../store';
+
+const {playCards, unPlayCards} = gameApi;
 
 const PlaySelection = ({
   queuedCardIds,

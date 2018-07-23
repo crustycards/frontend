@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import {createGame, getCardpacks} from '../../gameServerInterface';
+import mainApi from '../../api/apiInterface';
+import gameApi from '../../api/gameServerInterface';
+const {getCardpacksByUser} = mainApi;
+const {createGame} = gameApi;
 import {
   Button,
   TextField,
@@ -46,7 +49,7 @@ class GameCreator extends Component {
   }
 
   loadCardpacks() {
-    getCardpacks().then((cardpacks) => {
+    getCardpacksByUser().then((cardpacks) => {
       this.setState({cardpacks, isLoading: false});
     });
   }

@@ -9,7 +9,9 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {connect} from 'react-redux';
-import {joinGame, leaveGame, getGameList} from '../../gameServerInterface';
+import gameApi from '../../api/gameServerInterface';
+
+const {joinGame, leaveGame, getGameList} = gameApi;
 
 const styles = (theme) => ({
   leftIcon: {
