@@ -4,7 +4,7 @@ import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
 import {Button} from '@material-ui/core';
 import {canPlay, hasPlayed} from '../../../store';
-import {ContextLinkedUser} from '../../../api/context';
+import {ApiContextWrapper} from '../../../api/context';
 
 const PlaySelection = ({
   queuedCardIds,
@@ -48,7 +48,7 @@ const PlaySelection = ({
     </div>;
 };
 
-const ContextLinkedPlaySelection = ContextLinkedUser(PlaySelection);
+const ContextLinkedPlaySelection = ApiContextWrapper(PlaySelection);
 
 const mapStateToProps = ({
   game: {
