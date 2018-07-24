@@ -22,7 +22,6 @@ import ViewList from '@material-ui/icons/ViewList';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import Settings from '@material-ui/icons/Settings';
 import Person from '@material-ui/icons/Person';
-import {store} from '../globaldeps';
 import {push} from 'connected-react-router';
 
 const navItemStyle = {textDecoration: 'none'};
@@ -58,7 +57,7 @@ const Navbar = (props) => (
         <Typography variant={'title'} color={'inherit'} className={props.classes.flex}>
           Cards
         </Typography>
-        <Button color={'inherit'} onClick={() => store.dispatch(push('/game'))}>
+        <Button color={'inherit'} onClick={() => props.push('/game')}>
           Current Game
         </Button>
       </Toolbar>
@@ -136,6 +135,7 @@ const mapStateToProps = ({global: {navbarOpen, user}}) => ({
 });
 
 const mapDispatchToProps = (dispatch) => bindActionCreators({
+  push,
   openNavbar,
   closeNavbar
 }, dispatch);
