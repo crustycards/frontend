@@ -22,7 +22,17 @@ import {ConnectedRouter} from 'connected-react-router';
 import AuthRedirector from './components/AuthRedirector.jsx';
 import {init as initFirebase} from './firebase';
 import {Provider as ApiContextProvider} from './api/context';
-import {mainApi, gameApi, history, store} from './globaldeps';
+import HttpMainApi from './api/http/httpMainApi';
+import HttpGameApi from './api/http/httpGameApi';
+import createStore from './store/index.js';
+import {createBrowserHistory} from 'history';
+
+const userId = window.__PRELOADED_STATE__.user ? window.__PRELOADED_STATE__.user.id : null;
+
+const mainApi = new HttpMainApi(userId); // TODO - Stop exporting this
+const gameApi = new HttpGameApi(userId); // TODO - Stop exporting this
+const history = createBrowserHistory();
+const store = createStore({history});
 
 initFirebase((payload) => console.log(payload))
   .then((token) => mainApi.linkSessionToFirebase(token));
