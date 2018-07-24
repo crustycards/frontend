@@ -24,7 +24,8 @@ import {init as initFirebase} from './firebase';
 import {Provider as ApiContextProvider} from './api/context';
 import {mainApi, gameApi, history, store} from './globaldeps';
 
-initFirebase();
+initFirebase((payload) => console.log(payload))
+  .then((token) => mainApi.linkSessionToFirebase(token));
 
 // setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
 

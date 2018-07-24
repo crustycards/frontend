@@ -1,20 +1,19 @@
 import * as firebase from 'firebase/app';
 import 'firebase/messaging';
-import {linkSessionToFirebase} from './api/apiInterface';
 
 const config = {
   messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID
 };
 
-const init = () => {
+const init = (onMessage) => {
   firebase.initializeApp(config);
   const messaging = firebase.messaging();
-  messaging.requestPermission()
+  onMessage && messaging.onMessage(onMessage);
+  return messaging.requestPermission()
     .catch(() => console.log('Denied permission for notifications'))
-    .then(() => messaging.getToken())
-    .then(linkSessionToFirebase);
-
-  messaging.onMessage((payload) => console.log('Message:', payload));
+    .then(() => {
+      return messaging.getToken();
+    });
 };
 
 module.exports = {init};
