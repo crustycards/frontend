@@ -1,13 +1,13 @@
 import React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
-import {deleteBlackCard} from '../../api/apiInterface';
+import {ApiContextWrapper} from '../../api/context';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 
 const CAHBlackCard = (props) => {
   const removeCard = () => {
-    deleteBlackCard(props.card.id).then((data) => {
+    props.api.main.deleteBlackCard(props.card.id).then((data) => {
       if (props.onDelete) {
         props.onDelete(props.card.id);
       }
@@ -35,4 +35,4 @@ const CAHBlackCard = (props) => {
   </MuiThemeProvider>;
 };
 
-module.exports = CAHBlackCard;
+module.exports = ApiContextWrapper(CAHBlackCard);

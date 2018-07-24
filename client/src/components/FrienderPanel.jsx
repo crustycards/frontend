@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {searchUsers, autocompleteUserSearch} from '../api/apiInterface';
 import AutoComplete from './AutoComplete.jsx';
 import UserCard from './shells/UserCard.jsx';
+import {ApiContextWrapper} from '../api/context';
 
 class FrienderPanel extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class FrienderPanel extends Component {
   }
 
   searchUsers(query) {
-    searchUsers(query)
+    this.props.api.main.searchUsers(query)
       .then((searchedUsers) =>
         this.setState({
           searchedUsers,
@@ -31,7 +31,7 @@ class FrienderPanel extends Component {
         <div>Search Users</div>
         <AutoComplete
           label={'Search Users'}
-          getSuggestions={autocompleteUserSearch}
+          getSuggestions={this.props.api.main.autocompleteUserSearch}
           onSubmit={this.searchUsers}
         />
         {
@@ -56,4 +56,4 @@ class FrienderPanel extends Component {
   }
 }
 
-export default FrienderPanel;
+export default ApiContextWrapper(FrienderPanel);

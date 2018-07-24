@@ -1,12 +1,10 @@
 import React, {Component} from 'react';
 import queryString from 'query-string';
-import mainApi from '../api/apiInterface';
 import {CircularProgress} from '@material-ui/core';
 import CardpackList from '../components/CardpackList/index.jsx';
 import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
-
-const {getUser, getCardpacksByUser} = mainApi;
+import {ApiContextWrapper} from '../api/context';
 
 class User extends Component {
   constructor(props) {
@@ -24,7 +22,10 @@ class User extends Component {
     };
 
     if (typeof userId === 'string') {
-      Promise.all([getUser(userId), getCardpacksByUser(userId)])
+      Promise.all([
+        this.props.api.main.getUser(userId),
+        this.props.api.main.getCardpacksByUser(userId)
+      ])
         .then(([user, cardpacks]) => {
           this.setState({user, cardpacks, isLoading: false, successfullyLoaded: true});
         })
@@ -62,6 +63,8 @@ class User extends Component {
   }
 }
 
+const ContextLinkedUser = ApiContextWrapper(User);
+
 const mapStateToProps = ({global: {user}}) => ({user});
 
-export default connect(mapStateToProps)(User);
+export default connect(mapStateToProps)(ContextLinkedUser);

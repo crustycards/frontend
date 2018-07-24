@@ -1,8 +1,9 @@
 import React from 'react';
-import api from '../../api/apiInterface';
 import {NavLink} from 'react-router-dom';
 import {Button, Card, CardHeader, CardActions} from '@material-ui/core';
 import time from 'time-converter';
+import {ApiContextWrapper} from '../../api/context';
+
 const navItemStyle = {textDecoration: 'none'};
 
 const Cardpack = (props) => (
@@ -19,7 +20,7 @@ const Cardpack = (props) => (
       </NavLink>
       {
         props.canDelete &&
-        <Button onClick={api.deleteCardpack.bind(null, props.cardpack.id)}>
+        <Button onClick={() => props.api.main.deleteCardpack(props.cardpack.id)}>
           Delete
         </Button>
       }
@@ -27,4 +28,4 @@ const Cardpack = (props) => (
   </Card>
 );
 
-export default Cardpack;
+export default ApiContextWrapper(Cardpack);

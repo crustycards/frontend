@@ -3,10 +3,8 @@ import {connect} from 'react-redux';
 import Tray from './Tray.jsx';
 import PlayArea from './PlayArea.jsx';
 import {Button} from '@material-ui/core';
-import gameApi from '../../../api/gameServerInterface';
 import {canPlay, hasPlayed} from '../../../store';
-
-const {playCards, unPlayCards} = gameApi;
+import {ContextLinkedUser} from '../../../api/context';
 
 const PlaySelection = ({
   queuedCardIds,
@@ -14,7 +12,8 @@ const PlaySelection = ({
   whitePlayed,
   currentBlackCard,
   user,
-  judgeId
+  judgeId,
+  api
 }) => {
   return canPlay({whitePlayed, currentBlackCard, user, judgeId}) ?
     <div>
@@ -25,7 +24,7 @@ const PlaySelection = ({
         color={'secondary'}
         disabled={queuedCardIds.includes(null)}
         onClick={() => {
-          playCards(queuedCardIds);
+          api.game.playCards(queuedCardIds);
         }}
       >
         Play
@@ -40,7 +39,7 @@ const PlaySelection = ({
           variant={'contained'}
           color={'secondary'}
           onClick={() => {
-            unPlayCards();
+            api.game.unPlayCards();
           }}
         >
           Revert Play
@@ -48,6 +47,8 @@ const PlaySelection = ({
       }
     </div>;
 };
+
+const ContextLinkedPlaySelection = ContextLinkedUser(PlaySelection);
 
 const mapStateToProps = ({
   game: {
@@ -69,4 +70,4 @@ const mapStateToProps = ({
   judgeId
 });
 
-export default connect(mapStateToProps)(PlaySelection);
+export default connect(mapStateToProps)(ContextLinkedPlaySelection);

@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import api from '../../api/apiInterface';
 import {connect} from 'react-redux';
 import {Button, LinearProgress, CircularProgress, Tab, Tabs} from '@material-ui/core';
 import CardAdder from './CardAdder.jsx';
@@ -9,6 +8,7 @@ import cardpackFileHandler from '../../helpers/cardpackFileHandler';
 import TabbedList from '../TabbedList.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import {upload, convertToText} from '../../helpers/fileUpload';
+import {ApiContextWrapper} from '../../api/context';
 
 class CardpackViewer extends Component {
   constructor(props) {
@@ -32,7 +32,7 @@ class CardpackViewer extends Component {
   }
 
   fetchCurrentCardpack() {
-    api.getCardpack(this.cardpackId)
+    this.props.api.main.getCardpack(this.cardpackId)
       .then((cardpack) => {
         this.setState({cardpack});
       })
@@ -42,7 +42,7 @@ class CardpackViewer extends Component {
   }
 
   addWhiteCards(cards) {
-    return api.createWhiteCards(this.cardpackId, cards).then((createdCards) => {
+    return this.props.api.main.createWhiteCards(this.cardpackId, cards).then((createdCards) => {
       this.setState({
         cardpack: {
           ...this.state.cardpack,
@@ -57,7 +57,7 @@ class CardpackViewer extends Component {
   }
 
   addBlackCards(cards) {
-    return api.createBlackCards(this.cardpackId, cards).then((createdCards) => {
+    return this.props.api.main.createBlackCards(this.cardpackId, cards).then((createdCards) => {
       this.setState({
         cardpack: {
           ...this.state.cardpack,
@@ -217,6 +217,8 @@ class CardpackViewer extends Component {
   }
 }
 
+const ContextLinkedCardpackViewer = ApiContextWrapper(CardpackViewer);
+
 const mapStateToProps = ({global: {user}}) => ({user});
 
-export default connect(mapStateToProps)(CardpackViewer);
+export default connect(mapStateToProps)(ContextLinkedCardpackViewer);

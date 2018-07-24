@@ -1,8 +1,4 @@
 import React, {Component} from 'react';
-import mainApi from '../../api/apiInterface';
-import gameApi from '../../api/gameServerInterface';
-const {getCardpacksByUser} = mainApi;
-const {createGame} = gameApi;
 import {
   Button,
   TextField,
@@ -14,6 +10,7 @@ import {
   ListItemText,
   CircularProgress
 } from '@material-ui/core';
+import {ApiContextWrapper} from '../../api/context';
 
 class GameCreator extends Component {
   constructor(props) {
@@ -49,7 +46,7 @@ class GameCreator extends Component {
   }
 
   loadCardpacks() {
-    getCardpacksByUser().then((cardpacks) => {
+    this.props.api.main.getCardpacksByUser().then((cardpacks) => {
       this.setState({cardpacks, isLoading: false});
     });
   }
@@ -67,7 +64,7 @@ class GameCreator extends Component {
   }
 
   handleSubmit() {
-    createGame(
+    this.props.api.game.createGame(
       this.state.gameName,
       this.state.maxPlayers,
       this.state.maxScore,
@@ -144,4 +141,4 @@ class GameCreator extends Component {
   }
 }
 
-export default GameCreator;
+export default ApiContextWrapper(GameCreator);

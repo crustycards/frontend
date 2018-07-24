@@ -1,6 +1,6 @@
 import React from 'react';
-import api from '../api/apiInterface';
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
+import {ApiContextWrapper} from '../api/context';
 
 const ReceivedFriendRequest = (props) => (
   <Card className='card'>
@@ -8,10 +8,10 @@ const ReceivedFriendRequest = (props) => (
       title={props.user.name}
     />
     <CardActions>
-      <Button onClick={api.addFriend.bind(null, props.user.id)}>Accept</Button>
-      <Button onClick={api.removeFriend.bind(null, props.user.id)}>Decline</Button>
+      <Button onClick={() => props.api.main.addFriend(props.user.id)}>Accept</Button>
+      <Button onClick={() => props.api.main.removeFriend(props.user.id)}>Decline</Button>
     </CardActions>
   </Card>
 );
 
-export default ReceivedFriendRequest;
+export default ApiContextWrapper(ReceivedFriendRequest);

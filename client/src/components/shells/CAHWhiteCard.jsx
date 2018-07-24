@@ -1,10 +1,10 @@
 import React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
-import {deleteWhiteCard} from '../../api/apiInterface';
+import {ApiContextWrapper} from '../../api/context';
 
 const CAHWhiteCard = (props) => {
   const removeCard = () => {
-    return deleteWhiteCard(props.card.id).then((data) => {
+    return props.api.main.deleteWhiteCard(props.card.id).then((data) => {
       if (props.onDelete) {
         props.onDelete(props.card.id);
       }
@@ -28,4 +28,4 @@ const CAHWhiteCard = (props) => {
   );
 };
 
-module.exports = CAHWhiteCard;
+module.exports = ApiContextWrapper(CAHWhiteCard);

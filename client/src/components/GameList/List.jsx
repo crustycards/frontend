@@ -9,9 +9,7 @@ import {
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {connect} from 'react-redux';
-import gameApi from '../../api/gameServerInterface';
-
-const {joinGame, leaveGame, getGameList} = gameApi;
+import {ApiContextWrapper} from '../../api/context';
 
 const styles = (theme) => ({
   leftIcon: {
@@ -36,7 +34,7 @@ class GameList extends Component {
 
   refresh() {
     this.setState({isLoading: true});
-    getGameList().then(() => this.setState({isLoading: false}));
+    this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
   }
 
   render() {
@@ -80,10 +78,10 @@ class GameList extends Component {
               {
                 this.props.game && this.props.game.name === game.name ?
                   <Button onClick={() => {
-                    leaveGame().then(this.refresh);
+                    this.props.api.game.leaveGame().then(this.refresh);
                   }}>Leave</Button> :
                   <Button onClick={() => {
-                    joinGame(game.name);
+                    this.props.api.game.joinGame(game.name);
                   }}>Join</Button>
               }
             </CardActions>
@@ -102,7 +100,9 @@ class GameList extends Component {
   }
 }
 
-const StyledGameList = withStyles(styles)(GameList);
+const ContextLinkedGameList = ApiContextWrapper(GameList);
+
+const StyledGameList = withStyles(styles)(ContextLinkedGameList);
 
 const mapStateToProps = ({game, games}) => ({
   game,
