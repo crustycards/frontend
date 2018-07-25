@@ -20,7 +20,8 @@ import Home from '@material-ui/icons/Home';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import ViewList from '@material-ui/icons/ViewList';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
-import Settings from '@material-ui/icons/SettingsApplications'; // TODO - Change import back to icons/Settings
+// TODO - Change import below back to icons/Settings
+import Settings from '@material-ui/icons/SettingsApplications';
 import Person from '@material-ui/icons/Person';
 import {push} from 'connected-react-router';
 

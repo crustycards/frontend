@@ -23,7 +23,9 @@ class PlayedCards extends Component {
               color={'secondary'}
               disabled={this.state.selectedSetIndex === null}
               onClick={() => {
-                this.props.api.game.vote(this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id);
+                this.props.api.game.vote(
+                  this.props.game.whitePlayedAnonymous[this.state.selectedSetIndex][0].id
+                );
                 this.setState({selectedSetIndex: null});
               }}
             >
