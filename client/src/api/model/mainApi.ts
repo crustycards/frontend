@@ -1,4 +1,4 @@
-import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from './dao';
+import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from '../dao';
 
 interface MainApi {
   getUser(id: string): Promise<User>

@@ -1,4 +1,4 @@
-import {GameData, GameInfo} from './dao';
+import {GameData, GameInfo} from '../dao';
 
 interface GameApi {
   createGame(
