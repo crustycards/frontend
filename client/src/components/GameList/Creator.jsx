@@ -38,10 +38,13 @@ class GameCreator extends Component {
       this.handSizeDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
     }
 
+    this.loadCardpacks = this.loadCardpacks.bind(this);
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+  }
 
+  componentDidMount() {
     this.loadCardpacks();
   }
 
