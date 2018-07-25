@@ -1,9 +1,6 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {Provider} from 'react-redux';
-import lightBaseTheme from 'material-ui/styles/baseThemes/lightBaseTheme';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Home from './pages/Home.jsx';
 import Cardpack from './pages/Cardpack.jsx';
 import User from './pages/User.jsx';
@@ -48,27 +45,25 @@ export class App extends Component {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <MuiThemeProvider muiTheme={getMuiTheme(lightBaseTheme)}>
-            <DragDropContextProvider backend={DragDropHTML5Backend}>
-              <ApiContextProvider value={{main: mainApi, game: gameApi}}>
-                <div>
-                  <AuthRedirector/>
-                  <Navbar/>
-                  <StatusBar/>
-                  <Switch>
-                    <Route exact path='/' component={Home}/>
-                    <Route exact path='/cardpack' component={Cardpack}/>
-                    <Route exact path='/user' component={User}/>
-                    <Route exact path='/login' component={Login}/>
-                    <Route exact path='/game' component={Game}/>
-                    <Route exact path='/gamelist' component={GameList}/>
-                    <Route exact path='/settings' component={Settings}/>
-                    <Route component={NotFound}/>
-                  </Switch>
-                </div>
-              </ApiContextProvider>
-            </DragDropContextProvider>
-          </MuiThemeProvider>
+          <DragDropContextProvider backend={DragDropHTML5Backend}>
+            <ApiContextProvider value={{main: mainApi, game: gameApi}}>
+              <div>
+                <AuthRedirector/>
+                <Navbar/>
+                <StatusBar/>
+                <Switch>
+                  <Route exact path='/' component={Home}/>
+                  <Route exact path='/cardpack' component={Cardpack}/>
+                  <Route exact path='/user' component={User}/>
+                  <Route exact path='/login' component={Login}/>
+                  <Route exact path='/game' component={Game}/>
+                  <Route exact path='/gamelist' component={GameList}/>
+                  <Route exact path='/settings' component={Settings}/>
+                  <Route component={NotFound}/>
+                </Switch>
+              </div>
+            </ApiContextProvider>
+          </DragDropContextProvider>
         </ConnectedRouter>
       </Provider>
     );
