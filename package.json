@@ -8,7 +8,7 @@
     "build-prod": "webpack --mode production",
     "start": "node server/index.js",
     "start-dev": "nodemon server/index.js",
-    "lint": "eslint . --ext .js --ext .jsx --ext .ts --ext .tsx",
+    "lint": "eslint . --ext .js --ext .jsx",
     "lint-clean": "npm run lint -- --fix",
     "lint-init": "eslint --init",
     "test": "jest",
