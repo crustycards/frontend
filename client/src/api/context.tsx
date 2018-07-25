@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Subtract } from 'utility-types';
+import {Subtract} from 'utility-types';
 
 import Api from './model/api';
 

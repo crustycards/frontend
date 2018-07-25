@@ -65,7 +65,7 @@ const MessageBox = (props: MessageBoxProps) => {
         onSubmit={() => {
           props.handleSubmit(({messageText}) => {
             props.api.game.sendMessage(messageText);
-          })
+          });
         }}
       >
         <Field
