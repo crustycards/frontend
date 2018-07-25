@@ -1,7 +1,13 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Button} from '@material-ui/core';
-import {GridList, GridTile} from 'material-ui/GridList';
+import {GridList, GridListTile, withStyles} from '@material-ui/core';
+
+const StyledGridListTile = withStyles({
+  tile: {
+    height: 'auto'
+  }
+})((props) => (<GridListTile {...props}/>));
 
 class TabbedList extends Component {
   constructor(props) {
@@ -31,12 +37,11 @@ class TabbedList extends Component {
     // TODO - Convert for loop to map
     for (let i = tabStart; i < tabEnd; i++) {
       visibleElements.push(
-        <GridTile
+        <StyledGridListTile
           key={i}
-          style={{height: 'auto'}}
         >
           {this.props.children[i]}
-        </GridTile>
+        </StyledGridListTile>
       );
     }
 
@@ -68,7 +73,7 @@ class TabbedList extends Component {
             </div>
           }
         </div>
-        <GridList cols={this.columns} cellHeight='auto'>
+        <GridList cols={this.columns} cellHeight={'auto'}>
           {visibleElements}
         </GridList>
       </div>
