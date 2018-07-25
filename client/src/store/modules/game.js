@@ -1,6 +1,3 @@
-/**
- * TYPES
- */
 export const SET_GAME_STATE = 'game/SET_GAME_STATE';
 export const QUEUE_CARD = 'game/QUEUE_CARD';
 export const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
