@@ -32,7 +32,7 @@ const validate = (values) => {
 
 interface CardpackCreatorProps {
   api: Api
-  onSubmit: string
+  handleSubmit(submit: (data: {cardpackName: string}) => void): () => void
 }
 
 interface CardpackCreatorState {
@@ -50,7 +50,7 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     };
   }
 
-  createCardpack({cardpackName}) {
+  createCardpack({cardpackName}: {cardpackName: string}) {
     this.setState({isLoading: true});
     const cardpackCreation = this.props.api.main.createCardpack(cardpackName);
     cardpackCreation.then(() => {
