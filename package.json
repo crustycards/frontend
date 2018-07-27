@@ -17,7 +17,7 @@
   "author": "Thomas Volk",
   "license": "BOII",
   "devDependencies": {
-    "@types/jest": "^23.3.0",
+    "@types/jest": "^23.3.1",
     "@types/react-router-dom": "^4.3.0",
     "babel-core": "^6.26.3",
     "babel-eslint": "^8.2.6",
@@ -52,8 +52,8 @@
     "ts-jest": "^23.0.1",
     "ts-loader": "^4.4.2",
     "typescript": "^2.9.2",
-    "typescript-eslint-parser": "^16.0.1",
-    "webpack": "^4.16.2",
+    "typescript-eslint-parser": "^17.0.1",
+    "webpack": "^4.16.3",
     "webpack-bundle-analyzer": "^2.13.1",
     "webpack-cli": "^3.1.0"
   },
