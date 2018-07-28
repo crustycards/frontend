@@ -25,6 +25,7 @@ import createStore from './store/index.js';
 import {createBrowserHistory} from 'history';
 import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
+import {setGameState} from './store/modules/game';
 
 declare global {
   interface Window {
@@ -42,7 +43,9 @@ const store = createStore({history});
 initFirebase((payload: any) => console.log(payload))
   .then((token) => mainApi.linkSessionToFirebase(token));
 
-// setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
+setInterval(() => {
+  gameApi.getGameState().then((gameState) => store.dispatch(setGameState(gameState)))
+}, 500); // TODO - Find a way to remove this intermittent polling
 
 export class App extends Component {
   constructor(props: any) {
