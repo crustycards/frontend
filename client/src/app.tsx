@@ -23,6 +23,8 @@ import HttpMainApi from './api/http/httpMainApi';
 import HttpGameApi from './api/http/httpGameApi';
 import createStore from './store/index.js';
 import {createBrowserHistory} from 'history';
+import GameApi from './api/model/gameApi';
+import MainApi from './api/model/mainApi';
 
 declare global {
   interface Window {
@@ -32,8 +34,8 @@ declare global {
 
 const userId = window.__PRELOADED_STATE__.user ? window.__PRELOADED_STATE__.user.id : null;
 
-const mainApi = new HttpMainApi(userId); // TODO - Stop exporting this
-const gameApi = new HttpGameApi(userId); // TODO - Stop exporting this
+const mainApi: MainApi = new HttpMainApi(userId);
+const gameApi: GameApi = new HttpGameApi(userId);
 const history = createBrowserHistory();
 const store = createStore({history});
 
