@@ -1,16 +1,20 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {Field, reduxForm, reset} from 'redux-form';
+import {Field, reduxForm, reset, FormErrors, InjectedFormProps, SubmitHandler} from 'redux-form';
 import {TextField, Button, CircularProgress} from '@material-ui/core';
 import {ApiContextWrapper} from '../api/context';
 import Api from '../api/model/api';
+import { Cardpack } from '../api/dao';
 
 const renderTextField = ({
   input,
   label,
-  meta: {touched, error},
+  meta: {
+    touched,
+    error
+  },
   ...custom
-}) => (
+}: any) => (
   <TextField
     label={label}
     {...input}
@@ -19,20 +23,26 @@ const renderTextField = ({
   />
 );
 
-const validate = (values) => {
-  const errors = {};
-  const requiredFields = ['cardpackName'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = 'Required';
-    }
-  });
+interface CardpackFormData {
+  cardpackName: string
+}
+
+const validate = (values: CardpackFormData): FormErrors<CardpackFormData> => {
+  const {cardpackName} = values;
+
+  const errors: FormErrors<CardpackFormData> = {};
+
+  if (!cardpackName) {
+    errors.cardpackName = 'Required';
+  }
+
   return errors;
 };
 
-interface CardpackCreatorProps {
+interface CardpackCreatorProps extends InjectedFormProps {
   api: Api
-  handleSubmit(submit: (data: {cardpackName: string}) => void): () => void
+  handleSubmit: SubmitHandler<CardpackFormData>
+  onSubmit?(cardpack: Cardpack): void
 }
 
 interface CardpackCreatorState {
@@ -50,13 +60,14 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     };
   }
 
-  createCardpack({cardpackName}: {cardpackName: string}) {
+  createCardpack({cardpackName}: CardpackFormData) {
     this.setState({isLoading: true});
     const cardpackCreation = this.props.api.main.createCardpack(cardpackName);
-    cardpackCreation.then(() => {
+    cardpackCreation.then((cardpack) => {
       this.setState({isLoading: false});
+      
+      this.props.onSubmit && this.props.onSubmit(cardpack)
     });
-    this.props.onSubmit && cardpackCreation.then((cardpack) => this.props.onSubmit(cardpack));
   }
 
   render() {
@@ -82,7 +93,7 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
 
 const ContextLinkedCardpackCreator = ApiContextWrapper(CardpackCreator);
 
-const onSubmitSuccess = (result, dispatch) =>
+const onSubmitSuccess = (_: any, dispatch: any) =>
   dispatch(reset('cardpackCreator'));
 
 export default reduxForm({
