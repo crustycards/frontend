@@ -12,7 +12,7 @@ class User extends Component {
 
     const userId = queryString.parse(props.location.search).id;
 
-    this.isCurrentUser = this.props.user.id === userId;
+    this.isCurrentUser = this.props.user && this.props.user.id === userId;
 
     this.state = {
       isLoading: true,
