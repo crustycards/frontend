@@ -1,5 +1,4 @@
 const fileHandler = require('../../../client/src/helpers/cardpackFileHandler');
-const {expect} = require('chai');
 
 let dummyCards = {whiteCards: [], blackCards: []};
 
@@ -15,7 +14,7 @@ for (let i = 0; i < 10; i++) {
 }
 
 it('Should get back deeply equal card objects after stringifying and re-parsing', () => {
-  expect(fileHandler.parse(fileHandler.stringify(dummyCards))).to.deep.equal(dummyCards);
+  expect(fileHandler.parse(fileHandler.stringify(dummyCards))).toEqual(dummyCards);
 });
 
 describe('parse', () => {
@@ -26,6 +25,6 @@ describe('stringify', () => {
   it('Should not modify input array', () => {
     let cardsNonref = JSON.parse(JSON.stringify(dummyCards));
     fileHandler.stringify(cardsNonref);
-    expect(cardsNonref).to.eql(dummyCards);
+    expect(cardsNonref).toEqual(dummyCards);
   });
 });
