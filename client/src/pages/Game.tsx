@@ -2,7 +2,7 @@ import * as React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@material-ui/core';
 import PlayerList from '../components/GameBoard/PlayerList.jsx';
-import PlaySelection from '../components/GameBoard/PlaySelection/index.jsx';
+import PlaySelection from '../components/GameBoard/PlaySelection/index';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
 import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards.jsx';
@@ -135,6 +135,6 @@ const Game = (props: GameProps) => (
 
 const ContextLinkedGame = ApiContextWrapper(Game);
 
-const mapStateToProps = ({game, global: {user}}) => ({game, user});
+const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
 
 export default connect(mapStateToProps)(ContextLinkedGame);
