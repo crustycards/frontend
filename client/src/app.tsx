@@ -21,7 +21,7 @@ import {init as initFirebase} from './firebase';
 import {Provider as ApiContextProvider} from './api/context';
 import HttpMainApi from './api/http/httpMainApi';
 import HttpGameApi from './api/http/httpGameApi';
-import createStore from './store/index.js';
+import createStore from './store/index';
 import {createBrowserHistory} from 'history';
 import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
