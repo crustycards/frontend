@@ -24,6 +24,12 @@ import HttpGameApi from './api/http/httpGameApi';
 import createStore from './store/index.js';
 import {createBrowserHistory} from 'history';
 
+declare global {
+  interface Window {
+    __PRELOADED_STATE__: any
+  }
+}
+
 const userId = window.__PRELOADED_STATE__.user ? window.__PRELOADED_STATE__.user.id : null;
 
 const mainApi = new HttpMainApi(userId); // TODO - Stop exporting this
@@ -31,7 +37,7 @@ const gameApi = new HttpGameApi(userId); // TODO - Stop exporting this
 const history = createBrowserHistory();
 const store = createStore({history});
 
-initFirebase((payload) => console.log(payload))
+initFirebase((payload: any) => console.log(payload))
   .then((token) => mainApi.linkSessionToFirebase(token));
 
 // setInterval(getGameState, 500); // TODO - Find a way to remove this intermittent polling
