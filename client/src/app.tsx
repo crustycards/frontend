@@ -16,7 +16,7 @@ import {Route, Switch} from 'react-router';
 import {DragDropContextProvider} from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 import {ConnectedRouter} from 'connected-react-router';
-import AuthRedirector from './components/AuthRedirector.jsx';
+import AuthRedirector from './components/AuthRedirector';
 import {init as initFirebase} from './firebase';
 import {Provider as ApiContextProvider} from './api/context';
 import HttpMainApi from './api/http/httpMainApi';

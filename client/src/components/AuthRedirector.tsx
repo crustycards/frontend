@@ -1,8 +1,15 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {Redirect} from 'react-router-dom';
+import {User} from '../api/dao';
 
-class AuthRedirector extends Component {
+interface AuthRedirectorProps {
+  user: User
+  path: string
+}
+
+class AuthRedirector extends Component<AuthRedirectorProps> {
   render() {
     if (this.props.user && this.props.path === '/login') {
       return <Redirect to={'/'} />;
@@ -14,7 +21,7 @@ class AuthRedirector extends Component {
   }
 }
 
-const mapStateToProps = ({global: {user}, router}) => ({
+const mapStateToProps = ({global: {user}, router}: any) => ({
   user,
   path: router.location.pathname
 });
