@@ -81,7 +81,7 @@ export default class HttpGameApi implements GameApi {
   getGameState() {
     return axios.get(`/api/game/${this.userId}`)
       .then((response) => {
-        return response.data;
+        return response.data || null;
       });
   }
 
