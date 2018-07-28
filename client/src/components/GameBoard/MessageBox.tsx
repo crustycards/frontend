@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Field, reduxForm, reset} from 'redux-form';
+import {Field, reduxForm, reset, FormErrors, InjectedFormProps, SubmitHandler} from 'redux-form';
 import {Paper, Button, TextField, Typography, Divider} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
 import Api from '../../api/model/api';
@@ -11,7 +11,7 @@ const renderTextField = ({
   label,
   meta,
   ...custom
-}) => (
+}: any) => (
   <TextField
     label={label}
     {...input}
@@ -19,20 +19,25 @@ const renderTextField = ({
   />
 );
 
-const validate = (values) => {
-  const errors = {};
-  const requiredFields = ['messageText'];
-  requiredFields.forEach((field) => {
-    if (!values[field]) {
-      errors[field] = 'Required';
-    }
-  });
+interface MessageFormData {
+  messageText: string
+}
+
+const validate = (values: MessageFormData) => {
+  const {messageText} = values;
+
+  const errors: FormErrors<MessageFormData> = {};
+  
+  if (!messageText) {
+    errors.messageText = 'Required';
+  }
+
   return errors;
 };
 
-interface MessageBoxProps {
+interface MessageBoxProps extends InjectedFormProps {
   messages: Array<any>
-  handleSubmit: (fun: (data: {messageText: string}) => void) => void
+  handleSubmit: SubmitHandler<MessageFormData>
   api: Api
 }
 
@@ -89,7 +94,7 @@ const MessageBox = (props: MessageBoxProps) => {
 
 const ContextLinkedMessageBox = ApiContextWrapper(MessageBox);
 
-const mapStateToProps = ({game}) => ({
+const mapStateToProps = ({game}: any) => ({
   messages: game.messages
 });
 
