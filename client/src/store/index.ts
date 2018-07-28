@@ -1,8 +1,21 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from './modules';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
+import {User, WhiteCard, BlackCard} from '../api/dao';
+import {History} from '../../../node_modules/@types/history';
 
-export default ({history, preloadedState = {}}) => {
+declare global {
+  interface Window {
+    devToolsExtension?: any
+  }
+}
+
+interface CreateStore {
+  history: History
+  preloadedState?: any
+}
+
+export default ({history, preloadedState = {}}: CreateStore) => {
   const enhancers = [applyMiddleware(routerMiddleware(history))];
 
   // This block of code hooks up Redux DevTools if exists
@@ -18,16 +31,26 @@ export default ({history, preloadedState = {}}) => {
   );
 };
 
-export const hasPlayed = ({whitePlayed, currentBlackCard, user}) => {
+interface HasPlayed {
+  whitePlayed: Map<string, Array<WhiteCard>>
+  currentBlackCard: BlackCard
+  user: User
+}
+
+interface CanPlay extends HasPlayed {
+  judgeId: string
+}
+
+export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {
   return !!(
     whitePlayed &&
-    whitePlayed[user.id] &&
+    whitePlayed.has(user.id) &&
     currentBlackCard &&
-    whitePlayed[user.id].length === currentBlackCard.answerFields
+    whitePlayed.get(user.id).length === currentBlackCard.answerFields
   );
 };
 
-export const canPlay = ({whitePlayed, currentBlackCard, user, judgeId}) => {
+export const canPlay = ({whitePlayed, currentBlackCard, user, judgeId}: CanPlay) => {
   if (hasPlayed({whitePlayed, currentBlackCard, user})) {
     return false;
   }
