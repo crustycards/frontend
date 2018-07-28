@@ -44,7 +44,9 @@ initFirebase((payload: any) => console.log(payload))
   .then((token) => mainApi.linkSessionToFirebase(token));
 
 setInterval(() => {
-  gameApi.getGameState().then((gameState) => store.dispatch(setGameState(gameState)))
+  gameApi.getGameState().then((gameState) => {
+    store.dispatch(setGameState(gameState))
+  })
 }, 500); // TODO - Find a way to remove this intermittent polling
 
 export class App extends Component {
