@@ -1,7 +1,7 @@
 import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from './modules';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
-import {User, WhiteCard, BlackCard} from '../api/dao';
+import {User, BlackCard, WhitePlayed} from '../api/dao';
 import {History} from '../../../node_modules/@types/history';
 
 declare global {
@@ -32,9 +32,9 @@ export default ({history, preloadedState = {}}: CreateStore) => {
 };
 
 interface HasPlayed {
-  whitePlayed: Map<string, Array<WhiteCard>>
-  currentBlackCard: BlackCard
-  user: User
+  whitePlayed?: WhitePlayed
+  currentBlackCard?: BlackCard
+  user?: User
 }
 
 interface CanPlay extends HasPlayed {
@@ -44,9 +44,10 @@ interface CanPlay extends HasPlayed {
 export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {
   return !!(
     whitePlayed &&
-    whitePlayed.has(user.id) &&
+    user &&
+    whitePlayed[user.id] &&
     currentBlackCard &&
-    whitePlayed.get(user.id).length === currentBlackCard.answerFields
+    whitePlayed[user.id].length === currentBlackCard.answerFields
   );
 };
 

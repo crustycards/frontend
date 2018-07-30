@@ -45,6 +45,10 @@ export class Message {
   text: string
 }
 
+export class WhitePlayed {
+  [userId: string]: Array<WhiteCard>
+}
+
 export class GameData {
   name: string
   maxPlayers: number
@@ -56,7 +60,7 @@ export class GameData {
   bannedPlayers: Array<User>
   judgeId: string
   ownerId: string
-  whitePlayed: Map<string, Array<WhiteCard>>
+  whitePlayed: WhitePlayed
   whitePlayedAnonymous: Array<Array<WhiteCard>>
   currentBlackCard: BlackCard
   winner: User

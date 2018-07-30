@@ -5,13 +5,13 @@ import PlayArea from './PlayArea.jsx';
 import {Button} from '@material-ui/core';
 import {canPlay, hasPlayed} from '../../../store';
 import {ApiContextWrapper} from '../../../api/context';
-import {WhiteCard, BlackCard, User} from '../../../api/dao';
+import {BlackCard, User, WhitePlayed} from '../../../api/dao';
 import Api from '../../../api/model/api';
 
 interface PlaySelectionProps {
   queuedCardIds: Array<string>
   stage: string
-  whitePlayed: Map<string, Array<WhiteCard>>
+  whitePlayed: WhitePlayed
   currentBlackCard: BlackCard
   user: User
   judgeId: string
