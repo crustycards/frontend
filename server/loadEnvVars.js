@@ -8,7 +8,6 @@ const requiredVars = [
   'GOOGLE_CLIENT_SECRET',
   'OAUTH_ENCRYPTION_PASSWORD',
   'callbackURL',
-  'JWT_SECRET',
   'API_URL',
   'GAME_SERVER_URL',
   'AUTH_SERVER_URL'
@@ -29,7 +28,6 @@ const assertVarsExist = () => {
 
 const defaultVals = {
   NODE_ENV: 'production',
-  JWT_TIMEOUT_SECONDS: 60 * 60 * 24,
   PORT: 80
 };
 
