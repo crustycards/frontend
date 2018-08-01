@@ -5,7 +5,7 @@ const config = {
   messagingSenderId: '203333096571' // TODO - Dynamically insert Firebase sender ID
 };
 
-export const init = (onMessage) => {
+export const init = (onMessage: (payload: any) => void) => {
   firebase.initializeApp(config);
   const messaging = firebase.messaging();
   onMessage && messaging.onMessage(onMessage);

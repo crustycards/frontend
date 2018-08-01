@@ -40,7 +40,7 @@ const gameApi: GameApi = new HttpGameApi(userId);
 const history = createBrowserHistory();
 const store = createStore({history});
 
-initFirebase((payload: any) => console.log(payload))
+initFirebase((payload) => console.log(payload))
   .then((token) => mainApi.linkSessionToFirebase(token));
 
 setInterval(() => {
