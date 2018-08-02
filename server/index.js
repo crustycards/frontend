@@ -28,6 +28,8 @@ const server = new Hapi.Server();
 server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')});
 
 server.register(require('bell'), (err) => {
+  console.error(err);
+
   server.auth.strategy('google', 'bell', {
     provider: 'google',
     password: process.env.OAUTH_ENCRYPTION_PASSWORD,
@@ -53,6 +55,7 @@ server.register(require('bell'), (err) => {
       },
       handler: async (request, reply) => {
         if (!request.auth.isAuthenticated) {
+          console.error(request.auth.error);
           return reply('Authentication failed due to: ' + request.auth.error.message);
         }
 
@@ -67,7 +70,7 @@ server.register(require('bell'), (err) => {
           const session = await Auth.createSession(resUser.id);
           return reply.redirect('/').state(cookieName, session.id);
         } catch (err) {
-          console.log(err);
+          console.error(err);
         }
       }
     }
