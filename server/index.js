@@ -71,6 +71,7 @@ server.register(require('bell'), (err) => {
           return reply.redirect('/').state(cookieName, session.id);
         } catch (err) {
           console.error(err);
+          return reply('Failed to authenticate user:', err);
         }
       }
     }
