@@ -23,6 +23,7 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
 
   for (const i in tempWhiteTexts) {
     // TODO - Don't remove period if card ends in multiple ...'s
+    // TODO - handle underscored wrapped in quotation marks
     if (tempWhiteTexts[i] && tempWhiteTexts[i].endsWith('.')) {
       tempWhiteTexts[i] = tempWhiteTexts[i].slice(0, tempWhiteTexts[i].length - 1);
     }
