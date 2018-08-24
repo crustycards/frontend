@@ -6,7 +6,6 @@ const requiredVars = [
   'GOOGLE_CLIENT_ID',
   'GOOGLE_CLIENT_SECRET',
   'OAUTH_ENCRYPTION_PASSWORD',
-  'callbackURL',
   'API_URL',
   'GAME_SERVER_URL',
   'AUTH_SERVER_URL'
