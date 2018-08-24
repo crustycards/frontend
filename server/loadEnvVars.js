@@ -1,5 +1,4 @@
 const dotEnv = require('dotenv');
-const {getDockerSecrets} = require('get-docker-secrets');
 const assert = require('assert');
 
 const requiredVars = [
@@ -31,10 +30,6 @@ const defaultVals = {
   PORT: 80
 };
 
-const applyDockerSecrets = () => {
-  Object.assign(process.env, getDockerSecrets());
-};
-
 const applyEnvConfig = () => {
   dotEnv.config();
 };
@@ -55,7 +50,6 @@ const applyCommandLineArguments = () => {
 };
 
 module.exports = () => {
-  applyDockerSecrets();
   applyEnvConfig();
   applyCommandLineArguments();
   applyDefaultValues();
