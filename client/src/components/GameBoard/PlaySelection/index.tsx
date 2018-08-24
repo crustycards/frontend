@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import Tray from './Tray.jsx';
-import PlayArea from './PlayArea.jsx';
+import PlayArea from './PlayArea';
 import {Button} from '@material-ui/core';
 import {canPlay, hasPlayed} from '../../../store';
 import {ApiContextWrapper} from '../../../api/context';

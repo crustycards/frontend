@@ -1,9 +1,9 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Button} from '@material-ui/core';
-import PlayerList from '../components/GameBoard/PlayerList.jsx';
+import PlayerList from '../components/GameBoard/PlayerList';
 import PlaySelection from '../components/GameBoard/PlaySelection/index';
-import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard.jsx';
+import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
 import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards.jsx';
 import {NavLink} from 'react-router-dom';

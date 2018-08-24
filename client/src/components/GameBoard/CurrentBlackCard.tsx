@@ -1,9 +1,10 @@
-import React from 'react';
+import * as React from 'react';
 import CAHBlackCard from '../shells/CAHBlackCard.jsx';
 import {Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
+import { BlackCard, WhiteCard, LocalGameData } from '../../api/dao';
 
-const parseCardText = (blackCardText, whiteCardTextList) => {
+const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
   let tempText = blackCardText;
   const tempWhiteTexts = [...whiteCardTextList];
 
@@ -55,7 +56,13 @@ const parseCardText = (blackCardText, whiteCardTextList) => {
   return injectedBlackTextElements;
 };
 
-const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
+interface CurrentBlackCardProps {
+  card: BlackCard
+  hand: WhiteCard[]
+  queuedCardIds: string[]
+}
+
+const CurrentBlackCard = ({card, hand, queuedCardIds}: CurrentBlackCardProps) => (
   card ?
     <CAHBlackCard
       card={{
@@ -69,7 +76,7 @@ const CurrentBlackCard = ({card, hand, queuedCardIds}) => (
     <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING'}} />
 );
 
-const mapStateToProps = ({game}) => ({
+const mapStateToProps = ({game}: {game: LocalGameData}) => ({
   card: game.currentBlackCard,
   hand: game.hand,
   queuedCardIds: game.queuedCardIds

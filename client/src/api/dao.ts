@@ -67,6 +67,10 @@ export class GameData {
   messages: Array<Message>
 }
 
+export class LocalGameData extends GameData {
+  queuedCardIds: Array<string>
+}
+
 export class GameInfo {
   name: string
   playerCount: number

@@ -35,4 +35,4 @@ const CAHBlackCard = (props) => {
   </MuiThemeProvider>;
 };
 
-module.exports = ApiContextWrapper(CAHBlackCard);
+export default ApiContextWrapper(CAHBlackCard);

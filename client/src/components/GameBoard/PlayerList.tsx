@@ -1,10 +1,11 @@
-import React from 'react';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {List, ListItem, ListItemText, ListItemIcon, ListSubheader} from '@material-ui/core';
 import Star from '@material-ui/icons/Star';
 import Check from '@material-ui/icons/Check';
+import { Player, BlackCard, WhitePlayed, LocalGameData } from '../../api/dao';
 
-const styles = {
+const styles: React.CSSProperties = {
   overflowY: 'auto',
   maxHeight: '100%',
   padding: 0
@@ -12,7 +13,7 @@ const styles = {
 
 // TODO - Render game owner uniquely
 
-const renderPlayer = (player, ownerId, judgeId, hasPlayed) => {
+const renderPlayer = (player: Player, ownerId: string, judgeId: string, hasPlayed: boolean) => {
   if (player.id === ownerId && player.id === judgeId) {
     return (
       <ListItem>
@@ -60,7 +61,7 @@ const renderPlayer = (player, ownerId, judgeId, hasPlayed) => {
   }
 };
 
-const renderQueuedPlayer = (player) => (
+const renderQueuedPlayer = (player: Player) => (
   <ListItem disabled>
     <ListItemText
       primary={player.name}
@@ -69,7 +70,16 @@ const renderQueuedPlayer = (player) => (
   </ListItem>
 );
 
-const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, currentBlackCard}) => (
+interface PlayerListProps {
+  players: Player[]
+  queuedPlayers: Player[]
+  ownerId: string
+  judgeId: string
+  whitePlayed: WhitePlayed
+  currentBlackCard: BlackCard
+}
+
+const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, currentBlackCard}: PlayerListProps) => (
   <div className={'panel'}>
     <List subheader={<ListSubheader>Players</ListSubheader>} style={styles}>
       {players.map((player, index) => {
@@ -95,7 +105,7 @@ const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, curr
   </div>
 );
 
-const mapStateToProps = ({game}) => ({
+const mapStateToProps = ({game}: {game: LocalGameData}) => ({
   players: game.players,
   queuedPlayers: game.queuedPlayers,
   ownerId: game.ownerId,
