@@ -6,10 +6,10 @@ module.exports = [
   {
     method: 'GET',
     path: '/api/cardpack/search',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const query = request.query.query;
 
-      reply.proxy({
+      return h.proxy({
         uri: `${apiUrl}/cardpack/search${getQuery(query)}`
       });
     }
@@ -17,10 +17,10 @@ module.exports = [
   {
     method: 'GET',
     path: '/api/cardpack/search/autocomplete',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const query = request.query.query;
 
-      reply.proxy({
+      return h.proxy({
         uri: `${apiUrl}/cardpack/search/autocomplete${getQuery(query)}`
       });
     }
@@ -28,10 +28,10 @@ module.exports = [
   {
     method: 'GET',
     path: '/api/user/search',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const query = request.query.query;
 
-      reply.proxy({
+      return h.proxy({
         uri: `${apiUrl}/user/search${getQuery(query)}`
       });
     }
@@ -39,10 +39,10 @@ module.exports = [
   {
     method: 'GET',
     path: '/api/user/search/autocomplete',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const query = request.query.query;
 
-      reply.proxy({
+      return h.proxy({
         uri: `${apiUrl}/user/search/autocomplete${getQuery(query)}`
       });
     }

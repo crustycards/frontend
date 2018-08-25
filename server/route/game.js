@@ -5,19 +5,19 @@ module.exports = [
   {
     method: 'GET',
     path: '/api/games',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/games`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/games`});
     }
   },
   {
     method: 'DELETE',
     path: '/api/game/players',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const {kickerId, kickeeId} = request.query;
       if (kickerId === undefined || kickeeId === undefined) {
-        reply(Boom.badRequest('Must provide query parameters for kickerId and kickeeId'));
+        throw Boom.badRequest('Must provide query parameters for kickerId and kickeeId');
       } else {
-        reply.proxy({uri: `${gameUrl}/${kickerId}/game/players/${kickeeId}`});
+        return h.proxy({uri: `${gameUrl}/${kickerId}/game/players/${kickeeId}`});
       }
     },
     options: {payload: {parse: false}}
@@ -25,83 +25,83 @@ module.exports = [
   {
     method: 'DELETE',
     path: '/api/game/players/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'GET',
     path: '/api/game/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game`});
     }
   },
   {
     method: 'PUT',
     path: '/api/game/continue/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/continue`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/continue`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'POST',
     path: '/api/game/create/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/create`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/create`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
     path: '/api/game/messages/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/messages`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/messages`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
     path: '/api/game/play/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/play`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/play`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'DELETE',
     path: '/api/game/play/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/play`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/play`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'POST',
     path: '/api/game/start/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/start`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/start`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'POST',
     path: '/api/game/stop/{userId}',
-    handler: (request, reply) => {
-      reply.proxy({uri: `${gameUrl}/{userId}/game/stop`});
+    handler: (request, h) => {
+      return h.proxy({uri: `${gameUrl}/{userId}/game/stop`});
     },
     options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
     path: '/api/game/vote/{userId}',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const {cardId} = request.query;
       if (cardId === undefined) {
-        reply(Boom.badRequest('Must provide query parameter for cardId'));
+        throw Boom.badRequest('Must provide query parameter for cardId');
       } else {
-        reply.proxy({uri: `${gameUrl}/{userId}/game/vote/${cardId}`});
+        return h.proxy({uri: `${gameUrl}/{userId}/game/vote/${cardId}`});
       }
     },
     options: {payload: {parse: false}}
@@ -109,12 +109,12 @@ module.exports = [
   {
     method: 'POST',
     path: '/api/game/join/{userId}',
-    handler: (request, reply) => {
+    handler: (request, h) => {
       const {gameName} = request.query;
       if (gameName === undefined) {
-        reply(Boom.badRequest('Must provide query parameter for gameName'));
+        throw Boom.badRequest('Must provide query parameter for gameName');
       } else {
-        reply.proxy({uri: `${gameUrl}/{userId}/game/${gameName}/join`});
+        return h.proxy({uri: `${gameUrl}/{userId}/game/${gameName}/join`});
       }
     },
     options: {payload: {parse: false}}
