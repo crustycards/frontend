@@ -77,3 +77,9 @@ export class GameInfo {
   maxPlayers: number
   owner: User
 }
+
+export class Session {
+  id: string
+  userId: string
+  createdAt: Date
+}

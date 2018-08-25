@@ -15,4 +15,12 @@ export default class HttpAuthApi implements AuthApi {
     return axios.put(`/api/session?token=${firebaseToken}`)
       .then(() => {});
   }
+
+  getUserSessions() {
+    return axios.get(`/api/sessions?userId=${this.userId}`)
+      .then((response) => (response.data))
+      .then((sessions) => (
+        sessions.map((session: any) => ({...session, createdAt: new Date(session.createdAt)}))
+      ));
+  }
 }

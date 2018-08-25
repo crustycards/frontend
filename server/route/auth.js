@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const authUrl = process.env.AUTH_SERVER_URL;
 
 module.exports = [
@@ -15,5 +16,17 @@ module.exports = [
       }
     },
     options: {payload: {parse: false}}
+  },
+  {
+    method: 'GET',
+    path: '/api/sessions',
+    handler: (request, h) => {
+      const {userId} = request.query;
+      if (userId === undefined) {
+        throw Boom.badRequest('Must provide query parameter for gameName');
+      } else {
+        return h.proxy({uri: `${authUrl}/sessions?userId=${userId}`});
+      }
+    }
   }
 ];
