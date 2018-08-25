@@ -15,7 +15,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/user/{id}`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'GET',
@@ -50,6 +50,6 @@ module.exports = [
         reply.proxy({uri: `${apiUrl}/user/${userId}/friends/${friendId}`});
       }
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   }
 ];

@@ -7,7 +7,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cardpack/{id}`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'GET',
@@ -22,7 +22,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cardpack/{id}`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -30,7 +30,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cardpack/{id}/cards/black`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -38,7 +38,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cardpack/{id}/cards/white`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'DELETE',
@@ -46,7 +46,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cards/black/{id}`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'DELETE',
@@ -54,7 +54,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/cards/white/{id}`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -62,7 +62,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${apiUrl}/{userId}/cardpack`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'GET',

@@ -14,6 +14,6 @@ module.exports = [
         reply.response('Must be logged in to link Firebase token to session').code(400);
       }
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   }
 ];

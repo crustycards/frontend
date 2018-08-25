@@ -20,7 +20,7 @@ module.exports = [
         reply.proxy({uri: `${gameUrl}/${kickerId}/game/players/${kickeeId}`});
       }
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'DELETE',
@@ -28,7 +28,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'GET',
@@ -43,7 +43,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/continue`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'POST',
@@ -51,7 +51,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/create`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -59,7 +59,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/messages`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -67,7 +67,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/play`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'DELETE',
@@ -75,7 +75,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/play`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'POST',
@@ -83,7 +83,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/start`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'POST',
@@ -91,7 +91,7 @@ module.exports = [
     handler: (request, reply) => {
       reply.proxy({uri: `${gameUrl}/{userId}/game/stop`});
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'PUT',
@@ -104,7 +104,7 @@ module.exports = [
         reply.proxy({uri: `${gameUrl}/{userId}/game/vote/${cardId}`});
       }
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   },
   {
     method: 'POST',
@@ -117,6 +117,6 @@ module.exports = [
         reply.proxy({uri: `${gameUrl}/{userId}/game/${gameName}/join`});
       }
     },
-    config: {payload: {parse: false}}
+    options: {payload: {parse: false}}
   }
 ];

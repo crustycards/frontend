@@ -46,7 +46,7 @@ server.register(require('bell'), (err) => {
   server.route({
     method: 'GET',
     path: '/auth/google',
-    config: {
+    options: {
       auth: {
         strategy: 'google',
         mode: 'try'
