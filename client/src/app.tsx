@@ -21,10 +21,12 @@ import {init as initFirebase} from './firebase';
 import {Provider as ApiContextProvider} from './api/context';
 import HttpMainApi from './api/http/httpMainApi';
 import HttpGameApi from './api/http/httpGameApi';
+import HttpAuthApi from './api/http/httpAuthApi';
 import createStore from './store/index';
 import {createBrowserHistory} from 'history';
 import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
+import AuthApi from './api/model/authApi';
 import {setGameState} from './store/modules/game';
 
 declare global {
@@ -37,11 +39,12 @@ const userId = window.__PRELOADED_STATE__.user ? window.__PRELOADED_STATE__.user
 
 const mainApi: MainApi = new HttpMainApi(userId);
 const gameApi: GameApi = new HttpGameApi(userId);
+const authApi: AuthApi = new HttpAuthApi(userId);
 const history = createBrowserHistory();
 const store = createStore({history});
 
 initFirebase((payload) => console.log(payload))
-  .then((token) => mainApi.linkSessionToFirebase(token));
+  .then((token) => authApi.linkSessionToFirebase(token));
 
 setInterval(() => {
   gameApi.getGameState().then((gameState) => {
@@ -59,7 +62,7 @@ export class App extends Component {
       <Provider store={store}>
         <ConnectedRouter history={history}>
           <DragDropContextProvider backend={DragDropHTML5Backend}>
-            <ApiContextProvider value={{main: mainApi, game: gameApi}}>
+            <ApiContextProvider value={{main: mainApi, game: gameApi, auth: authApi}}>
               <div>
                 <AuthRedirector/>
                 <Navbar/>

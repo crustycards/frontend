@@ -16,7 +16,6 @@ interface MainApi {
   autocompleteUserSearch(query: string): Promise<Array<String>>
   searchCardpacks(query: string): Promise<Array<Cardpack>>
   autocompleteCardpackSearch(query: string): Promise<Array<String>>
-  linkSessionToFirebase(firebaseToken: string): Promise<void>
 }
 
 export default MainApi;

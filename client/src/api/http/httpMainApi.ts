@@ -86,9 +86,4 @@ export default class HttpMainApi implements MainApi {
     return axios.get<Array<string>>(`/api/cardpack/search/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
-
-  linkSessionToFirebase(firebaseToken: string) {
-    return axios.put(`/api/session?token=${firebaseToken}`)
-      .then(() => {});
-  }
 }
