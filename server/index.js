@@ -28,8 +28,6 @@ const server = new Hapi.Server();
 server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')});
 
 server.register(require('bell'), (err) => {
-  console.error(err);
-
   server.auth.strategy('google', 'bell', {
     provider: 'google',
     password: process.env.OAUTH_ENCRYPTION_PASSWORD,
