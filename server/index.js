@@ -24,99 +24,108 @@ const api = require('../api');
 const Hapi = require('hapi');
 const {Auth} = require('../api');
 
-const server = new Hapi.Server();
-server.connection({port, host: process.env.HOST || (isProduction ? undefined : 'localhost')});
-
-server.register(require('bell'), (err) => {
-  server.auth.strategy('google', 'bell', {
-    provider: 'google',
-    password: process.env.OAUTH_ENCRYPTION_PASSWORD,
-    clientId: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    location: process.env.OAUTH_REDIRECT_DOMAIN || server.info.uri,
-    isSecure: false
+const startServer = async () => {
+  const server = new Hapi.Server({
+    port,
+    host: process.env.HOST || (isProduction ? undefined : 'localhost')
   });
 
-  server.state(cookieName, {
-    isSecure: false,
-    encoding: 'base64json',
-    path: '/'
-  });
+  await server.register(require('bell'))
+    .then(() => {
+      server.auth.strategy('google', 'bell', {
+        provider: 'google',
+        password: process.env.OAUTH_ENCRYPTION_PASSWORD,
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        location: process.env.OAUTH_REDIRECT_DOMAIN || server.info.uri,
+        isSecure: false
+      });
 
-  server.route({
-    method: 'GET',
-    path: '/auth/google',
-    config: {
-      auth: {
-        strategy: 'google',
-        mode: 'try'
+      server.state(cookieName, {
+        isSecure: false,
+        encoding: 'base64json',
+        path: '/'
+      });
+
+      server.route({
+        method: 'GET',
+        path: '/auth/google',
+        options: {
+          auth: {
+            strategy: 'google',
+            mode: 'try'
+          },
+          handler: async (request, h) => {
+            if (!request.auth.isAuthenticated) {
+              console.error(request.auth.error);
+              return `Authentication failed due to: ${request.auth.error.message}`;
+            }
+
+            // Account lookup/registration
+            const userData = {
+              name: request.auth.credentials.profile.displayName,
+              oAuthId: request.auth.credentials.profile.id,
+              oAuthProvider: request.auth.credentials.provider
+            };
+            try {
+              const resUser = await api.User.findOrCreate(userData);
+              const session = await Auth.createSession(resUser.id);
+              return h.redirect('/').state(cookieName, session.id);
+            } catch (err) {
+              console.error(err);
+              return 'Failed to authenticate user:', err;
+            }
+          }
+        }
+      });
+    });
+
+    server.route([
+      {
+        method: 'GET',
+        path: '/{any*}',
+        handler: async (request, h) => {
+          try {
+            const session = await Auth.getSession(request.state[cookieName]);
+            const user = await api.User.get({id: session.userId});
+            return generateScript({user});
+          } catch (err) {
+            return generateScript();
+          }
+        }
       },
-      handler: async (request, reply) => {
-        if (!request.auth.isAuthenticated) {
-          console.error(request.auth.error);
-          return reply('Authentication failed due to: ' + request.auth.error.message);
+      {
+        method: 'GET',
+        path: '/bundle.js',
+        handler: (request, h) => {
+          return bundle;
         }
-
-        // Account lookup/registration
-        const userData = {
-          name: request.auth.credentials.profile.displayName,
-          oAuthId: request.auth.credentials.profile.id,
-          oAuthProvider: request.auth.credentials.provider
-        };
-        try {
-          const resUser = await api.User.findOrCreate(userData);
-          const session = await Auth.createSession(resUser.id);
-          return reply.redirect('/').state(cookieName, session.id);
-        } catch (err) {
-          console.error(err);
-          return reply('Failed to authenticate user:', err);
+      },
+      {
+        method: 'GET',
+        path: '/logout',
+        handler: async (request, h) => {
+          await Auth.deleteSession(request.state[cookieName]);
+          return h.redirect('/login').unstate(cookieName);
+        }
+      },
+      {
+        method: 'GET',
+        path: '/firebase-messaging-sw.js',
+        handler: (request, h) => {
+          return h.response(serviceWorker).header('Content-Type', 'application/javascript');
         }
       }
-    }
-  });
-});
+    ]);
 
-server.route([
-  {
-    method: 'GET',
-    path: '/{any*}',
-    handler: async (request, reply) => {
-      try {
-        const session = await Auth.getSession(request.state[cookieName]);
-        const user = await api.User.get({id: session.userId});
-        return reply(generateScript({user}));
-      } catch (err) {
-        return reply(generateScript());
-      }
-    }
-  },
-  {
-    method: 'GET',
-    path: '/bundle.js',
-    handler: (request, reply) => {
-      reply(bundle);
-    }
-  },
-  {
-    method: 'GET',
-    path: '/logout',
-    handler: async (request, reply) => {
-      await Auth.deleteSession(request.state[cookieName]);
-      reply.redirect('/login').unstate(cookieName);
-    }
-  },
-  {
-    method: 'GET',
-    path: '/firebase-messaging-sw.js',
-    handler: (request, reply) => {
-      reply(serviceWorker).header('Content-Type', 'application/javascript');
-    }
-  }
-]);
+    await server.register({plugin: require('h2o2')});
+    server.route(require('./route'));
 
-server.register({register: require('h2o2')});
-server.route(require('./route'));
+    await server.start().then(() => {
+      console.log(`Server is running on port ${port}`);
+    });
 
-server.start().then(() => {
- console.log(`Server is running on port ${port}`);
-});
+    return server;
+};
+
+startServer();
