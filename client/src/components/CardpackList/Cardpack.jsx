@@ -10,7 +10,7 @@ const Cardpack = (props) => (
   <Card className='card'>
     <CardHeader
       title={props.cardpack.name}
-      subheader={'Created ' + time.stringify(props.cardpack.createdAt, {relativeTime: true})}
+      subheader={`Created ${time.stringify(props.cardpack.createdAt, {relativeTime: true})}`}
     />
     <CardActions>
       <NavLink to={`/cardpack?id=${props.cardpack.id}`} style={navItemStyle}>
