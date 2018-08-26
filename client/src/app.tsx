@@ -8,7 +8,7 @@ import Login from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx';
 import Game from './pages/Game';
 import GameList from './pages/GameList.jsx';
-import Settings from './pages/Settings.jsx';
+import Settings from './pages/Settings';
 import Navbar from './components/Navbar.jsx';
 import StatusBar from './components/StatusBar.jsx';
 import './styles/index.scss';
