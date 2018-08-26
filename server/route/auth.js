@@ -23,10 +23,23 @@ module.exports = [
     handler: (request, h) => {
       const {userId} = request.query;
       if (userId === undefined) {
-        throw Boom.badRequest('Must provide query parameter for gameName');
+        throw Boom.badRequest('Must provide query parameter for userId');
       } else {
         return h.proxy({uri: `${authUrl}/sessions?userId=${userId}`});
       }
     }
+  },
+  {
+    method: 'DELETE',
+    path: '/api/session',
+    handler: (request, h) => {
+      const {sessionId} = request.query;
+      if (sessionId === undefined) {
+        throw Boom.badRequest('Must provide query parameter for sessionId');
+      } else {
+        return h.proxy({uri: `${authUrl}/session?sessionId=${sessionId}`});
+      }
+    },
+    options: {payload: {parse: false}}
   }
 ];

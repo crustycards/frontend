@@ -23,4 +23,9 @@ export default class HttpAuthApi implements AuthApi {
         sessions.map((session: any) => ({...session, createdAt: new Date(session.createdAt)}))
       ));
   }
+
+  deleteSession(sessionId: string) {
+    return axios.delete(`/api/session?sessionId=${sessionId}`)
+      .then(() => {});
+  }
 }

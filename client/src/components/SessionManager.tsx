@@ -9,6 +9,9 @@ import {
   Typography,
   Theme,
   Card,
+  CardHeader,
+  CardActions,
+  Button,
   List,
   ListItem
 } from '@material-ui/core';
@@ -17,6 +20,7 @@ import {ApiContextWrapper} from '../api/context';
 import { Session } from '../api/dao';
 import * as _ from 'underscore';
 import Api from '../api/model/api';
+import * as time from 'time-converter';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -65,6 +69,11 @@ class SessionManager extends Component<SessionManagerProps, SessionManagerState>
 
   firstLoad() {}
 
+  async deleteSession(sessionId: string) {
+    await this.props.api.auth.deleteSession(sessionId)
+    this.setState({sessions: this.state.sessions.filter((session) => session.id !== sessionId)});
+  }
+
   render() {
     return (
       <div className={this.props.classes.root}>
@@ -79,7 +88,21 @@ class SessionManager extends Component<SessionManagerProps, SessionManagerState>
               <List>
                 {
                   this.state.sessions.map((session, index) => (
-                    <ListItem><Card key={index} className={this.props.classes.card}>{session.id}</Card></ListItem>
+                    <ListItem key={index}>
+                      <Card
+                        className={this.props.classes.card}
+                      >
+                        <CardHeader
+                          title={session.id}
+                          subheader={`Created ${time.stringify(session.createdAt, {relativeTime: true})}`}
+                        />
+                        <CardActions>
+                          <Button onClick={() => this.deleteSession(session.id)}>
+                            Delete
+                          </Button>
+                        </CardActions>
+                      </Card>
+                    </ListItem>
                   ))
                 }
               </List>
