@@ -1,4 +1,4 @@
-require('./loadEnvVars')();
+require('./loadEnvVars.ts')();
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = parseInt(process.env.PORT);
