@@ -12,14 +12,19 @@ const requiredVars = [
 ];
 
 const assertVarsExist = () => {
-  const missingVars = requiredVars.filter((envVar) => (!process.env[envVar]));
+  let missingVars = [];
+  requiredVars.forEach((varName) => {
+    if (!process.env[varName]) {
+      missingVars.push(varName);
+    }
+  });
 
   if (missingVars.length) {
     throw new Error(`Missing the following environment variables: ${JSON.stringify(missingVars)}`);
   }
 };
 
-const defaultVals: any = {
+const defaultVals = {
   NODE_ENV: 'production',
   PORT: 80
 };
