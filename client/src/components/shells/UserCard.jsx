@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
+import {Link} from 'react-router-dom';
 
 const UserCard = (props) => (
   <Card className='card'>
@@ -25,6 +26,11 @@ const UserCard = (props) => (
           Unfriend
         </Button>
       }
+      <Button>
+        <Link to={`/user?id=${props.user.id}`}>
+          View Profile
+        </Link>
+      </Button>
     </CardActions>
   </Card>
 );
