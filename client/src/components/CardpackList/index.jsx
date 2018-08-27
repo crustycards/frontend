@@ -1,5 +1,5 @@
 import React from 'react';
-import Cardpack from './Cardpack.jsx';
+import Cardpack from './Cardpack';
 
 const CardpackList = (props) => (
   <div>

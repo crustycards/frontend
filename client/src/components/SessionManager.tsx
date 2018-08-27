@@ -20,7 +20,7 @@ import {ApiContextWrapper} from '../api/context';
 import { Session } from '../api/dao';
 import * as _ from 'underscore';
 import Api from '../api/model/api';
-import * as time from 'time-converter';
+import {convertTime} from '../helpers/time';
 
 const styles = (theme: Theme) => ({
   root: {
@@ -94,7 +94,7 @@ class SessionManager extends Component<SessionManagerProps, SessionManagerState>
                       >
                         <CardHeader
                           title={session.id}
-                          subheader={`Created ${time.stringify(session.createdAt, {relativeTime: true})}`}
+                          subheader={`Created ${convertTime(session.createdAt)}`}
                         />
                         <CardActions>
                           <Button onClick={() => this.deleteSession(session.id)}>
