@@ -12,6 +12,10 @@ export default class HttpMainApi implements MainApi {
     _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
+  private parseCardpack(data: any): Cardpack {
+    return {...data, createdAt: new Date(data.createdAt)};
+  }
+
   getUser(id: string = this.userId) {
     return axios.get<User>(`/api/user/${id}`)
       .then((res) => res.data);
@@ -34,17 +38,17 @@ export default class HttpMainApi implements MainApi {
 
   createCardpack(name: string) {
     return axios.put<Cardpack>(`/api/cardpacks/${this.userId}`, {name})
-      .then((res) => res.data);
+      .then((res) => this.parseCardpack(res.data));
   }
 
   getCardpack(id: string) {
     return axios.get<Cardpack>(`/api/cardpack/${id}`)
-      .then((res) => res.data);
+      .then((res) => this.parseCardpack(res.data));
   }
 
   getCardpacksByUser(userId: string = this.userId) {
     return axios.get<Array<Cardpack>>(`/api/cardpacks/${userId}`)
-      .then((res) => res.data);
+      .then((res) => res.data.map(this.parseCardpack));
   }
 
   createWhiteCards(cardpackId: string, cards: Array<JsonWhiteCard>) {
@@ -79,7 +83,7 @@ export default class HttpMainApi implements MainApi {
 
   searchCardpacks(query: string) {
     return axios.get<Array<Cardpack>>(`/api/cardpack/search?query=${query}`)
-      .then((res) => res.data);
+      .then((res) => res.data.map(this.parseCardpack));
   }
 
   autocompleteCardpackSearch(query: string) {
