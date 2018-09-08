@@ -1,13 +1,13 @@
-export const SET_GAME_STATE = 'game/SET_GAME_STATE';
-export const QUEUE_CARD = 'game/QUEUE_CARD';
-export const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
-export const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
-export const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
-export const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
-export const SET_HAND = 'game/SET_HAND';
-export const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
-export const ADD_PLAYER = 'game/ADD_PLAYER';
-export const SET_PLAYED_CARDS = 'game/SET_PLAYED_CARDS';
+const SET_GAME_STATE = 'game/SET_GAME_STATE';
+const QUEUE_CARD = 'game/QUEUE_CARD';
+const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
+const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
+const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
+const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
+const SET_HAND = 'game/SET_HAND';
+const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
+const ADD_PLAYER = 'game/ADD_PLAYER';
+const SET_PLAYED_CARDS = 'game/SET_PLAYED_CARDS';
 
 const initialState = null;
 

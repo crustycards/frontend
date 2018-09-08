@@ -1,6 +1,6 @@
-export const ADD_GAME = 'games/ADD_GAME';
-export const REMOVE_GAME = 'games/REMOVE_GAME';
-export const SET_GAMES = 'games/SET_GAMES';
+const ADD_GAME = 'games/ADD_GAME';
+const REMOVE_GAME = 'games/REMOVE_GAME';
+const SET_GAMES = 'games/SET_GAMES';
 
 const initialState = [];
 
