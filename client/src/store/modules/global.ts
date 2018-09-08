@@ -1,3 +1,5 @@
+import { User } from "../../api/dao";
+
 const OPEN_NAVBAR = 'global/OPEN_NAVBAR';
 const CLOSE_NAVBAR = 'global/CLOSE_NAVBAR';
 const SET_NAVBAR = 'global/SET_NAVBAR';
@@ -6,14 +8,21 @@ const HIDE_STATUS_MESSAGE = 'global/HIDE_STATUS_MESSAGE';
 
 const preloadedState = window.__PRELOADED_STATE__;
 
-const initialState = {
+interface ReduxGlobalState {
+  user: User
+  navbarOpen: boolean
+  statusMessage: string
+  statusVisible: boolean
+}
+
+const initialState: ReduxGlobalState = {
   user: preloadedState ? preloadedState.user : null,
   navbarOpen: false,
   statusMessage: '',
   statusVisible: false
 };
 
-export default (state = initialState, {type, payload}) => {
+export default (state: ReduxGlobalState = initialState, {type, payload}: {type: string, payload: any}): ReduxGlobalState => {
   switch (type) {
     case OPEN_NAVBAR:
       return {
@@ -47,33 +56,33 @@ export default (state = initialState, {type, payload}) => {
   }
 };
 
-export const openNavbar = (payload) => {
+export const openNavbar = () => {
   return {
     type: OPEN_NAVBAR
   };
 };
 
-export const closeNavbar = (payload) => {
+export const closeNavbar = () => {
   return {
     type: CLOSE_NAVBAR
   };
 };
 
-export const setNavbar = (payload) => {
+export const setNavbar = (isOpen: boolean) => {
   return {
     type: SET_NAVBAR,
-    payload
+    payload: isOpen
   };
 };
 
-export const showStatusMessage = (payload) => {
+export const showStatusMessage = (message: string) => {
   return {
     type: SHOW_STATUS_MESSAGE,
-    payload
+    payload: message
   };
 };
 
-export const hideStatusMessage = (payload) => {
+export const hideStatusMessage = () => {
   return {
     type: HIDE_STATUS_MESSAGE
   };

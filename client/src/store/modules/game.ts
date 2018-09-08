@@ -1,17 +1,17 @@
+import { GameData, WhiteCard } from "../../api/dao";
+
 const SET_GAME_STATE = 'game/SET_GAME_STATE';
 const QUEUE_CARD = 'game/QUEUE_CARD';
 const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
-const SET_BLACK_CARD = 'game/SET_BLACK_CARD';
-const SET_WHITE_CARDS = 'game/SET_WHITE_CARDS';
-const ADD_WHITE_CARD = 'game/ADD_WHITE_CARD';
 const SET_HAND = 'game/SET_HAND';
 const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
 const ADD_PLAYER = 'game/ADD_PLAYER';
-const SET_PLAYED_CARDS = 'game/SET_PLAYED_CARDS';
 
-const initialState = null;
+interface ReduxGameData extends GameData {
+  queuedCardIds: string[]
+}
 
-export default (state = initialState, {type, payload}) => {
+export default (state: ReduxGameData = null, {type, payload}: {type: string, payload: any}): ReduxGameData => {
   let queuedCardIds;
   let cardIdQueueIndex;
   let queueAlreadyContainsCardId;
@@ -26,7 +26,7 @@ export default (state = initialState, {type, payload}) => {
         state === null
         || state.queuedCardIds.length !== payload.currentBlackCard.answerFields
         || !state.queuedCardIds.reduce(
-          (acc, id) => (acc && (id === null || payload.hand.map((card) => card.id).includes(id))),
+          (acc, id) => (acc && (id === null || payload.hand.map((card: WhiteCard) => card.id).includes(id))),
           true
         )
       ) {
@@ -76,21 +76,6 @@ export default (state = initialState, {type, payload}) => {
       queuedCardIds = [...state.queuedCardIds];
       queuedCardIds[queuedCardIds.findIndex((id) => id === payload)] = null;
       return {...state, queuedCardIds};
-    case SET_BLACK_CARD:
-      return {
-        ...state,
-        blackCard: payload
-      };
-    case SET_WHITE_CARDS:
-      return {
-        ...state,
-        whiteCards: payload
-      };
-    case ADD_WHITE_CARD:
-      return {
-        ...state,
-        whiteCards: state.whiteCards.concat([payload])
-      };
     case SET_HAND:
       return {
         ...state,
@@ -106,33 +91,22 @@ export default (state = initialState, {type, payload}) => {
         ...state,
         players: state.players.concat([payload])
       };
-    case SET_PLAYED_CARDS:
-      return {
-        ...state,
-        hand: state.hand.filter((c) => !payload.includes(c.id))
-      // TODO - Add white cards to played cards object
-      };
     default:
       return state;
   }
 };
 
-export const setGameState = (payload) => ({
+export const setGameState = (payload: GameData) => ({
   type: SET_GAME_STATE,
   payload
 });
 
-export const queueCard = (payload) => ({
+export const queueCard = (payload: {index: number, cardId: string}) => ({
   type: QUEUE_CARD,
   payload
 });
 
-export const unqueueCard = (payload) => ({
+export const unqueueCard = (cardId: string) => ({
   type: UNQUEUE_CARD,
-  payload
-});
-
-export const setPlayedCards = (payload) => ({
-  type: SET_PLAYED_CARDS,
-  payload
+  payload: cardId
 });

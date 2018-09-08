@@ -1,7 +1,7 @@
 import {combineReducers} from 'redux';
-import global from './global.js';
-import game from './game.js';
-import games from './games.js';
+import global from './global';
+import game from './game';
+import games from './games';
 import {reducer as formReducer} from 'redux-form';
 
 export default combineReducers({
