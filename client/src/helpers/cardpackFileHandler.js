@@ -1,4 +1,4 @@
-module.exports.parse = (string) => {
+export const parse = (string) => {
   const cardpack = JSON.parse(string);
 
   if (typeof cardpack.whiteCards !== 'object' || cardpack.whiteCards.constructor !== Array) {
@@ -21,7 +21,7 @@ module.exports.parse = (string) => {
   return {whiteCards, blackCards};
 };
 
-module.exports.stringify = ({whiteCards, blackCards}) => {
+export const stringify = ({whiteCards, blackCards}) => {
   if (typeof whiteCards !== 'object' || whiteCards.constructor !== Array) {
     throw new Error('White cards must be an array');
   }

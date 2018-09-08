@@ -96,4 +96,4 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
   }
 }
 
-module.exports = CardAdder;
+export default CardAdder;
