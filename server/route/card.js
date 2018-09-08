@@ -1,3 +1,4 @@
+const Boom = require('boom');
 const apiUrl = process.env.API_URL;
 
 module.exports = [
@@ -69,6 +70,37 @@ module.exports = [
     path: '/api/cardpacks/{id}',
     handler: (request, h) => {
       return h.proxy({uri: `${apiUrl}/{id}/cardpacks`});
+    }
+  },
+  {
+    method: ['PUT', 'DELETE'],
+    path: '/api/cardpacks/favorite/{userId}',
+    handler: (request, h) => {
+      const {cardpackId} = request.query;
+      if (!cardpackId) {
+        throw Boom.badRequest('Must provide query parameter for sessionId');
+      }
+      return h.proxy({uri: `${apiUrl}/user/{userId}/cardpacks/favorite?cardpackId=${cardpackId}`});
+    },
+    options: {payload: {parse: false}}
+  },
+  {
+    method: 'GET',
+    path: '/api/cardpacks/favorite/{userId}',
+    handler: (request, h) => {
+      return h.proxy({uri: `${apiUrl}/user/{userId}/cardpacks/favorite`});
+    }
+  },
+  {
+    method: 'GET',
+    path: '/api/cardpacks/favorited',
+    handler: (request, h) => {
+      const {userId, cardpackId} = request.query;
+      if (userId && cardpackId) {
+        return h.proxy({uri: `${apiUrl}/user/${userId}/cardpacks/favorite/${cardpackId}`});
+      } else {
+        throw Boom.badRequest('Must provide userId and cardpackId query parameters');
+      }
     }
   }
 ];

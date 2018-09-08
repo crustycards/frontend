@@ -1,7 +1,13 @@
-import React from 'react';
+import * as React from 'react';
 import Cardpack from './Cardpack';
+import { Cardpack as CardpackDao } from '../../api/dao';
 
-const CardpackList = (props) => (
+interface CardpackListProps {
+  cardpacks: Array<CardpackDao>
+  canDelete: boolean
+}
+
+const CardpackList = (props: CardpackListProps) => (
   <div>
     {props.cardpacks.map((cardpack, index) => (
       <Cardpack
