@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, LinearProgress, CircularProgress, Tab, Tabs} from '@material-ui/core';
-import CardAdder from './CardAdder.jsx';
+import CardAdder from './CardAdder.tsx';
 import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
 import CAHBlackCard from '../shells/CAHBlackCard.jsx';
 import cardpackFileHandler from '../../helpers/cardpackFileHandler';

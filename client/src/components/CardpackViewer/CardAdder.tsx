@@ -1,31 +1,50 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {FormControl, InputLabel, TextField, Select, Button, MenuItem} from '@material-ui/core';
 
-class CardAdder extends Component {
-  constructor(props) {
+interface GenericCardData {
+  text: string
+  answerFields: number
+  type: string
+}
+
+interface CardAdderProps {
+  type: string
+  addCard(cardData: GenericCardData): boolean
+}
+
+interface CardAdderState {
+  newCardName: string
+  newCardAnswerFields: number
+}
+
+class CardAdder extends Component<CardAdderProps, CardAdderState> {
+  constructor(props: CardAdderProps) {
     super(props);
+
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.handleInputChange = this.handleInputChange.bind(this);
     this.changeAnswerField = this.changeAnswerField.bind(this);
     this.addCurrentCard = this.addCurrentCard.bind(this);
+
     this.state = {
       newCardName: '',
       newCardAnswerFields: 1
     };
   }
 
-  handleKeyPress(e) {
+  handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
       this.addCurrentCard();
     }
   }
 
-  handleInputChange(property, e) {
-    this.setState({[property]: e.target.value});
+  handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({newCardName: e.target.value});
   }
 
-  changeAnswerField(e) {
-    this.setState({newCardAnswerFields: e.target.value});
+  changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({newCardAnswerFields: parseInt(e.target.value)});
   }
 
   addCurrentCard() {
@@ -48,7 +67,7 @@ class CardAdder extends Component {
             label='Name'
             type='text'
             value={this.state.newCardName}
-            onChange={this.handleInputChange.bind(this, 'newCardName')}
+            onChange={this.handleInputChange}
           />
           <Button
             disabled={!this.state.newCardName}
