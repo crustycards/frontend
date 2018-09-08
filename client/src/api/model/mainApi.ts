@@ -16,6 +16,10 @@ interface MainApi {
   autocompleteUserSearch(query: string): Promise<Array<String>>
   searchCardpacks(query: string): Promise<Array<Cardpack>>
   autocompleteCardpackSearch(query: string): Promise<Array<String>>
+  favoriteCardpack(cardpackId: string): Promise<void>
+  unfavoriteCardpack(cardpackId: string): Promise<void>
+  getFavoritedCardpacks(userId?: string): Promise<Array<Cardpack>>
+  cardpackIsFavorited(cardpackId: string): Promise<boolean>
 }
 
 export default MainApi;

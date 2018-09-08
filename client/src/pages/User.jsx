@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import queryString from 'query-string';
 import {CircularProgress} from '@material-ui/core';
-import CardpackList from '../components/CardpackList/index.jsx';
+import CardpackList from '../components/CardpackList/index.tsx';
 import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../api/context';

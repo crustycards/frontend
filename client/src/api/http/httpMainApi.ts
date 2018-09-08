@@ -90,4 +90,22 @@ export default class HttpMainApi implements MainApi {
     return axios.get<Array<string>>(`/api/cardpack/search/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
+
+  async favoriteCardpack(cardpackId: string) {
+    await axios.put(`/api/cardpacks/favorite/${this.userId}?cardpackId=${cardpackId}`);
+  }
+
+  async unfavoriteCardpack(cardpackId: string) {
+    await axios.delete(`/api/cardpacks/favorite/${this.userId}?cardpackId=${cardpackId}`);
+  }
+
+  getFavoritedCardpacks(userId: string = this.userId) {
+    return axios.get<Array<Cardpack>>(`/api/cardpacks/favorite/${userId}`)
+      .then((res) => res.data.map(this.parseCardpack));
+  }
+
+  async cardpackIsFavorited(cardpackId: string) {
+    const res = await axios.get(`/api/cardpacks/favorited?userId=${this.userId}&cardpackId=${cardpackId}`);
+    return res.data;
+  }
 }

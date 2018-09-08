@@ -28,6 +28,7 @@ import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
 import AuthApi from './api/model/authApi';
 import {setGameState} from './store/modules/game';
+import {bindGameApi} from './api/reduxBind';
 
 declare global {
   interface Window {
@@ -43,13 +44,13 @@ const authApi: AuthApi = new HttpAuthApi(userId);
 const history = createBrowserHistory();
 const store = createStore({history});
 
+bindGameApi(gameApi, store);
+
 initFirebase((payload) => console.log(payload))
   .then((token) => authApi.linkSessionToFirebase(token));
 
 setInterval(() => {
-  gameApi.getGameState().then((gameState) => {
-    store.dispatch(setGameState(gameState))
-  })
+  gameApi.getGameState();
 }, 500); // TODO - Find a way to remove this intermittent polling
 
 export class App extends Component {
