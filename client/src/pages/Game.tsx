@@ -5,7 +5,7 @@ import PlayerList from '../components/GameBoard/PlayerList';
 import PlaySelection from '../components/GameBoard/PlaySelection/index';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
 import MessageBox from '../components/GameBoard/MessageBox';
-import PlayedCards from '../components/GameBoard/PlayedCards.jsx';
+import PlayedCards from '../components/GameBoard/PlayedCards';
 import {NavLink} from 'react-router-dom';
 import {GameData, User} from '../api/dao';
 import Api from '../api/model/api';

@@ -1,20 +1,36 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {Button, LinearProgress, CircularProgress, Tab, Tabs} from '@material-ui/core';
-import CardAdder from './CardAdder.tsx';
-import CAHWhiteCard from '../shells/CAHWhiteCard.jsx';
-import CAHBlackCard from '../shells/CAHBlackCard.jsx';
-import cardpackFileHandler from '../../helpers/cardpackFileHandler';
+import CardAdder from './CardAdder';
+import CAHWhiteCard from '../shells/CAHWhiteCard';
+import CAHBlackCard from '../shells/CAHBlackCard';
+import {stringify, parse} from '../../helpers/cardpackFileHandler';
 import TabbedList from '../TabbedList.jsx';
 import SwipeableViews from 'react-swipeable-views';
 import {upload, convertToText} from '../../helpers/fileUpload';
 import {ApiContextWrapper} from '../../api/context';
+import {Cardpack, User, JsonBlackCard, JsonWhiteCard} from '../../api/dao';
+import Api from '../../api/model/api';
 
-class CardpackViewer extends Component {
-  constructor(props) {
+interface CardpackViewerProps {
+  api: Api
+  cardpackId: string
+  user: User
+}
+
+interface CardpackViewerState {
+  newCardName: string
+  newCardType: string // TODO - Change to ENUM
+  newCardAnswerFields: number
+  cardpack: Cardpack,
+  slideIndex: number
+  isUploading: boolean
+}
+
+class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState> {
+  constructor(props: CardpackViewerProps) {
     super(props);
-    this.numCardsOnTab = 20;
-    this.cardpackId = this.props.cardpackId;
     this.addWhiteCards = this.addWhiteCards.bind(this);
     this.addBlackCards = this.addBlackCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
@@ -32,7 +48,7 @@ class CardpackViewer extends Component {
   }
 
   fetchCurrentCardpack() {
-    this.props.api.main.getCardpack(this.cardpackId)
+    this.props.api.main.getCardpack(this.props.cardpackId)
       .then((cardpack) => {
         this.setState({cardpack});
       })
@@ -41,8 +57,8 @@ class CardpackViewer extends Component {
       });
   }
 
-  addWhiteCards(cards) {
-    return this.props.api.main.createWhiteCards(this.cardpackId, cards).then((createdCards) => {
+  addWhiteCards(cards: JsonWhiteCard[]) {
+    return this.props.api.main.createWhiteCards(this.props.cardpackId, cards).then((createdCards) => {
       this.setState({
         cardpack: {
           ...this.state.cardpack,
@@ -56,8 +72,8 @@ class CardpackViewer extends Component {
     });
   }
 
-  addBlackCards(cards) {
-    return this.props.api.main.createBlackCards(this.cardpackId, cards).then((createdCards) => {
+  addBlackCards(cards: JsonBlackCard[]) {
+    return this.props.api.main.createBlackCards(this.state.cardpack.id, cards).then((createdCards) => {
       this.setState({
         cardpack: {
           ...this.state.cardpack,
@@ -72,8 +88,8 @@ class CardpackViewer extends Component {
   }
 
   downloadStringifiedCards() {
-    let download = (filename, text) => {
-      let element = document.createElement('a');
+    const download = (filename: string, text: string) => {
+      const element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
       element.setAttribute('download', filename);
       element.style.display = 'none';
@@ -82,7 +98,7 @@ class CardpackViewer extends Component {
       document.body.removeChild(element);
     };
     // Start file download.
-    download(this.state.cardpack.name, cardpackFileHandler.stringify({
+    download(this.state.cardpack.name, stringify({
       whiteCards: this.state.cardpack.whiteCards,
       blackCards: this.state.cardpack.blackCards
     }));
@@ -93,7 +109,7 @@ class CardpackViewer extends Component {
 
     if (fileTexts) {
       const {whiteCards, blackCards} = fileTexts.map((file) => file.text).reduce((acc, text) => {
-        const {whiteCards, blackCards} = cardpackFileHandler.parse(text);
+        const {whiteCards, blackCards} = parse(text);
         return {
           whiteCards: whiteCards.concat(acc.whiteCards),
           blackCards: blackCards.concat(acc.blackCards)
@@ -109,7 +125,7 @@ class CardpackViewer extends Component {
     }
   }
 
-  handleTabChange(_, value) {
+  handleTabChange(_: any, value: number) {
     this.setState({slideIndex: value});
   }
 
@@ -167,8 +183,8 @@ class CardpackViewer extends Component {
                 <Tab label='Black Cards' />
               </Tabs>
               <SwipeableViews
-                index={this.state.slideIndex}
                 onChangeIndex={this.handleTabChange}
+                index={this.state.slideIndex}
               >
                 <TabbedList>
                   {this.state.cardpack.whiteCards.map((card, index) =>
@@ -219,6 +235,6 @@ class CardpackViewer extends Component {
 
 const ContextLinkedCardpackViewer = ApiContextWrapper(CardpackViewer);
 
-const mapStateToProps = ({global: {user}}) => ({user});
+const mapStateToProps = ({global: {user}}: any) => ({user});
 
 export default connect(mapStateToProps)(ContextLinkedCardpackViewer);

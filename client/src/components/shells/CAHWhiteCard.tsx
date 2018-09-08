@@ -1,8 +1,17 @@
-import React from 'react';
+import * as React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
+import Api from '../../api/model/api';
+import { WhiteCard } from '../../api/dao';
 
-const CAHWhiteCard = (props) => {
+interface CAHWhiteCardProps {
+  api: Api
+  card: WhiteCard
+  isOwner?: boolean
+  onDelete(cardId: string): void
+}
+
+const CAHWhiteCard = (props: CAHWhiteCardProps) => {
   const removeCard = () => {
     return props.api.main.deleteWhiteCard(props.card.id).then((data) => {
       if (props.onDelete) {
@@ -28,4 +37,4 @@ const CAHWhiteCard = (props) => {
   );
 };
 
-module.exports = ApiContextWrapper(CAHWhiteCard);
+export default ApiContextWrapper(CAHWhiteCard);

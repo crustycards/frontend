@@ -1,5 +1,5 @@
 import React from 'react';
-import CardpackViewer from '../components/CardpackViewer/index.jsx';
+import CardpackViewer from '../components/CardpackViewer/index.tsx';
 import queryString from 'query-string';
 
 const Cardpack = (props) => (

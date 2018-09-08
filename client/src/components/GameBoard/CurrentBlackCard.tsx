@@ -1,5 +1,5 @@
 import * as React from 'react';
-import CAHBlackCard from '../shells/CAHBlackCard.jsx';
+import CAHBlackCard from '../shells/CAHBlackCard';
 import {Typography} from '@material-ui/core';
 import {connect} from 'react-redux';
 import { BlackCard, WhiteCard, LocalGameData } from '../../api/dao';
@@ -73,7 +73,7 @@ const CurrentBlackCard = ({card, hand, queuedCardIds}: CurrentBlackCardProps) =>
       }}
     />
     :
-    <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING'}} />
+    <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING', id: null, answerFields: null, cardpackId: null}} />
 );
 
 const mapStateToProps = ({game}: {game: LocalGameData}) => ({

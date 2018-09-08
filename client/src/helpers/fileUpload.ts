@@ -1,6 +1,19 @@
 import fileSelect from 'file-select';
 
-module.exports.upload = ({type, multiple = false}) => {
+interface UploadArg {
+  type: string
+  multiple: boolean
+}
+
+declare global {
+  interface Window {
+    File?: any
+    FileReader?: any
+    FileList?: any
+  }
+}
+
+export const upload = ({type, multiple = false}: UploadArg): Promise<File | FileList> => {
   if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
     return Promise.reject(new Error('Your browser does not support file uploading'));
   }
@@ -13,17 +26,17 @@ module.exports.upload = ({type, multiple = false}) => {
 
 // TODO - Abstract away logic from FileList and File in convertToText
 
-module.exports.convertToText = (data) => {
+export const convertToText = (data: File | FileList): Promise<{name: string, text: string}[]> => {
   if (data === undefined || data === null) {
     return undefined;
   }
 
   if (data.constructor === FileList) {
     return Promise.all(
-      Array.from(data).map((file) => (
-        new Promise((resolve, reject) => {
+      Array.from(data as FileList).map((file) => (
+        new Promise<{name: string, text: string}>((resolve, reject) => {
           const reader = new FileReader();
-          reader.onload = (result) => {
+          reader.onload = (result: any) => { // TODO - Remove 'any'
             const text = result.currentTarget.result;
             resolve({name: file.name, text});
           };
@@ -35,12 +48,12 @@ module.exports.convertToText = (data) => {
   }
 
   if (data.constructor === File) {
-    const file = data;
+    const file = data as File;
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
-      reader.onload = (result) => {
+      reader.onload = (result: any) => { // TODO - Remove 'any'
         const text = result.currentTarget.result;
-        resolve({name: file.name, text});
+        resolve([{name: file.name, text}]);
       };
       reader.onerror = (err) => reject(err);
       reader.readAsText(file);

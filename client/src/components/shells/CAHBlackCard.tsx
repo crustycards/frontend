@@ -1,11 +1,25 @@
-import React from 'react';
+import * as React from 'react';
 import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 import {MuiThemeProvider, createMuiTheme} from '@material-ui/core/styles';
 import {ApiContextWrapper} from '../../api/context';
+import Api from '../../api/model/api';
+import { BlackCard } from '../../api/dao';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 
-const CAHBlackCard = (props) => {
+interface DisplayableBlackCard extends BlackCard {
+  text: any // TODO - Narrow down typing here (string | (string | Element)[])
+}
+
+interface CAHBlackCardProps {
+  api: Api
+  card: DisplayableBlackCard
+  isOwner?: boolean
+  onDelete?(cardId: string): void
+  hideAnswerCount?: boolean
+}
+
+const CAHBlackCard = (props: CAHBlackCardProps) => {
   const removeCard = () => {
     props.api.main.deleteBlackCard(props.card.id).then((data) => {
       if (props.onDelete) {

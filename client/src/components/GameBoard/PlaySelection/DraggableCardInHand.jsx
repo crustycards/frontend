@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import DragSource from 'react-dnd/lib/DragSource';
-import CAHWhiteCard from '../../shells/CAHWhiteCard.jsx';
+import CAHWhiteCard from '../../shells/CAHWhiteCard.tsx';
 import {cardInPlayQueue} from '../../../dndTypes';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';

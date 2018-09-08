@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import WhiteCard from '../shells/CAHWhiteCard.jsx';
+import WhiteCard from '../shells/CAHWhiteCard.tsx';
 import {Button} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
 
