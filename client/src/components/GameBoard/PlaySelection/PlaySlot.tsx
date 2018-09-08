@@ -6,7 +6,7 @@ import {connect} from 'react-redux';
 import DraggableCardInPlayQueue from './DraggableCardInPlayQueue.jsx';
 import {bindActionCreators, Dispatch} from 'redux';
 import {queueCard, unqueueCard} from '../../../store/modules/game';
-import { LocalGameData, WhiteCard } from '../../../api/dao';
+import {LocalGameData, WhiteCard} from '../../../api/dao';
 
 interface ReducedPlaySlotProps {
   index: number
