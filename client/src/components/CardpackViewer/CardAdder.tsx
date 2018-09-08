@@ -10,7 +10,7 @@ interface GenericCardData {
 
 interface CardAdderProps {
   type: string
-  addCard(cardData: GenericCardData): boolean
+  addCard(cardData: GenericCardData): void
 }
 
 interface CardAdderState {

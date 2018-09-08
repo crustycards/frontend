@@ -10,7 +10,6 @@ export class WhiteCard {
 }
 
 export class JsonWhiteCard {
-  id: string
   text: string
 }
 
@@ -22,7 +21,6 @@ export class BlackCard {
 }
 
 export class JsonBlackCard {
-  id: string
   text: string
   answerFields: number
 }
