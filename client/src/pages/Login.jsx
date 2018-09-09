@@ -1,5 +1,5 @@
 import React from 'react';
-import GoogleButton from '../components/GoogleButton/index.jsx';
+import GoogleButton from '../components/GoogleButton/index.tsx';
 
 const Login = () => (
   <div className='login center'>
