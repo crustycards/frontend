@@ -1,11 +1,24 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
-import WhiteCard from '../shells/CAHWhiteCard.tsx';
+import WhiteCard from '../shells/CAHWhiteCard';
 import {Button} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
+import {GameData, User} from '../../api/dao';
+import Api from '../../api/model/api';
 
-class PlayedCards extends Component {
-  constructor(props) {
+interface PlayedCardsProps {
+  api: Api
+  game: GameData
+  user: User
+}
+
+interface PlayedCardsState {
+  selectedSetIndex?: number
+}
+
+class PlayedCards extends Component<PlayedCardsProps, PlayedCardsState> {
+  constructor(props: PlayedCardsProps) {
     super(props);
 
     this.state = {
@@ -98,6 +111,6 @@ class PlayedCards extends Component {
 
 const ContextLinkedPlayedCards = ApiContextWrapper(PlayedCards);
 
-const mapStateToProps = ({game, global: {user}}) => ({game, user});
+const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
 
 export default connect(mapStateToProps)(ContextLinkedPlayedCards);
