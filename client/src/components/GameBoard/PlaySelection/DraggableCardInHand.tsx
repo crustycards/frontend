@@ -1,23 +1,37 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import DragSource from 'react-dnd/lib/DragSource';
-import CAHWhiteCard from '../../shells/CAHWhiteCard.tsx';
+import CAHWhiteCard from '../../shells/CAHWhiteCard';
 import {cardInPlayQueue} from '../../../dndTypes';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {queueCard} from '../../../store/modules/game';
 import {canPlay} from '../../../store';
+import {User, WhiteCard, BlackCard, WhitePlayed} from '../../../api/dao';
+import { ConnectDragSource } from 'react-dnd';
+
+interface DraggableCardProps {
+  card: WhiteCard
+  whitePlayed: WhitePlayed
+  currentBlackCard: BlackCard
+  user: User
+  judgeId: string
+  isDragging: boolean
+  queueCard(data: {cardId: string}): void
+  connectDragSource: ConnectDragSource
+}
 
 @DragSource(
   cardInPlayQueue,
-  {beginDrag: (props) => ({cardId: props.card.id})},
+  {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()
   })
 )
-class DraggableCard extends Component {
+class DraggableCard extends Component<DraggableCardProps> {
   render() {
-    const {whitePlayed, currentBlackCard, user, judgeId} = this.props;
+    const {card, whitePlayed, currentBlackCard, user, judgeId, isDragging} = this.props;
     return this.props.connectDragSource(
       <div
         onClick={() => (
@@ -25,7 +39,7 @@ class DraggableCard extends Component {
           this.props.queueCard({cardId: this.props.card.id})
         )}
         style={{
-          opacity: (this.props.isDragging ||
+          opacity: (isDragging ||
             !canPlay({
               whitePlayed,
               currentBlackCard,
@@ -35,7 +49,7 @@ class DraggableCard extends Component {
           )
         }}
       >
-        <CAHWhiteCard {...this.props} />
+        <CAHWhiteCard card={card} />
       </div>
     );
   }
@@ -50,14 +64,14 @@ const mapStateToProps = ({
   global: {
     user
   }
-}) => ({
+}: any) => ({
   whitePlayed,
   currentBlackCard,
   user,
   judgeId
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   queueCard
 }, dispatch);
 

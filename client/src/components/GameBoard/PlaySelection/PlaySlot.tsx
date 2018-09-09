@@ -3,7 +3,7 @@ import {Component} from 'react';
 import {DropTarget, ConnectDropTarget} from 'react-dnd/lib';
 import {cardInHand, cardInPlayQueue} from '../../../dndTypes';
 import {connect} from 'react-redux';
-import DraggableCardInPlayQueue from './DraggableCardInPlayQueue.jsx';
+import DraggableCardInPlayQueue from './DraggableCardInPlayQueue';
 import {bindActionCreators, Dispatch} from 'redux';
 import {queueCard, unqueueCard} from '../../../store/modules/game';
 import {LocalGameData, WhiteCard} from '../../../api/dao';
@@ -38,7 +38,6 @@ class PlaySlot extends Component<PlaySlotProps> {
           <DraggableCardInPlayQueue
             key={card.id}
             card={card}
-            onDrop={() => this.props.unqueueCard(card.id)}
           />
         </div>
       );

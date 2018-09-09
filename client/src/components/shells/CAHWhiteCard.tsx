@@ -8,7 +8,7 @@ interface CAHWhiteCardProps {
   api: Api
   card: WhiteCard
   isOwner?: boolean
-  onDelete(cardId: string): void
+  onDelete?(cardId: string): void
 }
 
 const CAHWhiteCard = (props: CAHWhiteCardProps) => {

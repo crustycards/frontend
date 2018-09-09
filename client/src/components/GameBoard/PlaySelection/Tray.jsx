@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import DraggableCardInHand from './DraggableCardInHand.jsx';
+import DraggableCardInHand from './DraggableCardInHand.tsx';
 import {cardInHand} from '../../../dndTypes';
 import {DropTarget} from 'react-dnd/lib';
 import {connect} from 'react-redux';
