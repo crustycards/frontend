@@ -10,15 +10,16 @@ import {canPlay} from '../../../store';
 import {User, WhiteCard, BlackCard, WhitePlayed} from '../../../api/dao';
 import { ConnectDragSource } from 'react-dnd';
 
+// TODO - Remove ?'s from DraggableCardProps properties and fix react-dnd typescript issues
 interface DraggableCardProps {
   card: WhiteCard
   whitePlayed: WhitePlayed
   currentBlackCard: BlackCard
   user: User
   judgeId: string
-  isDragging: boolean
+  isDragging?: boolean
   queueCard(data: {cardId: string}): void
-  connectDragSource: ConnectDragSource
+  connectDragSource?: ConnectDragSource
 }
 
 @DragSource(
