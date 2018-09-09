@@ -1,24 +1,39 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {
   Button,
   CircularProgress,
   Card,
   CardActions,
   CardHeader,
-  withStyles
+  withStyles,
+  Theme
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../../api/context';
+import Api from '../../api/model/api';
+import {GameInfo, GameData} from '../../api/dao';
 
-const styles = (theme) => ({
+const styles = (theme: Theme) => ({
   leftIcon: {
     marginRight: theme.spacing.unit
   }
 });
 
-class GameList extends Component {
-  constructor(props) {
+interface GameListProps {
+  api: Api
+  games: GameInfo[]
+  game?: GameData
+  classes: any
+}
+
+interface GameListState {
+  isLoading: boolean
+}
+
+class GameList extends Component<GameListProps, GameListState> {
+  constructor(props: GameListProps) {
     super(props);
 
     this.state = {
@@ -104,7 +119,7 @@ const ContextLinkedGameList = ApiContextWrapper(GameList);
 
 const StyledGameList = withStyles(styles)(ContextLinkedGameList);
 
-const mapStateToProps = ({game, games}) => ({
+const mapStateToProps = ({game, games}: any) => ({
   game,
   games
 });
