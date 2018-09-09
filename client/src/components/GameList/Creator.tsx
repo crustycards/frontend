@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+import * as React from 'react';
+import {Component} from 'react';
 import {
   Button,
   TextField,
@@ -11,37 +12,48 @@ import {
   CircularProgress
 } from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
+import Api from '../../api/model/api';
+import {Cardpack} from '../../api/dao';
 
-class GameCreator extends Component {
-  constructor(props) {
+interface GameCreatorProps {
+  api: Api
+}
+
+interface GameCreatorState {
+  gameName: string
+  maxPlayers: number
+  maxScore: number
+  handSize: number
+  cardpacks: Cardpack[]
+  cardpacksSelected: string[]
+  isLoading: boolean
+}
+
+class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
+  constructor(props: GameCreatorProps) {
     super(props);
     this.state = {
       gameName: '',
       maxPlayers: 8,
       maxScore: 8,
       handSize: 6,
+      cardpacks: [],
       cardpacksSelected: [],
       isLoading: true
     };
-    this.maxPlayersDropdownItems = [];
-    for (let i = 4; i <= 20; i++) {
-      this.maxPlayersDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
-    }
-
-    this.maxScoreDropdownItems = [];
-    for (let i = 4; i <= 20; i++) {
-      this.maxScoreDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
-    }
-
-    this.handSizeDropdownItems = [];
-    for (let i = 3; i <= 20; i++) {
-      this.handSizeDropdownItems.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
-    }
 
     this.loadCardpacks = this.loadCardpacks.bind(this);
     this.handleGameNameChange = this.handleGameNameChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSelectChange = this.handleSelectChange.bind(this);
+  }
+
+  static generateNumberedMenuItems(startNum: number, endNum: number): JSX.Element[] {
+    const items = [];
+    for (let i = startNum; i <= endNum; i++) {
+      items.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
+    }
+    return items;
   }
 
   componentDidMount() {
@@ -54,11 +66,11 @@ class GameCreator extends Component {
     });
   }
 
-  handleGameNameChange(e) {
+  handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({gameName: e.target.value});
   }
 
-  handleSelectChange(id) {
+  handleSelectChange(id: string) {
     if (this.state.cardpacksSelected.includes(id)) {
       this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
     } else {
@@ -92,25 +104,25 @@ class GameCreator extends Component {
             <span>Max Players: </span>
             <Select
               value={this.state.maxPlayers}
-              onChange={(e) => this.setState({maxPlayers: e.target.value})}
+              onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value)})}
             >
-              {this.maxPlayersDropdownItems}
+              {GameCreator.generateNumberedMenuItems(4, 20)}
             </Select>
             <br/>
             <span>Winning Score: </span>
             <Select
               value={this.state.maxScore}
-              onChange={(e) => this.setState({maxScore: e.target.value})}
+              onChange={(e) => this.setState({maxScore: parseInt(e.target.value)})}
             >
-              {this.maxScoreDropdownItems}
+              {GameCreator.generateNumberedMenuItems(4, 20)}
             </Select>
             <br/>
             <span>Hand Size: </span>
             <Select
               value={this.state.handSize}
-              onChange={(e) => this.setState({handSize: e.target.value})}
+              onChange={(e) => this.setState({handSize: parseInt(e.target.value)})}
             >
-              {this.handSizeDropdownItems}
+              {GameCreator.generateNumberedMenuItems(3, 20)}
             </Select>
           </div>
           <div className='col-wide'>

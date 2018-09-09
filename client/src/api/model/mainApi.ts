@@ -7,7 +7,7 @@ interface MainApi {
   deleteCardpack(cardpackId: string): Promise<void>
   createCardpack(name: string): Promise<Cardpack>
   getCardpack(id: string): Promise<Cardpack>
-  getCardpacksByUser(userId: string): Promise<Array<Cardpack>>
+  getCardpacksByUser(userId?: string): Promise<Array<Cardpack>>
   createWhiteCards(cardpackId: string, cards: Array<JsonWhiteCard>): Promise<Array<WhiteCard>>
   createBlackCards(cardpackId: string, cards: Array<JsonBlackCard>): Promise<Array<BlackCard>>
   addFriend(friendId: string): Promise<void>
