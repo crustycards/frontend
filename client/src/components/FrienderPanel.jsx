@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AutoComplete from './AutoComplete.jsx';
-import UserCard from './shells/UserCard.jsx';
+import UserCard from './shells/UserCard.tsx';
 import {ApiContextWrapper} from '../api/context';
 
 class FrienderPanel extends Component {

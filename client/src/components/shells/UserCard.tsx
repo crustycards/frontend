@@ -1,10 +1,18 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
 import {Link} from 'react-router-dom';
+import Api from '../../api/model/api';
+import { User } from '../../api/dao';
 
-const UserCard = (props) => (
+interface UserCardProps {
+  api: Api
+  showFriendButton: boolean
+  showUnfriendButton: boolean
+  user: User
+}
+
+const UserCard = (props: UserCardProps) => (
   <Card className='card'>
     <CardHeader
       title={props.user.name}
@@ -34,14 +42,5 @@ const UserCard = (props) => (
     </CardActions>
   </Card>
 );
-
-UserCard.propTypes = {
-  showFriendButton: PropTypes.bool,
-  showUnfriendButton: PropTypes.bool,
-  user: PropTypes.shape({
-    name: PropTypes.string,
-    id: PropTypes.string
-  })
-};
 
 export default ApiContextWrapper(UserCard);
