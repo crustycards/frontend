@@ -1,6 +1,13 @@
-const fileHandler = require('../../../client/src/helpers/cardpackFileHandler');
+import {JsonWhiteCard, JsonBlackCard} from "../api/dao";
 
-let dummyCards = {whiteCards: [], blackCards: []};
+import * as fileHandler from './cardpackFileHandler';
+
+interface ParsedCardpack {
+  whiteCards: JsonWhiteCard[]
+  blackCards: JsonBlackCard[]
+}
+
+let dummyCards: ParsedCardpack = {whiteCards: [], blackCards: []};
 
 for (let i = 0; i < 10; i++) {
   dummyCards.whiteCards.push({
