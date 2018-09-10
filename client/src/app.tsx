@@ -4,7 +4,7 @@ import {Provider} from 'react-redux';
 import Home from './pages/Home';
 import Cardpack from './pages/Cardpack';
 import User from './pages/User.jsx';
-import Login from './pages/Login.jsx';
+import Login from './pages/Login';
 import NotFound from './pages/NotFound.jsx';
 import Game from './pages/Game';
 import GameList from './pages/GameList';
