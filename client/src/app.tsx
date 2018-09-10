@@ -5,7 +5,7 @@ import Home from './pages/Home';
 import Cardpack from './pages/Cardpack';
 import User from './pages/User.jsx';
 import Login from './pages/Login';
-import NotFound from './pages/NotFound.jsx';
+import NotFound from './pages/NotFound';
 import Game from './pages/Game';
 import GameList from './pages/GameList';
 import Settings from './pages/Settings';
