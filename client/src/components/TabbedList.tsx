@@ -1,23 +1,30 @@
-import React, {Component} from 'react';
-import PropTypes from 'prop-types';
-import {Button} from '@material-ui/core';
-import {GridList, GridListTile, withStyles} from '@material-ui/core';
+import * as React from 'react';
+import {Component} from 'react';
+import {Button, GridList, GridListTile, withStyles} from '@material-ui/core';
 
-const StyledGridListTile = withStyles({
-  tile: {
-    height: 'auto'
-  }
-})((props) => (<GridListTile {...props}/>));
+const StyledGridListTile = withStyles({tile: {height: 'auto'}})((props) => (<GridListTile {...props}/>));
 
-class TabbedList extends Component {
-  constructor(props) {
+interface TabbedListProps {
+  itemsPerTab?: number
+  columns?: number
+  children: React.ReactNode[]
+}
+
+interface TabbedListState {
+  tab: number
+  itemsPerTab: number
+  columns: number
+}
+
+class TabbedList extends Component<TabbedListProps, TabbedListState> {
+  constructor(props: TabbedListProps) {
     super(props);
-    this.itemsPerTab = props.itemsPerTab || 20;
-    this.columns = props.columns || 4;
     this.nextTab = this.nextTab.bind(this);
     this.previousTab = this.previousTab.bind(this);
     this.state = {
-      tab: 0
+      tab: 0,
+      itemsPerTab: props.itemsPerTab || 20,
+      columns: props.columns || 4
     };
   }
 
@@ -32,8 +39,8 @@ class TabbedList extends Component {
   render() {
     const visibleElements = [];
 
-    let tabStart = this.state.tab * this.itemsPerTab;
-    let tabEnd = tabStart + this.itemsPerTab;
+    let tabStart = this.state.tab * this.state.itemsPerTab;
+    let tabEnd = tabStart + this.state.itemsPerTab;
     // TODO - Convert for loop to map
     for (let i = tabStart; i < tabEnd; i++) {
       visibleElements.push(
@@ -49,7 +56,7 @@ class TabbedList extends Component {
       <div className='panel'>
         <div className='center'>
           {
-            this.props.children.length > this.itemsPerTab &&
+            this.props.children.length > this.state.itemsPerTab &&
             <div>
               <Button
                 onClick={this.previousTab}
@@ -67,23 +74,18 @@ class TabbedList extends Component {
                 Tab {
                   this.state.tab + 1
                 } of {
-                  Math.ceil(this.props.children.length / this.itemsPerTab)
+                  Math.ceil(this.props.children.length / this.state.itemsPerTab)
                 }
               </div>
             </div>
           }
         </div>
-        <GridList cols={this.columns} cellHeight={'auto'}>
+        <GridList cols={this.state.columns} cellHeight={'auto'}>
           {visibleElements}
         </GridList>
       </div>
     );
   }
 }
-
-TabbedList.propTypes = {
-  itemsPerTab: PropTypes.number,
-  columns: PropTypes.number
-};
 
 export default TabbedList;

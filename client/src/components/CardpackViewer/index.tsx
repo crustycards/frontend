@@ -6,7 +6,7 @@ import CardAdder from './CardAdder';
 import CAHWhiteCard from '../shells/CAHWhiteCard';
 import CAHBlackCard from '../shells/CAHBlackCard';
 import {stringify, parse} from '../../helpers/cardpackFileHandler';
-import TabbedList from '../TabbedList.jsx';
+import TabbedList from '../TabbedList';
 import SwipeableViews from 'react-swipeable-views';
 import {upload, convertToText} from '../../helpers/fileUpload';
 import {ApiContextWrapper} from '../../api/context';
