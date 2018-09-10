@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {Provider} from 'react-redux';
-import Home from './pages/Home.jsx';
+import Home from './pages/Home';
 import Cardpack from './pages/Cardpack';
 import User from './pages/User.jsx';
 import Login from './pages/Login.jsx';
