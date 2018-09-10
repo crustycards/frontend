@@ -1,10 +1,16 @@
-import React from 'react';
+import * as React from 'react';
 import {Snackbar} from '@material-ui/core';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, Dispatch} from 'redux';
 import {hideStatusMessage} from '../store/modules/global';
 
-const StatusBar = (props) => (
+interface StatusBarProps {
+  isVisible: boolean
+  message: string
+  hideStatusMessage(): void
+}
+
+const StatusBar = (props: StatusBarProps) => (
   <Snackbar
     open={props.isVisible}
     message={props.message}
@@ -14,12 +20,12 @@ const StatusBar = (props) => (
   />
 );
 
-const mapStateToProps = ({global}) => ({
+const mapStateToProps = ({global}: any) => ({
   message: global.statusMessage,
   isVisible: global.statusVisible
 });
 
-const mapDispatchToProps = (dispatch) => bindActionCreators({
+const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   hideStatusMessage
 }, dispatch);
 
