@@ -80,52 +80,52 @@ const startServer = async () => {
       });
     });
 
-    server.route([
-      {
-        method: 'GET',
-        path: '/{any*}',
-        handler: async (request, h) => {
-          try {
-            const session = await Auth.getSession(request.state[cookieName]);
-            const user = await api.User.get({id: session.userId});
-            return generateScript({user});
-          } catch (err) {
-            return generateScript();
-          }
-        }
-      },
-      {
-        method: 'GET',
-        path: '/bundle.js',
-        handler: (request, h) => {
-          return bundle;
-        }
-      },
-      {
-        method: 'GET',
-        path: '/logout',
-        handler: async (request, h) => {
-          await Auth.deleteSession(request.state[cookieName]);
-          return h.redirect('/login').unstate(cookieName);
-        }
-      },
-      {
-        method: 'GET',
-        path: '/firebase-messaging-sw.js',
-        handler: (request, h) => {
-          return h.response(serviceWorker).header('Content-Type', 'application/javascript');
+  server.route([
+    {
+      method: 'GET',
+      path: '/{any*}',
+      handler: async (request, h) => {
+        try {
+          const session = await Auth.getSession(request.state[cookieName]);
+          const user = await api.User.get({id: session.userId});
+          return generateScript({user});
+        } catch (err) {
+          return generateScript();
         }
       }
-    ]);
+    },
+    {
+      method: 'GET',
+      path: '/bundle.js',
+      handler: (request, h) => {
+        return bundle;
+      }
+    },
+    {
+      method: 'GET',
+      path: '/logout',
+      handler: async (request, h) => {
+        await Auth.deleteSession(request.state[cookieName]);
+        return h.redirect('/login').unstate(cookieName);
+      }
+    },
+    {
+      method: 'GET',
+      path: '/firebase-messaging-sw.js',
+      handler: (request, h) => {
+        return h.response(serviceWorker).header('Content-Type', 'application/javascript');
+      }
+    }
+  ]);
 
-    await server.register({plugin: require('h2o2')});
-    server.route(require('./route'));
+  await server.register({plugin: require('h2o2')});
+  server.route(require('./route'));
 
-    await server.start().then(() => {
-      console.log(`Server is running on port ${port}`);
-    });
+  await server.start().then(() => {
+    console.log(`Server is running on port ${port}`);
+  });
 
-    return server;
+  return server;
 };
 
 startServer();
