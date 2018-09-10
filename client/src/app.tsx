@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Component} from 'react';
 import {Provider} from 'react-redux';
 import Home from './pages/Home.jsx';
-import Cardpack from './pages/Cardpack.jsx';
+import Cardpack from './pages/Cardpack';
 import User from './pages/User.jsx';
 import Login from './pages/Login.jsx';
 import NotFound from './pages/NotFound.jsx';
@@ -27,7 +27,6 @@ import {createBrowserHistory} from 'history';
 import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
 import AuthApi from './api/model/authApi';
-import {setGameState} from './store/modules/game';
 import {bindGameApi} from './api/reduxBind';
 
 declare global {
