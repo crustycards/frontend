@@ -36,9 +36,9 @@ const validate = (values: MessageFormData) => {
 };
 
 interface MessageBoxProps extends InjectedFormProps {
-  messages: Array<any>
-  handleSubmit: SubmitHandler<MessageFormData>
   api: Api
+  handleSubmit: SubmitHandler<MessageFormData>
+  messages: Array<any>
 }
 
 const MessageBox = (props: MessageBoxProps) => {
@@ -67,11 +67,9 @@ const MessageBox = (props: MessageBoxProps) => {
       </div>
       <form
         autoComplete={'off'}
-        onSubmit={() => {
-          props.handleSubmit(({messageText}) => {
-            props.api.game.sendMessage(messageText);
-          });
-        }}
+        onSubmit={props.handleSubmit(({messageText}) => {
+          props.api.game.sendMessage(messageText);
+        })}
       >
         <Field
           name='messageText'
@@ -100,7 +98,8 @@ const mapStateToProps = ({game}: any) => ({
 
 const ReduxConnectedMessageBox = connect(mapStateToProps)(ContextLinkedMessageBox);
 
-const onSubmitSuccess = (_: any, dispatch: Dispatch<any>) => dispatch(reset('gameMessage'));
+const onSubmitSuccess = (_: any, dispatch: Dispatch) =>
+  dispatch(reset('gameMessage'));
 
 export default reduxForm({
   form: 'gameMessage',
