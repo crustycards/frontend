@@ -26,12 +26,12 @@ class User extends Component {
         this.props.api.main.getUser(userId),
         this.props.api.main.getCardpacksByUser(userId)
       ])
-        .then(([user, cardpacks]) => {
-          this.setState({user, cardpacks, isLoading: false, successfullyLoaded: true});
-        })
-        .catch(() => {
-          this.setState({isLoading: false, successfullyLoaded: false});
-        });
+          .then(([user, cardpacks]) => {
+            this.setState({user, cardpacks, isLoading: false, successfullyLoaded: true});
+          })
+          .catch(() => {
+            this.setState({isLoading: false, successfullyLoaded: false});
+          });
     } else {
       this.setState({isLoading: false, successfullyLoaded: false});
     }

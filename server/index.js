@@ -8,7 +8,7 @@ const fs = require('fs');
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 const serviceWorker = fs.readFileSync(
-  `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
+    `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
 ).toString();
 
 const generateScript = ({
@@ -31,54 +31,54 @@ const startServer = async () => {
   });
 
   await server.register(require('bell'))
-    .then(() => {
-      server.auth.strategy('google', 'bell', {
-        provider: 'google',
-        password: process.env.OAUTH_ENCRYPTION_PASSWORD,
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        location: process.env.OAUTH_REDIRECT_DOMAIN || server.info.uri,
-        isSecure: false
-      });
+      .then(() => {
+        server.auth.strategy('google', 'bell', {
+          provider: 'google',
+          password: process.env.OAUTH_ENCRYPTION_PASSWORD,
+          clientId: process.env.GOOGLE_CLIENT_ID,
+          clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+          location: process.env.OAUTH_REDIRECT_DOMAIN || server.info.uri,
+          isSecure: false
+        });
 
-      server.state(cookieName, {
-        isSecure: false,
-        encoding: 'base64json',
-        path: '/'
-      });
+        server.state(cookieName, {
+          isSecure: false,
+          encoding: 'base64json',
+          path: '/'
+        });
 
-      server.route({
-        method: 'GET',
-        path: '/auth/google',
-        options: {
-          auth: {
-            strategy: 'google',
-            mode: 'try'
-          },
-          handler: async (request, h) => {
-            if (!request.auth.isAuthenticated) {
-              console.error(request.auth.error);
-              return `Authentication failed due to: ${request.auth.error.message}`;
-            }
+        server.route({
+          method: 'GET',
+          path: '/auth/google',
+          options: {
+            auth: {
+              strategy: 'google',
+              mode: 'try'
+            },
+            handler: async (request, h) => {
+              if (!request.auth.isAuthenticated) {
+                console.error(request.auth.error);
+                return `Authentication failed due to: ${request.auth.error.message}`;
+              }
 
-            // Account lookup/registration
-            const userData = {
-              name: request.auth.credentials.profile.displayName,
-              oAuthId: request.auth.credentials.profile.id,
-              oAuthProvider: request.auth.credentials.provider
-            };
-            try {
-              const resUser = await api.User.findOrCreate(userData);
-              const session = await Auth.createSession(resUser.id);
-              return h.redirect('/').state(cookieName, session.id);
-            } catch (err) {
-              console.error(err);
-              return 'Failed to authenticate user:', err;
+              // Account lookup/registration
+              const userData = {
+                name: request.auth.credentials.profile.displayName,
+                oAuthId: request.auth.credentials.profile.id,
+                oAuthProvider: request.auth.credentials.provider
+              };
+              try {
+                const resUser = await api.User.findOrCreate(userData);
+                const session = await Auth.createSession(resUser.id);
+                return h.redirect('/').state(cookieName, session.id);
+              } catch (err) {
+                console.error(err);
+                return 'Failed to authenticate user:', err;
+              }
             }
           }
-        }
+        });
       });
-    });
 
   server.route([
     {

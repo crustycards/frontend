@@ -8,13 +8,13 @@ const createSession = async (userId) => {
 
 const getSession = (sessionId) => {
   return axios.get(`${auth}/session?sessionId=${sessionId}`)
-    .then((res) => res.data)
-    .catch(() => null);
+      .then((res) => res.data)
+      .catch(() => null);
 };
 
 const deleteSession = (sessionId) => {
   return axios.delete(`${auth}/session?sessionId=${sessionId}`)
-    .then(() => {});
+      .then(() => {});
 };
 
 module.exports = {

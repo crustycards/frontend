@@ -117,11 +117,11 @@ const Navbar = (props) => (
         <div>
           <NavLink to='/login' style={navItemStyle}>
             <MenuItem onClick={() => redirectTo('/logout')} className={props.classes.menuItem}>
-            <ListItemIcon className={props.classes.icon}>
-              <ExitToApp/>
-            </ListItemIcon>
-            <ListItemText inset primary={'Login'} />
-          </MenuItem>
+              <ListItemIcon className={props.classes.icon}>
+                <ExitToApp/>
+              </ListItemIcon>
+              <ListItemText inset primary={'Login'} />
+            </MenuItem>
           </NavLink>
         </div>}
     </Drawer>

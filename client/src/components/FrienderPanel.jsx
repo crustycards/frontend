@@ -17,12 +17,12 @@ class FrienderPanel extends Component {
 
   searchUsers(query) {
     this.props.api.main.searchUsers(query)
-      .then((searchedUsers) =>
-        this.setState({
-          searchedUsers,
-          hasSearched: true
-        })
-      );
+        .then((searchedUsers) =>
+          this.setState({
+            searchedUsers,
+            hasSearched: true
+          })
+        );
   }
 
   render() {
