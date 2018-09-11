@@ -5,14 +5,12 @@ import {TextField, Button, CircularProgress} from '@material-ui/core';
 import {ApiContextWrapper} from '../api/context';
 import Api from '../api/model/api';
 import { Cardpack } from '../api/dao';
+import { Dispatch } from 'redux';
 
 const renderTextField = ({
   input,
   label,
-  meta: {
-    touched,
-    error
-  },
+  meta,
   ...custom
 }: any) => (
   <TextField
@@ -93,7 +91,7 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
 
 const ContextLinkedCardpackCreator = ApiContextWrapper(CardpackCreator);
 
-const onSubmitSuccess = (_: any, dispatch: any) =>
+const onSubmitSuccess = (_: any, dispatch: Dispatch) =>
   dispatch(reset('cardpackCreator'));
 
 export default reduxForm({
