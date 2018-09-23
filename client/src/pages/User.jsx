@@ -5,6 +5,7 @@ import CardpackList from '../components/CardpackList/index.tsx';
 import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../api/context';
+import ProfileImageUploader from '../components/ProfileImageUploader';
 
 class User extends Component {
   constructor(props) {
@@ -48,6 +49,10 @@ class User extends Component {
       <div>
         <div className={'col-narrow'}>
           {this.state.user.name}
+          {
+            this.isCurrentUser &&
+            <ProfileImageUploader/>
+          }
         </div>
         <div className={'col-wide'}>
           {
