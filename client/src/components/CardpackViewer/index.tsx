@@ -8,10 +8,11 @@ import CAHBlackCard from '../shells/CAHBlackCard';
 import {stringify, parse} from '../../helpers/cardpackFileHandler';
 import TabbedList from '../TabbedList';
 import SwipeableViews from 'react-swipeable-views';
-import {upload, convertToText} from '../../helpers/fileUpload';
 import {ApiContextWrapper} from '../../api/context';
 import {Cardpack, User, JsonBlackCard, JsonWhiteCard} from '../../api/dao';
 import Api from '../../api/model/api';
+import FileUploader from '../FileUploader';
+import { FileWithPreview } from 'react-dropzone';
 
 interface CardpackViewerProps {
   api: Api
@@ -26,6 +27,7 @@ interface CardpackViewerState {
   cardpack: Cardpack,
   slideIndex: number
   isUploading: boolean
+  showUploadDialogBox: boolean
 }
 
 class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState> {
@@ -34,7 +36,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     this.addWhiteCards = this.addWhiteCards.bind(this);
     this.addBlackCards = this.addBlackCards.bind(this);
     this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
-    this.uploadStringifiedCards = this.uploadStringifiedCards.bind(this);
+    this.handleUpload = this.handleUpload.bind(this);
     this.handleTabChange = this.handleTabChange.bind(this);
     this.state = {
       newCardName: '',
@@ -42,9 +44,22 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
       newCardAnswerFields: 1,
       cardpack: undefined,
       slideIndex: 0,
-      isUploading: false
+      isUploading: false,
+      showUploadDialogBox: false
     };
+
+    this.openUploadDialog = this.openUploadDialog.bind(this);
+    this.closeUploadDialog = this.closeUploadDialog.bind(this);
+
     this.fetchCurrentCardpack();
+  }
+
+  openUploadDialog() {
+    this.setState({showUploadDialogBox: true});
+  }
+
+  closeUploadDialog() {
+    this.setState({showUploadDialogBox: false});
   }
 
   fetchCurrentCardpack() {
@@ -104,18 +119,28 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     }));
   }
 
-  async uploadStringifiedCards() {
-    const fileTexts = await upload({type: 'text/*', multiple: true}).then(convertToText);
+  static convertFileToCardpackData(file: FileWithPreview) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.readAsText(file);
+    })
+      .then((data: string) => {
+        const {whiteCards, blackCards} = JSON.parse(data);
+        if (!(Array.isArray(whiteCards) && Array.isArray(blackCards))) {
+          throw new Error('Invalid cardpack data');
+        }
+        return {whiteCards, blackCards};
+      });
+  }
 
-    if (fileTexts) {
-      const {whiteCards, blackCards} = fileTexts.map((file) => file.text).reduce((acc, text) => {
-        const {whiteCards, blackCards} = parse(text);
-        return {
-          whiteCards: whiteCards.concat(acc.whiteCards),
-          blackCards: blackCards.concat(acc.blackCards)
-        };
-      }, {whiteCards: [], blackCards: []});
-
+  async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
+    if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
+      this.closeUploadDialog();
+      const file = acceptedFiles[0];
+      const {whiteCards, blackCards} = await CardpackViewer.convertFileToCardpackData(file);
       this.setState({isUploading: true}, () => {
         Promise.all([
           this.addWhiteCards(whiteCards),
@@ -167,9 +192,18 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
                 </Button>
                 {
                   isOwner &&
-                  <Button disabled={this.state.isUploading} onClick={this.uploadStringifiedCards}>
-                    Upload
-                  </Button>
+                  <div>
+                    <Button disabled={this.state.isUploading} onClick={this.openUploadDialog}>
+                      Upload
+                    </Button>
+                    <FileUploader
+                      titleText={'Upload Profile Picture'}
+                      type={'text/*'}
+                      onUpload={this.handleUpload}
+                      onClose={this.closeUploadDialog}
+                      isVisible={this.state.showUploadDialogBox}
+                    />
+                  </div>
                 }
               </div>
               : null}
