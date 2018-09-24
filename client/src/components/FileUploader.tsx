@@ -22,6 +22,7 @@ const styles = (theme: Theme) => ({
 
 interface UploaderProps extends WithStyles<typeof styles> {
   titleText?: string
+  type?: string
   onUpload(
       acceptedFiles: FileWithPreview[],
       rejectedFiles: FileWithPreview[],
@@ -52,7 +53,7 @@ const FileUploader = (props: UploaderProps) => (
           borderColor: 'rgb(50, 50, 50)'
         }}
         onDrop={props.onUpload}
-        accept={'image/*'}
+        accept={props.type}
       >
         <div style={{
           position: 'absolute',

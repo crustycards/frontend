@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
 import {Button} from '@material-ui/core';
-import Dropzone, { FileWithPreview } from 'react-dropzone';
+import { FileWithPreview } from 'react-dropzone';
 import Api from '../api/model/api';
 import FileUploader from './FileUploader';
 import {ApiContextWrapper} from '../api/context';
@@ -51,6 +51,7 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
         </Button>
         <FileUploader
           titleText={'Upload Profile Picture'}
+          type={'image/*'}
           onUpload={this.handleUpload}
           onClose={this.closeDialog}
           isVisible={this.state.showDialogBox}
