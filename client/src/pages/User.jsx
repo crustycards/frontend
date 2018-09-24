@@ -6,6 +6,7 @@ import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../api/context';
 import ProfileImageUploader from '../components/ProfileImageUploader';
+import UrlImage from '../components/UrlImage';
 
 class User extends Component {
   constructor(props) {
@@ -53,6 +54,15 @@ class User extends Component {
             this.isCurrentUser &&
             <ProfileImageUploader/>
           }
+          <UrlImage
+            url={this.props.api.main.getProfileImageUrl(this.state.user.id)}
+            loadingView={<CircularProgress/>}
+            imageStyle={{
+              height: '150px',
+              width: '150px',
+              borderRadius: '5px'
+            }}
+          />
         </div>
         <div className={'col-wide'}>
           {

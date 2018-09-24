@@ -108,4 +108,13 @@ export default class HttpMainApi implements MainApi {
     const res = await axios.get(`/api/cardpacks/favorited?userId=${this.userId}&cardpackId=${cardpackId}`);
     return res.data;
   }
+
+  getProfileImageUrl(userId: string = this.userId) {
+    return `/api/user/profileimage/${userId}`;
+  }
+
+  async setProfileImage(data: Blob) {
+    const headers = {'Content-Type': 'application/octet-stream'};
+    await axios.put(`/api/user/profileimage/${this.userId}`, data, {headers});
+  }
 }
