@@ -4,11 +4,23 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  DialogTitle
+  DialogTitle,
+  Theme,
+  withStyles,
+  WithStyles
 } from '@material-ui/core';
 import Dropzone, { FileWithPreview } from 'react-dropzone';
 
-interface UploaderProps {
+const styles = (theme: Theme) => ({
+  text: {
+    fontSize: theme.typography.pxToRem(18)
+  },
+  subtext: {
+    fontSize: theme.typography.pxToRem(15)
+  }
+});
+
+interface UploaderProps extends WithStyles<typeof styles> {
   titleText?: string
   onUpload(
       acceptedFiles: FileWithPreview[],
@@ -49,11 +61,16 @@ const FileUploader = (props: UploaderProps) => (
           margin: 0,
           transform: 'translate(-50%, -50%)'
         }}>
-          <DialogContentText>Drop Here (Or click to select)</DialogContentText>
+          <DialogContentText className={props.classes.text}>
+            Drop Here
+          </DialogContentText>
+          <DialogContentText className={props.classes.subtext}>
+            (Or click to select)
+          </DialogContentText>
         </div>
       </Dropzone>
     </DialogContent>
   </Dialog>
 );
 
-export default FileUploader;
+export default withStyles(styles)(FileUploader);
