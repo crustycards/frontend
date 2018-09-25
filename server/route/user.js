@@ -51,5 +51,20 @@ module.exports = [
       }
     },
     options: {payload: {parse: false}}
+  },
+  {
+    method: ['GET'],
+    path: '/api/user/profileimage/{id}',
+    handler: (request, h) => {
+      return h.proxy({uri: `${apiUrl}/user/{id}/profileimage`});
+    }
+  },
+  {
+    method: ['PUT'],
+    path: '/api/user/profileimage/{id}',
+    handler: (request, h) => {
+      return h.proxy({uri: `${apiUrl}/user/{id}/profileimage`});
+    },
+    options: {payload: {parse: false}}
   }
 ];

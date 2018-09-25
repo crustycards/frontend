@@ -20,6 +20,8 @@ interface MainApi {
   unfavoriteCardpack(cardpackId: string): Promise<void>
   getFavoritedCardpacks(userId?: string): Promise<Array<Cardpack>>
   cardpackIsFavorited(cardpackId: string): Promise<boolean>
+  getProfileImageUrl(userId?: string): string
+  setProfileImage(data: Blob): Promise<void>
 }
 
 export default MainApi;
