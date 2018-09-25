@@ -7,7 +7,8 @@ import {
   CardActions,
   CardHeader,
   withStyles,
-  Theme
+  Theme,
+  WithStyles
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {connect} from 'react-redux';
@@ -21,11 +22,10 @@ const styles = (theme: Theme) => ({
   }
 });
 
-interface GameListProps {
+interface GameListProps extends WithStyles<typeof styles> {
   api: Api
   games: GameInfo[]
   game?: GameData
-  classes: any
 }
 
 interface GameListState {
