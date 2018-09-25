@@ -127,13 +127,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
       };
       fileReader.readAsText(file);
     })
-      .then((data: string) => {
-        const {whiteCards, blackCards} = JSON.parse(data);
-        if (!(Array.isArray(whiteCards) && Array.isArray(blackCards))) {
-          throw new Error('Invalid cardpack data');
-        }
-        return {whiteCards, blackCards};
-      });
+      .then(parse);
   }
 
   async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
