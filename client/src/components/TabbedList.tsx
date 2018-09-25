@@ -2,7 +2,7 @@ import * as React from 'react';
 import {Component} from 'react';
 import {Button, GridList, GridListTile, withStyles} from '@material-ui/core';
 
-const StyledGridListTile = withStyles({tile: {height: 'auto'}})((props) => (<GridListTile {...props}/>));
+const StyledGridListTile = withStyles({tile: {height: 'auto'}})((props: any) => (<GridListTile {...props}/>));
 
 interface TabbedListProps {
   itemsPerTab?: number
