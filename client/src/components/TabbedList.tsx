@@ -7,7 +7,7 @@ const StyledGridListTile = withStyles({tile: {height: 'auto'}})((props) => (<Gri
 interface TabbedListProps {
   itemsPerTab?: number
   columns?: number
-  children: React.ReactNode[]
+  children: JSX.Element[]
 }
 
 interface TabbedListState {
