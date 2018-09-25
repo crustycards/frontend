@@ -5,7 +5,6 @@ import parse from 'autosuggest-highlight/parse';
 import {TextField, Paper, MenuItem, withStyles} from '@material-ui/core';
 import _ from 'underscore';
 
-
 const styles = (theme) => ({
   container: {
     flexGrow: 1,
