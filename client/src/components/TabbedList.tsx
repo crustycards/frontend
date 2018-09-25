@@ -44,11 +44,11 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     // TODO - Convert for loop to map
     for (let i = tabStart; i < tabEnd; i++) {
       visibleElements.push(
-        <div key={i}>
-          <StyledGridListTile>
-            {this.props.children[i]}
-          </StyledGridListTile>
-        </div>
+        <StyledGridListTile
+          key={i}
+        >
+          {this.props.children[i]}
+        </StyledGridListTile>
       );
     }
 
