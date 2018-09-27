@@ -24,7 +24,8 @@ interface GameCreatorState {
   maxPlayers: number
   maxScore: number
   handSize: number
-  cardpacks: Cardpack[]
+  userCardpacks: Cardpack[]
+  subscribedCardpacks: Cardpack[]
   cardpacksSelected: string[]
   isLoading: boolean
 }
@@ -37,7 +38,8 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
       maxPlayers: 8,
       maxScore: 8,
       handSize: 6,
-      cardpacks: [],
+      userCardpacks: [],
+      subscribedCardpacks: [],
       cardpacksSelected: [],
       isLoading: true
     };
@@ -61,9 +63,10 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
   }
 
   loadCardpacks() {
-    this.props.api.main.getCardpacksByUser().then((cardpacks) => {
-      this.setState({cardpacks, isLoading: false});
-    });
+    Promise.all([this.props.api.main.getCardpacksByUser(), this.props.api.main.getFavoritedCardpacks()])
+      .then(([userCardpacks, subscribedCardpacks]) => {
+        this.setState({userCardpacks, subscribedCardpacks, isLoading: false});
+      });
   }
 
   handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -127,23 +130,43 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
           </div>
           <div className='col-wide'>
             <div className='subpanel'>
-              <h3>Cardpacks</h3>
               {this.state.isLoading ?
-                <CircularProgress/>
+                <div style={{textAlign: 'center'}}>
+                  <h3>Loading Cardpacks...</h3>
+                  <CircularProgress/>
+                </div>
                 :
-                <List>
-                  {this.state.cardpacks.map((c) => (
-                    <ListItem
-                      key={c.id}
-                    >
-                      <Checkbox
-                        checked={this.state.cardpacksSelected.includes(c.id)}
-                        onChange={this.handleSelectChange.bind(this, c.id)}
-                      />
-                      <ListItemText primary={c.name} />
-                    </ListItem>
-                  ))}
-                </List>
+                <div>
+                  {/* TODO - Keep code dry by refactoring the two <List/> uses below into separate component */}
+                  <h3>Your Cardpacks</h3>
+                  <List>
+                    {this.state.userCardpacks.map((c) => (
+                      <ListItem
+                        key={c.id}
+                      >
+                        <Checkbox
+                          checked={this.state.cardpacksSelected.includes(c.id)}
+                          onChange={this.handleSelectChange.bind(this, c.id)}
+                        />
+                        <ListItemText primary={c.name} />
+                      </ListItem>
+                    ))}
+                  </List>
+                  <h3>Subscribed Cardpacks</h3>
+                  <List>
+                    {this.state.subscribedCardpacks.map((c) => (
+                      <ListItem
+                        key={c.id}
+                      >
+                        <Checkbox
+                          checked={this.state.cardpacksSelected.includes(c.id)}
+                          onChange={this.handleSelectChange.bind(this, c.id)}
+                        />
+                        <ListItemText primary={c.name} />
+                      </ListItem>
+                    ))}
+                  </List>
+                </div>
               }
             </div>
           </div>
