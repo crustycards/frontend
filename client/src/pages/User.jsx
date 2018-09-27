@@ -69,6 +69,7 @@ class User extends Component {
           <UrlImage
             url={this.props.api.main.getProfileImageUrl(this.state.user.id)}
             loadingView={<CircularProgress/>}
+            errorView={<div>No profile image</div>}
             imageStyle={{
               height: '150px',
               width: '150px',

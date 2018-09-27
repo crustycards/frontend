@@ -6,12 +6,14 @@ interface UrlImageProps {
   onLoad?(e: React.SyntheticEvent<HTMLImageElement>): void
   onError?(e: React.SyntheticEvent<HTMLImageElement>): void
   loadingView?: React.ReactNode
+  errorView?: React.ReactNode
   style?: React.CSSProperties
   imageStyle?: React.CSSProperties
 }
 
 interface UrlImageState {
-  isLoading: boolean
+  isLoading: boolean,
+  encounteredError: boolean
 }
 
 class UrlImage extends Component<UrlImageProps, UrlImageState> {
@@ -19,7 +21,8 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
     super(props);
 
     this.state = {
-      isLoading: true
+      isLoading: true,
+      encounteredError: false
     };
 
     this.handleLoad = this.handleLoad.bind(this);
@@ -37,10 +40,14 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
     if (this.props.onError) {
       this.props.onError(e);
     }
-    this.setState({isLoading: false});
+    this.setState({isLoading: false, encounteredError: true});
   }
 
   render() {
+    if (this.state.encounteredError && this.props.errorView) {
+      return this.props.errorView;
+    }
+
     return (
       <div style={this.props.style}>
         <img
