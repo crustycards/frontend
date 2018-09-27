@@ -41,9 +41,21 @@ class User extends Component {
 
   render() {
     if (this.state.isLoading) {
-      return (<CircularProgress/>);
+      return (
+        <div style={{
+          textAlign: 'center',
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          margin: 0,
+          transform: 'translate(-50%, -50%)'
+        }}>
+          <h1>Loading User Page</h1>
+          <CircularProgress size={100}/>
+        </div>
+      );
     } else if (!this.state.successfullyLoaded) {
-      return (<div>User does not exist</div>);
+      return (<h1>User Not Found</h1>);
     }
 
     return (
