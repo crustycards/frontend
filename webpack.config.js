@@ -5,7 +5,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
-  entry: ['@babel/polyfill', `${SRC_DIR}/index.tsx`],
+  entry: ['babel-polyfill', `${SRC_DIR}/index.tsx`],
   output: {
     filename: 'bundle.js',
     path: DIST_DIR
@@ -15,11 +15,7 @@ module.exports = {
       {
         test: /\.jsx?/,
         include: SRC_DIR,
-        loader: 'babel-loader',
-        query: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
-          plugins: []
-        }
+        loader: 'babel-loader'
       },
       {
         test: /\.tsx?$/,
