@@ -62,12 +62,14 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
             this.props.children.length > this.state.itemsPerTab &&
             <div>
               <Button
+                className={'previous-tab'}
                 onClick={this.previousTab}
                 disabled={this.state.tab === 0}
               >
                 Previous
               </Button>
               <Button
+                className={'next-tab'}
                 onClick={this.nextTab}
                 disabled={tabEnd >= this.props.children.length}
               >

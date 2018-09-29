@@ -52,4 +52,45 @@ it('renders no more than 20 elements at once', () => {
   ]}</TabbedList>);
 
   expect(wrapper.find(GridListTile).length).toEqual(20);
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element One');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty');
+});
+
+it('can switch tabs', () => {
+  const wrapper = mount(<TabbedList>{[
+    <div>Element One</div>,
+    <div>Element Two</div>,
+    <div>Element Three</div>,
+    <div>Element Four</div>,
+    <div>Element Five</div>,
+    <div>Element Six</div>,
+    <div>Element Seven</div>,
+    <div>Element Eight</div>,
+    <div>Element Nine</div>,
+    <div>Element Ten</div>,
+    <div>Element Eleven</div>,
+    <div>Element Twelve</div>,
+    <div>Element Thirteen</div>,
+    <div>Element Fourteen</div>,
+    <div>Element Fifteen</div>,
+    <div>Element Sixteen</div>,
+    <div>Element Seventeen</div>,
+    <div>Element Eighteen</div>,
+    <div>Element Nineteen</div>,
+    <div>Element Twenty</div>,
+    <div>Element Twenty One</div>,
+    <div>Element Twenty Two</div>
+  ]}</TabbedList>);
+
+  wrapper.find('.next-tab').first().simulate('click');
+
+  expect(wrapper.find(GridListTile).length).toEqual(2);
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element Twenty One');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty Two');
+
+  wrapper.find('.previous-tab').first().simulate('click');
+
+  expect(wrapper.find(GridListTile).length).toEqual(20);
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element One');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty');
 });
