@@ -1,5 +1,6 @@
 node_modules
 .env
+/coverage
 
 /client/dist/bundle.js
 
