@@ -43,6 +43,9 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     let tabEnd = tabStart + this.state.itemsPerTab;
     // TODO - Convert for loop to map
     for (let i = tabStart; i < tabEnd; i++) {
+      if (!this.props.children[i]) {
+        break;
+      }
       visibleElements.push(
         <StyledGridListTile
           key={i}
