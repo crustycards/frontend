@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import Api from '../../api/model/api';
 import { User } from '../../api/dao';
 
@@ -35,9 +35,9 @@ const UserCard = (props: UserCardProps) => (
         </Button>
       }
       <Button>
-        <Link to={`/user?id=${props.user.id}`}>
+        <NavLink to={`/user?id=${props.user.id}`} style={{textDecoration: 'none'}}>
           View Profile
-        </Link>
+        </NavLink>
       </Button>
     </CardActions>
   </Card>
