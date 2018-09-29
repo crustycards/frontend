@@ -6,13 +6,12 @@ const config = {
 };
 
 export const init = async (onMessage: (payload: any) => void) => {
-  // TODO - Enable Firebase once HTTPS is setup
-  // firebase.initializeApp(config);
-  // const messaging = firebase.messaging();
-  // onMessage && messaging.onMessage(onMessage);
-  // return messaging.requestPermission()
-  //   .catch(() => console.log('Denied permission for notifications'))
-  //   .then(() => {
-  //     return messaging.getToken();
-  //   });
+  firebase.initializeApp(config);
+  const messaging = firebase.messaging();
+  onMessage && messaging.onMessage(onMessage);
+  return messaging.requestPermission()
+    .catch(() => console.log('Denied permission for notifications'))
+    .then(() => {
+      return messaging.getToken();
+    });
 };

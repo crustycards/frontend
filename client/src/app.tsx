@@ -45,8 +45,9 @@ const store = createStore({history});
 
 bindGameApi(gameApi, store);
 
-initFirebase((payload) => console.log(payload))
-  .then((token) => authApi.linkSessionToFirebase(token));
+// TODO - Uncomment two lines below once HTTPS is setup
+// initFirebase((payload) => console.log(payload))
+//   .then((token) => authApi.linkSessionToFirebase(token));
 
 setInterval(() => {
   gameApi.getGameState();
