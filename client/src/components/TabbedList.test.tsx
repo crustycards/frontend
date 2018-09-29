@@ -3,94 +3,46 @@ import TabbedList from './TabbedList';
 import {shallow, mount} from 'enzyme';
 import {GridListTile} from '@material-ui/core';
 
+const generateListElements = (size: number) => {
+  const elems = [];
+  for (let i = 0; i < size; i++) {
+    elems.push(<div>{`Element ${i + 1}`}</div>);
+  }
+  return elems;
+};
+
 it('matches snapshot of single page of elements', () => {
-  const wrapper = shallow(<TabbedList>{[
-    <div>Element One</div>,
-    <div>Element Two</div>,
-    <div>Element Three</div>,
-    <div>Element Four</div>
-  ]}</TabbedList>);
+  const wrapper = shallow(<TabbedList>{generateListElements(4)}</TabbedList>);
 
   expect(wrapper).toMatchSnapshot();
 });
 
 it('renders correct number of elements', () => {
-  const wrapper = mount(<TabbedList>{[
-    <div>Element One</div>,
-    <div>Element Two</div>,
-    <div>Element Three</div>,
-    <div>Element Four</div>
-  ]}</TabbedList>);
+  const wrapper = mount(<TabbedList>{generateListElements(4)}</TabbedList>);
 
   expect(wrapper.find(GridListTile).length).toEqual(4);
 });
 
 it('renders no more than 20 elements at once', () => {
-  const wrapper = mount(<TabbedList>{[
-    <div>Element One</div>,
-    <div>Element Two</div>,
-    <div>Element Three</div>,
-    <div>Element Four</div>,
-    <div>Element Five</div>,
-    <div>Element Six</div>,
-    <div>Element Seven</div>,
-    <div>Element Eight</div>,
-    <div>Element Nine</div>,
-    <div>Element Ten</div>,
-    <div>Element Eleven</div>,
-    <div>Element Twelve</div>,
-    <div>Element Thirteen</div>,
-    <div>Element Fourteen</div>,
-    <div>Element Fifteen</div>,
-    <div>Element Sixteen</div>,
-    <div>Element Seventeen</div>,
-    <div>Element Eighteen</div>,
-    <div>Element Nineteen</div>,
-    <div>Element Twenty</div>,
-    <div>Element Twenty One</div>,
-    <div>Element Twenty Two</div>
-  ]}</TabbedList>);
+  const wrapper = mount(<TabbedList>{generateListElements(22)}</TabbedList>);
 
   expect(wrapper.find(GridListTile).length).toEqual(20);
-  expect(wrapper.find(GridListTile).first().text()).toEqual('Element One');
-  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty');
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element 1');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element 20');
 });
 
 it('can switch tabs', () => {
-  const wrapper = mount(<TabbedList>{[
-    <div>Element One</div>,
-    <div>Element Two</div>,
-    <div>Element Three</div>,
-    <div>Element Four</div>,
-    <div>Element Five</div>,
-    <div>Element Six</div>,
-    <div>Element Seven</div>,
-    <div>Element Eight</div>,
-    <div>Element Nine</div>,
-    <div>Element Ten</div>,
-    <div>Element Eleven</div>,
-    <div>Element Twelve</div>,
-    <div>Element Thirteen</div>,
-    <div>Element Fourteen</div>,
-    <div>Element Fifteen</div>,
-    <div>Element Sixteen</div>,
-    <div>Element Seventeen</div>,
-    <div>Element Eighteen</div>,
-    <div>Element Nineteen</div>,
-    <div>Element Twenty</div>,
-    <div>Element Twenty One</div>,
-    <div>Element Twenty Two</div>
-  ]}</TabbedList>);
+  const wrapper = mount(<TabbedList>{generateListElements(22)}</TabbedList>);
 
   wrapper.find('.next-tab').first().simulate('click');
 
   expect(wrapper.find(GridListTile).length).toEqual(2);
-  expect(wrapper.find(GridListTile).first().text()).toEqual('Element Twenty One');
-  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty Two');
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element 21');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element 22');
 
   wrapper.find('.previous-tab').first().simulate('click');
 
   expect(wrapper.find(GridListTile).length).toEqual(20);
-  expect(wrapper.find(GridListTile).first().text()).toEqual('Element One');
-  expect(wrapper.find(GridListTile).last().text()).toEqual('Element Twenty');
+  expect(wrapper.find(GridListTile).first().text()).toEqual('Element 1');
+  expect(wrapper.find(GridListTile).last().text()).toEqual('Element 20');
 });

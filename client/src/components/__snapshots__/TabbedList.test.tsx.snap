@@ -5,16 +5,16 @@ ShallowWrapper {
   Symbol(enzyme.__root__): [Circular],
   Symbol(enzyme.__unrendered__): <TabbedList>
     <div>
-      Element One
+      Element 1
     </div>
     <div>
-      Element Two
+      Element 2
     </div>
     <div>
-      Element Three
+      Element 3
     </div>
     <div>
-      Element Four
+      Element 4
     </div>
   </TabbedList>,
   Symbol(enzyme.__renderer__): Object {
@@ -40,22 +40,22 @@ ShallowWrapper {
         >
           <WithStyles(Component)>
             <div>
-              Element One
+              Element 1
             </div>
           </WithStyles(Component)>
           <WithStyles(Component)>
             <div>
-              Element Two
+              Element 2
             </div>
           </WithStyles(Component)>
           <WithStyles(Component)>
             <div>
-              Element Three
+              Element 3
             </div>
           </WithStyles(Component)>
           <WithStyles(Component)>
             <div>
-              Element Four
+              Element 4
             </div>
           </WithStyles(Component)>
         </WithStyles(GridList)>,
@@ -85,22 +85,22 @@ ShallowWrapper {
           "children": Array [
             <WithStyles(Component)>
               <div>
-                Element One
+                Element 1
               </div>
             </WithStyles(Component)>,
             <WithStyles(Component)>
               <div>
-                Element Two
+                Element 2
               </div>
             </WithStyles(Component)>,
             <WithStyles(Component)>
               <div>
-                Element Three
+                Element 3
               </div>
             </WithStyles(Component)>,
             <WithStyles(Component)>
               <div>
-                Element Four
+                Element 4
               </div>
             </WithStyles(Component)>,
           ],
@@ -114,7 +114,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <div>
-                Element One
+                Element 1
               </div>,
             },
             "ref": null,
@@ -123,10 +123,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": "Element One",
+                "children": "Element 1",
               },
               "ref": null,
-              "rendered": "Element One",
+              "rendered": "Element 1",
               "type": "div",
             },
             "type": [Function],
@@ -137,7 +137,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <div>
-                Element Two
+                Element 2
               </div>,
             },
             "ref": null,
@@ -146,10 +146,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": "Element Two",
+                "children": "Element 2",
               },
               "ref": null,
-              "rendered": "Element Two",
+              "rendered": "Element 2",
               "type": "div",
             },
             "type": [Function],
@@ -160,7 +160,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <div>
-                Element Three
+                Element 3
               </div>,
             },
             "ref": null,
@@ -169,10 +169,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": "Element Three",
+                "children": "Element 3",
               },
               "ref": null,
-              "rendered": "Element Three",
+              "rendered": "Element 3",
               "type": "div",
             },
             "type": [Function],
@@ -183,7 +183,7 @@ ShallowWrapper {
             "nodeType": "class",
             "props": Object {
               "children": <div>
-                Element Four
+                Element 4
               </div>,
             },
             "ref": null,
@@ -192,10 +192,10 @@ ShallowWrapper {
               "key": undefined,
               "nodeType": "host",
               "props": Object {
-                "children": "Element Four",
+                "children": "Element 4",
               },
               "ref": null,
-              "rendered": "Element Four",
+              "rendered": "Element 4",
               "type": "div",
             },
             "type": [Function],
@@ -222,22 +222,22 @@ ShallowWrapper {
           >
             <WithStyles(Component)>
               <div>
-                Element One
+                Element 1
               </div>
             </WithStyles(Component)>
             <WithStyles(Component)>
               <div>
-                Element Two
+                Element 2
               </div>
             </WithStyles(Component)>
             <WithStyles(Component)>
               <div>
-                Element Three
+                Element 3
               </div>
             </WithStyles(Component)>
             <WithStyles(Component)>
               <div>
-                Element Four
+                Element 4
               </div>
             </WithStyles(Component)>
           </WithStyles(GridList)>,
@@ -267,22 +267,22 @@ ShallowWrapper {
             "children": Array [
               <WithStyles(Component)>
                 <div>
-                  Element One
+                  Element 1
                 </div>
               </WithStyles(Component)>,
               <WithStyles(Component)>
                 <div>
-                  Element Two
+                  Element 2
                 </div>
               </WithStyles(Component)>,
               <WithStyles(Component)>
                 <div>
-                  Element Three
+                  Element 3
                 </div>
               </WithStyles(Component)>,
               <WithStyles(Component)>
                 <div>
-                  Element Four
+                  Element 4
                 </div>
               </WithStyles(Component)>,
             ],
@@ -296,7 +296,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <div>
-                  Element One
+                  Element 1
                 </div>,
               },
               "ref": null,
@@ -305,10 +305,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Element One",
+                  "children": "Element 1",
                 },
                 "ref": null,
-                "rendered": "Element One",
+                "rendered": "Element 1",
                 "type": "div",
               },
               "type": [Function],
@@ -319,7 +319,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <div>
-                  Element Two
+                  Element 2
                 </div>,
               },
               "ref": null,
@@ -328,10 +328,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Element Two",
+                  "children": "Element 2",
                 },
                 "ref": null,
-                "rendered": "Element Two",
+                "rendered": "Element 2",
                 "type": "div",
               },
               "type": [Function],
@@ -342,7 +342,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <div>
-                  Element Three
+                  Element 3
                 </div>,
               },
               "ref": null,
@@ -351,10 +351,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Element Three",
+                  "children": "Element 3",
                 },
                 "ref": null,
-                "rendered": "Element Three",
+                "rendered": "Element 3",
                 "type": "div",
               },
               "type": [Function],
@@ -365,7 +365,7 @@ ShallowWrapper {
               "nodeType": "class",
               "props": Object {
                 "children": <div>
-                  Element Four
+                  Element 4
                 </div>,
               },
               "ref": null,
@@ -374,10 +374,10 @@ ShallowWrapper {
                 "key": undefined,
                 "nodeType": "host",
                 "props": Object {
-                  "children": "Element Four",
+                  "children": "Element 4",
                 },
                 "ref": null,
-                "rendered": "Element Four",
+                "rendered": "Element 4",
                 "type": "div",
               },
               "type": [Function],
