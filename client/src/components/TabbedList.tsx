@@ -97,11 +97,7 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
                 Next
               </Button>
               <div>
-                Tab {
-                  this.state.tab + 1
-                } of {
-                  Math.ceil(this.props.children.length / this.state.itemsPerTab)
-                }
+                {`Tab ${this.state.tab + 1} of ${Math.ceil(this.props.children.length / this.state.itemsPerTab)}`}
               </div>
             </div>
           }
