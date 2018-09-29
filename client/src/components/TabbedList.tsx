@@ -29,18 +29,39 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
   }
 
   nextTab() {
-    this.setState({tab: this.state.tab + 1});
+    if (this.canGoToNextPage()) {
+      this.setState({tab: this.state.tab + 1});
+    }
   }
 
   previousTab() {
-    this.setState({tab: this.state.tab - 1});
+    if (this.canGoToPreviousPage()) {
+      this.setState({tab: this.state.tab - 1});
+    }
+  }
+
+  getTabRange() {
+    const tabStart = this.state.tab * this.state.itemsPerTab;
+    const tabEnd = tabStart + this.state.itemsPerTab;
+    return {
+      tabStart,
+      tabEnd
+    };
+  }
+
+  canGoToNextPage() {
+    const {tabEnd} = this.getTabRange();
+    return tabEnd < this.props.children.length;
+  }
+
+  canGoToPreviousPage() {
+    return this.state.tab > 0;
   }
 
   render() {
     const visibleElements = [];
 
-    let tabStart = this.state.tab * this.state.itemsPerTab;
-    let tabEnd = tabStart + this.state.itemsPerTab;
+    const {tabStart, tabEnd} = this.getTabRange();
     // TODO - Convert for loop to map
     for (let i = tabStart; i < tabEnd; i++) {
       if (!this.props.children[i]) {
@@ -64,14 +85,14 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
               <Button
                 className={'previous-tab'}
                 onClick={this.previousTab}
-                disabled={this.state.tab === 0}
+                disabled={!this.canGoToPreviousPage()}
               >
                 Previous
               </Button>
               <Button
                 className={'next-tab'}
                 onClick={this.nextTab}
-                disabled={tabEnd >= this.props.children.length}
+                disabled={!this.canGoToNextPage()}
               >
                 Next
               </Button>

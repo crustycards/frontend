@@ -36,13 +36,52 @@ it('can switch tabs', () => {
 
   wrapper.find('.next-tab').first().simulate('click');
 
+  expect(wrapper.state('tab')).toEqual(1);
   expect(wrapper.find(GridListTile).length).toEqual(2);
   expect(wrapper.find(GridListTile).first().text()).toEqual('Element 21');
   expect(wrapper.find(GridListTile).last().text()).toEqual('Element 22');
 
   wrapper.find('.previous-tab').first().simulate('click');
 
+  expect(wrapper.state('tab')).toEqual(0);
   expect(wrapper.find(GridListTile).length).toEqual(20);
   expect(wrapper.find(GridListTile).first().text()).toEqual('Element 1');
   expect(wrapper.find(GridListTile).last().text()).toEqual('Element 20');
+});
+
+it('cannot go to previous tab if on first tab already', () => {
+  const wrapper = shallow(<TabbedList>{generateListElements(22)}</TabbedList>);
+
+  expect(wrapper.state('tab')).toEqual(0);
+  expect(wrapper.find('.previous-tab').first().props().disabled).toEqual(true);
+  wrapper.find('.previous-tab').first().simulate('click');
+  expect(wrapper.state('tab')).toEqual(0);
+});
+
+it('cannot go to next tab if on last tab already', () => {
+  const wrapper = shallow(<TabbedList>{generateListElements(22)}</TabbedList>);
+
+  expect(wrapper.state('tab')).toEqual(0);
+  expect(wrapper.find('.next-tab').first().props().disabled).toEqual(false);
+
+  wrapper.find('.next-tab').first().simulate('click');
+
+  expect(wrapper.state('tab')).toEqual(1);
+  expect(wrapper.find('.next-tab').first().props().disabled).toEqual(true);
+
+  wrapper.find('.next-tab').first().simulate('click');
+
+  expect(wrapper.state('tab')).toEqual(1);
+  expect(wrapper.find('.next-tab').first().props().disabled).toEqual(true);
+});
+
+it('only displays previous and next tab buttons when enough elements are present', () => {
+  const wrapperWithoutTabs = shallow(<TabbedList>{generateListElements(20)}</TabbedList>);
+  const wrapperWithTabs = shallow(<TabbedList>{generateListElements(21)}</TabbedList>);
+
+  expect(wrapperWithoutTabs.find('.previous-tab').exists()).toEqual(false);
+  expect(wrapperWithoutTabs.find('.next-tab').exists()).toEqual(false);
+
+  expect(wrapperWithTabs.find('.previous-tab').exists()).toEqual(true);
+  expect(wrapperWithTabs.find('.next-tab').exists()).toEqual(true);
 });
