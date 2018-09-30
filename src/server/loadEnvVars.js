@@ -1,5 +1,5 @@
-const dotEnv = require('dotenv');
-const assert = require('assert');
+import * as dotEnv from 'dotenv';
+import * as assert from 'assert';
 
 const requiredVars = [
   'NODE_ENV',
