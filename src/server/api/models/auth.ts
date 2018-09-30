@@ -1,16 +1,19 @@
-const axios = require('axios');
+import axios from 'axios';
+import { Session } from '../../../client/src/api/dao';
 
 export default class {
-  constructor(authServerUrl) {
+  private authServerUrl: string;
+
+  constructor(authServerUrl: string) {
     this.authServerUrl = authServerUrl;
   }
 
-  async createSession(userId) {
+  async createSession(userId: string): Promise<Session> {
     const response = await axios.put(`${this.authServerUrl}/session?userId=${userId}`);
     return response.data;
   }
 
-  async getSession(sessionId) {
+  async getSession(sessionId: string): Promise<Session> {
     try {
       const response = await axios.get(`${this.authServerUrl}/session?sessionId=${sessionId}`);
       return response.data;
@@ -19,7 +22,7 @@ export default class {
     }
   }
 
-  async deleteSession(sessionId) {
+  async deleteSession(sessionId: string): Promise<void> {
     await axios.delete(`${this.authServerUrl}/session?sessionId=${sessionId}`);
   }
 }
