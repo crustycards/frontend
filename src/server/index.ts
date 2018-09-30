@@ -20,9 +20,9 @@ const generateScript = (user: any = null) => (
 );
 
 import * as Hapi from 'hapi';
-import * as api from '../api';
+import * as api from './api';
 import * as Bell from 'bell';
-import {Auth} from '../api';
+import {Auth} from './api';
 import {ResponseToolkit, Request} from 'hapi';
 
 interface GoogleOAuthRequestAuth extends Hapi.RequestAuth {
