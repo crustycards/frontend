@@ -1,16 +1,20 @@
+import * as Hapi from 'hapi';
+import * as Bell from 'bell';
+import * as fs from 'fs';
 import * as loadEnvVars from './loadEnvVars';
+import * as api from './api';
+import {Auth} from './api';
+import {ResponseToolkit, Request} from 'hapi';
+
 loadEnvVars();
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = parseInt(process.env.PORT);
 const cookieName = 'session';
 
-import * as fs from 'fs';
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
-const serviceWorker = fs.readFileSync(
-    `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
-).toString();
+const serviceWorker = fs.readFileSync(`${__dirname}/../client/src/serviceWorker/serviceWorker.js`).toString();
 
 const generateScript = (user: any = null) => (
   `<script>
@@ -18,12 +22,6 @@ const generateScript = (user: any = null) => (
   </script>
   ${html}`
 );
-
-import * as Hapi from 'hapi';
-import * as api from './api';
-import * as Bell from 'bell';
-import {Auth} from './api';
-import {ResponseToolkit, Request} from 'hapi';
 
 interface GoogleOAuthRequestAuth extends Hapi.RequestAuth {
   credentials: {
