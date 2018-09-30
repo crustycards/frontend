@@ -13,7 +13,7 @@ import {ApiContextWrapper} from '../api/context';
 
 const buttonStyle = {
   height: '36px',
-  margin: '10px'
+  margin: '15px'
 };
 
 const gameAlertStyle = {
@@ -34,7 +34,18 @@ const Game = (props: GameProps) => (
     {props.game ?
       <div>
         <div className='game-top'>
-          <h2>Current game: {props.game.name}</h2>
+          <div style={{height: '66px', float: 'left'}}>
+            <h2
+              style={{lineHeight: '36px'}}
+            >
+              {`Current game:  ${props.game.name}`}
+            </h2>
+            <h3
+              style={{float: 'left', lineHeight: '30px'}}
+            >
+              {`Owner: ${props.game.players.find((player) => player.id === props.game.ownerId).name}`}
+            </h3>
+          </div>
           <Button
             onClick={props.api.game.leaveGame}
             style={buttonStyle}

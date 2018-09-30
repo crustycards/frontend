@@ -1,17 +1,21 @@
 @import 'global-variables';
 
-$game-top-height: 56px;
+$game-top-height: 66px;
 
 .game-top {
   height: $game-top-height;
   vertical-align: middle;
   background-color: $tertiary-color;
 
+  h2, h3 {
+    margin: 0 10px;
+  }
+
   h2 {
     font-size: 1.2em;
-    float: left;
-    margin: 0 10px;
-    line-height: $game-top-height;
+  }
+  h3 {
+    font-size: 1em;
   }
 
   button {
