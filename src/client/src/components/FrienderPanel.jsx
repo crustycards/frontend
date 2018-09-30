@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import AutoComplete from './AutoComplete.jsx';
+import AutoComplete from './AutoComplete.tsx';
 import UserCard from './shells/UserCard.tsx';
 import {ApiContextWrapper} from '../api/context';
 

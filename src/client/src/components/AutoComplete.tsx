@@ -1,18 +1,16 @@
-import React, {Component} from 'react';
-import Autosuggest from 'react-autosuggest';
-import match from 'autosuggest-highlight/match';
-import parse from 'autosuggest-highlight/parse';
-import {TextField, Paper, MenuItem, withStyles} from '@material-ui/core';
-import _ from 'underscore';
+import * as React from 'react';
+import {Component} from 'react';
+import * as Autosuggest from 'react-autosuggest';
+import parseHighlights from '../helpers/autoComplete';
+import {TextField, Paper, MenuItem, withStyles, Theme, WithStyles} from '@material-ui/core';
+import * as _ from 'underscore';
 
-const styles = (theme) => ({
+const styles = (theme: Theme) => ({
   container: {
     flexGrow: 1,
-    position: 'relative',
     height: 250
   },
   suggestionsContainerOpen: {
-    position: 'absolute',
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
@@ -28,7 +26,7 @@ const styles = (theme) => ({
   }
 });
 
-const renderInput = (inputProps) => {
+const renderInput: Autosuggest.RenderInputComponent<string> = (inputProps: any) => {
   const {classes, ref, ...other} = inputProps;
 
   return (
@@ -45,9 +43,9 @@ const renderInput = (inputProps) => {
   );
 };
 
-const renderSuggestion = (suggestion, {query, isHighlighted}) => {
-  const matches = match(suggestion.label, query);
-  const parts = parse(suggestion.label, matches);
+const renderSuggestion: Autosuggest.RenderSuggestion<any> = (suggestion, {query, isHighlighted}) => {
+  const parts = parseHighlights(suggestion.label, query);
+  console.log(suggestion.label, query, parts);
 
   return (
     <MenuItem selected={isHighlighted} component={'div'}>
@@ -68,24 +66,37 @@ const renderSuggestion = (suggestion, {query, isHighlighted}) => {
   );
 };
 
-const renderSuggestionsContainer = ({containerProps, children}) => (
+const renderSuggestionsContainer: Autosuggest.RenderSuggestionsContainer = ({containerProps, children}) => (
   <Paper {...containerProps} square>
     {children}
   </Paper>
 );
 
-const getSuggestionValue = ({label}) => (label);
+interface AutoCompleteSuggestion {
+  label: string
+}
 
-class AutoComplete extends Component {
-  constructor(props) {
+interface AutoCompleteProps extends WithStyles<typeof styles> {
+  label?: string
+  onSubmit(query: string): void
+  getSuggestions(text: string): Promise<Array<string>>
+}
+
+interface AutoCompleteState {
+  value: string
+  suggestions: AutoCompleteSuggestion[]
+  submit(query: string): void
+}
+
+class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
+  constructor(props: AutoCompleteProps) {
     super(props);
 
     this.state = {
       value: '',
-      suggestions: []
+      suggestions: [],
+      submit: _.throttle(this.props.onSubmit, 100, {trailing: false})
     };
-
-    this.submit = _.throttle(this.props.onSubmit, 100, {trailing: false});
 
     this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
     this.handleSuggestionsClearRequested = this.handleSuggestionsClearRequested.bind(this);
@@ -93,7 +104,7 @@ class AutoComplete extends Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  async handleSuggestionsFetchRequested({value}) {
+  async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
     const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
     this.setState({suggestions});
   }
@@ -102,13 +113,13 @@ class AutoComplete extends Component {
     this.setState({suggestions: []});
   }
 
-  handleChange(event, {newValue}) {
+  handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
     this.setState({value: newValue});
   }
 
-  handleKeyDown(event) {
+  handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter' && this.state.value) {
-      this.submit(this.state.value);
+      this.state.submit(this.state.value);
     }
   }
 
@@ -127,9 +138,9 @@ class AutoComplete extends Component {
         suggestions={this.state.suggestions}
         onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-        onSuggestionSelected={(e, {suggestionValue}) => this.submit(suggestionValue)}
+        onSuggestionSelected={(e, {suggestionValue}) => this.state.submit(suggestionValue)}
         renderSuggestionsContainer={renderSuggestionsContainer}
-        getSuggestionValue={getSuggestionValue}
+        getSuggestionValue={({label}) => (label)}
         renderSuggestion={renderSuggestion}
         inputProps={{
           classes,
