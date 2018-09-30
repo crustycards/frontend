@@ -10,14 +10,16 @@ export default class {
     return response.data;
   }
 
-  getSession(sessionId) {
-    return axios.get(`${this.authServerUrl}/session?sessionId=${sessionId}`)
-        .then((res) => res.data)
-        .catch(() => null);
+  async getSession(sessionId) {
+    try {
+      const response = await axios.get(`${this.authServerUrl}/session?sessionId=${sessionId}`);
+      return response.data;
+    } catch (err) {
+      return null;
+    }
   }
 
-  deleteSession(sessionId) {
-    return axios.delete(`${this.authServerUrl}/session?sessionId=${sessionId}`)
-        .then(() => {});
+  async deleteSession(sessionId) {
+    await axios.delete(`${this.authServerUrl}/session?sessionId=${sessionId}`);
   }
 }
