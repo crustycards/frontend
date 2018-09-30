@@ -1,6 +1,5 @@
+import axios from 'axios';
 import { Cardpack } from '../../../client/src/api/dao';
-
-const axios = require('axios');
 
 export default class {
   private apiUrl: string;
