@@ -9,7 +9,7 @@ import NotFound from './pages/NotFound';
 import Game from './pages/Game';
 import GameList from './pages/GameList';
 import Settings from './pages/Settings';
-import Navbar from './components/Navbar.jsx';
+import Navbar from './components/Navbar';
 import StatusBar from './components/StatusBar';
 import './styles/index.scss';
 import {Route, Switch} from 'react-router';
