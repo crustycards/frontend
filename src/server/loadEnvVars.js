@@ -48,7 +48,7 @@ const applyCommandLineArguments = () => {
   });
 };
 
-module.exports = () => {
+export default function() {
   applyEnvConfig();
   applyCommandLineArguments();
   applyDefaultValues();
@@ -58,4 +58,4 @@ module.exports = () => {
     'test',
     'production'
   ].includes(process.env.NODE_ENV), 'NODE_ENV must be either development, test, or production');
-};
+}

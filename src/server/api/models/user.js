@@ -1,12 +1,12 @@
 const axios = require('axios');
 const api = process.env.API_URL;
 
-const getById = async (id) => {
+export const getById = async (id) => {
   const response = await axios.get(`${api}/user`, {params: {id}});
   return response.data;
 };
 
-const getByOAuth = async ({oAuthId, oAuthProvider}) => {
+export const getByOAuth = async ({oAuthId, oAuthProvider}) => {
   if (!!oAuthId ^ !!oAuthProvider) {
     throw new Error('Must provide either oAuth data or user Id');
   }
@@ -14,7 +14,7 @@ const getByOAuth = async ({oAuthId, oAuthProvider}) => {
   return response.data;
 };
 
-const create = async ({name, oAuthId, oAuthProvider}) => {
+export const create = async ({name, oAuthId, oAuthProvider}) => {
   if (!(name && oAuthId && oAuthProvider)) {
     throw new Error('Not all parameters were provided');
   }
@@ -22,17 +22,10 @@ const create = async ({name, oAuthId, oAuthProvider}) => {
   return response.data;
 };
 
-const findOrCreate = async ({name, oAuthId, oAuthProvider}) => {
+export const findOrCreate = async ({name, oAuthId, oAuthProvider}) => {
   try {
     return await getByOAuth({oAuthId, oAuthProvider});
   } catch (err) {
     return create({name, oAuthId, oAuthProvider});
   }
-};
-
-module.exports = {
-  getById,
-  getByOAuth,
-  create,
-  findOrCreate
 };

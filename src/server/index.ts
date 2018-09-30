@@ -1,7 +1,7 @@
 import * as Hapi from 'hapi';
 import * as Bell from 'bell';
 import * as fs from 'fs';
-import * as loadEnvVars from './loadEnvVars';
+import loadEnvVars from './loadEnvVars';
 import * as api from './api';
 import {Auth} from './api';
 import {ResponseToolkit, Request} from 'hapi';
@@ -40,7 +40,7 @@ const startServer = async () => {
     host: process.env.HOST || (isProduction ? undefined : 'localhost')
   });
 
-  await server.register(Bell)
+  await server.register(Bell.plugin)
       .then(() => {
         server.auth.strategy('google', 'bell', {
           provider: 'google',
@@ -97,7 +97,7 @@ const startServer = async () => {
       handler: async (request: Request, h: ResponseToolkit) => {
         try {
           const session = await Auth.getSession(request.state[cookieName]);
-          const user = await api.User.getById({id: session.userId});
+          const user = await api.User.getById(session.userId);
           return generateScript(user);
         } catch (err) {
           return generateScript();
