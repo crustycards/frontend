@@ -1,4 +1,4 @@
-import { Cardpack } from "../../../client/src/api/dao";
+import { Cardpack } from '../../../client/src/api/dao';
 
 const axios = require('axios');
 

@@ -1,4 +1,4 @@
-import {JsonWhiteCard, JsonBlackCard} from "../api/dao";
+import {JsonWhiteCard, JsonBlackCard} from '../api/dao';
 
 interface ParsedCardpack {
   whiteCards: JsonWhiteCard[]

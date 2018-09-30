@@ -1,4 +1,4 @@
-import { User } from "../../../client/src/api/dao";
+import { User } from '../../../client/src/api/dao';
 
 const axios = require('axios');
 

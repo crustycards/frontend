@@ -1,5 +1,5 @@
-import GameApi from "./model/gameApi";
-import {Store} from "redux";
+import GameApi from './model/gameApi';
+import {Store} from 'redux';
 import {setGameList} from '../store/modules/games';
 import {setGameState} from '../store/modules/game';
 

@@ -1,4 +1,4 @@
-import { User } from "../../api/dao";
+import { User } from '../../api/dao';
 
 const OPEN_NAVBAR = 'global/OPEN_NAVBAR';
 const CLOSE_NAVBAR = 'global/CLOSE_NAVBAR';

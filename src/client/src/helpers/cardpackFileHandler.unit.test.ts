@@ -1,4 +1,4 @@
-import {JsonWhiteCard, JsonBlackCard} from "../api/dao";
+import {JsonWhiteCard, JsonBlackCard} from '../api/dao';
 
 import * as fileHandler from './cardpackFileHandler';
 

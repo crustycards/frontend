@@ -1,4 +1,4 @@
-import { GameInfo } from "../../api/dao";
+import { GameInfo } from '../../api/dao';
 
 const ADD_GAME = 'games/ADD_GAME';
 const REMOVE_GAME = 'games/REMOVE_GAME';

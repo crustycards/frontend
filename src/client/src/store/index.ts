@@ -2,7 +2,7 @@ import {createStore, applyMiddleware, compose} from 'redux';
 import rootReducer from './modules';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {User, BlackCard, WhitePlayed} from '../api/dao';
-import {History} from '../../../node_modules/@types/history';
+import {History} from 'history';
 
 declare global {
   interface Window {
