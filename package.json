@@ -6,7 +6,7 @@
   "scripts": {
     "build-dev": "webpack -d --watch --mode development",
     "build-prod": "webpack --mode production",
-    "start": "ts-node server/index.ts",
+    "start": "ts-node src/server/index.ts",
     "start-dev": "nodemon",
     "lint": "eslint . --ext .js --ext .jsx",
     "lint-clean": "npm run lint -- --fix",

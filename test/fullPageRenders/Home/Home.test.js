@@ -1,4 +1,4 @@
-import Home from '../../../client/src/pages/Home.tsx';
+import Home from '../../../src/client/src/pages/Home.tsx';
 import states from './Home.states.json';
 import {generateTests} from '../testGen';
 
