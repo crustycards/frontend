@@ -1,6 +1,6 @@
 const path = require('path');
-const SRC_DIR = path.join(__dirname, '/client/src');
-const DIST_DIR = path.join(__dirname, '/client/dist');
+const SRC_DIR = path.join(__dirname, '/src/client/src');
+const DIST_DIR = path.join(__dirname, '/src/client/dist');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
