@@ -41,7 +41,7 @@ const startServer = async () => {
     host: process.env.HOST || (isProduction ? undefined : 'localhost')
   });
 
-  await server.register(Bell.plugin)
+  await server.register(Bell)
       .then(() => {
         server.auth.strategy('google', 'bell', {
           provider: 'google',
