@@ -45,7 +45,6 @@ const renderInput: Autosuggest.RenderInputComponent<string> = (inputProps: any) 
 
 const renderSuggestion: Autosuggest.RenderSuggestion<any> = (suggestion, {query, isHighlighted}) => {
   const parts = parseHighlights(suggestion.label, query);
-  console.log(suggestion.label, query, parts);
 
   return (
     <MenuItem selected={isHighlighted} component={'div'}>
