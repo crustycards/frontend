@@ -6,8 +6,8 @@
   "scripts": {
     "build-dev": "webpack -d --watch --mode development",
     "build-prod": "webpack --mode production",
-    "start": "node server/index.js",
-    "start-dev": "nodemon server/index.js",
+    "start": "ts-node server/index.ts",
+    "start-dev": "nodemon",
     "lint": "eslint . --ext .js --ext .jsx",
     "lint-clean": "npm run lint -- --fix",
     "lint-init": "eslint --init",
@@ -55,6 +55,9 @@
   "dependencies": {
     "@material-ui/core": "^3.1.1",
     "@material-ui/icons": "^3.0.1",
+    "@types/bell": "^9.3.0",
+    "@types/h2o2": "^5.4.7",
+    "@types/hapi": "^17.6.0",
     "@types/history": "^4.7.0",
     "@types/query-string": "^6.1.0",
     "@types/react": "^16.4.14",
@@ -91,6 +94,7 @@
     "react-test-renderer": "^16.5.2",
     "redux": "^4.0.0",
     "redux-form": "^7.4.2",
+    "ts-node": "^7.0.1",
     "underscore": "^1.9.1",
     "url-loader": "^1.1.1",
     "utility-types": "^2.1.0"

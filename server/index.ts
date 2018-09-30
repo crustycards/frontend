@@ -1,28 +1,40 @@
-require('./loadEnvVars')();
+import * as loadEnvVars from './loadEnvVars';
+loadEnvVars();
 
 const isProduction = process.env.NODE_ENV === 'production';
 const port = parseInt(process.env.PORT);
 const cookieName = 'session';
 
-const fs = require('fs');
+import * as fs from 'fs';
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 const serviceWorker = fs.readFileSync(
     `${__dirname}/../client/src/serviceWorker/serviceWorker.js`
 ).toString();
 
-const generateScript = ({
-  user = null
-} = {}) => (
+const generateScript = (user: any = null) => (
   `<script>
     window.__PRELOADED_STATE__ = ${JSON.stringify({user})}
   </script>
   ${html}`
 );
 
-const api = require('../api');
-const Hapi = require('hapi');
-const {Auth} = require('../api');
+import * as Hapi from 'hapi';
+import * as api from '../api';
+import * as Bell from 'bell';
+import {Auth} from '../api';
+import {ResponseToolkit, Request} from 'hapi';
+
+interface GoogleOAuthRequestAuth extends Hapi.RequestAuth {
+  credentials: {
+    profile: any,
+    provider: any
+  }
+}
+
+interface GoogleOAuthRequest extends Request {
+  auth: GoogleOAuthRequestAuth
+}
 
 const startServer = async () => {
   const server = new Hapi.Server({
@@ -30,7 +42,7 @@ const startServer = async () => {
     host: process.env.HOST || (isProduction ? undefined : 'localhost')
   });
 
-  await server.register(require('bell'))
+  await server.register(Bell)
       .then(() => {
         server.auth.strategy('google', 'bell', {
           provider: 'google',
@@ -55,7 +67,7 @@ const startServer = async () => {
               strategy: 'google',
               mode: 'try'
             },
-            handler: async (request, h) => {
+            handler: async (request: GoogleOAuthRequest, h: ResponseToolkit) => {
               if (!request.auth.isAuthenticated) {
                 console.error(request.auth.error);
                 return `Authentication failed due to: ${request.auth.error.message}`;
@@ -73,7 +85,7 @@ const startServer = async () => {
                 return h.redirect('/').state(cookieName, session.id);
               } catch (err) {
                 console.error(err);
-                return 'Failed to authenticate user:', err;
+                return `Failed to authenticate user: ${err}`;
               }
             }
           }
@@ -84,11 +96,11 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/{any*}',
-      handler: async (request, h) => {
+      handler: async (request: Request, h: ResponseToolkit) => {
         try {
           const session = await Auth.getSession(request.state[cookieName]);
-          const user = await api.User.get({id: session.userId});
-          return generateScript({user});
+          const user = await api.User.getById({id: session.userId});
+          return generateScript(user);
         } catch (err) {
           return generateScript();
         }
@@ -97,14 +109,14 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/bundle.js',
-      handler: (request, h) => {
+      handler: (request: Request, h: ResponseToolkit) => {
         return bundle;
       }
     },
-    {
+    { 
       method: 'GET',
       path: '/logout',
-      handler: async (request, h) => {
+      handler: async (request: Request, h: ResponseToolkit) => {
         await Auth.deleteSession(request.state[cookieName]);
         return h.redirect('/login').unstate(cookieName);
       }
@@ -112,7 +124,7 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/firebase-messaging-sw.js',
-      handler: (request, h) => {
+      handler: (request: Request, h: ResponseToolkit) => {
         return h.response(serviceWorker).header('Content-Type', 'application/javascript');
       }
     }
