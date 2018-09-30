@@ -1,23 +1,22 @@
 const axios = require('axios');
-const api = process.env.API_URL;
 
-const getFriends = async (userId) => {
-  const response = await axios.get(`${api}/user/${userId}/friends`);
-  return response.data;
-};
+export default class {
+  constructor(apiUrl) {
+    this.apiUrl = apiUrl;
+  }
 
-const getSentRequests = async (userId) => {
-  const response = await axios.get(`${api}/user/${userId}/friends/requests/sent`);
-  return response.data;
-};
+  async getFriends(userId) {
+    const response = await axios.get(`${this.apiUrl}/user/${userId}/friends`);
+    return response.data;
+  }
 
-const getReceivedRequests = async (userId) => {
-  const response = await axios.get(`${api}/user/${userId}/friends/requests/received`);
-  return response.data;
-};
+  async getSentRequests(userId) {
+    const response = await axios.get(`${this.apiUrl}/user/${userId}/friends/requests/sent`);
+    return response.data;
+  }
 
-module.exports = {
-  getFriends,
-  getSentRequests,
-  getReceivedRequests
-};
+  async getReceivedRequests(userId) {
+    const response = await axios.get(`${this.apiUrl}/user/${userId}/friends/requests/received`);
+    return response.data;
+  }
+}

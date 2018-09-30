@@ -1,23 +1,22 @@
 const axios = require('axios');
-const api = process.env.API_URL;
 
-const getById = async (cardpackId) => {
-  const response = await axios.get(`${api}/cardpack/${cardpackId}`);
-  return response.data;
-};
+export default class {
+  constructor(apiUrl) {
+    this.apiUrl = apiUrl;
+  }
 
-const getByUser = async (userId) => {
-  const response = await axios.get(`${api}/${userId}/cardpacks`);
-  return response.data;
-};
+  async getById(cardpackId) {
+    const response = await axios.get(`${this.apiUrl}/cardpack/${cardpackId}`);
+    return response.data;
+  }
 
-const create = async (userId, name) => {
-  const response = await axios.put(`${api}/${userId}/cardpack`, {name});
-  return response.data;
-};
+  async getByUser(userId) {
+    const response = await axios.get(`${this.apiUrl}/${userId}/cardpacks`);
+    return response.data;
+  }
 
-module.exports = {
-  getById,
-  getByUser,
-  create
-};
+  async create(userId, name) {
+    const response = await axios.put(`${this.apiUrl}/${userId}/cardpack`, {name});
+    return response.data;
+  }
+}

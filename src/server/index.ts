@@ -2,8 +2,7 @@ import * as Hapi from 'hapi';
 import * as Bell from 'bell';
 import * as fs from 'fs';
 import loadEnvVars from './loadEnvVars';
-import * as api from './api';
-import {Auth} from './api';
+import Api from './api';
 import {ResponseToolkit, Request} from 'hapi';
 
 loadEnvVars();
@@ -15,6 +14,8 @@ const cookieName = 'session';
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 const serviceWorker = fs.readFileSync(`${__dirname}/../client/src/serviceWorker/serviceWorker.js`).toString();
+
+const api = new Api({authUrl: process.env.AUTH_SERVER_URL, apiUrl: process.env.API_URL});
 
 const generateScript = (user: any = null) => (
   `<script>
@@ -78,8 +79,8 @@ const startServer = async () => {
                 oAuthProvider: request.auth.credentials.provider
               };
               try {
-                const resUser = await api.User.findOrCreate(userData);
-                const session = await Auth.createSession(resUser.id);
+                const resUser = await api.user.findOrCreate(userData);
+                const session = await api.auth.createSession(resUser.id);
                 return h.redirect('/').state(cookieName, session.id);
               } catch (err) {
                 console.error(err);
@@ -96,8 +97,8 @@ const startServer = async () => {
       path: '/{any*}',
       handler: async (request: Request, h: ResponseToolkit) => {
         try {
-          const session = await Auth.getSession(request.state[cookieName]);
-          const user = await api.User.getById(session.userId);
+          const session = await api.auth.getSession(request.state[cookieName]);
+          const user = await api.user.getById(session.userId);
           return generateScript(user);
         } catch (err) {
           return generateScript();
@@ -115,7 +116,7 @@ const startServer = async () => {
       method: 'GET',
       path: '/logout',
       handler: async (request: Request, h: ResponseToolkit) => {
-        await Auth.deleteSession(request.state[cookieName]);
+        await api.auth.deleteSession(request.state[cookieName]);
         return h.redirect('/login').unstate(cookieName);
       }
     },

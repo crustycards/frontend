@@ -1,24 +1,23 @@
 const axios = require('axios');
-const auth = process.env.AUTH_SERVER_URL;
 
-const createSession = async (userId) => {
-  const response = await axios.put(`${auth}/session?userId=${userId}`);
-  return response.data;
-};
+export default class {
+  constructor(authServerUrl) {
+    this.authServerUrl = authServerUrl;
+  }
 
-const getSession = (sessionId) => {
-  return axios.get(`${auth}/session?sessionId=${sessionId}`)
-      .then((res) => res.data)
-      .catch(() => null);
-};
+  async createSession(userId) {
+    const response = await axios.put(`${this.authServerUrl}/session?userId=${userId}`);
+    return response.data;
+  }
 
-const deleteSession = (sessionId) => {
-  return axios.delete(`${auth}/session?sessionId=${sessionId}`)
-      .then(() => {});
-};
+  getSession(sessionId) {
+    return axios.get(`${this.authServerUrl}/session?sessionId=${sessionId}`)
+        .then((res) => res.data)
+        .catch(() => null);
+  }
 
-module.exports = {
-  createSession,
-  getSession,
-  deleteSession
-};
+  deleteSession(sessionId) {
+    return axios.delete(`${this.authServerUrl}/session?sessionId=${sessionId}`)
+        .then(() => {});
+  }
+}
