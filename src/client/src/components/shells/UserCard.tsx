@@ -7,8 +7,8 @@ import { User } from '../../api/dao';
 
 interface UserCardProps {
   api: Api
-  showFriendButton: boolean
-  showUnfriendButton: boolean
+  showFriendButton?: boolean
+  showUnfriendButton?: boolean
   user: User
 }
 

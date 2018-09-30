@@ -1,10 +1,22 @@
-import React, {Component} from 'react';
-import AutoComplete from './AutoComplete.tsx';
-import UserCard from './shells/UserCard.tsx';
+import * as React from 'react';
+import {Component} from 'react';
+import AutoComplete from './AutoComplete';
+import UserCard from './shells/UserCard';
 import {ApiContextWrapper} from '../api/context';
+import Api from '../api/model/api';
+import {User} from '../api/dao';
 
-class FrienderPanel extends Component {
-  constructor(props) {
+interface FrienderPanelProps {
+  api: Api
+}
+
+interface FrienderPanelState {
+  hasSearched: boolean
+  searchedUsers: User[]
+}
+
+class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
+  constructor(props: FrienderPanelProps) {
     super(props);
 
     this.state = {
@@ -15,7 +27,7 @@ class FrienderPanel extends Component {
     this.searchUsers = this.searchUsers.bind(this);
   }
 
-  searchUsers(query) {
+  searchUsers(query: string) {
     this.props.api.main.searchUsers(query)
         .then((searchedUsers) =>
           this.setState({

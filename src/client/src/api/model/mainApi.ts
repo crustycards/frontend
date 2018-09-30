@@ -13,9 +13,9 @@ interface MainApi {
   addFriend(friendId: string): Promise<void>
   removeFriend(friendId: string): Promise<void>
   searchUsers(query: string): Promise<Array<User>>
-  autocompleteUserSearch(query: string): Promise<Array<String>>
+  autocompleteUserSearch(query: string): Promise<Array<string>>
   searchCardpacks(query: string): Promise<Array<Cardpack>>
-  autocompleteCardpackSearch(query: string): Promise<Array<String>>
+  autocompleteCardpackSearch(query: string): Promise<Array<string>>
   favoriteCardpack(cardpackId: string): Promise<void>
   unfavoriteCardpack(cardpackId: string): Promise<void>
   getFavoritedCardpacks(userId?: string): Promise<Array<Cardpack>>

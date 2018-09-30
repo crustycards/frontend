@@ -1,10 +1,10 @@
 import * as React from 'react';
-import FrienderPanel from '../components/FrienderPanel.jsx';
+import FrienderPanel from '../components/FrienderPanel';
 
 const Home = () => (
   <div className='content-wrap'>
     <div className='col-narrow'>
-      <FrienderPanel />
+      <FrienderPanel/>
     </div>
     <div className='col-wide'>
     </div>
