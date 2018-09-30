@@ -54,11 +54,11 @@ const renderSuggestion = (suggestion, {query, isHighlighted}) => {
       <div>
         {parts.map((part, index) => {
           return part.highlight ? (
-            <span key={String(index)} style={{fontWeight: 500}}>
+            <span key={String(index)} style={{fontWeight: 700}}>
               {part.text}
             </span>
           ) : (
-            <strong key={String(index)} style={{fontWeight: 300}}>
+            <strong key={String(index)} style={{fontWeight: 400}}>
               {part.text}
             </strong>
           );
