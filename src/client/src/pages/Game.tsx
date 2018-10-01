@@ -130,14 +130,14 @@ const Game = (props: GameProps) => (
             to='/gamelist'
             style={{textDecoration: 'none'}}
           >
-          <Button
-            style={{marginLeft: '5px'}}
-            variant={'outlined'}
-            color={'primary'}
-          >
-            See Games
-          </Button>
-        </NavLink>
+            <Button
+              style={{marginLeft: '5px'}}
+              variant={'outlined'}
+              color={'primary'}
+            >
+              See Games
+            </Button>
+          </NavLink>
         </div>
       </div>
     }
