@@ -19,6 +19,7 @@
   "devDependencies": {
     "@types/dotenv": "^4.0.3",
     "@types/enzyme": "^3.1.14",
+    "@types/enzyme-adapter-react-16": "^1.0.3",
     "@types/jest": "^23.3.2",
     "@types/webpack": "^4.4.13",
     "babel-core": "^6.26.3",
@@ -101,7 +102,7 @@
     "utility-types": "^2.1.0"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.js",
+    "setupTestFrameworkScriptFile": "<rootDir>/test/setupTests.ts",
     "transform": {
       "^.+\\.jsx?$": "babel-jest",
       "^.+\\.tsx?$": "ts-jest"

@@ -5,7 +5,7 @@
 // import {createMockStore} from '../helpers';
 // import {Provider as ApiContextProvider} from '../../client/src/api/context';
 
-module.exports.generateTests = (Component, states) => {
+export const generateTests = (Component: () => JSX.Element, states: any[]) => {
   describe(`${Component.constructor.name} page renders states without error`, () => {
     states.forEach((state, index) => {
       it(`renders state at index ${index}`, () => {

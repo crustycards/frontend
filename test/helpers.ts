@@ -1,12 +1,13 @@
 import {createStore as createReduxStore} from 'redux';
 
-module.exports.createMockStore = (data) => {
-  const reducer = (state = data, {action, payload}) => {
+module.exports.createMockStore = (data: any) => {
+  const reducer = (state = data, {action, payload}: any) => {
     if (action === 'SET_ENTIRE_STATE') {
       return payload;
     } else {
       return state;
     }
   };
+
   return createReduxStore(reducer);
 };
