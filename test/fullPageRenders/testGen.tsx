@@ -1,9 +1,9 @@
-// import React from 'react';
+// import * as React from 'react';
 // import {Provider} from 'react-redux';
 // import {BrowserRouter} from 'react-router-dom';
 // import {mount} from 'enzyme';
 // import {createMockStore} from '../helpers';
-// import {Provider as ApiContextProvider} from '../../client/src/api/context';
+// import {Provider as ApiContextProvider} from '../../src/client/src/api/context';
 
 export const generateTests = (Component: () => JSX.Element, states: any[]) => {
   describe(`${Component.constructor.name} page renders states without error`, () => {
