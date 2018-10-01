@@ -1,8 +1,8 @@
-import {JsonWhiteCard, JsonBlackCard} from '../api/dao';
+import {JsonBlackCard, JsonWhiteCard} from '../api/dao';
 
 interface ParsedCardpack {
-  whiteCards: JsonWhiteCard[]
-  blackCards: JsonBlackCard[]
+  whiteCards: JsonWhiteCard[];
+  blackCards: JsonBlackCard[];
 }
 
 export const parse = (string: string): ParsedCardpack => {

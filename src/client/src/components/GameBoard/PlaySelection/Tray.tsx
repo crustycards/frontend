@@ -1,23 +1,23 @@
 import * as React from 'react';
 import {Component} from 'react';
-import DraggableCardInHand from './DraggableCardInHand';
-import {cardInHand} from '../../../dndTypes';
-import {DropTarget, ConnectDropTarget} from 'react-dnd/lib';
+import {ConnectDropTarget, DropTarget} from 'react-dnd/lib';
 import {connect} from 'react-redux';
+import {bindActionCreators, Dispatch} from 'redux';
+import {BlackCard, User, WhiteCard, WhitePlayed} from '../../../api/dao';
+import {cardInHand} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {unqueueCard} from '../../../store/modules/game';
-import {bindActionCreators, Dispatch} from 'redux';
-import {WhiteCard, User, WhitePlayed, BlackCard} from '../../../api/dao';
+import DraggableCardInHand from './DraggableCardInHand';
 
 interface TrayProps {
-  unqueueCard(cardId: string): void
-  cards: WhiteCard[]
-  queuedCardIds: string[]
-  connectDropTarget?: ConnectDropTarget // TODO - Remove '?' and fix react-dnd types
-  whitePlayed: WhitePlayed
-  currentBlackCard: BlackCard
-  user: User
-  judgeId: string
+  cards: WhiteCard[];
+  queuedCardIds: string[];
+  connectDropTarget?: ConnectDropTarget; // TODO - Remove '?' and fix react-dnd types
+  whitePlayed: WhitePlayed;
+  currentBlackCard: BlackCard;
+  user: User;
+  judgeId: string;
+  unqueueCard(cardId: string): void;
 }
 
 @DropTarget(cardInHand, {drop: (props: TrayProps, monitor) => {
@@ -28,7 +28,7 @@ interface TrayProps {
   canDrop: monitor.canDrop()
 }))
 class Tray extends Component<TrayProps> {
-  render() {
+  public render() {
     const {
       cards,
       queuedCardIds,

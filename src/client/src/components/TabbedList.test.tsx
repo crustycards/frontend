@@ -1,7 +1,7 @@
+import {GridListTile} from '@material-ui/core';
+import {mount, shallow} from 'enzyme';
 import * as React from 'react';
 import TabbedList from './TabbedList';
-import {shallow, mount} from 'enzyme';
-import {GridListTile} from '@material-ui/core';
 
 const generateListElements = (size: number) => {
   const elems = [];

@@ -10,9 +10,9 @@ export default (server: Server, apiUrl: string) => {
       path: '/api/cardpack/search',
       handler: (request: Request, h: ProxyResponseToolkit) => {
         const {query} = request.query;
-  
+
         return h.proxy({
-          uri: `${apiUrl}/cardpack/search${getQuery(<string>query)}`
+          uri: `${apiUrl}/cardpack/search${getQuery(query as string)}`
         });
       }
     },
@@ -21,9 +21,9 @@ export default (server: Server, apiUrl: string) => {
       path: '/api/cardpack/search/autocomplete',
       handler: (request: Request, h: ProxyResponseToolkit) => {
         const {query} = request.query;
-  
+
         return h.proxy({
-          uri: `${apiUrl}/cardpack/search/autocomplete${getQuery(<string>query)}`
+          uri: `${apiUrl}/cardpack/search/autocomplete${getQuery(query as string)}`
         });
       }
     },
@@ -32,9 +32,9 @@ export default (server: Server, apiUrl: string) => {
       path: '/api/user/search',
       handler: (request: Request, h: ProxyResponseToolkit) => {
         const {query} = request.query;
-  
+
         return h.proxy({
-          uri: `${apiUrl}/user/search${getQuery(<string>query)}`
+          uri: `${apiUrl}/user/search${getQuery(query as string)}`
         });
       }
     },
@@ -43,9 +43,9 @@ export default (server: Server, apiUrl: string) => {
       path: '/api/user/search/autocomplete',
       handler: (request: Request, h: ProxyResponseToolkit) => {
         const {query} = request.query;
-  
+
         return h.proxy({
-          uri: `${apiUrl}/user/search/autocomplete${getQuery(<string>query)}`
+          uri: `${apiUrl}/user/search/autocomplete${getQuery(query as string)}`
         });
       }
     }

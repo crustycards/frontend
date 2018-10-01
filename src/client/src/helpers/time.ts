@@ -1,6 +1,6 @@
 interface RelativeTime {
-  count: number
-  unit: string
+  count: number;
+  unit: string;
 }
 
 const timeSince = (secondsPast: number): RelativeTime => {
@@ -8,10 +8,10 @@ const timeSince = (secondsPast: number): RelativeTime => {
     return {count: Math.floor(secondsPast), unit: 'second'};
   }
   if (secondsPast < 3600) {
-    return {count: Math.floor(secondsPast/60), unit: 'minute'};
+    return {count: Math.floor(secondsPast / 60), unit: 'minute'};
   }
   if (secondsPast < 86400) {
-    return {count: Math.floor(secondsPast/3600), unit: 'hour'};
+    return {count: Math.floor(secondsPast / 3600), unit: 'hour'};
   }
 };
 

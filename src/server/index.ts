@@ -1,9 +1,9 @@
-import * as Hapi from 'hapi';
 import * as Bell from 'bell';
 import * as fs from 'fs';
-import loadEnvVars from './loadEnvVars';
-import Api from './api';
+import * as Hapi from 'hapi';
 import {Request} from 'hapi';
+import Api from './api';
+import loadEnvVars from './loadEnvVars';
 import loadRoutes from './route';
 
 loadEnvVars();
@@ -29,11 +29,11 @@ interface GoogleOAuthRequestAuth extends Hapi.RequestAuth {
   credentials: {
     profile: any,
     provider: any
-  }
+  };
 }
 
 interface GoogleOAuthRequest extends Request {
-  auth: GoogleOAuthRequestAuth
+  auth: GoogleOAuthRequestAuth;
 }
 
 const startServer = async () => {
@@ -113,7 +113,7 @@ const startServer = async () => {
         return bundle;
       }
     },
-    { 
+    {
       method: 'GET',
       path: '/logout',
       handler: async (request, h) => {

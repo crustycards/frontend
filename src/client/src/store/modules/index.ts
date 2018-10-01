@@ -1,8 +1,8 @@
 import {combineReducers} from 'redux';
-import global from './global';
+import {reducer as formReducer} from 'redux-form';
 import game from './game';
 import games from './games';
-import {reducer as formReducer} from 'redux-form';
+import global from './global';
 
 export default combineReducers({
   global,

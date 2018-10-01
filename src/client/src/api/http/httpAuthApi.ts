@@ -1,9 +1,9 @@
 import axios from 'axios';
-import AuthApi from '../model/authApi';
 import * as _ from 'underscore';
+import AuthApi from '../model/authApi';
 
 export default class HttpAuthApi implements AuthApi {
-  private userId: string
+  private userId: string;
 
   constructor(currentUserId: string) {
     this.userId = currentUserId;
@@ -11,12 +11,12 @@ export default class HttpAuthApi implements AuthApi {
     _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
-  linkSessionToFirebase(firebaseToken: string) {
+  public linkSessionToFirebase(firebaseToken: string) {
     return axios.put(`/api/session?token=${firebaseToken}`)
       .then(() => {});
   }
 
-  getUserSessions() {
+  public getUserSessions() {
     return axios.get(`/api/sessions?userId=${this.userId}`)
       .then((response) => (response.data))
       .then((sessions) => (
@@ -24,7 +24,7 @@ export default class HttpAuthApi implements AuthApi {
       ));
   }
 
-  deleteSession(sessionId: string) {
+  public deleteSession(sessionId: string) {
     return axios.delete(`/api/session?sessionId=${sessionId}`)
       .then(() => {});
   }

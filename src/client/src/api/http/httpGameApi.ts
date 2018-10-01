@@ -1,10 +1,10 @@
 import axios from 'axios';
 import * as queryString from 'query-string';
-import GameApi from '../model/gameApi';
 import * as _ from 'underscore';
+import GameApi from '../model/gameApi';
 
 export default class HttpGameApi implements GameApi {
-  private userId: string
+  private userId: string;
 
   constructor(currentUserId: string) {
     this.userId = currentUserId;
@@ -12,27 +12,27 @@ export default class HttpGameApi implements GameApi {
     _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
-  createGame(
+  public createGame(
     gameName: string,
     maxPlayers: number,
     maxScore: number,
     handSize: number,
-    cardpackIds: Array<string>
+    cardpackIds: string[]
   ) {
     if (maxPlayers < 4 || maxPlayers > 20) {
-      let message = 'Max players must be between 4 and 20';
+      const message = 'Max players must be between 4 and 20';
       return Promise.reject(message);
     }
     if (maxScore < 4 || maxScore > 20) {
-      let message = 'Max score must be between 4 and 20';
+      const message = 'Max score must be between 4 and 20';
       return Promise.reject(message);
     }
     if (!gameName) {
-      let message = 'Game name cannot be blank';
+      const message = 'Game name cannot be blank';
       return Promise.reject(message);
     }
     if (!cardpackIds.length) {
-      let message = 'Must select at least one cardpack';
+      const message = 'Must select at least one cardpack';
       return Promise.reject(message);
     }
     return axios.post(
@@ -50,72 +50,72 @@ export default class HttpGameApi implements GameApi {
       });
   }
 
-  startGame() {
+  public startGame() {
     return axios.post(`/api/game/start/${this.userId}`)
       .then((response) => {
         return response.data;
       });
   }
 
-  stopGame() {
+  public stopGame() {
     return axios.post(`/api/game/stop/${this.userId}`)
       .then((response) => {
         return response.data;
       });
   }
 
-  joinGame(gameName: string) {
+  public joinGame(gameName: string) {
     return axios.post(`/api/game/join/${this.userId}?${queryString.stringify({gameName})}`)
       .then((response) => {
         return response.data;
       });
   }
 
-  leaveGame() {
+  public leaveGame() {
     return axios.delete(`/api/game/players/${this.userId}`)
       .then((response) => {
         return response.data;
       });
   }
 
-  getGameState() {
+  public getGameState() {
     return axios.get(`/api/game/${this.userId}`)
       .then((response) => {
         return response.data || null;
       });
   }
 
-  getGameList() {
+  public getGameList() {
     return axios.get('/api/games')
       .then((response) => {
         return response.data;
       });
   }
 
-  playCards(cardIds: Array<string>) {
+  public playCards(cardIds: string[]) {
     return axios.put(`/api/game/play/${this.userId}`, cardIds).then(() => {});
   }
 
-  unPlayCards() {
+  public unPlayCards() {
     return axios.delete(`/api/game/play/${this.userId}`).then(() => {});
   }
 
-  kickPlayer(playerId: string) {
+  public kickPlayer(playerId: string) {
     return axios.delete(`/api/game/players?${queryString.stringify({
       kickerId: this.userId,
       kickeeId: playerId
     })}`).then(() => {});
   }
 
-  vote(cardId: string) {
+  public vote(cardId: string) {
     return axios.put(`/api/game/vote/${this.userId}?${queryString.stringify({cardId})}`).then(() => {});
   }
 
-  startNextRound() {
+  public startNextRound() {
     return axios.put(`/api/game/continue/${this.userId}`).then(() => {});
   }
 
-  sendMessage(message: string) {
+  public sendMessage(message: string) {
     return axios.put(
       `/api/game/messages/${this.userId}`,
       message,

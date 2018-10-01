@@ -1,36 +1,47 @@
+import {Button, CircularProgress, LinearProgress, Tab, Tabs} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
+import { FileWithPreview } from 'react-dropzone';
 import {connect} from 'react-redux';
-import {Button, LinearProgress, CircularProgress, Tab, Tabs} from '@material-ui/core';
-import CardAdder from './CardAdder';
-import CAHWhiteCard from '../shells/CAHWhiteCard';
-import CAHBlackCard from '../shells/CAHBlackCard';
-import {stringify, parse} from '../../helpers/cardpackFileHandler';
-import TabbedList from '../TabbedList';
 import SwipeableViews from 'react-swipeable-views';
 import {ApiContextWrapper} from '../../api/context';
-import {Cardpack, User, JsonBlackCard, JsonWhiteCard} from '../../api/dao';
+import {Cardpack, JsonBlackCard, JsonWhiteCard, User} from '../../api/dao';
 import Api from '../../api/model/api';
+import {parse, stringify} from '../../helpers/cardpackFileHandler';
 import FileUploader from '../FileUploader';
-import { FileWithPreview } from 'react-dropzone';
+import CAHBlackCard from '../shells/CAHBlackCard';
+import CAHWhiteCard from '../shells/CAHWhiteCard';
+import TabbedList from '../TabbedList';
+import CardAdder from './CardAdder';
 
 interface CardpackViewerProps {
-  api: Api
-  cardpackId: string
-  user: User
+  api: Api;
+  cardpackId: string;
+  user: User;
 }
 
 interface CardpackViewerState {
-  newCardName: string
-  newCardType: string // TODO - Change to ENUM
-  newCardAnswerFields: number
-  cardpack: Cardpack,
-  slideIndex: number
-  isUploading: boolean
-  showUploadDialogBox: boolean
+  newCardName: string;
+  newCardType: string; // TODO - Change to ENUM
+  newCardAnswerFields: number;
+  cardpack: Cardpack;
+  slideIndex: number;
+  isUploading: boolean;
+  showUploadDialogBox: boolean;
 }
 
 class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState> {
+
+  public static convertFileToCardpackData(file: FileWithPreview) {
+    return new Promise((resolve, reject) => {
+      const fileReader = new FileReader();
+      fileReader.onload = () => {
+        resolve(fileReader.result);
+      };
+      fileReader.readAsText(file);
+    })
+      .then(parse);
+  }
   constructor(props: CardpackViewerProps) {
     super(props);
     this.addWhiteCards = this.addWhiteCards.bind(this);
@@ -54,15 +65,15 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     this.fetchCurrentCardpack();
   }
 
-  openUploadDialog() {
+  public openUploadDialog() {
     this.setState({showUploadDialogBox: true});
   }
 
-  closeUploadDialog() {
+  public closeUploadDialog() {
     this.setState({showUploadDialogBox: false});
   }
 
-  fetchCurrentCardpack() {
+  public fetchCurrentCardpack() {
     this.props.api.main.getCardpack(this.props.cardpackId)
       .then((cardpack) => {
         this.setState({cardpack});
@@ -72,7 +83,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
       });
   }
 
-  addWhiteCards(cards: JsonWhiteCard[]) {
+  public addWhiteCards(cards: JsonWhiteCard[]) {
     return this.props.api.main.createWhiteCards(this.props.cardpackId, cards).then((createdCards) => {
       this.setState({
         cardpack: {
@@ -87,7 +98,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     });
   }
 
-  addBlackCards(cards: JsonBlackCard[]) {
+  public addBlackCards(cards: JsonBlackCard[]) {
     return this.props.api.main.createBlackCards(this.state.cardpack.id, cards).then((createdCards) => {
       this.setState({
         cardpack: {
@@ -102,7 +113,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     });
   }
 
-  downloadStringifiedCards() {
+  public downloadStringifiedCards() {
     const download = (filename: string, text: string) => {
       const element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -119,18 +130,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     }));
   }
 
-  static convertFileToCardpackData(file: FileWithPreview) {
-    return new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.onload = () => {
-        resolve(fileReader.result);
-      };
-      fileReader.readAsText(file);
-    })
-      .then(parse);
-  }
-
-  async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
+  public async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
       this.closeUploadDialog();
       const file = acceptedFiles[0];
@@ -144,18 +144,18 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     }
   }
 
-  handleTabChange(_: any, value: number) {
+  public handleTabChange(_: any, value: number) {
     this.setState({slideIndex: value});
   }
 
-  render() {
+  public render() {
     if (this.state.cardpack === null) {
       return (
         <div className='panel'>Cardpack does not exist</div>
       );
     }
 
-    let isOwner = this.props.user &&
+    const isOwner = this.props.user &&
       this.state.cardpack &&
       this.state.cardpack.owner &&
       this.props.user.id === this.state.cardpack.owner.id;

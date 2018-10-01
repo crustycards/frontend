@@ -8,17 +8,17 @@ export default class {
     this.apiUrl = apiUrl;
   }
 
-  async getById(cardpackId: string): Promise<Cardpack> {
+  public async getById(cardpackId: string): Promise<Cardpack> {
     const response = await axios.get(`${this.apiUrl}/cardpack/${cardpackId}`);
     return response.data;
   }
 
-  async getByUser(userId: string): Promise<Array<Cardpack>> {
+  public async getByUser(userId: string): Promise<Cardpack[]> {
     const response = await axios.get(`${this.apiUrl}/${userId}/cardpacks`);
     return response.data;
   }
 
-  async create(userId: string, name: string): Promise<Cardpack> {
+  public async create(userId: string, name: string): Promise<Cardpack> {
     const response = await axios.put(`${this.apiUrl}/${userId}/cardpack`, {name});
     return response.data;
   }

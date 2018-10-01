@@ -1,21 +1,21 @@
+import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import Tray from './Tray';
-import PlayArea from './PlayArea';
-import {Button} from '@material-ui/core';
-import {canPlay, hasPlayed} from '../../../store';
 import {ApiContextWrapper} from '../../../api/context';
 import {BlackCard, User, WhitePlayed} from '../../../api/dao';
 import Api from '../../../api/model/api';
+import {canPlay, hasPlayed} from '../../../store';
+import PlayArea from './PlayArea';
+import Tray from './Tray';
 
 interface PlaySelectionProps {
-  queuedCardIds: Array<string>
-  stage: string
-  whitePlayed: WhitePlayed
-  currentBlackCard: BlackCard
-  user: User
-  judgeId: string
-  api: Api
+  queuedCardIds: string[];
+  stage: string;
+  whitePlayed: WhitePlayed;
+  currentBlackCard: BlackCard;
+  user: User;
+  judgeId: string;
+  api: Api;
 }
 
 const PlaySelection = ({

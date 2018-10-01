@@ -1,17 +1,17 @@
+import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import {Button} from '@material-ui/core';
 import { FileWithPreview } from 'react-dropzone';
+import {ApiContextWrapper} from '../api/context';
 import Api from '../api/model/api';
 import FileUploader from './FileUploader';
-import {ApiContextWrapper} from '../api/context';
 
 interface UploaderProps {
-  api: Api
+  api: Api;
 }
 
 interface UploaderState {
-  showDialogBox: boolean
+  showDialogBox: boolean;
 }
 
 class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
@@ -27,15 +27,15 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     this.handleUpload = this.handleUpload.bind(this);
   }
 
-  openDialog() {
+  public openDialog() {
     this.setState({showDialogBox: true});
   }
 
-  closeDialog() {
+  public closeDialog() {
     this.setState({showDialogBox: false});
   }
 
-  async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
+  public async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
       const file = acceptedFiles[0];
       await this.props.api.main.setProfileImage(file.slice());
@@ -43,7 +43,7 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <div>
         <Button variant={'outlined'} onClick={this.openDialog}>

@@ -8,17 +8,17 @@ export default class {
     this.apiUrl = apiUrl;
   }
 
-  async getFriends(userId: string): Promise<Array<User>> {
+  public async getFriends(userId: string): Promise<User[]> {
     const response = await axios.get(`${this.apiUrl}/user/${userId}/friends`);
     return response.data;
   }
 
-  async getSentRequests(userId: string): Promise<Array<User>> {
+  public async getSentRequests(userId: string): Promise<User[]> {
     const response = await axios.get(`${this.apiUrl}/user/${userId}/friends/requests/sent`);
     return response.data;
   }
 
-  async getReceivedRequests(userId: string): Promise<Array<User>> {
+  public async getReceivedRequests(userId: string): Promise<User[]> {
     const response = await axios.get(`${this.apiUrl}/user/${userId}/friends/requests/received`);
     return response.data;
   }

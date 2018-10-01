@@ -1,9 +1,9 @@
-import {Server} from "hapi";
-import searchRoutes from './search';
-import cardRoutes from './card';
-import userRoutes from './user';
-import gameRoutes from './game';
+import {Server} from 'hapi';
 import authRoutes from './auth';
+import cardRoutes from './card';
+import gameRoutes from './game';
+import searchRoutes from './search';
+import userRoutes from './user';
 
 export default (server: Server, options: {apiUrl: string, authUrl: string, gameUrl: string}) => {
   searchRoutes(server, options.apiUrl);

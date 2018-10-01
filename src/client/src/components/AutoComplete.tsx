@@ -1,9 +1,9 @@
+import {MenuItem, Paper, TextField, Theme, withStyles, WithStyles} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
 import * as Autosuggest from 'react-autosuggest';
-import parseHighlights from '../helpers/autoComplete';
-import {TextField, Paper, MenuItem, withStyles, Theme, WithStyles} from '@material-ui/core';
 import * as _ from 'underscore';
+import parseHighlights from '../helpers/autoComplete';
 
 const styles = (theme: Theme) => ({
   container: {
@@ -72,19 +72,19 @@ const renderSuggestionsContainer: Autosuggest.RenderSuggestionsContainer = ({con
 );
 
 interface AutoCompleteSuggestion {
-  label: string
+  label: string;
 }
 
 interface AutoCompleteProps extends WithStyles<typeof styles> {
-  label?: string
-  onSubmit(query: string): void
-  getSuggestions(text: string): Promise<Array<string>>
+  label?: string;
+  onSubmit(query: string): void;
+  getSuggestions(text: string): Promise<string[]>;
 }
 
 interface AutoCompleteState {
-  value: string
-  suggestions: AutoCompleteSuggestion[]
-  submit(query: string): void
+  value: string;
+  suggestions: AutoCompleteSuggestion[];
+  submit(query: string): void;
 }
 
 class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
@@ -103,26 +103,26 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
+  public async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
     const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
     this.setState({suggestions});
   }
 
-  handleSuggestionsClearRequested() {
+  public handleSuggestionsClearRequested() {
     this.setState({suggestions: []});
   }
 
-  handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
+  public handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
     this.setState({value: newValue});
   }
 
-  handleKeyDown(event: React.KeyboardEvent) {
+  public handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter' && this.state.value) {
       this.state.submit(this.state.value);
     }
   }
 
-  render() {
+  public render() {
     const {classes} = this.props;
 
     return (

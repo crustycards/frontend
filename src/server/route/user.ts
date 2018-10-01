@@ -45,7 +45,7 @@ export default (server: Server, apiUrl: string) => {
       path: '/api/user/friends',
       handler: (request: Request, h: ProxyResponseToolkit) => {
         const {userId, friendId} = request.query;
-  
+
         if (userId === undefined || friendId === undefined) {
           throw Boom.badRequest('Must provide query parameters for userId and friendId');
         } else {

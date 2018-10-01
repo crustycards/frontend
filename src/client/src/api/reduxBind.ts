@@ -1,7 +1,7 @@
-import GameApi from './model/gameApi';
 import {Store} from 'redux';
-import {setGameList} from '../store/modules/games';
 import {setGameState} from '../store/modules/game';
+import {setGameList} from '../store/modules/games';
+import GameApi from './model/gameApi';
 
 export const bindGameApi = (gameApi: GameApi, store: Store) => {
   const createGame = gameApi.createGame;

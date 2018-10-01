@@ -1,25 +1,25 @@
+import {Button, Card, CardActions, CardHeader, CircularProgress, IconButton} from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import * as React from 'react';
 import {Component} from 'react';
+import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
-import {Button, Card, CardHeader, CardActions, IconButton, CircularProgress} from '@material-ui/core';
-import {convertTime} from '../../helpers/time';
 import {ApiContextWrapper} from '../../api/context';
 import { Cardpack as CardpackModel, User } from '../../api/dao';
 import Api from '../../api/model/api';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import {connect} from 'react-redux';
+import {convertTime} from '../../helpers/time';
 
 const navItemStyle = {textDecoration: 'none'};
 
 interface CardpackProps {
-  api: Api
-  cardpack: CardpackModel
-  canDelete: boolean
-  currentUser: User
+  api: Api;
+  cardpack: CardpackModel;
+  canDelete: boolean;
+  currentUser: User;
 }
 
 interface CardpackState {
-  isLiked: boolean
+  isLiked: boolean;
 }
 
 class Cardpack extends Component<CardpackProps, CardpackState> {
@@ -40,7 +40,7 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
     }
   }
 
-  async toggleLike() {
+  public async toggleLike() {
     if (this.state.isLiked) {
       await this.props.api.main.unfavoriteCardpack(this.props.cardpack.id);
       this.setState({isLiked: false});
@@ -50,7 +50,7 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <Card className='card'>
         <CardHeader

@@ -1,10 +1,10 @@
+import {Button, Divider, Paper, TextField, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Field, reduxForm, reset, FormErrors, InjectedFormProps, SubmitHandler} from 'redux-form';
-import {Paper, Button, TextField, Typography, Divider} from '@material-ui/core';
+import {Dispatch} from 'redux';
+import {Field, FormErrors, InjectedFormProps, reduxForm, reset, SubmitHandler} from 'redux-form';
 import {ApiContextWrapper} from '../../api/context';
 import Api from '../../api/model/api';
-import {Dispatch} from 'redux';
 
 const renderTextField = ({
   input,
@@ -20,14 +20,14 @@ const renderTextField = ({
 );
 
 interface MessageFormData {
-  messageText: string
+  messageText: string;
 }
 
 const validate = (values: MessageFormData) => {
   const {messageText} = values;
 
   const errors: FormErrors<MessageFormData> = {};
-  
+
   if (!messageText) {
     errors.messageText = 'Required';
   }
@@ -36,9 +36,9 @@ const validate = (values: MessageFormData) => {
 };
 
 interface MessageBoxProps extends InjectedFormProps {
-  api: Api
-  handleSubmit: SubmitHandler<MessageFormData>
-  messages: Array<any>
+  api: Api;
+  handleSubmit: SubmitHandler<MessageFormData>;
+  messages: any[];
 }
 
 const MessageBox = (props: MessageBoxProps) => {

@@ -1,36 +1,44 @@
-import * as React from 'react';
-import {Component} from 'react';
 import {
   Button,
-  TextField,
   Checkbox,
-  Select,
-  MenuItem,
+  CircularProgress,
   List,
   ListItem,
   ListItemText,
-  CircularProgress
+  MenuItem,
+  Select,
+  TextField
 } from '@material-ui/core';
+import * as React from 'react';
+import {Component} from 'react';
 import {ApiContextWrapper} from '../../api/context';
-import Api from '../../api/model/api';
 import {Cardpack} from '../../api/dao';
+import Api from '../../api/model/api';
 
 interface GameCreatorProps {
-  api: Api
+  api: Api;
 }
 
 interface GameCreatorState {
-  gameName: string
-  maxPlayers: number
-  maxScore: number
-  handSize: number
-  userCardpacks: Cardpack[]
-  subscribedCardpacks: Cardpack[]
-  cardpacksSelected: string[]
-  isLoading: boolean
+  gameName: string;
+  maxPlayers: number;
+  maxScore: number;
+  handSize: number;
+  userCardpacks: Cardpack[];
+  subscribedCardpacks: Cardpack[];
+  cardpacksSelected: string[];
+  isLoading: boolean;
 }
 
 class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
+
+  public static generateNumberedMenuItems(startNum: number, endNum: number): JSX.Element[] {
+    const items = [];
+    for (let i = startNum; i <= endNum; i++) {
+      items.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
+    }
+    return items;
+  }
   constructor(props: GameCreatorProps) {
     super(props);
     this.state = {
@@ -50,30 +58,22 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
-  static generateNumberedMenuItems(startNum: number, endNum: number): JSX.Element[] {
-    const items = [];
-    for (let i = startNum; i <= endNum; i++) {
-      items.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
-    }
-    return items;
-  }
-
-  componentDidMount() {
+  public componentDidMount() {
     this.loadCardpacks();
   }
 
-  loadCardpacks() {
+  public loadCardpacks() {
     Promise.all([this.props.api.main.getCardpacksByUser(), this.props.api.main.getFavoritedCardpacks()])
       .then(([userCardpacks, subscribedCardpacks]) => {
         this.setState({userCardpacks, subscribedCardpacks, isLoading: false});
       });
   }
 
-  handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+  public handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({gameName: e.target.value});
   }
 
-  handleSelectChange(id: string) {
+  public handleSelectChange(id: string) {
     if (this.state.cardpacksSelected.includes(id)) {
       this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
     } else {
@@ -81,7 +81,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     }
   }
 
-  handleSubmit() {
+  public handleSubmit() {
     this.props.api.game.createGame(
       this.state.gameName,
       this.state.maxPlayers,
@@ -91,7 +91,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     );
   }
 
-  render() {
+  public render() {
     return (
       <div>
         <h2>Create Game</h2>

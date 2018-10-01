@@ -1,9 +1,9 @@
+import {List, ListItem, ListItemIcon, ListItemText, ListSubheader} from '@material-ui/core';
+import Check from '@material-ui/icons/Check';
+import Star from '@material-ui/icons/Star';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {List, ListItem, ListItemText, ListItemIcon, ListSubheader} from '@material-ui/core';
-import Star from '@material-ui/icons/Star';
-import Check from '@material-ui/icons/Check';
-import { Player, BlackCard, WhitePlayed, LocalGameData } from '../../api/dao';
+import { BlackCard, LocalGameData, Player, WhitePlayed } from '../../api/dao';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
@@ -71,12 +71,12 @@ const renderQueuedPlayer = (player: Player) => (
 );
 
 interface PlayerListProps {
-  players: Player[]
-  queuedPlayers: Player[]
-  ownerId: string
-  judgeId: string
-  whitePlayed: WhitePlayed
-  currentBlackCard: BlackCard
+  players: Player[];
+  queuedPlayers: Player[];
+  ownerId: string;
+  judgeId: string;
+  whitePlayed: WhitePlayed;
+  currentBlackCard: BlackCard;
 }
 
 const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, currentBlackCard}: PlayerListProps) => (

@@ -1,18 +1,18 @@
-import {createStore, applyMiddleware, compose} from 'redux';
-import rootReducer from './modules';
 import {connectRouter, routerMiddleware} from 'connected-react-router';
-import {User, BlackCard, WhitePlayed} from '../api/dao';
 import {History} from 'history';
+import {applyMiddleware, compose, createStore} from 'redux';
+import {BlackCard, User, WhitePlayed} from '../api/dao';
+import rootReducer from './modules';
 
 declare global {
   interface Window {
-    devToolsExtension?: any
+    devToolsExtension?: any;
   }
 }
 
 interface CreateStore {
-  history: History
-  preloadedState?: any
+  history: History;
+  preloadedState?: any;
 }
 
 export default ({history, preloadedState = {}}: CreateStore) => {
@@ -32,13 +32,13 @@ export default ({history, preloadedState = {}}: CreateStore) => {
 };
 
 interface HasPlayed {
-  whitePlayed?: WhitePlayed
-  currentBlackCard?: BlackCard
-  user?: User
+  whitePlayed?: WhitePlayed;
+  currentBlackCard?: BlackCard;
+  user?: User;
 }
 
 interface CanPlay extends HasPlayed {
-  judgeId: string
+  judgeId: string;
 }
 
 export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {

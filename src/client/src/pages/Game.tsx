@@ -1,15 +1,15 @@
+import {Button, Theme, WithStyles, withStyles} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Button, WithStyles, Theme, withStyles} from '@material-ui/core';
-import PlayerList from '../components/GameBoard/PlayerList';
-import PlaySelection from '../components/GameBoard/PlaySelection/index';
+import {NavLink} from 'react-router-dom';
+import {ApiContextWrapper} from '../api/context';
+import {GameData, User} from '../api/dao';
+import Api from '../api/model/api';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
 import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards';
-import {NavLink} from 'react-router-dom';
-import {GameData, User} from '../api/dao';
-import Api from '../api/model/api';
-import {ApiContextWrapper} from '../api/context';
+import PlayerList from '../components/GameBoard/PlayerList';
+import PlaySelection from '../components/GameBoard/PlaySelection/index';
 
 const buttonStyle = {
   height: '36px',
@@ -30,9 +30,9 @@ const styles = (theme: Theme) => ({
 });
 
 interface GameProps extends WithStyles<typeof styles> {
-  game: GameData
-  user: User
-  api: Api
+  game: GameData;
+  user: User;
+  api: Api;
 }
 
 const Game = (props: GameProps) => (
@@ -41,7 +41,7 @@ const Game = (props: GameProps) => (
       <div>
         <div className={`${props.classes.topBar} game-top`} style={{
           height: '66px',
-          verticalAlign: 'middle',
+          verticalAlign: 'middle'
         }}>
           <div style={{height: '66px', float: 'left'}}>
             <h2

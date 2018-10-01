@@ -1,12 +1,12 @@
-import * as React from 'react';
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
+import * as React from 'react';
 import {ApiContextWrapper} from '../api/context';
 import {User} from '../api/dao';
 import Api from '../api/model/api';
 
 interface SentFriendRequestProps {
-  api: Api
-  user: User
+  api: Api;
+  user: User;
 }
 
 const SentFriendRequest = (props: SentFriendRequestProps) => (

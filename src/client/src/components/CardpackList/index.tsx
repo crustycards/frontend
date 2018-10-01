@@ -1,10 +1,10 @@
 import * as React from 'react';
-import Cardpack from './Cardpack';
 import { Cardpack as CardpackDao } from '../../api/dao';
+import Cardpack from './Cardpack';
 
 interface CardpackListProps {
-  cardpacks: Array<CardpackDao>
-  canDelete: boolean
+  cardpacks: CardpackDao[];
+  canDelete: boolean;
 }
 
 const CardpackList = (props: CardpackListProps) => (

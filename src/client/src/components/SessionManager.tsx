@@ -1,24 +1,24 @@
-import * as React from 'react';
-import {Component} from 'react';
 import {
-  withStyles,
+  Button,
+  Card,
+  CardActions,
+  CardHeader,
   CircularProgress,
   ExpansionPanel,
-  ExpansionPanelSummary,
   ExpansionPanelDetails,
-  Typography,
-  Theme,
-  Card,
-  CardHeader,
-  CardActions,
-  Button,
+  ExpansionPanelSummary,
   List,
-  ListItem
+  ListItem,
+  Theme,
+  Typography,
+  withStyles
 } from '@material-ui/core';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import * as React from 'react';
+import {Component} from 'react';
+import * as _ from 'underscore';
 import {ApiContextWrapper} from '../api/context';
 import { Session } from '../api/dao';
-import * as _ from 'underscore';
 import Api from '../api/model/api';
 import {convertTime} from '../helpers/time';
 
@@ -28,7 +28,7 @@ const styles = (theme: Theme) => ({
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightRegular
   },
   details: {
     display: 'block'
@@ -39,13 +39,13 @@ const styles = (theme: Theme) => ({
 });
 
 interface SessionManagerProps {
-  classes: any
-  api: Api
+  classes: any;
+  api: Api;
 }
 
 interface SessionManagerState {
-  isLoading: boolean
-  sessions: Session[]
+  isLoading: boolean;
+  sessions: Session[];
 }
 
 class SessionManager extends Component<SessionManagerProps, SessionManagerState> {
@@ -61,20 +61,20 @@ class SessionManager extends Component<SessionManagerProps, SessionManagerState>
     this.firstLoad = _.once(this.loadSessions);
   }
 
-  async loadSessions() {
+  public async loadSessions() {
     await new Promise((resolve) => this.setState({isLoading: true}, () => resolve()));
     const sessions = await this.props.api.auth.getUserSessions();
     await new Promise((resolve) => this.setState({sessions, isLoading: false}, () => resolve()));
   }
 
-  firstLoad() {}
+  public firstLoad() {}
 
-  async deleteSession(sessionId: string) {
-    await this.props.api.auth.deleteSession(sessionId)
+  public async deleteSession(sessionId: string) {
+    await this.props.api.auth.deleteSession(sessionId);
     this.setState({sessions: this.state.sessions.filter((session) => session.id !== sessionId)});
   }
 
-  render() {
+  public render() {
     return (
       <div className={this.props.classes.root}>
         <ExpansionPanel onChange={this.firstLoad}>

@@ -1,8 +1,8 @@
-import * as React from 'react';
-import CAHBlackCard from '../shells/CAHBlackCard';
 import {Typography} from '@material-ui/core';
+import * as React from 'react';
 import {connect} from 'react-redux';
-import { BlackCard, WhiteCard, LocalGameData } from '../../api/dao';
+import { BlackCard, LocalGameData, WhiteCard } from '../../api/dao';
+import CAHBlackCard from '../shells/CAHBlackCard';
 
 const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
   let tempText = blackCardText;
@@ -57,9 +57,9 @@ const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
 };
 
 interface CurrentBlackCardProps {
-  card: BlackCard
-  hand: WhiteCard[]
-  queuedCardIds: string[]
+  card: BlackCard;
+  hand: WhiteCard[];
+  queuedCardIds: string[];
 }
 
 const CurrentBlackCard = ({card, hand, queuedCardIds}: CurrentBlackCardProps) => (

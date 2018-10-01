@@ -11,11 +11,11 @@ const style = {
 };
 
 interface GoogleButtonProps {
-  onClick?(): void
+  onClick?(): void;
 }
 
 interface GoogleButtonState {
-  imageSrc: string
+  imageSrc: string;
 }
 
 class GoogleButton extends Component<GoogleButtonProps, GoogleButtonState> {
@@ -28,18 +28,18 @@ class GoogleButton extends Component<GoogleButtonProps, GoogleButtonState> {
     };
   }
 
-  onClick() {
+  public onClick() {
     if (this.props.onClick) {
       this.props.onClick();
     }
     this.setState({imageSrc: pressed});
   }
 
-  clickRelease() {
+  public clickRelease() {
     this.setState({imageSrc: unpressed});
   }
 
-  render() {
+  public render() {
     return <input
       onMouseDown={this.onClick}
       onMouseUp={this.clickRelease}

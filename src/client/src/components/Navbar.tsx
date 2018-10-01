@@ -1,30 +1,30 @@
-import * as React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
-import {openNavbar, closeNavbar} from '../store/modules/global';
 import {
-  Drawer,
-  MenuItem,
   AppBar,
-  Toolbar,
-  Typography,
   Button,
+  Drawer,
   IconButton,
   ListItemIcon,
-  ListItemText
+  ListItemText,
+  MenuItem,
+  Toolbar,
+  Typography
 } from '@material-ui/core';
 import {withStyles, WithStyles} from '@material-ui/core/styles';
-import {NavLink} from 'react-router-dom';
-import MenuIcon from '@material-ui/icons/Menu';
-import Home from '@material-ui/icons/Home';
 import ExitToApp from '@material-ui/icons/ExitToApp';
-import ViewList from '@material-ui/icons/ViewList';
-import VideogameAsset from '@material-ui/icons/VideogameAsset';
+import Home from '@material-ui/icons/Home';
+import MenuIcon from '@material-ui/icons/Menu';
+import Person from '@material-ui/icons/Person';
 // TODO - Change import below back to icons/Settings
 import Settings from '@material-ui/icons/SettingsApplications';
-import Person from '@material-ui/icons/Person';
+import VideogameAsset from '@material-ui/icons/VideogameAsset';
+import ViewList from '@material-ui/icons/ViewList';
 import {push} from 'connected-react-router';
+import * as React from 'react';
+import {connect} from 'react-redux';
+import {NavLink} from 'react-router-dom';
+import {bindActionCreators, Dispatch} from 'redux';
 import {User} from '../api/dao';
+import {closeNavbar, openNavbar} from '../store/modules/global';
 
 const navItemStyle = {textDecoration: 'none'};
 const redirectTo = (url: string) => {
@@ -45,11 +45,11 @@ const styles = {
 };
 
 interface NavbarProps extends WithStyles<typeof styles> {
-  isOpen: boolean
-  user: User
-  openNavbar(): void
-  closeNavbar(): void
-  push(route: string): void
+  isOpen: boolean;
+  user: User;
+  openNavbar(): void;
+  closeNavbar(): void;
+  push(route: string): void;
 }
 
 const Navbar = (props: NavbarProps) => (

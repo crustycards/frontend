@@ -8,7 +8,7 @@ const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
 const ADD_PLAYER = 'game/ADD_PLAYER';
 
 interface ReduxGameData extends GameData {
-  queuedCardIds: string[]
+  queuedCardIds: string[];
 }
 
 export default (state: ReduxGameData = null, {type, payload}: {type: string, payload: any}): ReduxGameData => {

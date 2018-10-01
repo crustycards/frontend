@@ -1,13 +1,13 @@
-import {JsonWhiteCard, JsonBlackCard} from '../api/dao';
+import {JsonBlackCard, JsonWhiteCard} from '../api/dao';
 
 import * as fileHandler from './cardpackFileHandler';
 
 interface ParsedCardpack {
-  whiteCards: JsonWhiteCard[]
-  blackCards: JsonBlackCard[]
+  whiteCards: JsonWhiteCard[];
+  blackCards: JsonBlackCard[];
 }
 
-let dummyCards: ParsedCardpack = {whiteCards: [], blackCards: []};
+const dummyCards: ParsedCardpack = {whiteCards: [], blackCards: []};
 
 for (let i = 0; i < 10; i++) {
   dummyCards.whiteCards.push({
@@ -30,7 +30,7 @@ describe('parse', () => {
 
 describe('stringify', () => {
   it('Should not modify input array', () => {
-    let cardsNonref = JSON.parse(JSON.stringify(dummyCards));
+    const cardsNonref = JSON.parse(JSON.stringify(dummyCards));
     fileHandler.stringify(cardsNonref);
     expect(cardsNonref).toEqual(dummyCards);
   });

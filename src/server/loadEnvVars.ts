@@ -1,5 +1,5 @@
-import * as dotEnv from 'dotenv';
 import * as assert from 'assert';
+import * as dotEnv from 'dotenv';
 
 const requiredVars = [
   'NODE_ENV',
@@ -12,7 +12,7 @@ const requiredVars = [
 ];
 
 const assertVarsExist = () => {
-  let missingVars: string[] = [];
+  const missingVars: string[] = [];
   requiredVars.forEach((varName) => {
     if (!process.env[varName]) {
       missingVars.push(varName);
@@ -25,7 +25,7 @@ const assertVarsExist = () => {
 };
 
 interface StringHashObject {
-  [indexer: string]: string
+  [indexer: string]: string;
 }
 
 const defaultVals: StringHashObject = {
@@ -38,7 +38,7 @@ const applyEnvConfig = () => {
 };
 
 const applyDefaultValues = () => {
-  for (let key in defaultVals) {
+  for (const key in defaultVals) {
     if (!process.env[key]) {
       process.env[key] = defaultVals[key];
     }

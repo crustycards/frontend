@@ -1,21 +1,21 @@
+import {Button, FormControl, InputLabel, MenuItem, Select, TextField} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import {FormControl, InputLabel, TextField, Select, Button, MenuItem} from '@material-ui/core';
 
 interface GenericCardData {
-  text: string
-  answerFields: number
-  type: string
+  text: string;
+  answerFields: number;
+  type: string;
 }
 
 interface CardAdderProps {
-  type: string
-  addCard(cardData: GenericCardData): void
+  type: string;
+  addCard(cardData: GenericCardData): void;
 }
 
 interface CardAdderState {
-  newCardName: string
-  newCardAnswerFields: number
+  newCardName: string;
+  newCardAnswerFields: number;
 }
 
 class CardAdder extends Component<CardAdderProps, CardAdderState> {
@@ -33,21 +33,21 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
     };
   }
 
-  handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
+  public handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
       this.addCurrentCard();
     }
   }
 
-  handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  public handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({newCardName: e.target.value});
   }
 
-  changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
+  public changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({newCardAnswerFields: parseInt(e.target.value)});
   }
 
-  addCurrentCard() {
+  public addCurrentCard() {
     if (this.state.newCardName) {
       this.props.addCard({
         text: this.state.newCardName,
@@ -58,7 +58,7 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <div>
         <div className='col-narrow'>

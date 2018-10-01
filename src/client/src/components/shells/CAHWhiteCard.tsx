@@ -1,14 +1,14 @@
+import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import * as React from 'react';
-import {Card, CardActions, CardContent, Button, Typography} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
-import Api from '../../api/model/api';
 import { WhiteCard } from '../../api/dao';
+import Api from '../../api/model/api';
 
 interface CAHWhiteCardProps {
-  api: Api
-  card: WhiteCard
-  isOwner?: boolean
-  onDelete?(cardId: string): void
+  api: Api;
+  card: WhiteCard;
+  isOwner?: boolean;
+  onDelete?(cardId: string): void;
 }
 
 const CAHWhiteCard = (props: CAHWhiteCardProps) => {

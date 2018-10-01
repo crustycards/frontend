@@ -1,23 +1,23 @@
 import * as React from 'react';
 import {Component} from 'react';
-import {DropTarget, ConnectDropTarget} from 'react-dnd/lib';
-import {cardInHand, cardInPlayQueue} from '../../../dndTypes';
+import {ConnectDropTarget, DropTarget} from 'react-dnd/lib';
 import {connect} from 'react-redux';
-import DraggableCardInPlayQueue from './DraggableCardInPlayQueue';
 import {bindActionCreators, Dispatch} from 'redux';
-import {queueCard, unqueueCard} from '../../../store/modules/game';
 import {LocalGameData, WhiteCard} from '../../../api/dao';
+import {cardInHand, cardInPlayQueue} from '../../../dndTypes';
+import {queueCard, unqueueCard} from '../../../store/modules/game';
+import DraggableCardInPlayQueue from './DraggableCardInPlayQueue';
 
 interface ReducedPlaySlotProps {
-  index: number
-  queuedCardIds: string[]
-  cards: WhiteCard[]
-  queueCard: ({index, cardId}: {index: number, cardId: string}) => void
-  unqueueCard: (cardId: string) => void
+  index: number;
+  queuedCardIds: string[];
+  cards: WhiteCard[];
+  queueCard: ({index, cardId}: {index: number, cardId: string}) => void;
+  unqueueCard: (cardId: string) => void;
 }
 
 interface PlaySlotProps extends ReducedPlaySlotProps {
-  connectDropTarget: ConnectDropTarget
+  connectDropTarget: ConnectDropTarget;
 }
 
 @DropTarget([cardInHand, cardInPlayQueue], {drop: (props: PlaySlotProps, monitor) => {
@@ -28,7 +28,7 @@ interface PlaySlotProps extends ReducedPlaySlotProps {
   canDrop: monitor.canDrop()
 }))
 class PlaySlot extends Component<PlaySlotProps> {
-  render() {
+  public render() {
     if (this.props.queuedCardIds[this.props.index]) {
       const card = this.props.cards.find(
         (card) => card.id === this.props.queuedCardIds[this.props.index]

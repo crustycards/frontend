@@ -1,11 +1,11 @@
+import {Button, CircularProgress, TextField} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import {Field, reduxForm, reset, FormErrors, InjectedFormProps, SubmitHandler} from 'redux-form';
-import {TextField, Button, CircularProgress} from '@material-ui/core';
-import {ApiContextWrapper} from '../api/context';
-import Api from '../api/model/api';
-import { Cardpack } from '../api/dao';
 import { Dispatch } from 'redux';
+import {Field, FormErrors, InjectedFormProps, reduxForm, reset, SubmitHandler} from 'redux-form';
+import {ApiContextWrapper} from '../api/context';
+import { Cardpack } from '../api/dao';
+import Api from '../api/model/api';
 
 const renderTextField = ({
   input,
@@ -22,7 +22,7 @@ const renderTextField = ({
 );
 
 interface CardpackFormData {
-  cardpackName: string
+  cardpackName: string;
 }
 
 const validate = (values: CardpackFormData): FormErrors<CardpackFormData> => {
@@ -38,13 +38,13 @@ const validate = (values: CardpackFormData): FormErrors<CardpackFormData> => {
 };
 
 interface CardpackCreatorProps extends InjectedFormProps {
-  api: Api
-  handleSubmit: SubmitHandler<CardpackFormData>
-  onSubmit?(cardpack: Cardpack): void
+  api: Api;
+  handleSubmit: SubmitHandler<CardpackFormData>;
+  onSubmit?(cardpack: Cardpack): void;
 }
 
 interface CardpackCreatorState {
-  isLoading: boolean
+  isLoading: boolean;
 }
 
 class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorState> {
@@ -58,17 +58,17 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     };
   }
 
-  createCardpack({cardpackName}: CardpackFormData) {
+  public createCardpack({cardpackName}: CardpackFormData) {
     this.setState({isLoading: true});
     const cardpackCreation = this.props.api.main.createCardpack(cardpackName);
     cardpackCreation.then((cardpack) => {
       this.setState({isLoading: false});
-      
-      this.props.onSubmit && this.props.onSubmit(cardpack)
+
+      this.props.onSubmit && this.props.onSubmit(cardpack);
     });
   }
 
-  render() {
+  public render() {
     return (
       <form autoComplete={'off'} onSubmit={this.props.handleSubmit(this.createCardpack)}>
         <Field

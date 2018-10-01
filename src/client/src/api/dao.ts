@@ -1,83 +1,83 @@
 export class User {
-  id: string
-  name: string
+  public id: string;
+  public name: string;
 }
 
 export class WhiteCard {
-  id: string
-  text: string
-  cardpackId: string
+  public id: string;
+  public text: string;
+  public cardpackId: string;
 }
 
 export class JsonWhiteCard {
-  text: string
+  public text: string;
 }
 
 export class BlackCard {
-  id: string
-  text: string
-  answerFields: number
-  cardpackId: string
+  public id: string;
+  public text: string;
+  public answerFields: number;
+  public cardpackId: string;
 }
 
 export class JsonBlackCard {
-  text: string
-  answerFields: number
+  public text: string;
+  public answerFields: number;
 }
 
 export class Cardpack {
-  id: string
-  name: string
-  owner: User
-  whiteCards: Array<WhiteCard>
-  blackCards: Array<BlackCard>
-  createdAt: Date
+  public id: string;
+  public name: string;
+  public owner: User;
+  public whiteCards: WhiteCard[];
+  public blackCards: BlackCard[];
+  public createdAt: Date;
 }
 
 export class Player extends User {
-  score: number
+  public score: number;
 }
 
 export class Message {
-  user: User
-  text: string
+  public user: User;
+  public text: string;
 }
 
 export class WhitePlayed {
-  [userId: string]: Array<WhiteCard>
+  [userId: string]: WhiteCard[]
 }
 
 export class GameData {
-  name: string
-  maxPlayers: number
-  maxScore: number
-  stage: string
-  hand: Array<WhiteCard>
-  players: Array<Player>
-  queuedPlayers: Array<Player>
-  bannedPlayers: Array<User>
-  judgeId: string
-  ownerId: string
-  whitePlayed: WhitePlayed
-  whitePlayedAnonymous: Array<Array<WhiteCard>>
-  currentBlackCard: BlackCard
-  winner: User
-  messages: Array<Message>
+  public name: string;
+  public maxPlayers: number;
+  public maxScore: number;
+  public stage: string;
+  public hand: WhiteCard[];
+  public players: Player[];
+  public queuedPlayers: Player[];
+  public bannedPlayers: User[];
+  public judgeId: string;
+  public ownerId: string;
+  public whitePlayed: WhitePlayed;
+  public whitePlayedAnonymous: WhiteCard[][];
+  public currentBlackCard: BlackCard;
+  public winner: User;
+  public messages: Message[];
 }
 
 export class LocalGameData extends GameData {
-  queuedCardIds: Array<string>
+  public queuedCardIds: string[];
 }
 
 export class GameInfo {
-  name: string
-  playerCount: number
-  maxPlayers: number
-  owner: User
+  public name: string;
+  public playerCount: number;
+  public maxPlayers: number;
+  public owner: User;
 }
 
 export class Session {
-  id: string
-  userId: string
-  createdAt: Date
+  public id: string;
+  public userId: string;
+  public createdAt: Date;
 }

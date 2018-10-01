@@ -1,37 +1,37 @@
+import {ConnectedRouter} from 'connected-react-router';
+import {createBrowserHistory} from 'history';
 import * as React from 'react';
 import {Component} from 'react';
-import {Provider} from 'react-redux';
-import Home from './pages/Home';
-import Cardpack from './pages/Cardpack';
-import User from './pages/User.jsx';
-import Login from './pages/Login';
-import NotFound from './pages/NotFound';
-import Game from './pages/Game';
-import GameList from './pages/GameList';
-import Settings from './pages/Settings';
-import Navbar from './components/Navbar';
-import StatusBar from './components/StatusBar';
-import './styles/index.scss';
-import {Route, Switch} from 'react-router';
-import {DragDropContextProvider} from 'react-dnd/lib';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
-import {ConnectedRouter} from 'connected-react-router';
-import AuthRedirector from './components/AuthRedirector';
-import {init as initFirebase} from './firebase';
+import {DragDropContextProvider} from 'react-dnd/lib';
+import {Provider} from 'react-redux';
+import {Route, Switch} from 'react-router';
 import {Provider as ApiContextProvider} from './api/context';
-import HttpMainApi from './api/http/httpMainApi';
-import HttpGameApi from './api/http/httpGameApi';
 import HttpAuthApi from './api/http/httpAuthApi';
-import createStore from './store/index';
-import {createBrowserHistory} from 'history';
+import HttpGameApi from './api/http/httpGameApi';
+import HttpMainApi from './api/http/httpMainApi';
+import AuthApi from './api/model/authApi';
 import GameApi from './api/model/gameApi';
 import MainApi from './api/model/mainApi';
-import AuthApi from './api/model/authApi';
 import {bindGameApi} from './api/reduxBind';
+import AuthRedirector from './components/AuthRedirector';
+import Navbar from './components/Navbar';
+import StatusBar from './components/StatusBar';
+import {init as initFirebase} from './firebase';
+import Cardpack from './pages/Cardpack';
+import Game from './pages/Game';
+import GameList from './pages/GameList';
+import Home from './pages/Home';
+import Login from './pages/Login';
+import NotFound from './pages/NotFound';
+import Settings from './pages/Settings';
+import User from './pages/User.jsx';
+import createStore from './store/index';
+import './styles/index.scss';
 
 declare global {
   interface Window {
-    __PRELOADED_STATE__: any
+    __PRELOADED_STATE__: any;
   }
 }
 
@@ -58,7 +58,7 @@ export class App extends Component {
     super(props);
   }
 
-  render() {
+  public render() {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>

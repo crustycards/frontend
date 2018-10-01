@@ -1,10 +1,10 @@
 import axios from 'axios';
-import MainApi from '../model/mainApi';
-import {User, Cardpack, WhiteCard, JsonWhiteCard, BlackCard, JsonBlackCard} from '../dao';
 import * as _ from 'underscore';
+import {BlackCard, Cardpack, JsonBlackCard, JsonWhiteCard, User, WhiteCard} from '../dao';
+import MainApi from '../model/mainApi';
 
 export default class HttpMainApi implements MainApi {
-  private userId: string
+  private userId: string;
 
   constructor(currentUserId: string) {
     this.userId = currentUserId;
@@ -12,109 +12,109 @@ export default class HttpMainApi implements MainApi {
     _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
-  private parseCardpack(data: any): Cardpack {
-    return {...data, createdAt: new Date(data.createdAt)};
-  }
-
-  getUser(id: string = this.userId) {
+  public getUser(id: string = this.userId) {
     return axios.get<User>(`/api/user/${id}`)
       .then((res) => res.data);
   }
 
-  deleteWhiteCard(cardId: string) {
+  public deleteWhiteCard(cardId: string) {
     return axios.delete(`/api/cards/white/${cardId}`)
       .then(() => {});
   }
 
-  deleteBlackCard(cardId: string) {
+  public deleteBlackCard(cardId: string) {
     return axios.delete(`/api/cards/black/${cardId}`)
       .then(() => {});
   }
 
-  deleteCardpack(cardpackId: string) {
+  public deleteCardpack(cardpackId: string) {
     return axios.delete(`/api/cardpack/${cardpackId}`)
       .then(() => {});
   }
 
-  createCardpack(name: string) {
+  public createCardpack(name: string) {
     return axios.put<Cardpack>(`/api/cardpacks/${this.userId}`, {name})
       .then((res) => this.parseCardpack(res.data));
   }
 
-  getCardpack(id: string) {
+  public getCardpack(id: string) {
     return axios.get<Cardpack>(`/api/cardpack/${id}`)
       .then((res) => this.parseCardpack(res.data));
   }
 
-  getCardpacksByUser(userId: string = this.userId) {
-    return axios.get<Array<Cardpack>>(`/api/cardpacks/${userId}`)
+  public getCardpacksByUser(userId: string = this.userId) {
+    return axios.get<Cardpack[]>(`/api/cardpacks/${userId}`)
       .then((res) => res.data.map(this.parseCardpack));
   }
 
-  createWhiteCards(cardpackId: string, cards: Array<JsonWhiteCard>) {
-    return axios.put<Array<WhiteCard>>(`/api/cardpack/cards/white/${cardpackId}`, cards)
+  public createWhiteCards(cardpackId: string, cards: JsonWhiteCard[]) {
+    return axios.put<WhiteCard[]>(`/api/cardpack/cards/white/${cardpackId}`, cards)
       .then((res) => res.data);
   }
 
-  createBlackCards(cardpackId: string, cards: Array<JsonBlackCard>) {
-    return axios.put<Array<BlackCard>>(`/api/cardpack/cards/black/${cardpackId}`, cards)
+  public createBlackCards(cardpackId: string, cards: JsonBlackCard[]) {
+    return axios.put<BlackCard[]>(`/api/cardpack/cards/black/${cardpackId}`, cards)
       .then((res) => res.data);
   }
 
-  addFriend(friendId: string) {
+  public addFriend(friendId: string) {
     return axios.put(`/api/user/friends?userId=${this.userId}&friendId=${friendId}`)
       .then(() => {});
   }
 
-  removeFriend(friendId: string) {
+  public removeFriend(friendId: string) {
     return axios.delete(`/api/user/friends?userId=${this.userId}&friendId=${friendId}`)
       .then(() => {});
   }
 
-  searchUsers(query: string) {
-    return axios.get<Array<User>>(`/api/user/search?query=${query}`)
+  public searchUsers(query: string) {
+    return axios.get<User[]>(`/api/user/search?query=${query}`)
       .then((res) => res.data);
   }
 
-  autocompleteUserSearch(query: string) {
-    return axios.get<Array<string>>(`/api/user/search/autocomplete?query=${query}`)
+  public autocompleteUserSearch(query: string) {
+    return axios.get<string[]>(`/api/user/search/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
 
-  searchCardpacks(query: string) {
-    return axios.get<Array<Cardpack>>(`/api/cardpack/search?query=${query}`)
+  public searchCardpacks(query: string) {
+    return axios.get<Cardpack[]>(`/api/cardpack/search?query=${query}`)
       .then((res) => res.data.map(this.parseCardpack));
   }
 
-  autocompleteCardpackSearch(query: string) {
-    return axios.get<Array<string>>(`/api/cardpack/search/autocomplete?query=${query}`)
+  public autocompleteCardpackSearch(query: string) {
+    return axios.get<string[]>(`/api/cardpack/search/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
 
-  async favoriteCardpack(cardpackId: string) {
+  public async favoriteCardpack(cardpackId: string) {
     await axios.put(`/api/cardpacks/favorite/${this.userId}?cardpackId=${cardpackId}`);
   }
 
-  async unfavoriteCardpack(cardpackId: string) {
+  public async unfavoriteCardpack(cardpackId: string) {
     await axios.delete(`/api/cardpacks/favorite/${this.userId}?cardpackId=${cardpackId}`);
   }
 
-  getFavoritedCardpacks(userId: string = this.userId) {
-    return axios.get<Array<Cardpack>>(`/api/cardpacks/favorite/${userId}`)
+  public getFavoritedCardpacks(userId: string = this.userId) {
+    return axios.get<Cardpack[]>(`/api/cardpacks/favorite/${userId}`)
       .then((res) => res.data.map(this.parseCardpack));
   }
 
-  async cardpackIsFavorited(cardpackId: string) {
+  public async cardpackIsFavorited(cardpackId: string) {
     const res = await axios.get(`/api/cardpacks/favorited?userId=${this.userId}&cardpackId=${cardpackId}`);
     return res.data;
   }
 
-  getProfileImageUrl(userId: string = this.userId) {
+  public getProfileImageUrl(userId: string = this.userId) {
     return `/api/user/profileimage/${userId}`;
   }
 
-  async setProfileImage(data: Blob) {
+  public async setProfileImage(data: Blob) {
     const headers = {'Content-Type': 'application/octet-stream'};
     await axios.put(`/api/user/profileimage/${this.userId}`, data, {headers});
+  }
+
+  private parseCardpack(data: any): Cardpack {
+    return {...data, createdAt: new Date(data.createdAt)};
   }
 }

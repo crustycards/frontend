@@ -1,20 +1,20 @@
+import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
 import {connect} from 'react-redux';
-import WhiteCard from '../shells/CAHWhiteCard';
-import {Button} from '@material-ui/core';
 import {ApiContextWrapper} from '../../api/context';
 import {GameData, User} from '../../api/dao';
 import Api from '../../api/model/api';
+import WhiteCard from '../shells/CAHWhiteCard';
 
 interface PlayedCardsProps {
-  api: Api
-  game: GameData
-  user: User
+  api: Api;
+  game: GameData;
+  user: User;
 }
 
 interface PlayedCardsState {
-  selectedSetIndex?: number
+  selectedSetIndex?: number;
 }
 
 class PlayedCards extends Component<PlayedCardsProps, PlayedCardsState> {
@@ -26,7 +26,7 @@ class PlayedCards extends Component<PlayedCardsProps, PlayedCardsState> {
     };
   }
 
-  render() {
+  public render() {
     if (this.props.game.stage === 'judgePhase') {
       return (
         <div className={'panel'}>

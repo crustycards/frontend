@@ -2,18 +2,18 @@ import * as React from 'react';
 import {Component} from 'react';
 
 interface UrlImageProps {
-  url: string
-  onLoad?(e: React.SyntheticEvent<HTMLImageElement>): void
-  onError?(e: React.SyntheticEvent<HTMLImageElement>): void
-  loadingView?: React.ReactNode
-  errorView?: React.ReactNode
-  style?: React.CSSProperties
-  imageStyle?: React.CSSProperties
+  url: string;
+  loadingView?: React.ReactNode;
+  errorView?: React.ReactNode;
+  style?: React.CSSProperties;
+  imageStyle?: React.CSSProperties;
+  onLoad?(e: React.SyntheticEvent<HTMLImageElement>): void;
+  onError?(e: React.SyntheticEvent<HTMLImageElement>): void;
 }
 
 interface UrlImageState {
-  isLoading: boolean,
-  encounteredError: boolean
+  isLoading: boolean;
+  encounteredError: boolean;
 }
 
 class UrlImage extends Component<UrlImageProps, UrlImageState> {
@@ -29,21 +29,21 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
     this.handleError = this.handleError.bind(this);
   }
 
-  handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+  public handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     if (this.props.onLoad) {
       this.props.onLoad(e);
     }
     this.setState({isLoading: false});
   }
 
-  handleError(e: React.SyntheticEvent<HTMLImageElement>) {
+  public handleError(e: React.SyntheticEvent<HTMLImageElement>) {
     if (this.props.onError) {
       this.props.onError(e);
     }
     this.setState({isLoading: false, encounteredError: true});
   }
 
-  render() {
+  public render() {
     if (this.state.encounteredError && this.props.errorView) {
       return this.props.errorView;
     }

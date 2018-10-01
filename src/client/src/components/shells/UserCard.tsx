@@ -1,21 +1,21 @@
+import {Avatar, Button, Card, CardActions, CardContent, CardHeader} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import {Button, Card, CardContent, CardActions, CardHeader, Avatar} from '@material-ui/core';
-import {ApiContextWrapper} from '../../api/context';
 import {NavLink} from 'react-router-dom';
-import Api from '../../api/model/api';
+import {ApiContextWrapper} from '../../api/context';
 import {User} from '../../api/dao';
+import Api from '../../api/model/api';
 import {stringToHexColor} from '../../helpers/hash';
 
 interface UserCardProps {
-  api: Api
-  showFriendButton?: boolean
-  showUnfriendButton?: boolean
-  user: User
+  api: Api;
+  showFriendButton?: boolean;
+  showUnfriendButton?: boolean;
+  user: User;
 }
 
 interface UserCardState {
-  imgError: boolean
+  imgError: boolean;
 }
 
 class UserCard extends Component<UserCardProps, UserCardState> {
@@ -27,7 +27,7 @@ class UserCard extends Component<UserCardProps, UserCardState> {
     };
   }
 
-  render() {
+  public render() {
     return (
       <Card className='card'>
         <CardHeader

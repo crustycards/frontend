@@ -1,20 +1,20 @@
-import * as React from 'react';
-import {Component} from 'react';
 import {
   Button,
-  CircularProgress,
   Card,
   CardActions,
   CardHeader,
-  withStyles,
+  CircularProgress,
   Theme,
+  withStyles,
   WithStyles
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import * as React from 'react';
+import {Component} from 'react';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../../api/context';
+import {GameData, GameInfo} from '../../api/dao';
 import Api from '../../api/model/api';
-import {GameInfo, GameData} from '../../api/dao';
 
 const styles = (theme: Theme) => ({
   leftIcon: {
@@ -23,13 +23,13 @@ const styles = (theme: Theme) => ({
 });
 
 interface GameListProps extends WithStyles<typeof styles> {
-  api: Api
-  games: GameInfo[]
-  game?: GameData
+  api: Api;
+  games: GameInfo[];
+  game?: GameData;
 }
 
 interface GameListState {
-  isLoading: boolean
+  isLoading: boolean;
 }
 
 class GameList extends Component<GameListProps, GameListState> {
@@ -43,16 +43,16 @@ class GameList extends Component<GameListProps, GameListState> {
     this.refresh = this.refresh.bind(this);
   }
 
-  componentDidMount() {
+  public componentDidMount() {
     this.refresh();
   }
 
-  refresh() {
+  public refresh() {
     this.setState({isLoading: true});
     this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
   }
 
-  render() {
+  public render() {
     if (this.state.isLoading) {
       return <div>
         <h2>Games</h2>

@@ -1,10 +1,10 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import PlaySlot from './PlaySlot';
 import { BlackCard, LocalGameData } from '../../../api/dao';
+import PlaySlot from './PlaySlot';
 
 interface PlayAreaProps {
-  currentBlackCard: BlackCard
+  currentBlackCard: BlackCard;
 }
 
 const PlayArea = ({currentBlackCard}: PlayAreaProps) => {

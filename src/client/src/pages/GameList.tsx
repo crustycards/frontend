@@ -1,7 +1,7 @@
+import {Divider} from '@material-ui/core';
 import * as React from 'react';
 import Creator from '../components/GameList/Creator';
 import List from '../components/GameList/List';
-import {Divider} from '@material-ui/core';
 
 const GameList = () => (
   <div className='content-wrap'>

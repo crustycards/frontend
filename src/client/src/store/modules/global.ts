@@ -9,10 +9,10 @@ const HIDE_STATUS_MESSAGE = 'global/HIDE_STATUS_MESSAGE';
 const preloadedState = window.__PRELOADED_STATE__;
 
 interface ReduxGlobalState {
-  user: User
-  navbarOpen: boolean
-  statusMessage: string
-  statusVisible: boolean
+  user: User;
+  navbarOpen: boolean;
+  statusMessage: string;
+  statusVisible: boolean;
 }
 
 const initialState: ReduxGlobalState = {

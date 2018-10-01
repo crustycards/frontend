@@ -5,12 +5,12 @@ import {Redirect} from 'react-router-dom';
 import {User} from '../api/dao';
 
 interface AuthRedirectorProps {
-  user: User
-  path: string
+  user: User;
+  path: string;
 }
 
 class AuthRedirector extends Component<AuthRedirectorProps> {
-  render() {
+  public render() {
     if (this.props.user && this.props.path === '/login') {
       return <Redirect to={'/'} />;
     } else if (!this.props.user && this.props.path !== '/login') {

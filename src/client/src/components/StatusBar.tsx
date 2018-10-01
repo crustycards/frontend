@@ -1,13 +1,13 @@
-import * as React from 'react';
 import {Snackbar} from '@material-ui/core';
+import * as React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
 import {hideStatusMessage} from '../store/modules/global';
 
 interface StatusBarProps {
-  isVisible: boolean
-  message: string
-  hideStatusMessage(): void
+  isVisible: boolean;
+  message: string;
+  hideStatusMessage(): void;
 }
 
 const StatusBar = (props: StatusBarProps) => (

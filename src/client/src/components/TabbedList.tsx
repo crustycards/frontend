@@ -1,19 +1,19 @@
+import {Button, GridList, GridListTile, withStyles} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import {Button, GridList, GridListTile, withStyles} from '@material-ui/core';
 
 const StyledGridListTile = withStyles({tile: {height: 'auto'}})((props: any) => (<GridListTile {...props}/>));
 
 interface TabbedListProps {
-  itemsPerTab?: number
-  columns?: number
-  children: JSX.Element[]
+  itemsPerTab?: number;
+  columns?: number;
+  children: JSX.Element[];
 }
 
 interface TabbedListState {
-  tab: number
-  itemsPerTab: number
-  columns: number
+  tab: number;
+  itemsPerTab: number;
+  columns: number;
 }
 
 class TabbedList extends Component<TabbedListProps, TabbedListState> {
@@ -28,19 +28,19 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     };
   }
 
-  nextTab() {
+  public nextTab() {
     if (this.canGoToNextPage()) {
       this.setState({tab: this.state.tab + 1});
     }
   }
 
-  previousTab() {
+  public previousTab() {
     if (this.canGoToPreviousPage()) {
       this.setState({tab: this.state.tab - 1});
     }
   }
 
-  getTabRange() {
+  public getTabRange() {
     const tabStart = this.state.tab * this.state.itemsPerTab;
     const tabEnd = tabStart + this.state.itemsPerTab;
     return {
@@ -49,16 +49,16 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     };
   }
 
-  canGoToNextPage() {
+  public canGoToNextPage() {
     const {tabEnd} = this.getTabRange();
     return tabEnd < this.props.children.length;
   }
 
-  canGoToPreviousPage() {
+  public canGoToPreviousPage() {
     return this.state.tab > 0;
   }
 
-  render() {
+  public render() {
     const visibleElements = [];
 
     const {tabStart, tabEnd} = this.getTabRange();

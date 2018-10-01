@@ -4,10 +4,10 @@ import Friend from './models/friend';
 import User from './models/user';
 
 export default class {
-  auth: Auth;
-  cardpack: Cardpack;
-  friend: Friend;
-  user: User;
+  public auth: Auth;
+  public cardpack: Cardpack;
+  public friend: Friend;
+  public user: User;
 
   constructor({authUrl, apiUrl}: {authUrl: string, apiUrl: string}) {
     this.auth = new Auth(authUrl);

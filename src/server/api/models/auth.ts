@@ -8,12 +8,12 @@ export default class {
     this.authServerUrl = authServerUrl;
   }
 
-  async createSession(userId: string): Promise<Session> {
+  public async createSession(userId: string): Promise<Session> {
     const response = await axios.put(`${this.authServerUrl}/session?userId=${userId}`);
     return response.data;
   }
 
-  async getSession(sessionId: string): Promise<Session> {
+  public async getSession(sessionId: string): Promise<Session> {
     try {
       const response = await axios.get(`${this.authServerUrl}/session?sessionId=${sessionId}`);
       return response.data;
@@ -22,7 +22,7 @@ export default class {
     }
   }
 
-  async deleteSession(sessionId: string): Promise<void> {
+  public async deleteSession(sessionId: string): Promise<void> {
     await axios.delete(`${this.authServerUrl}/session?sessionId=${sessionId}`);
   }
 }

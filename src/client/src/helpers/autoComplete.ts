@@ -8,7 +8,7 @@ const whitespacesRegex = /\s+/;
 
 const escapeRegexCharacters = (str: string) => (str.replace(specialCharsRegex, '\\$&'));
 
-const match = (text: string, query: string): Array<Array<number>> => (
+const match = (text: string, query: string): number[][] => (
   query
     .trim()
     .split(whitespacesRegex)
@@ -35,16 +35,16 @@ const match = (text: string, query: string): Array<Array<number>> => (
 );
 
 interface HighlightObject {
-  text: string
-  highlight: boolean
+  text: string;
+  highlight: boolean;
 }
 
-const parse = (text: string, matches: Array<Array<number>>): Array<HighlightObject> => {
-  const result: Array<HighlightObject> = [];
+const parse = (text: string, matches: number[][]): HighlightObject[] => {
+  const result: HighlightObject[] = [];
 
   if (matches.length === 0) {
     result.push({
-      text: text,
+      text,
       highlight: false
     });
   } else {

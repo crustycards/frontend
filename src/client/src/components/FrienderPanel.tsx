@@ -1,20 +1,20 @@
+import {CircularProgress} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
+import {ApiContextWrapper} from '../api/context';
+import {User} from '../api/dao';
+import Api from '../api/model/api';
 import AutoComplete from './AutoComplete';
 import UserCard from './shells/UserCard';
-import {ApiContextWrapper} from '../api/context';
-import Api from '../api/model/api';
-import {User} from '../api/dao';
-import {CircularProgress} from '@material-ui/core';
 
 interface FrienderPanelProps {
-  api: Api
+  api: Api;
 }
 
 interface FrienderPanelState {
-  hasSearched: boolean
-  isSearching: boolean
-  searchedUsers: User[]
+  hasSearched: boolean;
+  isSearching: boolean;
+  searchedUsers: User[];
 }
 
 class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
@@ -30,7 +30,7 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
     this.searchUsers = this.searchUsers.bind(this);
   }
 
-  searchUsers(query: string) {
+  public searchUsers(query: string) {
     if (!this.state.isSearching) {
       this.setState({isSearching: true});
       this.props.api.main.searchUsers(query)
@@ -44,7 +44,7 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
     }
   }
 
-  render() {
+  public render() {
     return (
       <div className='panel'>
         <div>Search Users</div>
