@@ -34,11 +34,11 @@ const UserCard = (props: UserCardProps) => (
           Unfriend
         </Button>
       }
-      <Button>
-        <NavLink to={`/user?id=${props.user.id}`} style={{textDecoration: 'none'}}>
+      <NavLink to={`/user?id=${props.user.id}`} style={{textDecoration: 'none'}}>
+        <Button>
           View Profile
-        </NavLink>
-      </Button>
+        </Button>
+      </NavLink>
     </CardActions>
   </Card>
 );
