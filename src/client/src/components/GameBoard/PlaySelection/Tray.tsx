@@ -44,6 +44,9 @@ class Tray extends Component<TrayProps> {
         className='tray'
         style={{
           minHeight: '100px',
+          width: '100%',
+          overflowX: 'scroll',
+          display: 'flex',
           backgroundColor: canPlay({
             whitePlayed,
             currentBlackCard,

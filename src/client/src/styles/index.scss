@@ -56,24 +56,20 @@ h1, h2, h3 {
   padding: 10px;
   overflow: hidden;
 }
+
 .col-narrow {
   width: 40%;
   float: left;
   min-height: 125px;
 }
+
 .col-wide {
   width: 60%;
   float: right;
   min-height: 125px;
 }
 
-.tray {
-  width: 100%;
-  overflow-x: scroll;
-  display: flex;
-
-  .card {
-    width: 10em;
-    box-sizing: border-box;
-  }
+.tray .card {
+  width: 10em;
+  box-sizing: border-box;
 }
