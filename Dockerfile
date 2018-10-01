@@ -4,5 +4,6 @@ COPY ./ ./app
 WORKDIR /app
 RUN npm install
 RUN npm run build-prod
-RUN npm prune --production
+# TODO - Enable npm module pruning
+# RUN npm prune --production
 CMD ["npm", "start"]
