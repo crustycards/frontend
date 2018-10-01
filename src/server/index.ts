@@ -3,7 +3,8 @@ import * as Bell from 'bell';
 import * as fs from 'fs';
 import loadEnvVars from './loadEnvVars';
 import Api from './api';
-import {ResponseToolkit, Request} from 'hapi';
+import {Request} from 'hapi';
+import loadRoutes from './route';
 
 loadEnvVars();
 
@@ -130,7 +131,11 @@ const startServer = async () => {
   ]);
 
   await server.register({plugin: require('h2o2')});
-  server.route(require('./route'));
+  loadRoutes(server, {
+    apiUrl: process.env.API_URL,
+    authUrl: process.env.AUTH_SERVER_URL,
+    gameUrl: process.env.GAME_SERVER_URL
+  });
 
   await server.start().then(() => {
     console.log(`Server is running on port ${port}`);
