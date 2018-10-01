@@ -1,12 +1,6 @@
 @import 'global-variables';
 
-$game-top-height: 66px;
-
 .game-top {
-  height: $game-top-height;
-  vertical-align: middle;
-  background-color: $tertiary-color;
-
   h2, h3 {
     margin: 0 10px;
   }

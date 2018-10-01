@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {Button} from '@material-ui/core';
+import {Button, WithStyles, Theme, withStyles} from '@material-ui/core';
 import PlayerList from '../components/GameBoard/PlayerList';
 import PlaySelection from '../components/GameBoard/PlaySelection/index';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
@@ -23,7 +23,13 @@ const gameAlertStyle = {
   fontSize: '1.5em'
 };
 
-interface GameProps {
+const styles = (theme: Theme) => ({
+  topBar: {
+    backgroundColor: theme.palette.grey['400']
+  }
+});
+
+interface GameProps extends WithStyles<typeof styles> {
   game: GameData
   user: User
   api: Api
@@ -33,7 +39,10 @@ const Game = (props: GameProps) => (
   <div>
     {props.game ?
       <div>
-        <div className='game-top'>
+        <div className={`${props.classes.topBar} game-top`} style={{
+          height: '66px',
+          verticalAlign: 'middle',
+        }}>
           <div style={{height: '66px', float: 'left'}}>
             <h2
               style={{lineHeight: '36px'}}
@@ -144,7 +153,8 @@ const Game = (props: GameProps) => (
   </div>
 );
 
-const ContextLinkedGame = ApiContextWrapper(Game);
+const StyledGame = withStyles(styles)(Game);
+const ContextLinkedGame = ApiContextWrapper(StyledGame);
 
 const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
 
