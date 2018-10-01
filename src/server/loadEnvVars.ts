@@ -12,7 +12,7 @@ const requiredVars = [
 ];
 
 const assertVarsExist = () => {
-  let missingVars = [];
+  let missingVars: string[] = [];
   requiredVars.forEach((varName) => {
     if (!process.env[varName]) {
       missingVars.push(varName);
@@ -24,9 +24,13 @@ const assertVarsExist = () => {
   }
 };
 
-const defaultVals = {
+interface StringHashObject {
+  [indexer: string]: string
+}
+
+const defaultVals: StringHashObject = {
   NODE_ENV: 'production',
-  PORT: 80
+  PORT: '80'
 };
 
 const applyEnvConfig = () => {
