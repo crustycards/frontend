@@ -5,6 +5,7 @@ import UserCard from './shells/UserCard';
 import {ApiContextWrapper} from '../api/context';
 import Api from '../api/model/api';
 import {User} from '../api/dao';
+import {CircularProgress} from '@material-ui/core';
 
 interface FrienderPanelProps {
   api: Api
@@ -12,6 +13,7 @@ interface FrienderPanelProps {
 
 interface FrienderPanelState {
   hasSearched: boolean
+  isSearching: boolean
   searchedUsers: User[]
 }
 
@@ -21,6 +23,7 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
 
     this.state = {
       hasSearched: false,
+      isSearching: false,
       searchedUsers: []
     };
 
@@ -28,13 +31,17 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
   }
 
   searchUsers(query: string) {
-    this.props.api.main.searchUsers(query)
-        .then((searchedUsers) =>
-          this.setState({
-            searchedUsers,
-            hasSearched: true
-          })
-        );
+    if (!this.state.isSearching) {
+      this.setState({isSearching: true});
+      this.props.api.main.searchUsers(query)
+          .then((searchedUsers) =>
+            this.setState({
+              hasSearched: true,
+              isSearching: false,
+              searchedUsers
+            })
+          );
+    }
   }
 
   render() {
@@ -47,21 +54,24 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
           onSubmit={this.searchUsers}
         />
         {
-          this.state.hasSearched &&
-          <div style={{marginTop: '14px'}}>
-            {
-              this.state.searchedUsers.length ?
-                this.state.searchedUsers.map((user, index) =>
-                  <UserCard
-                    user={user}
-                    showFriendButton
-                    key={index}
-                  />
-                )
-                :
-                <div>No users were found</div>
-            }
-          </div>
+          (this.state.isSearching || this.state.hasSearched) &&
+            <div style={{marginTop: '14px'}}>
+              {
+                this.state.isSearching ?
+                  <CircularProgress style={{display: 'block', marginLeft: 'auto', marginRight: 'auto'}}/>
+                  :
+                  this.state.searchedUsers.length ?
+                    this.state.searchedUsers.map((user, index) =>
+                      <UserCard
+                        user={user}
+                        showFriendButton
+                        key={index}
+                      />
+                    )
+                    :
+                    <div>No users were found</div>
+              }
+            </div>
         }
       </div>
     );
