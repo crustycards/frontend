@@ -5,6 +5,7 @@ import {ApiContextWrapper} from '../../api/context';
 import {NavLink} from 'react-router-dom';
 import Api from '../../api/model/api';
 import {User} from '../../api/dao';
+import {stringToHexColor} from '../../helpers/hash';
 
 interface UserCardProps {
   api: Api
@@ -34,9 +35,9 @@ class UserCard extends Component<UserCardProps, UserCardState> {
             <div style={{height: '50px'}}>
               {
                 this.state.imgError === false ?
-                <Avatar onError={() => this.setState({imgError: true})} style={{float: 'left'}} src={this.props.api.main.getProfileImageUrl(this.props.user.id)}>H</Avatar>
+                <Avatar onError={() => this.setState({imgError: true})} style={{float: 'left'}} src={this.props.api.main.getProfileImageUrl(this.props.user.id)}/>
                 :
-                <Avatar style={{float: 'left'}}>{this.props.user.name.charAt(0).toUpperCase()}</Avatar>
+                <Avatar style={{float: 'left', backgroundColor: stringToHexColor(this.props.user.id)}}>{this.props.user.name.charAt(0).toUpperCase()}</Avatar>
               }
               <div style={{padding: '5px 50px'}}>{this.props.user.name}</div>
             </div>
