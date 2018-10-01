@@ -93,26 +93,26 @@ export default class HttpGameApi implements GameApi {
   }
 
   public playCards(cardIds: string[]) {
-    return axios.put(`/api/game/play/${this.userId}`, cardIds).then(() => {});
+    return axios.put(`/api/game/play/${this.userId}`, cardIds).then(() => null);
   }
 
   public unPlayCards() {
-    return axios.delete(`/api/game/play/${this.userId}`).then(() => {});
+    return axios.delete(`/api/game/play/${this.userId}`).then(() => null);
   }
 
   public kickPlayer(playerId: string) {
     return axios.delete(`/api/game/players?${queryString.stringify({
       kickerId: this.userId,
       kickeeId: playerId
-    })}`).then(() => {});
+    })}`).then(() => null);
   }
 
   public vote(cardId: string) {
-    return axios.put(`/api/game/vote/${this.userId}?${queryString.stringify({cardId})}`).then(() => {});
+    return axios.put(`/api/game/vote/${this.userId}?${queryString.stringify({cardId})}`).then(() => null);
   }
 
   public startNextRound() {
-    return axios.put(`/api/game/continue/${this.userId}`).then(() => {});
+    return axios.put(`/api/game/continue/${this.userId}`).then(() => null);
   }
 
   public sendMessage(message: string) {

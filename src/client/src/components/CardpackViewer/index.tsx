@@ -130,7 +130,11 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     }));
   }
 
-  public async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
+  public async handleUpload(
+    acceptedFiles: FileWithPreview[],
+    rejectedFiles: FileWithPreview[],
+    event: React.DragEvent<HTMLDivElement>
+  ) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
       this.closeUploadDialog();
       const file = acceptedFiles[0];
@@ -207,8 +211,8 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
                 onChange={this.handleTabChange}
                 value={this.state.slideIndex}
               >
-                <Tab label='White Cards' />
-                <Tab label='Black Cards' />
+                <Tab label='White Cards'/>
+                <Tab label='Black Cards'/>
               </Tabs>
               <SwipeableViews
                 onChangeIndex={this.handleTabChange}

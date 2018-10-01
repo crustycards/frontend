@@ -64,7 +64,9 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     cardpackCreation.then((cardpack) => {
       this.setState({isLoading: false});
 
-      this.props.onSubmit && this.props.onSubmit(cardpack);
+      if (this.props.onSubmit) {
+        this.props.onSubmit(cardpack);
+      }
     });
   }
 

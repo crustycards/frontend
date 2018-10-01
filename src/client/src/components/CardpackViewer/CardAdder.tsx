@@ -44,7 +44,7 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
   }
 
   public changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({newCardAnswerFields: parseInt(e.target.value)});
+    this.setState({newCardAnswerFields: parseInt(e.target.value, 10)});
   }
 
   public addCurrentCard() {

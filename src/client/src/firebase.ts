@@ -8,7 +8,9 @@ const config = {
 export const init = async (onMessage: (payload: any) => void) => {
   firebase.initializeApp(config);
   const messaging = firebase.messaging();
-  onMessage && messaging.onMessage(onMessage);
+  if (onMessage) {
+    messaging.onMessage(onMessage);
+  }
   return messaging.requestPermission()
     .catch(() => console.log('Denied permission for notifications'))
     .then(() => {

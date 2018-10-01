@@ -71,8 +71,14 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
           }
           {
             (this.state.isLiked === true || this.state.isLiked === false) &&
-            <IconButton onClick={this.toggleLike} style={{color: this.state.isLiked ? '#d12743' : undefined, transition: 'all .2s ease-in'}}>
-              <FavoriteIcon />
+            <IconButton
+              onClick={this.toggleLike}
+              style={{
+                color: this.state.isLiked ? '#d12743' : undefined,
+                transition: 'all .2s ease-in'
+              }}
+            >
+              <FavoriteIcon/>
             </IconButton>
           }
           {

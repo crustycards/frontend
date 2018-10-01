@@ -2,8 +2,10 @@ import AuthApi from './authApi';
 import GameApi from './gameApi';
 import MainApi from './mainApi';
 
-export default interface Api {
+interface Api {
   main: MainApi;
   game: GameApi;
   auth: AuthApi;
 }
+
+export default Api;

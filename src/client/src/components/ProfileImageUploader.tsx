@@ -35,7 +35,11 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     this.setState({showDialogBox: false});
   }
 
-  public async handleUpload(acceptedFiles: FileWithPreview[], rejectedFiles: FileWithPreview[], event: React.DragEvent<HTMLDivElement>) {
+  public async handleUpload(
+    acceptedFiles: FileWithPreview[],
+    rejectedFiles: FileWithPreview[],
+    event: React.DragEvent<HTMLDivElement>
+  ) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
       const file = acceptedFiles[0];
       await this.props.api.main.setProfileImage(file.slice());

@@ -6,7 +6,6 @@
       },
       "new-parens": true,
       "no-arg": true,
-      "no-bitwise": true,
       "no-conditional-assignment": true,
       "no-consecutive-blank-lines": false,
       "no-console": {
@@ -25,7 +24,12 @@
         "singleline": "never"
       }],
       "quotemark": [true, "single", "jsx-single"],
-      "object-literal-sort-keys": false
+      "object-literal-sort-keys": false,
+      "max-classes-per-file": false,
+      "interface-name": [true, "never-prefix"],
+      "no-shadowed-variable": false,
+      "no-bitwise": false,
+      "no-var-requires": false
   },
   "jsRules": {
       "max-line-length": {

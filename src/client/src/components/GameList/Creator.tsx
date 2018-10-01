@@ -107,7 +107,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
             <span>Max Players: </span>
             <Select
               value={this.state.maxPlayers}
-              onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value)})}
+              onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value, 10)})}
             >
               {GameCreator.generateNumberedMenuItems(4, 20)}
             </Select>
@@ -115,7 +115,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
             <span>Winning Score: </span>
             <Select
               value={this.state.maxScore}
-              onChange={(e) => this.setState({maxScore: parseInt(e.target.value)})}
+              onChange={(e) => this.setState({maxScore: parseInt(e.target.value, 10)})}
             >
               {GameCreator.generateNumberedMenuItems(4, 20)}
             </Select>
@@ -123,7 +123,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
             <span>Hand Size: </span>
             <Select
               value={this.state.handSize}
-              onChange={(e) => this.setState({handSize: parseInt(e.target.value)})}
+              onChange={(e) => this.setState({handSize: parseInt(e.target.value, 10)})}
             >
               {GameCreator.generateNumberedMenuItems(3, 20)}
             </Select>

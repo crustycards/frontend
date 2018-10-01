@@ -13,7 +13,7 @@ export default class HttpAuthApi implements AuthApi {
 
   public linkSessionToFirebase(firebaseToken: string) {
     return axios.put(`/api/session?token=${firebaseToken}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public getUserSessions() {
@@ -26,6 +26,6 @@ export default class HttpAuthApi implements AuthApi {
 
   public deleteSession(sessionId: string) {
     return axios.delete(`/api/session?sessionId=${sessionId}`)
-      .then(() => {});
+      .then(() => null);
   }
 }

@@ -9,7 +9,7 @@ import loadRoutes from './route';
 loadEnvVars();
 
 const isProduction = process.env.NODE_ENV === 'production';
-const port = parseInt(process.env.PORT);
+const port = parseInt(process.env.PORT, 10);
 const cookieName = 'session';
 
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();

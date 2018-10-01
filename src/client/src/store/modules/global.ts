@@ -22,7 +22,10 @@ const initialState: ReduxGlobalState = {
   statusVisible: false
 };
 
-export default (state: ReduxGlobalState = initialState, {type, payload}: {type: string, payload: any}): ReduxGlobalState => {
+export default (
+  state: ReduxGlobalState = initialState,
+  {type, payload}: {type: string, payload: any}
+): ReduxGlobalState => {
   switch (type) {
     case OPEN_NAVBAR:
       return {

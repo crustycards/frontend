@@ -33,7 +33,7 @@ interface UploaderProps extends WithStyles<typeof styles> {
 }
 
 const FileUploader = (props: UploaderProps) => (
-  <Dialog open={props.isVisible} fullWidth={true} onClose={props.onClose || (() => {})}>
+  <Dialog open={props.isVisible} fullWidth={true} onClose={props.onClose || (() => null)}>
     {props.titleText && <DialogTitle>{props.titleText}</DialogTitle>}
     <DialogContent>
       <Dropzone

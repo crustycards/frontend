@@ -19,17 +19,17 @@ export default class HttpMainApi implements MainApi {
 
   public deleteWhiteCard(cardId: string) {
     return axios.delete(`/api/cards/white/${cardId}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public deleteBlackCard(cardId: string) {
     return axios.delete(`/api/cards/black/${cardId}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public deleteCardpack(cardpackId: string) {
     return axios.delete(`/api/cardpack/${cardpackId}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public createCardpack(name: string) {
@@ -59,12 +59,12 @@ export default class HttpMainApi implements MainApi {
 
   public addFriend(friendId: string) {
     return axios.put(`/api/user/friends?userId=${this.userId}&friendId=${friendId}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public removeFriend(friendId: string) {
     return axios.delete(`/api/user/friends?userId=${this.userId}&friendId=${friendId}`)
-      .then(() => {});
+      .then(() => null);
   }
 
   public searchUsers(query: string) {

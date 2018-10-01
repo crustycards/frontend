@@ -18,12 +18,28 @@ export default class {
     return response.data;
   }
 
-  public async create({name, oAuthId, oAuthProvider}: {name: string, oAuthId: string, oAuthProvider: string}): Promise<User> {
+  public async create({
+    name,
+    oAuthId,
+    oAuthProvider
+  }: {
+    name: string,
+    oAuthId: string,
+    oAuthProvider: string
+  }): Promise<User> {
     const response = await axios.put(`${this.apiUrl}/user`, {name, oAuthId, oAuthProvider});
     return response.data;
   }
 
-  public async findOrCreate({name, oAuthId, oAuthProvider}: {name: string, oAuthId: string, oAuthProvider: string}): Promise<User> {
+  public async findOrCreate({
+    name,
+    oAuthId,
+    oAuthProvider
+  }: {
+    name: string,
+    oAuthId: string,
+    oAuthProvider: string
+  }): Promise<User> {
     try {
       return await this.getByOAuth({oAuthId, oAuthProvider});
     } catch (err) {

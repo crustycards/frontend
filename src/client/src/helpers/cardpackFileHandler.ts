@@ -5,8 +5,8 @@ interface ParsedCardpack {
   blackCards: JsonBlackCard[];
 }
 
-export const parse = (string: string): ParsedCardpack => {
-  const cardpack = JSON.parse(string);
+export const parse = (str: string): ParsedCardpack => {
+  const cardpack = JSON.parse(str);
 
   if (typeof cardpack.whiteCards !== 'object' || cardpack.whiteCards.constructor !== Array) {
     throw new Error('White cards must be an array');

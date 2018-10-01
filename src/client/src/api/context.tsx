@@ -12,8 +12,9 @@ const Context = React.createContext<Api>(undefined);
 export const Provider = Context.Provider;
 export const Consumer = Context.Consumer;
 
-export const ApiContextWrapper = <P extends InjectedApiProps>(Component: React.ComponentType<P>): React.ComponentType<Subtract<P, InjectedApiProps>> => (
-  class ApiContextWrapper extends React.Component<Subtract<P, InjectedApiProps>> {
+export const ApiContextWrapper = <P extends InjectedApiProps>
+(Component: React.ComponentType<P>): React.ComponentType<Subtract<P, InjectedApiProps>> => (
+  class ApiContextWrappedComponent extends React.Component<Subtract<P, InjectedApiProps>> {
     public render() {
       return (
         <Consumer>
