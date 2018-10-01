@@ -8,9 +8,9 @@
     "build-prod": "webpack --mode production",
     "start": "ts-node src/server/index.ts",
     "start-dev": "nodemon",
-    "lint": "eslint . --ext .js --ext .jsx",
-    "lint-clean": "npm run lint -- --fix",
-    "lint-init": "eslint --init",
+    "lint": "npm run lint-es && npm run lint-ts",
+    "lint-es": "eslint . --ext .js --ext .jsx",
+    "lint-ts": "tslint '**/**/*.ts' '**/**/*.tsx'",
     "test": "jest",
     "deploy": "git pull && npm install && webpack && pm2 restart all"
   },
