@@ -5,23 +5,6 @@ body {
   background-color: #FBFBFB;
 }
 
-.navbar {
-  text-align: center;
-  overflow: visible;
-
-  a {
-    color: #2B2D42;
-    font-size: 20px;
-    padding: 20px 30px;
-    font-weight: 400;
-
-    &:hover {
-      background: #8D99AE;
-      text-decoration: none;
-    }
-  }
-}
-
 .subpanel {
   padding: 10px;
   background: #E0E0E0;
