@@ -66,7 +66,7 @@ const startServer = async () => {
               strategy: 'google',
               mode: 'try'
             },
-            handler: async (request: GoogleOAuthRequest, h: ResponseToolkit) => {
+            handler: async (request: GoogleOAuthRequest, h) => {
               if (!request.auth.isAuthenticated) {
                 console.error(request.auth.error);
                 return `Authentication failed due to: ${request.auth.error.message}`;
@@ -95,7 +95,7 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/{any*}',
-      handler: async (request: Request, h: ResponseToolkit) => {
+      handler: async (request, h) => {
         try {
           const session = await api.auth.getSession(request.state[cookieName]);
           const user = await api.user.getById(session.userId);
@@ -108,14 +108,14 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/bundle.js',
-      handler: (request: Request, h: ResponseToolkit) => {
+      handler: (request, h) => {
         return bundle;
       }
     },
     { 
       method: 'GET',
       path: '/logout',
-      handler: async (request: Request, h: ResponseToolkit) => {
+      handler: async (request, h) => {
         await api.auth.deleteSession(request.state[cookieName]);
         return h.redirect('/login').unstate(cookieName);
       }
@@ -123,7 +123,7 @@ const startServer = async () => {
     {
       method: 'GET',
       path: '/firebase-messaging-sw.js',
-      handler: (request: Request, h: ResponseToolkit) => {
+      handler: (request, h) => {
         return h.response(serviceWorker).header('Content-Type', 'application/javascript');
       }
     }
