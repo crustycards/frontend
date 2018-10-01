@@ -1,5 +1,3 @@
-@import 'game-board';
-
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #FBFBFB;
@@ -72,4 +70,21 @@ h1, h2, h3 {
 .tray .card {
   width: 10em;
   box-sizing: border-box;
+}
+
+.game-top {
+  h2, h3 {
+    margin: 0 10px;
+  }
+
+  h2 {
+    font-size: 1.2em;
+  }
+  h3 {
+    font-size: 1em;
+  }
+
+  button {
+    float: right;
+  }
 }
