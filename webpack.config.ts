@@ -1,10 +1,11 @@
+import * as webpack from 'webpack';
 const path = require('path');
 const SRC_DIR = path.join(__dirname, '/src/client/src');
 const DIST_DIR = path.join(__dirname, '/src/client/dist');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 // const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
-module.exports = {
+const config: webpack.Configuration = {
   entry: ['babel-polyfill', `${SRC_DIR}/index.tsx`],
   output: {
     filename: 'bundle.js',
@@ -57,3 +58,5 @@ module.exports = {
     // new BundleAnalyzerPlugin() // Uncomment for bundle analysis
   ]
 };
+
+export default config;
