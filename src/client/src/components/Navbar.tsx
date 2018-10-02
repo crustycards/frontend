@@ -54,7 +54,7 @@ interface NavbarProps extends WithStyles<typeof styles> {
 
 const Navbar = (props: NavbarProps) => (
   <div>
-    <AppBar position={'static'}>
+    <AppBar position={'static'} style={{borderRadius: '5px'}}>
       <Toolbar>
         <IconButton
           className={props.classes.menuButton}
@@ -67,7 +67,7 @@ const Navbar = (props: NavbarProps) => (
         <Typography variant={'title'} color={'inherit'} className={props.classes.flex}>
           Cards
         </Typography>
-        <Button color={'inherit'} onClick={() => props.push('/game')}>
+        <Button color={'secondary'} variant={'contained'} style={{color: 'white'}} onClick={() => props.push('/game')}>
           Current Game
         </Button>
       </Toolbar>
