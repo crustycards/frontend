@@ -1,9 +1,9 @@
+import {AppBar, Button, Theme, Toolbar, WithStyles, withStyles} from '@material-ui/core';
 import * as React from 'react';
-import {AppBar, Toolbar, Button, WithStyles, Theme, withStyles} from '@material-ui/core';
-import {User, GameData} from '../../api/dao';
-import Api from '../../api/model/api';
-import {ApiContextWrapper} from '../../api/context';
 import {connect} from 'react-redux';
+import {ApiContextWrapper} from '../../api/context';
+import {GameData, User} from '../../api/dao';
+import Api from '../../api/model/api';
 
 const buttonStyle = {
   height: '36px',
@@ -20,9 +20,9 @@ const styles = (theme: Theme) => ({
 });
 
 interface TopBarProps extends WithStyles<typeof styles> {
-  api: Api
-  user: User
-  game: GameData
+  api: Api;
+  user: User;
+  game: GameData;
 }
 
 const TopBar = (props: TopBarProps) => (
