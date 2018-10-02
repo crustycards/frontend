@@ -20,24 +20,26 @@ const hsvToRgb = (h: number, s: number, v: number) => {
   };
 };
 
-const hashCode = (str: string) => {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-     hash = str.charCodeAt(i) + ((hash << 5) - hash);
+const parseHexString = (str: string, charsPerNumber = 8): number[] => {
+  const result = [];
+  while (str.length >= charsPerNumber) {
+      result.push(parseInt(str.substring(0, charsPerNumber), 16));
+
+      str = str.substring(charsPerNumber, str.length);
   }
-  return hash;
+  return result;
 };
 
-const intToRGB = (i: number) => {
-  const c = (i & 0x00FFFFFF)
-      .toString(16)
-      .toUpperCase();
-
-  return '00000'.substring(0, 6 - c.length) + c;
+const pickColor = (rand: number[]) => {
+  console.log(rand[0] % 31);
+  return hsvToRgb(((rand[0] % 31) + 1) / 32, 1, rand[1] % 2 === 0 ? 0.8 : 0.5);
 };
 
-export const stringToHexColor = (str: string) => `#${intToRGB(hashCode(str))}`;
-
+export const stringToHexColor = (str: string) => {
+  const color = pickColor(parseHexString(SHA256(str), 4));
+  console.log(`rgb(${color.r}, ${color.g}, ${color.b})`);
+  return `rgb(${color.r}, ${color.g}, ${color.b})`;
+};
 
 export const SHA256 = (s: string): string => {
 
