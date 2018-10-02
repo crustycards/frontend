@@ -1,4 +1,4 @@
-import {Button, Theme, WithStyles, withStyles} from '@material-ui/core';
+import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
@@ -10,11 +10,7 @@ import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards';
 import PlayerList from '../components/GameBoard/PlayerList';
 import PlaySelection from '../components/GameBoard/PlaySelection/index';
-
-const buttonStyle = {
-  height: '36px',
-  margin: '15px'
-};
+import TopBar from '../components/GameBoard/TopBar';
 
 const gameAlertStyle = {
   display: 'block',
@@ -23,13 +19,7 @@ const gameAlertStyle = {
   fontSize: '1.5em'
 };
 
-const styles = (theme: Theme) => ({
-  topBar: {
-    backgroundColor: theme.palette.grey['400']
-  }
-});
-
-interface GameProps extends WithStyles<typeof styles> {
+interface GameProps {
   game: GameData;
   user: User;
   api: Api;
@@ -39,59 +29,8 @@ const Game = (props: GameProps) => (
   <div>
     {props.game ?
       <div>
-        <div className={`${props.classes.topBar} game-top`} style={{
-          height: '66px',
-          verticalAlign: 'middle'
-        }}>
-          <div style={{height: '66px', float: 'left'}}>
-            <h2
-              style={{lineHeight: '36px'}}
-            >
-              {`Current game:  ${props.game.name}`}
-            </h2>
-            <h3
-              style={{float: 'left', lineHeight: '30px'}}
-            >
-              {`Owner: ${props.game.players.find((player) => player.id === props.game.ownerId).name}`}
-            </h3>
-          </div>
-          <Button
-            onClick={props.api.game.leaveGame}
-            style={buttonStyle}
-          >
-            Leave Game
-          </Button>
-          {
-            props.game.ownerId === props.user.id &&
-            props.game.stage === 'notRunning' &&
-            <Button
-              onClick={props.api.game.startGame}
-              style={buttonStyle}
-            >
-              Start Game
-            </Button>
-          }
-          {
-            props.game.ownerId === props.user.id &&
-            props.game.stage !== 'notRunning' &&
-            <Button
-              onClick={props.api.game.stopGame}
-              style={buttonStyle}
-            >
-              Stop Game
-            </Button>
-          }
-          {
-            props.game.stage === 'roundEndPhase' &&
-            <Button
-              onClick={props.api.game.startNextRound}
-              style={buttonStyle}
-            >
-              Start Next Round
-            </Button>
-          }
-        </div>
-        <div className='game-main'>
+        <TopBar/>
+        <div>
           <div className='col-narrow'>
             <CurrentBlackCard/>
             <PlayerList/>
@@ -153,8 +92,7 @@ const Game = (props: GameProps) => (
   </div>
 );
 
-const StyledGame = withStyles(styles)(Game);
-const ContextLinkedGame = ApiContextWrapper(StyledGame);
+const ContextLinkedGame = ApiContextWrapper(Game);
 
 const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
 
