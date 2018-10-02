@@ -5,7 +5,7 @@ import {NavLink} from 'react-router-dom';
 import {ApiContextWrapper} from '../../api/context';
 import {User} from '../../api/dao';
 import Api from '../../api/model/api';
-import {stringToHexColor} from '../../helpers/hash';
+import {stringToCssColor} from '../../helpers/colorGenerator';
 
 interface UserCardProps {
   api: Api;
@@ -42,7 +42,7 @@ class UserCard extends Component<UserCardProps, UserCardState> {
                 />
                 :
                 <Avatar
-                  style={{float: 'left', backgroundColor: stringToHexColor(this.props.user.id)}}
+                  style={{float: 'left', backgroundColor: stringToCssColor(this.props.user.id)}}
                 >
                   {this.props.user.name.charAt(0).toUpperCase()}
                 </Avatar>
