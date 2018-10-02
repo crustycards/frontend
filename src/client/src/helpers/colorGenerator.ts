@@ -1,9 +1,9 @@
 import {SHA256} from './hash';
 
 class Color {
-  r: number;
-  g: number;
-  b: number;
+  public r: number;
+  public g: number;
+  public b: number;
 
   constructor(r: number, g: number, b: number) {
     if (Math.max(r, g, b) > 255) {
@@ -17,7 +17,7 @@ class Color {
     this.b = b;
   }
 
-  toCssString(): string {
+  public toCssString(): string {
     return `rgb(${this.r}, ${this.g}, ${this.b})`;
   }
 }

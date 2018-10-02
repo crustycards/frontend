@@ -9,7 +9,7 @@ export const SHA256 = (s: string): string => {
     const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
 
     return (msw << 16) | (lsw & 0xFFFF);
-  }
+  };
 
   const S = (X: number, n: number) => (( X >>> n ) | (X << (32 - n)));
 
@@ -47,8 +47,8 @@ export const SHA256 = (s: string): string => {
       h = HASH[7];
 
       for (let j = 0; j < 64; j++) {
-        if (j < 16) W[j] = m[j + i];
-        else W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);
+        if (j < 16) { W[j] = m[j + i]; }
+        else { W[j] = safe_add(safe_add(safe_add(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]); }
 
         T1 = safe_add(safe_add(safe_add(safe_add(h, Sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
         T2 = safe_add(Sigma0256(a), Maj(a, b, c));
@@ -73,21 +73,21 @@ export const SHA256 = (s: string): string => {
     }
 
     return HASH;
-  }
+  };
 
   const str2binb = (str: string) => {
     const bin = Array();
     const mask = (1 << chrsz) - 1;
 
-    for(let i = 0; i < str.length * chrsz; i += chrsz) {
-      bin[i>>5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i%32);
+    for (let i = 0; i < str.length * chrsz; i += chrsz) {
+      bin[i >> 5] |= (str.charCodeAt(i / chrsz) & mask) << (24 - i % 32);
     }
 
     return bin;
-  }
+  };
 
   const Utf8Encode = (string: string) => {
-    string = string.replace(/\r\n/g,"\n");
+    string = string.replace(/\r\n/g, '\n');
     let utftext = '';
 
     for (let n = 0; n < string.length; n++) {
@@ -106,21 +106,21 @@ export const SHA256 = (s: string): string => {
     }
 
     return utftext;
-  }
+  };
 
   const binb2hex = (binarray: number[]) => {
-    const hex_tab = hexcase ? "0123456789ABCDEF" : "0123456789abcdef";
+    const hex_tab = hexcase ? '0123456789ABCDEF' : '0123456789abcdef';
     let str = '';
 
-    for(let i = 0; i < binarray.length * 4; i++) {
-      str += hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8+4)) & 0xF) +
-      hex_tab.charAt((binarray[i>>2] >> ((3 - i%4)*8  )) & 0xF);
+    for (let i = 0; i < binarray.length * 4; i++) {
+      str += hex_tab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8 + 4)) & 0xF) +
+      hex_tab.charAt((binarray[i >> 2] >> ((3 - i % 4) * 8  )) & 0xF);
     }
 
     return str;
-  }
+  };
 
   s = Utf8Encode(s);
 
   return binb2hex(core_sha256(str2binb(s), s.length * chrsz)).toUpperCase();
-}
+};
