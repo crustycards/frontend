@@ -1,3 +1,5 @@
+import {blue} from '@material-ui/core/colors';
+import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import {ConnectedRouter} from 'connected-react-router';
 import {createBrowserHistory} from 'history';
 import * as React from 'react';
@@ -53,6 +55,8 @@ setInterval(() => {
   gameApi.getGameState();
 }, 500); // TODO - Find a way to remove this intermittent polling
 
+const theme = createMuiTheme({palette: {primary: blue, secondary: {main: '#43c6a8'}}});
+
 export class App extends Component {
   constructor(props: any) {
     super(props);
@@ -60,29 +64,31 @@ export class App extends Component {
 
   public render() {
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <DragDropContextProvider backend={DragDropHTML5Backend}>
-            <ApiContextProvider value={{main: mainApi, game: gameApi, auth: authApi}}>
-              <div>
-                <AuthRedirector/>
-                <Navbar/>
-                <StatusBar/>
-                <Switch>
-                  <Route exact path='/' component={Home}/>
-                  <Route exact path='/cardpack' component={Cardpack}/>
-                  <Route exact path='/user' component={User}/>
-                  <Route exact path='/login' component={Login}/>
-                  <Route exact path='/game' component={Game}/>
-                  <Route exact path='/gamelist' component={GameList}/>
-                  <Route exact path='/settings' component={Settings}/>
-                  <Route component={NotFound}/>
-                </Switch>
-              </div>
-            </ApiContextProvider>
-          </DragDropContextProvider>
-        </ConnectedRouter>
-      </Provider>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <ConnectedRouter history={history}>
+            <DragDropContextProvider backend={DragDropHTML5Backend}>
+              <ApiContextProvider value={{main: mainApi, game: gameApi, auth: authApi}}>
+                <div>
+                  <AuthRedirector/>
+                  <Navbar/>
+                  <StatusBar/>
+                  <Switch>
+                    <Route exact path='/' component={Home}/>
+                    <Route exact path='/cardpack' component={Cardpack}/>
+                    <Route exact path='/user' component={User}/>
+                    <Route exact path='/login' component={Login}/>
+                    <Route exact path='/game' component={Game}/>
+                    <Route exact path='/gamelist' component={GameList}/>
+                    <Route exact path='/settings' component={Settings}/>
+                    <Route component={NotFound}/>
+                  </Switch>
+                </div>
+              </ApiContextProvider>
+            </DragDropContextProvider>
+          </ConnectedRouter>
+        </Provider>
+      </MuiThemeProvider>
     );
   }
 }
