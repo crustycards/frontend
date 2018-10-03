@@ -36,6 +36,7 @@ interface CardpackProps extends WithStyles<typeof styles> {
   canDelete: boolean;
   currentUser: User;
   showStatusMessage(msg: string): void;
+  onDelete?(cardpackId: string): void
 }
 
 interface CardpackState {
@@ -91,6 +92,9 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
         .then(() => {
           this.setState({isDeleting: false});
           this.closeDeleteDialog();
+          if (this.props.onDelete) {
+            this.props.onDelete(this.props.cardpack.id);
+          }
         })
         .catch(() => {
           this.setState({isDeleting: false});
