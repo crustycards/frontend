@@ -7,10 +7,10 @@ import parseHighlights from '../helpers/autoComplete';
 
 const styles = (theme: Theme) => ({
   container: {
-    position: 'relative'
+    position: 'relative' as any
   },
   suggestionsContainerOpen: {
-    position: 'absolute',
+    position: 'absolute' as any,
     zIndex: 1,
     marginTop: theme.spacing.unit,
     left: 0,
