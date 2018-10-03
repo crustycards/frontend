@@ -95,7 +95,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     return (
       <div>
         <h2>Create Game</h2>
-        <div className='content-wrap'>
+        <div className='content-wrap' style={{overflow: 'auto'}}>
           <div className='col-narrow center'>
             <TextField
               name='gameName'
