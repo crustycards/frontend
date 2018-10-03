@@ -23,7 +23,14 @@ class Color {
 }
 
 const hsvToRgb = (h: number, s: number, v: number): Color => {
-  let r, g, b, i, f, p, q, t;
+  let r;
+  let g;
+  let b;
+  let i;
+  let f;
+  let p;
+  let q;
+  let t;
   i = Math.floor(h * 6);
   f = h * 6 - i;
   p = v * (1 - s);
