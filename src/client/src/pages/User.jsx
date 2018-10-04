@@ -84,7 +84,15 @@ class User extends Component {
               this.setState({cardpacks: this.state.cardpacks.concat(cardpack)});
             }} />
           }
-          <CardpackList cardpacks={this.state.cardpacks} canDelete={this.isCurrentUser} />
+          <CardpackList
+            cardpacks={this.state.cardpacks}
+            canDelete={this.isCurrentUser}
+            onDelete={(id) => {
+              this.setState({
+                cardpacks: this.state.cardpacks.filter((cardpack) => cardpack.id !== id)
+              });
+            }}
+          />
         </div>
       </div>
     );

@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { Cardpack as CardpackDao } from '../../api/dao';
+import {Cardpack as CardpackDao} from '../../api/dao';
 import Cardpack from './Cardpack';
 
 interface CardpackListProps {
   cardpacks: CardpackDao[];
   canDelete: boolean;
+  onDelete?(cardpackId: string): void
 }
 
 const CardpackList = (props: CardpackListProps) => (
@@ -14,6 +15,7 @@ const CardpackList = (props: CardpackListProps) => (
         key={index}
         cardpack={cardpack}
         canDelete={props.canDelete}
+        onDelete={props.onDelete}
       />
     ))}
   </div>
