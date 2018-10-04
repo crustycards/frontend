@@ -25,11 +25,13 @@ const generateScript = (user: any = null) => (
   ${html}`
 );
 
+interface GoogleOAuthCredentials extends Hapi.AuthCredentials {
+  profile: any;
+  provider: any;
+}
+
 interface GoogleOAuthRequestAuth extends Hapi.RequestAuth {
-  credentials: {
-    profile: any,
-    provider: any
-  };
+  credentials: GoogleOAuthCredentials;
 }
 
 interface GoogleOAuthRequest extends Request {
