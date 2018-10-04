@@ -36,7 +36,7 @@ interface CardpackProps extends WithStyles<typeof styles> {
   canDelete: boolean;
   currentUser: User;
   showStatusMessage(msg: string): void;
-  onDelete?(cardpackId: string): void
+  onDelete?(cardpackId: string): void;
 }
 
 interface CardpackState {
