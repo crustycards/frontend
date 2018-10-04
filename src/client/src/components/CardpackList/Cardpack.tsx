@@ -169,6 +169,10 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
   }
 }
 
+const StyledCardpack = withStyles(styles)(Cardpack);
+
+const ApiWrappedCardpack = ApiContextWrapper(StyledCardpack);
+
 const mapStateToProps = ({global: {user}}: any) => ({
   currentUser: user
 });
@@ -177,4 +181,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   showStatusMessage
 }, dispatch);
 
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(ApiContextWrapper(Cardpack)));
+export default connect(mapStateToProps, mapDispatchToProps)(ApiWrappedCardpack);
