@@ -37,6 +37,6 @@
       }
   },
   "linterOptions": {
-    "exclude": ["node_modules/**/*.ts"]
+    "exclude": ["node_modules/**/*.ts", "node_modules/**/*.tsx"]
   }
 }
