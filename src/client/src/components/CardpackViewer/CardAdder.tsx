@@ -71,7 +71,6 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
           />
           <Button
             disabled={!this.state.newCardName}
-            className={'btn'}
             onClick={this.addCurrentCard}
           >
             Create Card

@@ -41,7 +41,6 @@ class Tray extends Component<TrayProps> {
 
     return connectDropTarget(
       <div
-        className='tray'
         style={{
           minHeight: '100px',
           width: '100%',
