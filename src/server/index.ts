@@ -5,6 +5,7 @@ import {Request} from 'hapi';
 import Api from './api';
 import loadEnvVars from './loadEnvVars';
 import loadRoutes from './route';
+import * as typescript from 'typescript';
 
 loadEnvVars();
 
@@ -14,7 +15,7 @@ const cookieName = 'session';
 
 const html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
 const bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
-const serviceWorker = fs.readFileSync(`${__dirname}/../client/src/serviceWorker/serviceWorker.js`).toString();
+const serviceWorker = typescript.transpile(fs.readFileSync(`${__dirname}/../client/src/serviceWorker/serviceWorker.ts`).toString());
 
 const api = new Api({authUrl: process.env.AUTH_SERVER_URL, apiUrl: process.env.API_URL});
 
