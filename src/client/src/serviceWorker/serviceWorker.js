@@ -9,6 +9,6 @@ firebase.initializeApp(config);
 
 const messaging = firebase.messaging();
 
-messaging.setBackgroundMessageHandler((payload) => {
-  return self.registration.showNotification('Hello, world', {body: 'This is a message'});
-});
+messaging.setBackgroundMessageHandler((payload) => (
+  self.registration.showNotification('Hello, world', {body: 'This is a message'})
+));
