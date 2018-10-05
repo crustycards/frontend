@@ -1,22 +1,40 @@
-import React, {Component} from 'react';
-import queryString from 'query-string';
+import * as React from 'react';
+import {Component} from 'react';
+import * as queryString from 'query-string';
 import {CircularProgress} from '@material-ui/core';
-import CardpackList from '../components/CardpackList/index.tsx';
+import CardpackList from '../components/CardpackList/index';
 import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../api/context';
 import ProfileImageUploader from '../components/ProfileImageUploader';
 import UrlImage from '../components/UrlImage';
+import {User as UserModel, Cardpack} from '../api/dao';
+import Api from '../api/model/api';
 
-class User extends Component {
-  constructor(props) {
+interface UserProps {
+  user: UserModel;
+  location: {
+    search: string
+  };
+  api: Api;
+}
+
+interface UserState {
+  isCurrentUser: boolean;
+  isLoading: boolean;
+  successfullyLoaded: boolean;
+  user: UserModel;
+  cardpacks: Cardpack[];
+}
+
+class User extends Component<UserProps, UserState> {
+  constructor(props: UserProps) {
     super(props);
 
     const userId = queryString.parse(props.location.search).id;
 
-    this.isCurrentUser = this.props.user && this.props.user.id === userId;
-
     this.state = {
+      isCurrentUser: this.props.user && this.props.user.id === userId,
       isLoading: true,
       successfullyLoaded: false,
       user: undefined,
@@ -63,7 +81,7 @@ class User extends Component {
         <div className={'col-narrow'}>
           {this.state.user.name}
           {
-            this.isCurrentUser &&
+            this.state.isCurrentUser &&
             <ProfileImageUploader/>
           }
           <UrlImage
@@ -79,14 +97,14 @@ class User extends Component {
         </div>
         <div className={'col-wide'}>
           {
-            this.isCurrentUser &&
+            this.state.isCurrentUser &&
             <CardpackCreator onSubmit={(cardpack) => {
               this.setState({cardpacks: this.state.cardpacks.concat(cardpack)});
             }} />
           }
           <CardpackList
             cardpacks={this.state.cardpacks}
-            canDelete={this.isCurrentUser}
+            canDelete={this.state.isCurrentUser}
             onDelete={(id) => {
               this.setState({
                 cardpacks: this.state.cardpacks.filter((cardpack) => cardpack.id !== id)
@@ -101,6 +119,6 @@ class User extends Component {
 
 const ContextLinkedUser = ApiContextWrapper(User);
 
-const mapStateToProps = ({global: {user}}) => ({user});
+const mapStateToProps = ({global: {user}}: any) => ({user});
 
 export default connect(mapStateToProps)(ContextLinkedUser);

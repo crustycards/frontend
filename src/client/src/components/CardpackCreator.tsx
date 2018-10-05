@@ -1,49 +1,17 @@
 import {Button, CircularProgress, TextField} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import { Dispatch } from 'redux';
-import {Field, FormErrors, InjectedFormProps, reduxForm, reset, SubmitHandler} from 'redux-form';
 import {ApiContextWrapper} from '../api/context';
-import { Cardpack } from '../api/dao';
+import {Cardpack} from '../api/dao';
 import Api from '../api/model/api';
 
-const renderTextField = ({
-  input,
-  label,
-  meta,
-  ...custom
-}: any) => (
-  <TextField
-    label={label}
-    {...input}
-    {...custom}
-    margin={'normal'}
-  />
-);
-
-interface CardpackFormData {
-  cardpackName: string;
-}
-
-const validate = (values: CardpackFormData): FormErrors<CardpackFormData> => {
-  const {cardpackName} = values;
-
-  const errors: FormErrors<CardpackFormData> = {};
-
-  if (!cardpackName) {
-    errors.cardpackName = 'Required';
-  }
-
-  return errors;
-};
-
-interface CardpackCreatorProps extends InjectedFormProps {
+interface CardpackCreatorProps {
   api: Api;
-  handleSubmit: SubmitHandler<CardpackFormData>;
   onSubmit?(cardpack: Cardpack): void;
 }
 
 interface CardpackCreatorState {
+  cardpackName: string;
   isLoading: boolean;
 }
 
@@ -52,36 +20,46 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     super(props);
 
     this.createCardpack = this.createCardpack.bind(this);
+    this.handleCardpackNameChange = this.handleCardpackNameChange.bind(this);
 
     this.state = {
+      cardpackName: '',
       isLoading: false
     };
   }
 
-  public createCardpack({cardpackName}: CardpackFormData) {
+  public createCardpack() {
     this.setState({isLoading: true});
-    const cardpackCreation = this.props.api.main.createCardpack(cardpackName);
-    cardpackCreation.then((cardpack) => {
-      this.setState({isLoading: false});
+    this.props.api.main.createCardpack(this.state.cardpackName)
+        .then((cardpack) => {
+          this.setState({isLoading: false, cardpackName: ''});
 
-      if (this.props.onSubmit) {
-        this.props.onSubmit(cardpack);
-      }
-    });
+          if (this.props.onSubmit) {
+            this.props.onSubmit(cardpack);
+          }
+        });
+  }
+
+  public handleCardpackNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({cardpackName: e.target.value});
   }
 
   public render() {
     return (
-      <form autoComplete={'off'} onSubmit={this.props.handleSubmit(this.createCardpack)}>
-        <Field
-          name='cardpackName'
-          component={renderTextField}
-          label='Cardpack Name'
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        this.createCardpack();
+      }}>
+        <TextField
+          label={'Cardpack Name'}
+          value={this.state.cardpackName}
+          onChange={this.handleCardpackNameChange}
+          margin={'normal'}
         />
         <br/>
         <Button
           type={'submit'}
-          disabled={this.props.pristine || this.props.submitting || this.state.isLoading}
+          disabled={this.state.cardpackName === '' || this.state.isLoading}
         >
           Create Cardpack
         </Button>
@@ -91,13 +69,4 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
   }
 }
 
-const ContextLinkedCardpackCreator = ApiContextWrapper(CardpackCreator);
-
-const onSubmitSuccess = (_: any, dispatch: Dispatch) =>
-  dispatch(reset('cardpackCreator'));
-
-export default reduxForm({
-  form: 'cardpackCreator',
-  validate,
-  onSubmitSuccess
-})(ContextLinkedCardpackCreator);
+export default ApiContextWrapper(CardpackCreator);

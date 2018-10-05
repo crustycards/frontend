@@ -27,7 +27,7 @@ import Home from './pages/Home';
 import Login from './pages/Login';
 import NotFound from './pages/NotFound';
 import Settings from './pages/Settings';
-import User from './pages/User.jsx';
+import User from './pages/User';
 import createStore from './store/index';
 import './styles/index.scss';
 
