@@ -1,15 +1,15 @@
+import {CircularProgress} from '@material-ui/core';
+import * as queryString from 'query-string';
 import * as React from 'react';
 import {Component} from 'react';
-import * as queryString from 'query-string';
-import {CircularProgress} from '@material-ui/core';
-import CardpackList from '../components/CardpackList/index';
-import CardpackCreator from '../components/CardpackCreator';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../api/context';
+import {Cardpack, User as UserModel} from '../api/dao';
+import Api from '../api/model/api';
+import CardpackCreator from '../components/CardpackCreator';
+import CardpackList from '../components/CardpackList/index';
 import ProfileImageUploader from '../components/ProfileImageUploader';
 import UrlImage from '../components/UrlImage';
-import {User as UserModel, Cardpack} from '../api/dao';
-import Api from '../api/model/api';
 
 interface UserProps {
   user: UserModel;
@@ -57,7 +57,7 @@ class User extends Component<UserProps, UserState> {
     }
   }
 
-  render() {
+  public render() {
     if (this.state.isLoading) {
       return (
         <div style={{
