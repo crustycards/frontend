@@ -29,20 +29,6 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
     this.handleError = this.handleError.bind(this);
   }
 
-  private handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
-    if (this.props.onLoad) {
-      this.props.onLoad(e);
-    }
-    this.setState({isLoading: false});
-  }
-
-  private handleError(e: React.SyntheticEvent<HTMLImageElement>) {
-    if (this.props.onError) {
-      this.props.onError(e);
-    }
-    this.setState({isLoading: false, encounteredError: true});
-  }
-
   public render() {
     if (this.state.encounteredError && this.props.errorView) {
       return this.props.errorView;
@@ -61,6 +47,20 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
         }
       </div>
     );
+  }
+
+  private handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+    if (this.props.onLoad) {
+      this.props.onLoad(e);
+    }
+    this.setState({isLoading: false});
+  }
+
+  private handleError(e: React.SyntheticEvent<HTMLImageElement>) {
+    if (this.props.onError) {
+      this.props.onError(e);
+    }
+    this.setState({isLoading: false, encounteredError: true});
   }
 }
 

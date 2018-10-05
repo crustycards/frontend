@@ -65,93 +65,6 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
     this.fetchCurrentCardpack();
   }
 
-  private openUploadDialog() {
-    this.setState({showUploadDialogBox: true});
-  }
-
-  private closeUploadDialog() {
-    this.setState({showUploadDialogBox: false});
-  }
-
-  private fetchCurrentCardpack() {
-    this.props.api.main.getCardpack(this.props.cardpackId)
-      .then((cardpack) => {
-        this.setState({cardpack});
-      })
-      .catch(() => {
-        this.setState({cardpack: null});
-      });
-  }
-
-  private addWhiteCards(cards: JsonWhiteCard[]) {
-    return this.props.api.main.createWhiteCards(this.props.cardpackId, cards).then((createdCards) => {
-      this.setState({
-        cardpack: {
-          ...this.state.cardpack,
-          whiteCards: [
-            ...this.state.cardpack.whiteCards,
-            ...createdCards
-          ]
-        }
-      });
-      return createdCards;
-    });
-  }
-
-  private addBlackCards(cards: JsonBlackCard[]) {
-    return this.props.api.main.createBlackCards(this.state.cardpack.id, cards).then((createdCards) => {
-      this.setState({
-        cardpack: {
-          ...this.state.cardpack,
-          blackCards: [
-            ...this.state.cardpack.blackCards,
-            ...createdCards
-          ]
-        }
-      });
-      return createdCards;
-    });
-  }
-
-  private downloadStringifiedCards() {
-    const download = (filename: string, text: string) => {
-      const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
-      element.setAttribute('download', filename);
-      element.style.display = 'none';
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    };
-    // Start file download.
-    download(this.state.cardpack.name, stringify({
-      whiteCards: this.state.cardpack.whiteCards,
-      blackCards: this.state.cardpack.blackCards
-    }));
-  }
-
-  private async handleUpload(
-    acceptedFiles: FileWithPreview[],
-    rejectedFiles: FileWithPreview[],
-    event: React.DragEvent<HTMLDivElement>
-  ) {
-    if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
-      this.closeUploadDialog();
-      const file = acceptedFiles[0];
-      const {whiteCards, blackCards} = await CardpackViewer.convertFileToCardpackData(file);
-      this.setState({isUploading: true}, () => {
-        Promise.all([
-          this.addWhiteCards(whiteCards),
-          this.addBlackCards(blackCards)
-        ]).then(() => this.setState({isUploading: false}));
-      });
-    }
-  }
-
-  private handleTabChange(_: any, value: number) {
-    this.setState({slideIndex: value});
-  }
-
   public render() {
     if (this.state.cardpack === null) {
       return (
@@ -262,6 +175,93 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
           <LinearProgress/>}
       </div>
     );
+  }
+
+  private openUploadDialog() {
+    this.setState({showUploadDialogBox: true});
+  }
+
+  private closeUploadDialog() {
+    this.setState({showUploadDialogBox: false});
+  }
+
+  private fetchCurrentCardpack() {
+    this.props.api.main.getCardpack(this.props.cardpackId)
+      .then((cardpack) => {
+        this.setState({cardpack});
+      })
+      .catch(() => {
+        this.setState({cardpack: null});
+      });
+  }
+
+  private addWhiteCards(cards: JsonWhiteCard[]) {
+    return this.props.api.main.createWhiteCards(this.props.cardpackId, cards).then((createdCards) => {
+      this.setState({
+        cardpack: {
+          ...this.state.cardpack,
+          whiteCards: [
+            ...this.state.cardpack.whiteCards,
+            ...createdCards
+          ]
+        }
+      });
+      return createdCards;
+    });
+  }
+
+  private addBlackCards(cards: JsonBlackCard[]) {
+    return this.props.api.main.createBlackCards(this.state.cardpack.id, cards).then((createdCards) => {
+      this.setState({
+        cardpack: {
+          ...this.state.cardpack,
+          blackCards: [
+            ...this.state.cardpack.blackCards,
+            ...createdCards
+          ]
+        }
+      });
+      return createdCards;
+    });
+  }
+
+  private downloadStringifiedCards() {
+    const download = (filename: string, text: string) => {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', filename);
+      element.style.display = 'none';
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    };
+    // Start file download.
+    download(this.state.cardpack.name, stringify({
+      whiteCards: this.state.cardpack.whiteCards,
+      blackCards: this.state.cardpack.blackCards
+    }));
+  }
+
+  private async handleUpload(
+    acceptedFiles: FileWithPreview[],
+    rejectedFiles: FileWithPreview[],
+    event: React.DragEvent<HTMLDivElement>
+  ) {
+    if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
+      this.closeUploadDialog();
+      const file = acceptedFiles[0];
+      const {whiteCards, blackCards} = await CardpackViewer.convertFileToCardpackData(file);
+      this.setState({isUploading: true}, () => {
+        Promise.all([
+          this.addWhiteCards(whiteCards),
+          this.addBlackCards(blackCards)
+        ]).then(() => this.setState({isUploading: false}));
+      });
+    }
+  }
+
+  private handleTabChange(_: any, value: number) {
+    this.setState({slideIndex: value});
   }
 }
 

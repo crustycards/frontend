@@ -33,31 +33,6 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
     };
   }
 
-  private handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
-    if (e.key === 'Enter') {
-      this.addCurrentCard();
-    }
-  }
-
-  private handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({newCardName: e.target.value});
-  }
-
-  private changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
-    this.setState({newCardAnswerFields: parseInt(e.target.value, 10)});
-  }
-
-  private addCurrentCard() {
-    if (this.state.newCardName) {
-      this.props.addCard({
-        text: this.state.newCardName,
-        answerFields: this.state.newCardAnswerFields,
-        type: this.props.type
-      });
-      this.setState({newCardName: ''});
-    }
-  }
-
   public render() {
     return (
       <div>
@@ -92,6 +67,31 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
         </div>
       </div>
     );
+  }
+
+  private handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
+    if (e.key === 'Enter') {
+      this.addCurrentCard();
+    }
+  }
+
+  private handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({newCardName: e.target.value});
+  }
+
+  private changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
+    this.setState({newCardAnswerFields: parseInt(e.target.value, 10)});
+  }
+
+  private addCurrentCard() {
+    if (this.state.newCardName) {
+      this.props.addCard({
+        text: this.state.newCardName,
+        answerFields: this.state.newCardAnswerFields,
+        type: this.props.type
+      });
+      this.setState({newCardName: ''});
+    }
   }
 }
 

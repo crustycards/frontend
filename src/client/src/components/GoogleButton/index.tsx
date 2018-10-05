@@ -28,6 +28,16 @@ class GoogleButton extends Component<GoogleButtonProps, GoogleButtonState> {
     };
   }
 
+  public render() {
+    return <input
+      onMouseDown={this.onClick}
+      onMouseUp={this.clickRelease}
+      type='image'
+      src={this.state.imageSrc}
+      style={style}
+    />;
+  }
+
   private onClick() {
     if (this.props.onClick) {
       this.props.onClick();
@@ -37,16 +47,6 @@ class GoogleButton extends Component<GoogleButtonProps, GoogleButtonState> {
 
   private clickRelease() {
     this.setState({imageSrc: unpressed});
-  }
-
-  public render() {
-    return <input
-      onMouseDown={this.onClick}
-      onMouseUp={this.clickRelease}
-      type='image'
-      src={this.state.imageSrc}
-      style={style}
-    />;
   }
 }
 

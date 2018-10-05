@@ -47,11 +47,6 @@ class GameList extends Component<GameListProps, GameListState> {
     this.refresh();
   }
 
-  private refresh() {
-    this.setState({isLoading: true});
-    this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
-  }
-
   public render() {
     if (this.state.isLoading) {
       return <div>
@@ -112,6 +107,11 @@ class GameList extends Component<GameListProps, GameListState> {
         }
       </div>
     );
+  }
+
+  private refresh() {
+    this.setState({isLoading: true});
+    this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
   }
 }
 

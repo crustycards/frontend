@@ -68,41 +68,6 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
     }
   }
 
-  private async toggleLike() {
-    if (this.state.isLiked) {
-      await this.props.api.main.unfavoriteCardpack(this.props.cardpack.id);
-      this.setState({isLiked: false});
-    } else {
-      await this.props.api.main.favoriteCardpack(this.props.cardpack.id);
-      this.setState({isLiked: true});
-    }
-  }
-
-  private openDeleteDialog() {
-    this.setState({showDeleteDialog: true});
-  }
-
-  private closeDeleteDialog() {
-    this.setState({showDeleteDialog: false});
-  }
-
-  private deleteCardpack() {
-    this.setState({isDeleting: true});
-    this.props.api.main.deleteCardpack(this.props.cardpack.id)
-        .then(() => {
-          this.setState({isDeleting: false});
-          this.closeDeleteDialog();
-          if (this.props.onDelete) {
-            this.props.onDelete(this.props.cardpack.id);
-          }
-        })
-        .catch(() => {
-          this.setState({isDeleting: false});
-          this.closeDeleteDialog();
-          this.props.showStatusMessage('Error occured deleting cardpack');
-        });
-  }
-
   public render() {
     return (
       <div>
@@ -166,6 +131,41 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
         }
       </div>
     );
+  }
+
+  private async toggleLike() {
+    if (this.state.isLiked) {
+      await this.props.api.main.unfavoriteCardpack(this.props.cardpack.id);
+      this.setState({isLiked: false});
+    } else {
+      await this.props.api.main.favoriteCardpack(this.props.cardpack.id);
+      this.setState({isLiked: true});
+    }
+  }
+
+  private openDeleteDialog() {
+    this.setState({showDeleteDialog: true});
+  }
+
+  private closeDeleteDialog() {
+    this.setState({showDeleteDialog: false});
+  }
+
+  private deleteCardpack() {
+    this.setState({isDeleting: true});
+    this.props.api.main.deleteCardpack(this.props.cardpack.id)
+        .then(() => {
+          this.setState({isDeleting: false});
+          this.closeDeleteDialog();
+          if (this.props.onDelete) {
+            this.props.onDelete(this.props.cardpack.id);
+          }
+        })
+        .catch(() => {
+          this.setState({isDeleting: false});
+          this.closeDeleteDialog();
+          this.props.showStatusMessage('Error occured deleting cardpack');
+        });
   }
 }
 

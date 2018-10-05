@@ -103,25 +103,6 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  private async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
-    const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
-    this.setState({suggestions});
-  }
-
-  private handleSuggestionsClearRequested() {
-    this.setState({suggestions: []});
-  }
-
-  private handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
-    this.setState({value: newValue});
-  }
-
-  private handleKeyDown(event: React.KeyboardEvent) {
-    if (event.key === 'Enter' && this.state.value) {
-      this.state.submit(this.state.value);
-    }
-  }
-
   public render() {
     const {classes} = this.props;
 
@@ -150,6 +131,25 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
         }}
       />
     );
+  }
+
+  private async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
+    const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
+    this.setState({suggestions});
+  }
+
+  private handleSuggestionsClearRequested() {
+    this.setState({suggestions: []});
+  }
+
+  private handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
+    this.setState({value: newValue});
+  }
+
+  private handleKeyDown(event: React.KeyboardEvent) {
+    if (event.key === 'Enter' && this.state.value) {
+      this.state.submit(this.state.value);
+    }
   }
 }
 

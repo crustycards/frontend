@@ -30,20 +30,6 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
     this.searchUsers = this.searchUsers.bind(this);
   }
 
-  private searchUsers(query: string) {
-    if (!this.state.isSearching) {
-      this.setState({isSearching: true});
-      this.props.api.main.searchUsers(query)
-          .then((searchedUsers) =>
-            this.setState({
-              hasSearched: true,
-              isSearching: false,
-              searchedUsers
-            })
-          );
-    }
-  }
-
   public render() {
     return (
       <div className='panel'>
@@ -75,6 +61,20 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
         }
       </div>
     );
+  }
+
+  private searchUsers(query: string) {
+    if (!this.state.isSearching) {
+      this.setState({isSearching: true});
+      this.props.api.main.searchUsers(query)
+          .then((searchedUsers) =>
+            this.setState({
+              hasSearched: true,
+              isSearching: false,
+              searchedUsers
+            })
+          );
+    }
   }
 }
 

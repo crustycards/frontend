@@ -28,36 +28,6 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     };
   }
 
-  private nextTab() {
-    if (this.canGoToNextPage()) {
-      this.setState({tab: this.state.tab + 1});
-    }
-  }
-
-  private previousTab() {
-    if (this.canGoToPreviousPage()) {
-      this.setState({tab: this.state.tab - 1});
-    }
-  }
-
-  private getTabRange() {
-    const tabStart = this.state.tab * this.state.itemsPerTab;
-    const tabEnd = tabStart + this.state.itemsPerTab;
-    return {
-      tabStart,
-      tabEnd
-    };
-  }
-
-  private canGoToNextPage() {
-    const {tabEnd} = this.getTabRange();
-    return tabEnd < this.props.children.length;
-  }
-
-  private canGoToPreviousPage() {
-    return this.state.tab > 0;
-  }
-
   public render() {
     const visibleElements = [];
 
@@ -107,6 +77,36 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
         </GridList>
       </div>
     );
+  }
+
+  private nextTab() {
+    if (this.canGoToNextPage()) {
+      this.setState({tab: this.state.tab + 1});
+    }
+  }
+
+  private previousTab() {
+    if (this.canGoToPreviousPage()) {
+      this.setState({tab: this.state.tab - 1});
+    }
+  }
+
+  private getTabRange() {
+    const tabStart = this.state.tab * this.state.itemsPerTab;
+    const tabEnd = tabStart + this.state.itemsPerTab;
+    return {
+      tabStart,
+      tabEnd
+    };
+  }
+
+  private canGoToNextPage() {
+    const {tabEnd} = this.getTabRange();
+    return tabEnd < this.props.children.length;
+  }
+
+  private canGoToPreviousPage() {
+    return this.state.tab > 0;
   }
 }
 

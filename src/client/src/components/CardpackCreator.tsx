@@ -28,22 +28,6 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     };
   }
 
-  private createCardpack() {
-    this.setState({isLoading: true});
-    this.props.api.main.createCardpack(this.state.cardpackName)
-        .then((cardpack) => {
-          this.setState({isLoading: false, cardpackName: ''});
-
-          if (this.props.onSubmit) {
-            this.props.onSubmit(cardpack);
-          }
-        });
-  }
-
-  private handleCardpackNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({cardpackName: e.target.value});
-  }
-
   public render() {
     return (
       <form onSubmit={(e) => {
@@ -66,6 +50,22 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
         {this.state.isLoading && <CircularProgress size={25} style={{verticalAlign: 'sub'}} />}
       </form>
     );
+  }
+
+  private createCardpack() {
+    this.setState({isLoading: true});
+    this.props.api.main.createCardpack(this.state.cardpackName)
+        .then((cardpack) => {
+          this.setState({isLoading: false, cardpackName: ''});
+
+          if (this.props.onSubmit) {
+            this.props.onSubmit(cardpack);
+          }
+        });
+  }
+
+  private handleCardpackNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({cardpackName: e.target.value});
   }
 }
 

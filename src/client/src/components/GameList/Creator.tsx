@@ -62,35 +62,6 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     this.loadCardpacks();
   }
 
-  private loadCardpacks() {
-    Promise.all([this.props.api.main.getCardpacksByUser(), this.props.api.main.getFavoritedCardpacks()])
-      .then(([userCardpacks, subscribedCardpacks]) => {
-        this.setState({userCardpacks, subscribedCardpacks, isLoading: false});
-      });
-  }
-
-  private handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({gameName: e.target.value});
-  }
-
-  private handleSelectChange(id: string) {
-    if (this.state.cardpacksSelected.includes(id)) {
-      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
-    } else {
-      this.setState({cardpacksSelected: [...this.state.cardpacksSelected, id]});
-    }
-  }
-
-  private handleSubmit() {
-    this.props.api.game.createGame(
-      this.state.gameName,
-      this.state.maxPlayers,
-      this.state.maxScore,
-      this.state.handSize,
-      this.state.cardpacksSelected
-    );
-  }
-
   public render() {
     return (
       <div>
@@ -175,6 +146,35 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
           <Button type='submit' onClick={this.handleSubmit}>Submit</Button>
         </div>
       </div>
+    );
+  }
+
+  private loadCardpacks() {
+    Promise.all([this.props.api.main.getCardpacksByUser(), this.props.api.main.getFavoritedCardpacks()])
+      .then(([userCardpacks, subscribedCardpacks]) => {
+        this.setState({userCardpacks, subscribedCardpacks, isLoading: false});
+      });
+  }
+
+  private handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    this.setState({gameName: e.target.value});
+  }
+
+  private handleSelectChange(id: string) {
+    if (this.state.cardpacksSelected.includes(id)) {
+      this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
+    } else {
+      this.setState({cardpacksSelected: [...this.state.cardpacksSelected, id]});
+    }
+  }
+
+  private handleSubmit() {
+    this.props.api.game.createGame(
+      this.state.gameName,
+      this.state.maxPlayers,
+      this.state.maxScore,
+      this.state.handSize,
+      this.state.cardpacksSelected
     );
   }
 }

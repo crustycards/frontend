@@ -27,6 +27,23 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     this.handleUpload = this.handleUpload.bind(this);
   }
 
+  public render() {
+    return (
+      <div>
+        <Button variant={'outlined'} onClick={this.openDialog}>
+          Upload Profile Picture
+        </Button>
+        <FileUploader
+          titleText={'Upload Profile Picture'}
+          type={'image/*'}
+          onUpload={this.handleUpload}
+          onClose={this.closeDialog}
+          isVisible={this.state.showDialogBox}
+        />
+      </div>
+    );
+  }
+
   private openDialog() {
     this.setState({showDialogBox: true});
   }
@@ -45,23 +62,6 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
       await this.props.api.main.setProfileImage(file.slice());
       this.closeDialog();
     }
-  }
-
-  public render() {
-    return (
-      <div>
-        <Button variant={'outlined'} onClick={this.openDialog}>
-          Upload Profile Picture
-        </Button>
-        <FileUploader
-          titleText={'Upload Profile Picture'}
-          type={'image/*'}
-          onUpload={this.handleUpload}
-          onClose={this.closeDialog}
-          isVisible={this.state.showDialogBox}
-        />
-      </div>
-    );
   }
 }
 
