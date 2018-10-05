@@ -33,21 +33,21 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
     };
   }
 
-  public handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
+  private handleKeyPress(e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === 'Enter') {
       this.addCurrentCard();
     }
   }
 
-  public handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  private handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({newCardName: e.target.value});
   }
 
-  public changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
+  private changeAnswerField(e: React.ChangeEvent<HTMLSelectElement>) {
     this.setState({newCardAnswerFields: parseInt(e.target.value, 10)});
   }
 
-  public addCurrentCard() {
+  private addCurrentCard() {
     if (this.state.newCardName) {
       this.props.addCard({
         text: this.state.newCardName,

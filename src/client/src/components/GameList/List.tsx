@@ -47,7 +47,7 @@ class GameList extends Component<GameListProps, GameListState> {
     this.refresh();
   }
 
-  public refresh() {
+  private refresh() {
     this.setState({isLoading: true});
     this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
   }

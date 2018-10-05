@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Session } from '../../../client/src/api/dao';
+import {Session} from '../../../client/src/api/dao';
 
 export default class {
   private authServerUrl: string;

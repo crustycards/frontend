@@ -68,7 +68,7 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
     }
   }
 
-  public async toggleLike() {
+  private async toggleLike() {
     if (this.state.isLiked) {
       await this.props.api.main.unfavoriteCardpack(this.props.cardpack.id);
       this.setState({isLiked: false});
@@ -78,15 +78,15 @@ class Cardpack extends Component<CardpackProps, CardpackState> {
     }
   }
 
-  public openDeleteDialog() {
+  private openDeleteDialog() {
     this.setState({showDeleteDialog: true});
   }
 
-  public closeDeleteDialog() {
+  private closeDeleteDialog() {
     this.setState({showDeleteDialog: false});
   }
 
-  public deleteCardpack() {
+  private deleteCardpack() {
     this.setState({isDeleting: true});
     this.props.api.main.deleteCardpack(this.props.cardpack.id)
         .then(() => {

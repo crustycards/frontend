@@ -27,15 +27,15 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     this.handleUpload = this.handleUpload.bind(this);
   }
 
-  public openDialog() {
+  private openDialog() {
     this.setState({showDialogBox: true});
   }
 
-  public closeDialog() {
+  private closeDialog() {
     this.setState({showDialogBox: false});
   }
 
-  public async handleUpload(
+  private async handleUpload(
     acceptedFiles: FileWithPreview[],
     rejectedFiles: FileWithPreview[],
     event: React.DragEvent<HTMLDivElement>

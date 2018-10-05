@@ -28,19 +28,19 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     };
   }
 
-  public nextTab() {
+  private nextTab() {
     if (this.canGoToNextPage()) {
       this.setState({tab: this.state.tab + 1});
     }
   }
 
-  public previousTab() {
+  private previousTab() {
     if (this.canGoToPreviousPage()) {
       this.setState({tab: this.state.tab - 1});
     }
   }
 
-  public getTabRange() {
+  private getTabRange() {
     const tabStart = this.state.tab * this.state.itemsPerTab;
     const tabEnd = tabStart + this.state.itemsPerTab;
     return {
@@ -49,12 +49,12 @@ class TabbedList extends Component<TabbedListProps, TabbedListState> {
     };
   }
 
-  public canGoToNextPage() {
+  private canGoToNextPage() {
     const {tabEnd} = this.getTabRange();
     return tabEnd < this.props.children.length;
   }
 
-  public canGoToPreviousPage() {
+  private canGoToPreviousPage() {
     return this.state.tab > 0;
   }
 

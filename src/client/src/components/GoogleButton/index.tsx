@@ -28,14 +28,14 @@ class GoogleButton extends Component<GoogleButtonProps, GoogleButtonState> {
     };
   }
 
-  public onClick() {
+  private onClick() {
     if (this.props.onClick) {
       this.props.onClick();
     }
     this.setState({imageSrc: pressed});
   }
 
-  public clickRelease() {
+  private clickRelease() {
     this.setState({imageSrc: unpressed});
   }
 

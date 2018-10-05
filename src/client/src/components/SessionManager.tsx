@@ -61,18 +61,18 @@ class SessionManager extends Component<SessionManagerProps, SessionManagerState>
     this.firstLoad = _.once(this.loadSessions);
   }
 
-  public async loadSessions() {
+  private async loadSessions() {
     await new Promise((resolve) => this.setState({isLoading: true}, () => resolve()));
     const sessions = await this.props.api.auth.getUserSessions();
     await new Promise((resolve) => this.setState({sessions, isLoading: false}, () => resolve()));
   }
 
-  public firstLoad(): void {
+  private firstLoad(): void {
     // Placeholder - TODO - Find a way to safely remove this
     throw new Error();
   }
 
-  public async deleteSession(sessionId: string) {
+  private async deleteSession(sessionId: string) {
     await this.props.api.auth.deleteSession(sessionId);
     this.setState({sessions: this.state.sessions.filter((session) => session.id !== sessionId)});
   }

@@ -32,7 +32,7 @@ interface GameCreatorState {
 
 class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
 
-  public static generateNumberedMenuItems(startNum: number, endNum: number): JSX.Element[] {
+  private static generateNumberedMenuItems(startNum: number, endNum: number): JSX.Element[] {
     const items = [];
     for (let i = startNum; i <= endNum; i++) {
       items.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
@@ -62,18 +62,18 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     this.loadCardpacks();
   }
 
-  public loadCardpacks() {
+  private loadCardpacks() {
     Promise.all([this.props.api.main.getCardpacksByUser(), this.props.api.main.getFavoritedCardpacks()])
       .then(([userCardpacks, subscribedCardpacks]) => {
         this.setState({userCardpacks, subscribedCardpacks, isLoading: false});
       });
   }
 
-  public handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+  private handleGameNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({gameName: e.target.value});
   }
 
-  public handleSelectChange(id: string) {
+  private handleSelectChange(id: string) {
     if (this.state.cardpacksSelected.includes(id)) {
       this.setState({cardpacksSelected: this.state.cardpacksSelected.filter((cId) => cId !== id)});
     } else {
@@ -81,7 +81,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     }
   }
 
-  public handleSubmit() {
+  private handleSubmit() {
     this.props.api.game.createGame(
       this.state.gameName,
       this.state.maxPlayers,

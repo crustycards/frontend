@@ -30,7 +30,7 @@ class FrienderPanel extends Component<FrienderPanelProps, FrienderPanelState> {
     this.searchUsers = this.searchUsers.bind(this);
   }
 
-  public searchUsers(query: string) {
+  private searchUsers(query: string) {
     if (!this.state.isSearching) {
       this.setState({isSearching: true});
       this.props.api.main.searchUsers(query)

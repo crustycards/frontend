@@ -103,20 +103,20 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
 
-  public async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
+  private async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
     const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
     this.setState({suggestions});
   }
 
-  public handleSuggestionsClearRequested() {
+  private handleSuggestionsClearRequested() {
     this.setState({suggestions: []});
   }
 
-  public handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
+  private handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
     this.setState({value: newValue});
   }
 
-  public handleKeyDown(event: React.KeyboardEvent) {
+  private handleKeyDown(event: React.KeyboardEvent) {
     if (event.key === 'Enter' && this.state.value) {
       this.state.submit(this.state.value);
     }

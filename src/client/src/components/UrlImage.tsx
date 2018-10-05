@@ -29,14 +29,14 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
     this.handleError = this.handleError.bind(this);
   }
 
-  public handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
+  private handleLoad(e: React.SyntheticEvent<HTMLImageElement>) {
     if (this.props.onLoad) {
       this.props.onLoad(e);
     }
     this.setState({isLoading: false});
   }
 
-  public handleError(e: React.SyntheticEvent<HTMLImageElement>) {
+  private handleError(e: React.SyntheticEvent<HTMLImageElement>) {
     if (this.props.onError) {
       this.props.onError(e);
     }

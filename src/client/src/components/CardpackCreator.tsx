@@ -28,7 +28,7 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
     };
   }
 
-  public createCardpack() {
+  private createCardpack() {
     this.setState({isLoading: true});
     this.props.api.main.createCardpack(this.state.cardpackName)
         .then((cardpack) => {
@@ -40,7 +40,7 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
         });
   }
 
-  public handleCardpackNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+  private handleCardpackNameChange(e: React.ChangeEvent<HTMLInputElement>) {
     this.setState({cardpackName: e.target.value});
   }
 
