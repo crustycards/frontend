@@ -2,6 +2,7 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  Grid,
   List,
   ListItem,
   ListItemText,
@@ -67,80 +68,82 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
       <div>
         <h2>Create Game</h2>
         <div className='content-wrap' style={{overflow: 'auto'}}>
-          <div className='col-narrow center'>
-            <TextField
-              name='gameName'
-              label='Game Name'
-              value={this.state.gameName}
-              onChange={this.handleGameNameChange}
-            />
-            <br/>
-            <span>Max Players: </span>
-            <Select
-              value={this.state.maxPlayers}
-              onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value, 10)})}
-            >
-              {GameCreator.generateNumberedMenuItems(4, 20)}
-            </Select>
-            <br/>
-            <span>Winning Score: </span>
-            <Select
-              value={this.state.maxScore}
-              onChange={(e) => this.setState({maxScore: parseInt(e.target.value, 10)})}
-            >
-              {GameCreator.generateNumberedMenuItems(4, 20)}
-            </Select>
-            <br/>
-            <span>Hand Size: </span>
-            <Select
-              value={this.state.handSize}
-              onChange={(e) => this.setState({handSize: parseInt(e.target.value, 10)})}
-            >
-              {GameCreator.generateNumberedMenuItems(3, 20)}
-            </Select>
-          </div>
-          <div className='col-wide'>
-            <div className='subpanel'>
-              {this.state.isLoading ?
-                <div style={{textAlign: 'center'}}>
-                  <h3>Loading Cardpacks...</h3>
-                  <CircularProgress/>
-                </div>
-                :
-                <div>
-                  {/* TODO - Keep code dry by refactoring the two <List/> uses below into separate component */}
-                  <h3>Your Cardpacks</h3>
-                  <List>
-                    {this.state.userCardpacks.map((c) => (
-                      <ListItem
-                        key={c.id}
-                      >
-                        <Checkbox
-                          checked={this.state.cardpacksSelected.includes(c.id)}
-                          onChange={this.handleSelectChange.bind(this, c.id)}
-                        />
-                        <ListItemText primary={c.name} />
-                      </ListItem>
-                    ))}
-                  </List>
-                  <h3>Subscribed Cardpacks</h3>
-                  <List>
-                    {this.state.subscribedCardpacks.map((c) => (
-                      <ListItem
-                        key={c.id}
-                      >
-                        <Checkbox
-                          checked={this.state.cardpacksSelected.includes(c.id)}
-                          onChange={this.handleSelectChange.bind(this, c.id)}
-                        />
-                        <ListItemText primary={c.name} />
-                      </ListItem>
-                    ))}
-                  </List>
-                </div>
-              }
-            </div>
-          </div>
+          <Grid container spacing={8}>
+            <Grid item xs={12} sm={5} className={'center'}>
+              <TextField
+                name='gameName'
+                label='Game Name'
+                value={this.state.gameName}
+                onChange={this.handleGameNameChange}
+              />
+              <br/>
+              <span>Max Players: </span>
+              <Select
+                value={this.state.maxPlayers}
+                onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value, 10)})}
+              >
+                {GameCreator.generateNumberedMenuItems(4, 20)}
+              </Select>
+              <br/>
+              <span>Winning Score: </span>
+              <Select
+                value={this.state.maxScore}
+                onChange={(e) => this.setState({maxScore: parseInt(e.target.value, 10)})}
+              >
+                {GameCreator.generateNumberedMenuItems(4, 20)}
+              </Select>
+              <br/>
+              <span>Hand Size: </span>
+              <Select
+                value={this.state.handSize}
+                onChange={(e) => this.setState({handSize: parseInt(e.target.value, 10)})}
+              >
+                {GameCreator.generateNumberedMenuItems(3, 20)}
+              </Select>
+            </Grid>
+            <Grid item xs={12} sm={7}>
+              <div className='subpanel'>
+                {this.state.isLoading ?
+                  <div style={{textAlign: 'center'}}>
+                    <h3>Loading Cardpacks...</h3>
+                    <CircularProgress/>
+                  </div>
+                  :
+                  <div>
+                    {/* TODO - Keep code dry by refactoring the two <List/> uses below into separate component */}
+                    <h3>Your Cardpacks</h3>
+                    <List>
+                      {this.state.userCardpacks.map((c) => (
+                        <ListItem
+                          key={c.id}
+                        >
+                          <Checkbox
+                            checked={this.state.cardpacksSelected.includes(c.id)}
+                            onChange={this.handleSelectChange.bind(this, c.id)}
+                          />
+                          <ListItemText primary={c.name} />
+                        </ListItem>
+                      ))}
+                    </List>
+                    <h3>Subscribed Cardpacks</h3>
+                    <List>
+                      {this.state.subscribedCardpacks.map((c) => (
+                        <ListItem
+                          key={c.id}
+                        >
+                          <Checkbox
+                            checked={this.state.cardpacksSelected.includes(c.id)}
+                            onChange={this.handleSelectChange.bind(this, c.id)}
+                          />
+                          <ListItemText primary={c.name} />
+                        </ListItem>
+                      ))}
+                    </List>
+                  </div>
+                }
+              </div>
+            </Grid>
+          </Grid>
         </div>
         <div className='center'>
           <Button type='submit' onClick={this.handleSubmit}>Submit</Button>

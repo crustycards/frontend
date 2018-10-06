@@ -1,4 +1,4 @@
-import {CircularProgress} from '@material-ui/core';
+import {CircularProgress, Grid} from '@material-ui/core';
 import * as queryString from 'query-string';
 import * as React from 'react';
 import {Component} from 'react';
@@ -77,8 +77,8 @@ class User extends Component<UserProps, UserState> {
     }
 
     return (
-      <div>
-        <div className={'col-narrow'}>
+      <Grid container spacing={8}>
+        <Grid item xs={12} md={5}>
           {this.state.user.name}
           {
             this.state.isCurrentUser &&
@@ -94,8 +94,8 @@ class User extends Component<UserProps, UserState> {
               borderRadius: '5px'
             }}
           />
-        </div>
-        <div className={'col-wide'}>
+        </Grid>
+        <Grid item xs={12} md={7}>
           {
             this.state.isCurrentUser &&
             <CardpackCreator onSubmit={(cardpack) => {
@@ -111,8 +111,8 @@ class User extends Component<UserProps, UserState> {
               });
             }}
           />
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     );
   }
 }
