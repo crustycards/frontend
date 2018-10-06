@@ -1,6 +1,6 @@
+import {Grid} from '@material-ui/core';
 import * as React from 'react';
 import FrienderPanel from '../components/FrienderPanel';
-import {Grid} from '@material-ui/core';
 
 const Home = () => (
   <div className='content-wrap'>
