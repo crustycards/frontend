@@ -1,4 +1,4 @@
-import {Button, CircularProgress, LinearProgress, Tab, Tabs} from '@material-ui/core';
+import {Button, CircularProgress, Grid, LinearProgress, Tab, Tabs} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
 import { FileWithPreview } from 'react-dropzone';
@@ -82,43 +82,58 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
         {this.state.cardpack ?
           <div>
             <div className='center'>{this.state.cardpack.name}</div>
-            {isOwner && <CardAdder
-              addCard={(cardData) => {
-                cardData.type === 'white' ?
-                  this.addWhiteCards([{text: cardData.text}])
-                  :
-                  this.addBlackCards([
-                    {
-                      text: cardData.text,
-                      answerFields: cardData.answerFields
-                    }
-                  ]);
-              }}
-              type={this.state.slideIndex ? 'black' : 'white'}
-            />}
-            {this.state.cardpack ?
-              <div>
-                <Button onClick={this.downloadStringifiedCards}>
-                  Download
-                </Button>
-                {
-                  isOwner &&
+            <Grid container spacing={8}>
+              <Grid item xs={8}>
+                {isOwner && <CardAdder
+                  addCard={(cardData) => {
+                    cardData.type === 'white' ?
+                      this.addWhiteCards([{text: cardData.text}])
+                      :
+                      this.addBlackCards([
+                        {
+                          text: cardData.text,
+                          answerFields: cardData.answerFields
+                        }
+                      ]);
+                  }}
+                  type={this.state.slideIndex ? 'black' : 'white'}
+                />}
+              </Grid>
+              <Grid item xs={4}>
+                {this.state.cardpack &&
                   <div>
-                    <Button disabled={this.state.isUploading} onClick={this.openUploadDialog}>
-                      Upload
+                    <Button
+                      style={{margin: '2px'}}
+                      variant={'outlined'}
+                      onClick={this.downloadStringifiedCards}
+                    >
+                      Download
                     </Button>
-                    <FileUploader
-                      titleText={'Upload Profile Picture'}
-                      type={'text/*'}
-                      onUpload={this.handleUpload}
-                      onClose={this.closeUploadDialog}
-                      isVisible={this.state.showUploadDialogBox}
-                    />
+                    {
+                      isOwner &&
+                      <div style={{display: 'inline'}}>
+                        <Button
+                          style={{margin: '2px'}}
+                          variant={'outlined'}
+                          disabled={this.state.isUploading}
+                          onClick={this.openUploadDialog}
+                        >
+                          Upload
+                        </Button>
+                        <FileUploader
+                          titleText={'Upload Profile Picture'}
+                          type={'text/*'}
+                          onUpload={this.handleUpload}
+                          onClose={this.closeUploadDialog}
+                          isVisible={this.state.showUploadDialogBox}
+                        />
+                      </div>
+                    }
                   </div>
                 }
-              </div>
-              : null}
-            {this.state.isUploading && <CircularProgress/>}
+                {this.state.isUploading && <CircularProgress/>}
+              </Grid>
+            </Grid>
             <div>
               <Tabs
                 onChange={this.handleTabChange}

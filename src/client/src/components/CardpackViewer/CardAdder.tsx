@@ -35,36 +35,34 @@ class CardAdder extends Component<CardAdderProps, CardAdderState> {
 
   public render() {
     return (
-      <div>
-        <div className='col-narrow'>
-          <TextField
-            onKeyPress={this.handleKeyPress}
-            label='Name'
-            type='text'
-            value={this.state.newCardName}
-            onChange={this.handleInputChange}
-          />
+      <div className={'center'} style={{padding: '20px'}}>
+        <TextField
+          onKeyPress={this.handleKeyPress}
+          label='Name'
+          type='text'
+          value={this.state.newCardName}
+          onChange={this.handleInputChange}
+          style={{padding: '5px'}}
+        />
+        {this.props.type === 'black' &&
+          <FormControl style={{padding: '5px'}}>
+            <InputLabel style={{minWidth: '120px'}}>Answer Fields</InputLabel>
+            <Select
+              value={this.state.newCardAnswerFields}
+              onChange={this.changeAnswerField}
+            >
+              <MenuItem value={1}>One</MenuItem>
+              <MenuItem value={2}>Two</MenuItem>
+              <MenuItem value={3}>Three</MenuItem>
+            </Select>
+          </FormControl>}
+          <br/>
           <Button
             disabled={!this.state.newCardName}
             onClick={this.addCurrentCard}
           >
             Create Card
           </Button>
-        </div>
-        <div className='col-wide'>
-          {this.props.type === 'black' &&
-            <FormControl>
-              <InputLabel style={{minWidth: '120px'}}>Answer Fields</InputLabel>
-              <Select
-                value={this.state.newCardAnswerFields}
-                onChange={this.changeAnswerField}
-              >
-                <MenuItem value={1}>One</MenuItem>
-                <MenuItem value={2}>Two</MenuItem>
-                <MenuItem value={3}>Three</MenuItem>
-              </Select>
-            </FormControl>}
-        </div>
       </div>
     );
   }
