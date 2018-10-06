@@ -1,4 +1,4 @@
-import {Button} from '@material-ui/core';
+import {Button, Grid} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {NavLink} from 'react-router-dom';
@@ -30,13 +30,13 @@ const Game = (props: GameProps) => (
     {props.game ?
       <div>
         <TopBar/>
-        <div>
-          <div className='col-narrow'>
+        <Grid container spacing={8}>
+          <Grid item xs={12} sm={5} md={4}>
             <CurrentBlackCard/>
             <PlayerList/>
             <MessageBox/>
-          </div>
-          <div className='col-wide'>
+          </Grid>
+          <Grid item xs={12} sm={7} md={8}>
             {props.game.hand && <PlaySelection/>}
             {
               props.game.queuedPlayers.map((user) => user.id).includes(props.user.id) &&
@@ -67,8 +67,8 @@ const Game = (props: GameProps) => (
                 Winner: {props.game.winner.name}
               </span>
             }
-          </div>
-        </div>
+          </Grid>
+        </Grid>
       </div>
       :
       <div className='content-wrap'>
