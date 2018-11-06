@@ -1,4 +1,4 @@
-FROM node:alpine
+FROM node:10
 EXPOSE 80
 COPY ./ ./app
 WORKDIR /app
