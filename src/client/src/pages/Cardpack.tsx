@@ -7,7 +7,7 @@ const Cardpack = (props: {location: Location}) => (
   <div className='content-wrap'>
     {
       queryString.parse(props.location.search).id &&
-        <CardpackViewer cardpackId={queryString.parse(props.location.search).id} />
+        <CardpackViewer cardpackId={queryString.parse(props.location.search).id as string} />
     }
   </div>
 );
