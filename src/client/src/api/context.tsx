@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {Subtract} from 'utility-types';
 import Api from './model/api';
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 interface InjectedApiProps {
   api: Api;
@@ -11,15 +12,9 @@ const Context = React.createContext<Api>(undefined);
 export const Provider = Context.Provider;
 export const Consumer = Context.Consumer;
 
-export const ApiContextWrapper = <P extends InjectedApiProps>
-(Component: React.ComponentType<P>): React.ComponentType<Subtract<P, InjectedApiProps>> => (
-  class ApiContextWrappedComponent extends React.Component<Subtract<P, InjectedApiProps>> {
-    public render() {
-      return (
-        <Consumer>
-          {(api) => (<Component api={api} {...this.props} {...this.state}/>)}
-        </Consumer>
-      );
-    }
-  }
-);
+export const ApiContextWrapper = <P extends InjectedApiProps, R = Omit<P, 'api'>>
+(Component: React.ComponentType<P>): React.SFC<R> => ((props: any) => ( // TODO - Remove 'any'
+  <Consumer>
+    {(api) => (<Component api={api} {...{...props, api}}/>)}
+  </Consumer>
+));
