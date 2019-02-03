@@ -22,14 +22,6 @@ interface DraggableCardProps {
   queueCard(data: {cardId: string}): void;
 }
 
-@DragSource(
-  cardInPlayQueue,
-  {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
-  (connect, monitor) => ({
-    connectDragSource: connect.dragSource(),
-    isDragging: monitor.isDragging()
-  })
-)
 class DraggableCard extends Component<DraggableCardProps> {
   public render() {
     const {card, whitePlayed, currentBlackCard, user, judgeId, isDragging} = this.props;
@@ -76,4 +68,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   queueCard
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(DraggableCard);
+const DragSourceDraggableCard = DragSource(
+  cardInPlayQueue,
+  {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
+  (connect, monitor) => ({
+    connectDragSource: connect.dragSource(),
+    isDragging: monitor.isDragging()
+  })
+)(DraggableCard);
+export default connect(mapStateToProps, mapDispatchToProps)(DragSourceDraggableCard);

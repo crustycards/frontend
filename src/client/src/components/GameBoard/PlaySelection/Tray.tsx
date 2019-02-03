@@ -20,13 +20,6 @@ interface TrayProps {
   unqueueCard(cardId: string): void;
 }
 
-@DropTarget(cardInHand, {drop: (props: TrayProps, monitor) => {
-  props.unqueueCard(monitor.getItem().cardId);
-}}, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))
 class Tray extends Component<TrayProps> {
   public render() {
     const {
@@ -89,4 +82,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
   unqueueCard
 }, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Tray);
+const DropTargetTray = DropTarget(cardInHand, {drop: (props: TrayProps, monitor) => {
+  props.unqueueCard(monitor.getItem().cardId);
+}}, (connect, monitor) => ({
+  connectDropTarget: connect.dropTarget(),
+  isOver: monitor.isOver(),
+  canDrop: monitor.canDrop()
+}))(Tray);
+export default connect(mapStateToProps, mapDispatchToProps)(DropTargetTray);
