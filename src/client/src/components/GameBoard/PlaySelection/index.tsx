@@ -2,7 +2,7 @@ import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {ApiContextWrapper} from '../../../api/context';
-import {BlackCard, User, WhitePlayed} from '../../../api/dao';
+import {BlackCard, User, WhitePlayedEntry} from '../../../api/dao';
 import Api from '../../../api/model/api';
 import {canPlay, hasPlayed} from '../../../store';
 import PlayArea from './PlayArea';
@@ -11,7 +11,7 @@ import Tray from './Tray';
 interface PlaySelectionProps {
   queuedCardIds: string[];
   stage: string;
-  whitePlayed: WhitePlayed;
+  whitePlayed: WhitePlayedEntry[];
   currentBlackCard: BlackCard;
   user: User;
   judgeId: string;

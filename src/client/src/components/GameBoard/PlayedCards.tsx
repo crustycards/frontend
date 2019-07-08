@@ -77,23 +77,28 @@ class PlayedCards extends Component<PlayedCardsProps, PlayedCardsState> {
         this.props.game.winner
       )
     ) {
+      const winnerIsRealUser = !!this.props.game.winner.user;
       return (
         <div className={'panel'}>
-          {Object.keys(this.props.game.whitePlayed).map((userId, index) => (
+          {this.props.game.whitePlayed.map((entry, index) => (
             <div
-              style={this.props.game.winner.id === userId ? {} : {opacity: 0.5}}
+              style={(this.props.game.winner && winnerIsRealUser ?
+                this.props.game.winner.user.id === entry.playerId.userId :
+                this.props.game.winner.artificialPlayerName === entry.playerId.artificialPlayerUUID)
+                ? {} : {opacity: 0.5}}
               className={'subpanel'}
               key={index}
             >
               <div>
                 {
-                  this.props.game.players.find((player) => player.id === userId) ?
-                    this.props.game.players.find((player) => player.id === userId).name
+                  this.props.game.players.find((player) => player.id === entry.playerId.userId) ?
+                    this.props.game.players.find((player) => player.id === entry.playerId.userId).name
                     :
+                    entry.playerId.artificialPlayerUUID ? entry.playerId.artificialPlayerUUID :
                     'This user has left the game'
                 }
               </div>
-              {this.props.game.whitePlayed[userId].map((card, index) => (
+              {entry.cards.map((card, index) => (
                 <WhiteCard
                   card={card}
                   key={index}

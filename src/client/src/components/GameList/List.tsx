@@ -18,7 +18,7 @@ import Api from '../../api/model/api';
 
 const styles = (theme: Theme) => ({
   leftIcon: {
-    marginRight: theme.spacing.unit
+    marginRight: theme.spacing(1)
   }
 });
 

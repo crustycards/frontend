@@ -1,11 +1,12 @@
 import {
   AppBar,
   Button,
+  Divider,
   Drawer,
   IconButton,
+  ListItem,
   ListItemIcon,
   ListItemText,
-  MenuItem,
   Toolbar,
   Typography
 } from '@material-ui/core';
@@ -21,7 +22,6 @@ import ViewList from '@material-ui/icons/ViewList';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import {NavLink} from 'react-router-dom';
 import {bindActionCreators, Dispatch} from 'redux';
 import {User} from '../api/dao';
 import {closeNavbar, openNavbar} from '../store/modules/global';
@@ -64,7 +64,7 @@ const Navbar = (props: NavbarProps) => (
         >
           <MenuIcon/>
         </IconButton>
-        <Typography variant={'title'} color={'inherit'} className={props.classes.flex}>
+        <Typography variant={'h6'} color={'inherit'} className={props.classes.flex}>
           Cards
         </Typography>
         <Button color={'secondary'} variant={'contained'} style={{color: 'white'}} onClick={() => props.push('/game')}>
@@ -75,63 +75,64 @@ const Navbar = (props: NavbarProps) => (
     <Drawer open={props.isOpen} onClose={() => props.closeNavbar()}>
       {props.user ?
         <div>
-          <NavLink to='/' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar}>
-              <ListItemIcon>
-                <Home/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Home'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to={`/user?id=${props.user.id}`} style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar}>
-              <ListItemIcon>
-                <Person/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Profile'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/game' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar}>
-              <ListItemIcon>
-                <VideogameAsset/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Current Game'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/gamelist' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar}>
-              <ListItemIcon>
-                <ViewList/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Find a Game'} />
-            </MenuItem>
-          </NavLink>
-          <NavLink to='/settings' style={navItemStyle}>
-            <MenuItem onClick={props.closeNavbar}>
-              <ListItemIcon>
-                <Settings/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Settings'} />
-            </MenuItem>
-          </NavLink>
-          <MenuItem onClick={() => redirectTo('/logout')}>
+          {[
+            {
+              to: '/',
+              onClick: props.closeNavbar,
+              icon: <Home/>,
+              text: 'Home'
+            },
+            {
+              to: `/user?id=${props.user.id}`,
+              onClick: props.closeNavbar,
+              icon: <Person/>,
+              text: 'Profile'
+            },
+            {
+              to: '/game',
+              onClick: props.closeNavbar,
+              icon: <VideogameAsset/>,
+              text: 'Current Game'
+            },
+            {
+              to: '/gamelist',
+              onClick: props.closeNavbar,
+              icon: <ViewList/>,
+              text: 'Find/Create a Game'
+            },
+            {
+              to: '/settings',
+              onClick: props.closeNavbar,
+              icon: <Settings/>,
+              text: 'Settings'
+            }
+          ].map(({to, onClick, icon, text}, index) => (
+              <ListItem key={index} button onClick={() => {
+                onClick();
+                props.push(to);
+              }}>
+                <ListItemIcon>
+                  {icon}
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+          ))}
+          <Divider/>
+          <ListItem button onClick={() => redirectTo('/logout')}>
             <ListItemIcon>
               <ExitToApp/>
             </ListItemIcon>
-            <ListItemText inset primary={'Logout'} />
-          </MenuItem>
+            <ListItemText primary={'Logout'} />
+          </ListItem>
         </div>
         :
         <div>
-          <NavLink to='/login' style={navItemStyle}>
-            <MenuItem onClick={() => redirectTo('/logout')}>
-              <ListItemIcon>
-                <ExitToApp/>
-              </ListItemIcon>
-              <ListItemText inset primary={'Login'} />
-            </MenuItem>
-          </NavLink>
+          <ListItem button onClick={() => redirectTo('/logout')}>
+            <ListItemIcon>
+              <ExitToApp/>
+            </ListItemIcon>
+            <ListItemText primary={'Login'} />
+          </ListItem>
         </div>}
     </Drawer>
   </div>

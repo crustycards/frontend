@@ -13,7 +13,7 @@ interface CAHWhiteCardProps {
 
 const CAHWhiteCard = (props: CAHWhiteCardProps) => {
   const removeCard = () => {
-    return props.api.main.deleteWhiteCard(props.card.id).then((data) => {
+    return props.api.main.deleteWhiteCard(props.card.cardpackId, props.card.id).then((data) => {
       if (props.onDelete) {
         props.onDelete(props.card.id);
       }
@@ -26,7 +26,7 @@ const CAHWhiteCard = (props: CAHWhiteCardProps) => {
   return (
     <Card className='card'>
       <CardContent>
-        <Typography align={'left'} variant={'body1'}>
+        <Typography align={'left'} variant={'body2'}>
           {props.card.text}
         </Typography>
       </CardContent>

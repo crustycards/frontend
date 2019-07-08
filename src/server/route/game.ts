@@ -1,5 +1,5 @@
-import * as Boom from 'boom';
-import {Server} from 'hapi';
+import * as Boom from '@hapi/boom';
+import {Server} from '@hapi/hapi';
 import {ProxyResponseToolkit, Request} from '../model';
 
 export default (server: Server, gameUrl: string) => {
@@ -118,6 +118,22 @@ export default (server: Server, gameUrl: string) => {
         } else {
           return h.proxy({uri: `${gameUrl}/{userId}/game/${gameName}/join`});
         }
+      },
+      options: {payload: {parse: false}}
+    },
+    {
+      method: 'POST',
+      path: '/api/game/artificialPlayers/add/{userId}',
+      handler: (request: Request, h: ProxyResponseToolkit) => {
+        return h.proxy({uri: `${gameUrl}/{userId}/game/artificialPlayers/add`});
+      },
+      options: {payload: {parse: false}}
+    },
+    {
+      method: 'POST',
+      path: '/api/game/artificialPlayers/remove/{userId}',
+      handler: (request: Request, h: ProxyResponseToolkit) => {
+        return h.proxy({uri: `${gameUrl}/{userId}/game/artificialPlayers/remove`});
       },
       options: {payload: {parse: false}}
     }

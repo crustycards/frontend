@@ -1,8 +1,8 @@
-import {ProxyHandlerOptions} from 'h2o2';
-import {Request as HapiRequest, RequestQuery, ResponseToolkit} from 'hapi';
+import {ProxyHandlerOptions} from '@hapi/h2o2';
+import {Request as HapiRequest, RequestQuery, ResponseObject, ResponseToolkit} from '@hapi/hapi';
 
 export interface ProxyResponseToolkit extends ResponseToolkit {
-  proxy(options: ProxyHandlerOptions): void;
+  proxy(options: ProxyHandlerOptions): Promise<ResponseObject>;
 }
 
 export interface Request extends HapiRequest {

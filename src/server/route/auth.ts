@@ -1,5 +1,5 @@
-import * as Boom from 'boom';
-import {Server} from 'hapi';
+import * as Boom from '@hapi/boom';
+import {Server} from '@hapi/hapi';
 import {ProxyResponseToolkit, Request} from '../model';
 
 export default (server: Server, authUrl: string) => {

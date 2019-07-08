@@ -3,7 +3,7 @@ import Check from '@material-ui/icons/Check';
 import Star from '@material-ui/icons/Star';
 import * as React from 'react';
 import {connect} from 'react-redux';
-import { BlackCard, LocalGameData, Player, WhitePlayed } from '../../api/dao';
+import {BlackCard, LocalGameData, Player, WhitePlayedEntry} from '../../api/dao';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
@@ -75,7 +75,7 @@ interface PlayerListProps {
   queuedPlayers: Player[];
   ownerId: string;
   judgeId: string;
-  whitePlayed: WhitePlayed;
+  whitePlayed: WhitePlayedEntry[];
   currentBlackCard: BlackCard;
 }
 
@@ -90,9 +90,10 @@ const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, curr
             judgeId,
             (
               whitePlayed &&
-              whitePlayed[player.id] &&
+              whitePlayed.find((entry) => entry.playerId.userId === player.id) &&
               currentBlackCard &&
-              whitePlayed[player.id].length === currentBlackCard.answerFields
+              whitePlayed.find((entry) => entry.playerId.userId === player.id)
+                .cards.length === currentBlackCard.answerFields
             )
           )}
         </div>);

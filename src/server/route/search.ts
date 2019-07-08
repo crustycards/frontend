@@ -1,4 +1,4 @@
-import {Server} from 'hapi';
+import {Server} from '@hapi/hapi';
 import {ProxyResponseToolkit, Request} from '../model';
 
 const getQuery = (query: string) => query ? `?query=${query}` : '';

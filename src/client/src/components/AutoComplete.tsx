@@ -12,7 +12,7 @@ const styles = (theme: Theme) => ({
   suggestionsContainerOpen: {
     position: 'absolute' as any,
     zIndex: 1,
-    marginTop: theme.spacing.unit,
+    marginTop: theme.spacing(1),
     left: 0,
     right: 0
   },
@@ -31,7 +31,6 @@ const renderInput: Autosuggest.RenderInputComponent<string> = (inputProps: any) 
 
   return (
     <TextField
-      fullWidth
       InputProps={{
         inputRef: ref,
         classes: {

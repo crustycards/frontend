@@ -1,7 +1,7 @@
-import * as Bell from 'bell';
+import * as Bell from '@hapi/bell';
+import * as Hapi from '@hapi/hapi';
+import {Request} from '@hapi/hapi';
 import * as fs from 'fs';
-import * as Hapi from 'hapi';
-import {Request} from 'hapi';
 import * as typescript from 'typescript';
 import Api from './api';
 import loadEnvVars from './loadEnvVars';
@@ -135,7 +135,7 @@ const startServer = async () => {
     }
   ]);
 
-  await server.register({plugin: require('h2o2')});
+  await server.register({plugin: require('@hapi/h2o2')});
   loadRoutes(server, {
     apiUrl: process.env.API_URL,
     authUrl: process.env.AUTH_SERVER_URL,

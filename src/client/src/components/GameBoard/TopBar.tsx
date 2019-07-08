@@ -44,38 +44,6 @@ const TopBar = (props: TopBarProps) => (
       </div>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>
-        <Button
-          color={'primary'}
-          variant={'contained'}
-          onClick={props.api.game.leaveGame}
-          style={buttonStyle}
-        >
-          Leave Game
-        </Button>
-        {
-          props.game.ownerId === props.user.id &&
-          props.game.stage === 'notRunning' &&
-          <Button
-            color={'primary'}
-            variant={'contained'}
-            onClick={props.api.game.startGame}
-            style={buttonStyle}
-          >
-            Start Game
-          </Button>
-        }
-        {
-          props.game.ownerId === props.user.id &&
-          props.game.stage !== 'notRunning' &&
-          <Button
-            color={'primary'}
-            variant={'contained'}
-            onClick={props.api.game.stopGame}
-            style={buttonStyle}
-          >
-            Stop Game
-          </Button>
-        }
         {
           props.game.stage === 'roundEndPhase' &&
           <Button
@@ -87,6 +55,14 @@ const TopBar = (props: TopBarProps) => (
             Start Next Round
           </Button>
         }
+        <Button
+          color={'primary'}
+          variant={'contained'}
+          onClick={props.api.game.leaveGame}
+          style={buttonStyle}
+        >
+          Leave Game
+        </Button>
       </div>
     </Toolbar>
   </AppBar>
