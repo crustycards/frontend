@@ -4,7 +4,7 @@ import { ConnectDragSource } from 'react-dnd';
 import DragSource from 'react-dnd/lib/DragSource';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
-import {BlackCard, User, WhiteCard, WhitePlayed} from '../../../api/dao';
+import {BlackCard, User, WhiteCard, WhitePlayedEntry} from '../../../api/dao';
 import {cardInPlayQueue} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
@@ -13,7 +13,7 @@ import CAHWhiteCard from '../../shells/CAHWhiteCard';
 // TODO - Remove ?'s from DraggableCardProps properties and fix react-dnd typescript issues
 interface DraggableCardProps {
   card: WhiteCard;
-  whitePlayed: WhitePlayed;
+  whitePlayed: WhitePlayedEntry[];
   currentBlackCard: BlackCard;
   user: User;
   judgeId: string;

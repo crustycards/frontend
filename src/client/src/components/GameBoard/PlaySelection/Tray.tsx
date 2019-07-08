@@ -3,7 +3,7 @@ import {Component} from 'react';
 import {ConnectDropTarget, DropTarget} from 'react-dnd/lib';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
-import {BlackCard, User, WhiteCard, WhitePlayed} from '../../../api/dao';
+import {BlackCard, User, WhiteCard, WhitePlayedEntry} from '../../../api/dao';
 import {cardInHand} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {unqueueCard} from '../../../store/modules/game';
@@ -13,7 +13,7 @@ interface TrayProps {
   cards: WhiteCard[];
   queuedCardIds: string[];
   connectDropTarget?: ConnectDropTarget; // TODO - Remove '?' and fix react-dnd types
-  whitePlayed: WhitePlayed;
+  whitePlayed: WhitePlayedEntry[];
   currentBlackCard: BlackCard;
   user: User;
   judgeId: string;

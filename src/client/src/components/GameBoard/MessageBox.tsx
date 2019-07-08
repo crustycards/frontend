@@ -59,7 +59,7 @@ const MessageBox = (props: MessageBoxProps) => {
             key={i}
             style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}
           >
-            <Typography variant={'body2'}>
+            <Typography variant={'body1'}>
               <b>{message.user.name + ': '}</b>{message.text}
             </Typography>
           </Paper>

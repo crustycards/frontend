@@ -1,4 +1,4 @@
-import {Server} from 'hapi';
+import {Server} from '@hapi/hapi';
 import authRoutes from './auth';
 import cardRoutes from './card';
 import gameRoutes from './game';

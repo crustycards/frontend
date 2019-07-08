@@ -43,8 +43,25 @@ export class Message {
   public text: string;
 }
 
-export class WhitePlayed {
-  [userId: string]: WhiteCard[]
+export class PlayerId {
+  public artificialPlayerUUID: string;
+  public realUser: boolean;
+  public userId: string;
+}
+
+export class WhitePlayedEntry {
+  public cards: WhiteCard[];
+  public playerId: PlayerId;
+}
+
+export class ArtificialPlayer {
+  public name: string;
+  public score: number;
+}
+
+export class Winner {
+  public user: User;
+  public artificialPlayerName: string;
 }
 
 export class GameData {
@@ -54,14 +71,16 @@ export class GameData {
   public stage: string;
   public hand: WhiteCard[];
   public players: Player[];
+  public artificialPlayers: ArtificialPlayer[];
   public queuedPlayers: Player[];
+  public queuedArtificialPlayers: ArtificialPlayer[];
   public bannedPlayers: User[];
   public judgeId: string;
   public ownerId: string;
-  public whitePlayed: WhitePlayed;
+  public whitePlayed: WhitePlayedEntry[];
   public whitePlayedAnonymous: WhiteCard[][];
   public currentBlackCard: BlackCard;
-  public winner: User;
+  public winner: Winner;
   public messages: Message[];
 }
 

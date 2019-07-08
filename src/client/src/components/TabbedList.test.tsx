@@ -1,6 +1,7 @@
 import {GridListTile} from '@material-ui/core';
 import {mount, shallow} from 'enzyme';
 import * as React from 'react';
+import * as renderer from 'react-test-renderer';
 import TabbedList from './TabbedList';
 
 const generateListElements = (size: number) => {
@@ -12,9 +13,9 @@ const generateListElements = (size: number) => {
 };
 
 it('matches snapshot of single page of elements', () => {
-  const wrapper = shallow(<TabbedList>{generateListElements(4)}</TabbedList>);
+  const tree = renderer.create(<TabbedList>{generateListElements(4)}</TabbedList>).toJSON();
 
-  expect(wrapper).toMatchSnapshot();
+  expect(tree).toMatchSnapshot();
 });
 
 it('renders correct number of elements', () => {

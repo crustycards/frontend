@@ -40,7 +40,7 @@ const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
         <Typography
           key={i}
           style={{display: 'inline'}}
-          variant={'title'}
+          variant={'h6'}
           component={'div'}
           color={'secondary'}
         >

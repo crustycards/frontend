@@ -67,7 +67,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
     return (
       <div>
         <h2>Create Game</h2>
-        <div className='content-wrap' style={{overflow: 'auto'}}>
+        <div className='content-wrap'>
           <Grid container spacing={8}>
             <Grid item xs={12} sm={5} className={'center'}>
               <TextField
@@ -80,7 +80,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
               <span>Max Players: </span>
               <Select
                 value={this.state.maxPlayers}
-                onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value, 10)})}
+                onChange={(e) => this.setState({maxPlayers: parseInt(e.target.value as string, 10)})}
               >
                 {GameCreator.generateNumberedMenuItems(4, 20)}
               </Select>
@@ -88,7 +88,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
               <span>Winning Score: </span>
               <Select
                 value={this.state.maxScore}
-                onChange={(e) => this.setState({maxScore: parseInt(e.target.value, 10)})}
+                onChange={(e) => this.setState({maxScore: parseInt(e.target.value as string, 10)})}
               >
                 {GameCreator.generateNumberedMenuItems(4, 20)}
               </Select>
@@ -96,7 +96,7 @@ class GameCreator extends Component<GameCreatorProps, GameCreatorState> {
               <span>Hand Size: </span>
               <Select
                 value={this.state.handSize}
-                onChange={(e) => this.setState({handSize: parseInt(e.target.value, 10)})}
+                onChange={(e) => this.setState({handSize: parseInt(e.target.value as string, 10)})}
               >
                 {GameCreator.generateNumberedMenuItems(3, 20)}
               </Select>

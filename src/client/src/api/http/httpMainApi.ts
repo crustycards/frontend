@@ -17,13 +17,13 @@ export default class HttpMainApi implements MainApi {
       .then((res) => res.data);
   }
 
-  public deleteWhiteCard(cardId: string) {
-    return axios.delete(`/api/cards/white/${cardId}`)
+  public deleteWhiteCard(cardpackId: string, cardId: string) {
+    return axios.delete(`/api/cards/white/${cardId}?cardpackId=${cardpackId}`)
       .then(() => null);
   }
 
-  public deleteBlackCard(cardId: string) {
-    return axios.delete(`/api/cards/black/${cardId}`)
+  public deleteBlackCard(cardpackId: string, cardId: string) {
+    return axios.delete(`/api/cards/black/${cardId}?cardpackId=${cardpackId}`)
       .then(() => null);
   }
 

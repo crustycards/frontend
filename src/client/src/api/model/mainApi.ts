@@ -2,8 +2,8 @@ import {BlackCard, Cardpack, JsonBlackCard, JsonWhiteCard, User, WhiteCard} from
 
 interface MainApi {
   getUser(id: string): Promise<User>;
-  deleteWhiteCard(cardId: string): Promise<void>;
-  deleteBlackCard(cardId: string): Promise<void>;
+  deleteWhiteCard(cardpackId: string, cardId: string): Promise<void>;
+  deleteBlackCard(cardpackId: string, cardId: string): Promise<void>;
   deleteCardpack(cardpackId: string): Promise<void>;
   createCardpack(name: string): Promise<Cardpack>;
   getCardpack(id: string): Promise<Cardpack>;

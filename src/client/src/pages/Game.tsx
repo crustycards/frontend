@@ -5,6 +5,8 @@ import {NavLink} from 'react-router-dom';
 import {ApiContextWrapper} from '../api/context';
 import {GameData, User} from '../api/dao';
 import Api from '../api/model/api';
+import AdminBar from '../components/GameBoard/AdminBar';
+import ArtificialPlayerList from '../components/GameBoard/ArtificialPlayerList';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
 import MessageBox from '../components/GameBoard/MessageBox';
 import PlayedCards from '../components/GameBoard/PlayedCards';
@@ -30,10 +32,13 @@ const Game = (props: GameProps) => (
     {props.game ?
       <div>
         <TopBar/>
+        {props.game.ownerId === props.user.id && <AdminBar/>}
         <Grid container spacing={8}>
           <Grid item xs={12} sm={5} md={4}>
             <CurrentBlackCard/>
             <PlayerList/>
+            {(!!props.game.artificialPlayers.length || !!props.game.queuedArtificialPlayers.length)
+              && <ArtificialPlayerList/>}
             <MessageBox/>
           </Grid>
           <Grid item xs={12} sm={7} md={8}>
@@ -64,7 +69,7 @@ const Game = (props: GameProps) => (
                 className={'center panel'}
                 style={gameAlertStyle}
               >
-                Winner: {props.game.winner.name}
+                Winner: {props.game.winner.user ? props.game.winner.user.name : props.game.winner.artificialPlayerName}
               </span>
             }
           </Grid>

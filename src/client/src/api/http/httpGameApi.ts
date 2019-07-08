@@ -78,6 +78,34 @@ export default class HttpGameApi implements GameApi {
       });
   }
 
+  public addArtificialPlayer(artificialPlayerName: string) {
+    return axios.post(`/api/game/artificialPlayers/add/${this.userId}`, {artificialPlayerName})
+      .then((response) => {
+        return response.data || null;
+      });
+  }
+
+  public removeArtificialPlayer(artificialPlayerName: string) {
+    return axios.post(`/api/game/artificialPlayers/remove/${this.userId}`, {artificialPlayerName})
+      .then((response) => {
+        return response.data || null;
+      });
+  }
+
+  public addArtificialPlayers(amount: number) {
+    return axios.post(`/api/game/artificialPlayers/add/${this.userId}`, {amount})
+      .then((response) => {
+        return response.data || null;
+      });
+  }
+
+  public removeArtificialPlayers(amount: number) {
+    return axios.post(`/api/game/artificialPlayers/remove/${this.userId}`, {amount})
+      .then((response) => {
+        return response.data || null;
+      });
+  }
+
   public getGameState() {
     return axios.get(`/api/game/${this.userId}`)
       .then((response) => {

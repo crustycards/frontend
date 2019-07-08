@@ -32,6 +32,34 @@ export const bindGameApi = (gameApi: GameApi, store: Store) => {
     return gameState;
   });
 
+  const addArtificialPlayer = gameApi.addArtificialPlayer;
+  gameApi.addArtificialPlayer = (...args) => addArtificialPlayer(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
+  const removeArtificialPlayer = gameApi.removeArtificialPlayer;
+  gameApi.removeArtificialPlayer = (...args) => removeArtificialPlayer(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
+  const addArtificialPlayers = gameApi.addArtificialPlayers;
+  gameApi.addArtificialPlayers = (...args) => addArtificialPlayers(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
+  const removeArtificialPlayers = gameApi.removeArtificialPlayers;
+  gameApi.removeArtificialPlayers = (...args) => removeArtificialPlayers(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
   const getGameState = gameApi.getGameState;
   gameApi.getGameState = () => getGameState().then((gameState) => {
     store.dispatch(setGameState(gameState));

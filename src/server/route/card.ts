@@ -1,5 +1,5 @@
-import * as Boom from 'boom';
-import {Server} from 'hapi';
+import * as Boom from '@hapi/boom';
+import {Server} from '@hapi/hapi';
 import {ProxyResponseToolkit, Request} from '../model';
 
 export default (server: Server, apiUrl: string) => {
@@ -47,7 +47,8 @@ export default (server: Server, apiUrl: string) => {
       method: 'DELETE',
       path: '/api/cards/black/{id}',
       handler: (request, h: ProxyResponseToolkit) => {
-        return h.proxy({uri: `${apiUrl}/cards/black/{id}`});
+        const {cardpackId} = request.query;
+        return h.proxy({uri: `${apiUrl}/cardpack/${cardpackId}/cards/black/{id}`});
       },
       options: {payload: {parse: false}}
     },
@@ -55,7 +56,8 @@ export default (server: Server, apiUrl: string) => {
       method: 'DELETE',
       path: '/api/cards/white/{id}',
       handler: (request, h: ProxyResponseToolkit) => {
-        return h.proxy({uri: `${apiUrl}/cards/white/{id}`});
+        const {cardpackId} = request.query;
+        return h.proxy({uri: `${apiUrl}/cardpack/${cardpackId}/cards/white/{id}`});
       },
       options: {payload: {parse: false}}
     },

@@ -21,7 +21,7 @@ interface CAHBlackCardProps {
 
 const CAHBlackCard = (props: CAHBlackCardProps) => {
   const removeCard = () => {
-    props.api.main.deleteBlackCard(props.card.id).then((data) => {
+    props.api.main.deleteBlackCard(props.card.cardpackId, props.card.id).then((data) => {
       if (props.onDelete) {
         props.onDelete(props.card.id);
       }
@@ -32,12 +32,12 @@ const CAHBlackCard = (props: CAHBlackCardProps) => {
   return <MuiThemeProvider theme={darkTheme}>
     <Card className='card'>
       <CardContent>
-        <Typography align={'left'} gutterBottom variant={'title'}>
+        <Typography align={'left'} gutterBottom variant={'h6'}>
           {props.card.text}
         </Typography>
         {
           !props.hideAnswerCount &&
-          <Typography align={'left'} color={'textSecondary'} variant={'subheading'}>
+          <Typography align={'left'} color={'textSecondary'} variant={'body1'}>
             {`Answers: ${props.card.answerFields}`}
           </Typography>
         }

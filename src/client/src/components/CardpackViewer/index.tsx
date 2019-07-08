@@ -121,7 +121,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
                           Upload
                         </Button>
                         <FileUploader
-                          titleText={'Upload Profile Picture'}
+                          titleText={'Upload cardpack *.txt file'}
                           type={'text/*'}
                           onUpload={this.handleUpload}
                           onClose={this.closeUploadDialog}
