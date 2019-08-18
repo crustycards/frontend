@@ -22,6 +22,7 @@ interface MainApi {
   cardpackIsFavorited(cardpackId: string): Promise<boolean>;
   getProfileImageUrl(userId?: string): string;
   setProfileImage(data: Blob): Promise<void>;
+  setUsername(name: string): Promise<void>;
 }
 
 export default MainApi;

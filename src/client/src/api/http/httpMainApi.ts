@@ -114,6 +114,10 @@ export default class HttpMainApi implements MainApi {
     await axios.put(`/api/user/profileimage/${this.userId}`, data, {headers});
   }
 
+  public async setUsername(name: string) {
+    await axios.patch(`/api/user/${this.userId}`, [{op: 'replace', path: '/name', value: name}]);
+  }
+
   private parseCardpack(data: any): Cardpack {
     return {...data, createdAt: new Date(data.createdAt)};
   }

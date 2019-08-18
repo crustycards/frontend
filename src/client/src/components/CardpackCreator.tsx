@@ -38,7 +38,6 @@ class CardpackCreator extends Component<CardpackCreatorProps, CardpackCreatorSta
           label={'Cardpack Name'}
           value={this.state.cardpackName}
           onChange={this.handleCardpackNameChange}
-          margin={'normal'}
         />
         <br/>
         <Button

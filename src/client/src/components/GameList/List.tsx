@@ -92,7 +92,7 @@ class GameList extends Component<GameListProps, GameListState> {
                   }}>Leave</Button> :
                   <Button onClick={() => {
                     this.props.api.game.joinGame(game.name);
-                  }}>Join</Button>
+                  }}>Join</Button> // Make join game and create game buttons bring you directly to current game page
               }
             </CardActions>
           </Card>

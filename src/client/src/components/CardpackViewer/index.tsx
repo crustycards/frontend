@@ -8,7 +8,7 @@ import {ApiContextWrapper} from '../../api/context';
 import {Cardpack, JsonBlackCard, JsonWhiteCard, User} from '../../api/dao';
 import Api from '../../api/model/api';
 import {parse, stringify} from '../../helpers/cardpackFileHandler';
-import FileUploader from '../FileUploader';
+import FileUploaderDialog from '../FileUploaderDialog';
 import CAHBlackCard from '../shells/CAHBlackCard';
 import CAHWhiteCard from '../shells/CAHWhiteCard';
 import TabbedList from '../TabbedList';
@@ -120,7 +120,7 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
                         >
                           Upload
                         </Button>
-                        <FileUploader
+                        <FileUploaderDialog
                           titleText={'Upload cardpack *.txt file'}
                           type={'text/*'}
                           onUpload={this.handleUpload}

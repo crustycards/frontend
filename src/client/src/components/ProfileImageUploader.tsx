@@ -1,4 +1,3 @@
-import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
 import { FileWithPreview } from 'react-dropzone';
@@ -10,46 +9,22 @@ interface UploaderProps {
   api: Api;
 }
 
-interface UploaderState {
-  showDialogBox: boolean;
-}
-
-class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
+class ProfileImageUploader extends Component<UploaderProps> {
   constructor(props: UploaderProps) {
     super(props);
 
-    this.state = {
-      showDialogBox: false
-    };
-
-    this.openDialog = this.openDialog.bind(this);
-    this.closeDialog = this.closeDialog.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
   }
 
   public render() {
     return (
-      <div>
-        <Button variant={'outlined'} onClick={this.openDialog}>
-          Upload Profile Picture
-        </Button>
+      <div style={{width: '100%'}}>
         <FileUploader
-          titleText={'Upload Profile Picture'}
           type={'image/*'}
           onUpload={this.handleUpload}
-          onClose={this.closeDialog}
-          isVisible={this.state.showDialogBox}
         />
       </div>
     );
-  }
-
-  private openDialog() {
-    this.setState({showDialogBox: true});
-  }
-
-  private closeDialog() {
-    this.setState({showDialogBox: false});
   }
 
   private async handleUpload(
@@ -60,7 +35,7 @@ class ProfileImageUploader extends Component<UploaderProps, UploaderState> {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
       const file = acceptedFiles[0];
       await this.props.api.main.setProfileImage(file.slice());
-      this.closeDialog();
+      window.location.reload(); // Refresh page so that the user can see their new profile picture
     }
   }
 }
