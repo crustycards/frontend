@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useContext} from 'react';
 import Api from './model/api';
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -18,3 +19,7 @@ export const ApiContextWrapper = <P extends InjectedApiProps, R = Omit<P, 'api'>
     {(api) => (<Component api={api} {...{...props, api}}/>)}
   </Consumer>
 ));
+
+export const useApi = () => {
+  return useContext(Context);
+};

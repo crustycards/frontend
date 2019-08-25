@@ -10,7 +10,6 @@ import {
   Toolbar,
   Typography
 } from '@material-ui/core';
-import {withStyles, WithStyles} from '@material-ui/core/styles';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import Home from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -19,22 +18,18 @@ import Person from '@material-ui/icons/Person';
 import Settings from '@material-ui/icons/SettingsApplications';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import ViewList from '@material-ui/icons/ViewList';
+import {makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
-import {User} from '../api/dao';
+import {useDispatch, useSelector} from 'react-redux';
+import {StoreState} from '../store';
 import {closeNavbar, openNavbar} from '../store/modules/global';
 
-const navItemStyle = {textDecoration: 'none'};
 const redirectTo = (url: string) => {
   window.location.replace(url);
 };
 
-const styles = {
-  root: {
-    flexGrow: 1
-  },
+const useStyles = makeStyles({
   flex: {
     flex: 1
   },
@@ -42,74 +37,78 @@ const styles = {
     marginLeft: -12,
     marginRight: 20
   }
-};
+});
 
-interface NavbarProps extends WithStyles<typeof styles> {
-  isOpen: boolean;
-  user: User;
-  openNavbar(): void;
-  closeNavbar(): void;
-  push(route: string): void;
-}
+const Navbar = () => {
+  const classes = useStyles({});
+  const {isOpen, user} = useSelector(({global: {navbarOpen, user}}: StoreState) => ({
+    isOpen: navbarOpen,
+    user
+  }));
+  const dispatch = useDispatch();
 
-const Navbar = (props: NavbarProps) => (
-  <div>
+  return <div>
     <AppBar position={'static'} style={{borderRadius: '5px'}}>
       <Toolbar>
         <IconButton
-          className={props.classes.menuButton}
+          className={classes.menuButton}
           color={'inherit'}
           aria-label={'Menu'}
-          onClick={props.openNavbar}
+          onClick={() => dispatch(openNavbar())}
         >
           <MenuIcon/>
         </IconButton>
-        <Typography variant={'h6'} color={'inherit'} className={props.classes.flex}>
+        <Typography variant={'h6'} color={'inherit'} className={classes.flex}>
           Cards
         </Typography>
-        <Button color={'secondary'} variant={'contained'} style={{color: 'white'}} onClick={() => props.push('/game')}>
+        <Button
+          color={'secondary'}
+          variant={'contained'}
+          style={{color: 'white'}}
+          onClick={() => dispatch(push('/game'))}
+        >
           Current Game
         </Button>
       </Toolbar>
     </AppBar>
-    <Drawer open={props.isOpen} onClose={() => props.closeNavbar()}>
-      {props.user ?
+    <Drawer open={isOpen} onClose={() => dispatch(closeNavbar())}>
+      {user ?
         <div>
           {[
             {
               to: '/',
-              onClick: props.closeNavbar,
+              onClick: () => dispatch(closeNavbar()),
               icon: <Home/>,
               text: 'Home'
             },
             {
-              to: `/user?id=${props.user.id}`,
-              onClick: props.closeNavbar,
+              to: `/user?id=${user.id}`,
+              onClick: () => dispatch(closeNavbar()),
               icon: <Person/>,
               text: 'Profile'
             },
             {
               to: '/game',
-              onClick: props.closeNavbar,
+              onClick: () => dispatch(closeNavbar()),
               icon: <VideogameAsset/>,
               text: 'Current Game'
             },
             {
               to: '/gamelist',
-              onClick: props.closeNavbar,
+              onClick: () => dispatch(closeNavbar()),
               icon: <ViewList/>,
               text: 'Find/Create a Game'
             },
             {
               to: '/settings',
-              onClick: props.closeNavbar,
+              onClick: () => dispatch(closeNavbar()),
               icon: <Settings/>,
               text: 'Settings'
             }
           ].map(({to, onClick, icon, text}, index) => (
               <ListItem key={index} button onClick={() => {
                 onClick();
-                props.push(to);
+                dispatch(push(to));
               }}>
                 <ListItemIcon>
                   {icon}
@@ -135,20 +134,7 @@ const Navbar = (props: NavbarProps) => (
           </ListItem>
         </div>}
     </Drawer>
-  </div>
-);
+  </div>;
+};
 
-const StyledNavbar = withStyles(styles)(Navbar);
-
-const mapStateToProps = ({global: {navbarOpen, user}}: any) => ({
-  isOpen: navbarOpen,
-  user
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  push,
-  openNavbar,
-  closeNavbar
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(StyledNavbar);
+export default Navbar;

@@ -2,7 +2,7 @@ import {connectRouter, routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import {applyMiddleware, compose, createStore} from 'redux';
 import {BlackCard, User, WhitePlayedEntry} from '../api/dao';
-import rootReducer from './modules';
+import createRootReducer from './modules';
 
 declare global {
   interface Window {
@@ -25,7 +25,7 @@ export default ({history, preloadedState = {}}: CreateStore) => {
   }
 
   return createStore(
-    connectRouter(history)(rootReducer),
+    createRootReducer(history),
     preloadedState,
     compose(...enhancers)
   );
@@ -40,6 +40,9 @@ interface HasPlayed {
 interface CanPlay extends HasPlayed {
   judgeId: string;
 }
+
+// The Typescript type of the entire Redux state
+export type StoreState = ReturnType<ReturnType<typeof createRootReducer>>;
 
 export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {
   return !!(

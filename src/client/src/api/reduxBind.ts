@@ -74,6 +74,27 @@ export const bindGameApi = (gameApi: GameApi, store: Store) => {
     return games;
   });
 
+  const kickPlayer = gameApi.kickPlayer;
+  gameApi.kickPlayer = (...args) => kickPlayer(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
+  const banPlayer = gameApi.banPlayer;
+  gameApi.banPlayer = (...args) => banPlayer(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
+  const unbanPlayer = gameApi.unbanPlayer;
+  gameApi.unbanPlayer = (...args) => unbanPlayer(...args).then((gameState) => {
+    store.dispatch(setGameState(gameState));
+
+    return gameState;
+  });
+
   const sendMessage = gameApi.sendMessage;
   gameApi.sendMessage = (...args) => sendMessage(...args).then((gameState) => {
     store.dispatch(setGameState(gameState));

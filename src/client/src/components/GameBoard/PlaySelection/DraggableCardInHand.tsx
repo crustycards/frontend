@@ -1,74 +1,46 @@
 import * as React from 'react';
-import {Component} from 'react';
-import { ConnectDragSource } from 'react-dnd';
-import DragSource from 'react-dnd/lib/DragSource';
-import {connect} from 'react-redux';
-import {bindActionCreators, Dispatch} from 'redux';
-import {BlackCard, User, WhiteCard, WhitePlayedEntry} from '../../../api/dao';
+import {ConnectDragSource, DragSource} from 'react-dnd';
+import {useDispatch, useSelector} from 'react-redux';
+import {User, WhiteCard} from '../../../api/dao';
 import {cardInPlayQueue} from '../../../dndTypes';
-import {canPlay} from '../../../store';
+import {canPlay, StoreState} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
 import CAHWhiteCard from '../../shells/CAHWhiteCard';
 
-// TODO - Remove ?'s from DraggableCardProps properties and fix react-dnd typescript issues
 interface DraggableCardProps {
   card: WhiteCard;
-  whitePlayed: WhitePlayedEntry[];
-  currentBlackCard: BlackCard;
-  user: User;
-  judgeId: string;
-  isDragging?: boolean;
-  connectDragSource?: ConnectDragSource;
-  queueCard(data: {cardId: string}): void;
+  connectDragSource: ConnectDragSource;
+  isDragging: boolean;
 }
 
-class DraggableCard extends Component<DraggableCardProps> {
-  public render() {
-    const {card, whitePlayed, currentBlackCard, user, judgeId, isDragging} = this.props;
-    return this.props.connectDragSource(
-      <div
-        onClick={() => (
-          canPlay({whitePlayed, currentBlackCard, user, judgeId}) &&
-          this.props.queueCard({cardId: this.props.card.id})
-        )}
-        style={{
-          opacity: (isDragging ||
-            !canPlay({
-              whitePlayed,
-              currentBlackCard,
-              user,
-              judgeId
-            }) ? 0.5 : 1
-          )
-        }}
-      >
-        <CAHWhiteCard card={card} />
-      </div>
-    );
-  }
-}
+const DraggableCard = (props: DraggableCardProps) => {
+  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
+  const {whitePlayed, currentBlackCard, judgeId} = game;
+  const dispatch = useDispatch();
 
-const mapStateToProps = ({
-  game: {
-    whitePlayed,
-    currentBlackCard,
-    judgeId
-  },
-  global: {
-    user
-  }
-}: any) => ({
-  whitePlayed,
-  currentBlackCard,
-  user,
-  judgeId
-});
+  return props.connectDragSource(
+    <div
+      onClick={() => (
+        canPlay({whitePlayed, currentBlackCard, user, judgeId}) &&
+        dispatch(queueCard({cardId: props.card.id}))
+      )}
+      style={{
+        opacity: (props.isDragging ||
+          !canPlay({
+            whitePlayed,
+            currentBlackCard,
+            user,
+            judgeId
+          }) ? 0.5 : 1
+        )
+      }}
+    >
+      <CAHWhiteCard card={props.card} />
+    </div>
+  );
+};
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  queueCard
-}, dispatch);
-
-const DragSourceDraggableCard = DragSource(
+export default DragSource(
   cardInPlayQueue,
   {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
   (connect, monitor) => ({
@@ -76,4 +48,3 @@ const DragSourceDraggableCard = DragSource(
     isDragging: monitor.isDragging()
   })
 )(DraggableCard);
-export default connect(mapStateToProps, mapDispatchToProps)(DragSourceDraggableCard);

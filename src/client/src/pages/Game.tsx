@@ -1,10 +1,7 @@
 import {Button, Grid} from '@material-ui/core';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {NavLink} from 'react-router-dom';
-import {ApiContextWrapper} from '../api/context';
-import {GameData, User} from '../api/dao';
-import Api from '../api/model/api';
 import AdminBar from '../components/GameBoard/AdminBar';
 import ArtificialPlayerList from '../components/GameBoard/ArtificialPlayerList';
 import CurrentBlackCard from '../components/GameBoard/CurrentBlackCard';
@@ -13,6 +10,7 @@ import PlayedCards from '../components/GameBoard/PlayedCards';
 import PlayerList from '../components/GameBoard/PlayerList';
 import PlaySelection from '../components/GameBoard/PlaySelection/index';
 import TopBar from '../components/GameBoard/TopBar';
+import {StoreState} from '../store';
 
 const gameAlertStyle = {
   display: 'block',
@@ -21,30 +19,26 @@ const gameAlertStyle = {
   fontSize: '1.5em'
 };
 
-interface GameProps {
-  game: GameData;
-  user: User;
-  api: Api;
-}
+const Game = () => {
+  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
 
-const Game = (props: GameProps) => (
-  <div>
-    {props.game ?
+  return <div>
+    {game ?
       <div>
         <TopBar/>
-        {props.game.ownerId === props.user.id && <AdminBar/>}
+        {game.ownerId === user.id && <AdminBar/>}
         <Grid container spacing={8}>
           <Grid item xs={12} sm={5} md={4}>
             <CurrentBlackCard/>
             <PlayerList/>
-            {(!!props.game.artificialPlayers.length || !!props.game.queuedArtificialPlayers.length)
+            {(!!game.artificialPlayers.length || !!game.queuedArtificialPlayers.length)
               && <ArtificialPlayerList/>}
             <MessageBox/>
           </Grid>
           <Grid item xs={12} sm={7} md={8}>
-            {props.game.hand && <PlaySelection/>}
+            {game.hand && <PlaySelection/>}
             {
-              props.game.queuedPlayers.map((user) => user.id).includes(props.user.id) &&
+              game.queuedPlayers.map((user) => user.id).includes(user.id) &&
               <span
                 className={'center panel'}
                 style={gameAlertStyle}
@@ -54,7 +48,7 @@ const Game = (props: GameProps) => (
             }
             <PlayedCards/>
             {
-              props.game.judgeId === props.user.id &&
+              game.judgeId === user.id &&
               <span
                 className={'center panel'}
                 style={gameAlertStyle}
@@ -63,13 +57,13 @@ const Game = (props: GameProps) => (
               </span>
             }
             {
-              props.game.winner &&
-              props.game.stage === 'notRunning' &&
+              game.winner &&
+              game.stage === 'notRunning' &&
               <span
                 className={'center panel'}
                 style={gameAlertStyle}
               >
-                Winner: {props.game.winner.user ? props.game.winner.user.name : props.game.winner.artificialPlayerName}
+                Winner: {game.winner.user ? game.winner.user.name : game.winner.artificialPlayerName}
               </span>
             }
           </Grid>
@@ -94,11 +88,7 @@ const Game = (props: GameProps) => (
         </div>
       </div>
     }
-  </div>
-);
+  </div>;
+};
 
-const ContextLinkedGame = ApiContextWrapper(Game);
-
-const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
-
-export default connect(mapStateToProps)(ContextLinkedGame);
+export default Game;

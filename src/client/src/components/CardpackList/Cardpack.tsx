@@ -8,177 +8,154 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  IconButton,
-  Theme,
-  WithStyles,
-  withStyles
+  IconButton
 } from '@material-ui/core';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import * as React from 'react';
-import {Component} from 'react';
-import {connect} from 'react-redux';
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {NavLink} from 'react-router-dom';
-import {bindActionCreators, Dispatch} from 'redux';
-import {ApiContextWrapper} from '../../api/context';
-import {Cardpack as CardpackModel, User} from '../../api/dao';
-import Api from '../../api/model/api';
+import {useApi} from '../../api/context';
+import {Cardpack as CardpackModel} from '../../api/dao';
 import {convertTime} from '../../helpers/time';
+import {StoreState} from '../../store';
 import {showStatusMessage} from '../../store/modules/global';
 
-const navItemStyle = {textDecoration: 'none'};
-
-const styles = (theme: Theme) => ({
-});
-
-interface CardpackProps extends WithStyles<typeof styles> {
-  api: Api;
+interface CardpackProps {
   cardpack: CardpackModel;
-  canDelete: boolean;
-  currentUser: User;
-  showStatusMessage(msg: string): void;
   onDelete?(cardpackId: string): void;
 }
 
-interface CardpackState {
-  isLiked: boolean;
-  showDeleteDialog: boolean;
-  isDeleting: boolean;
-}
+const Cardpack = (props: CardpackProps) => {
+  const {currentUser} = useSelector(({global: {user}}: StoreState) => ({currentUser: user}));
+  const dispatch = useDispatch();
+  const cardpackBelongsToCurrentUser = currentUser.id === props.cardpack.owner.id;
+  const [isLiked, setIsLiked] = useState(false);
+  const [loadingIsLiked, setLoadingIsLiked] = useState(!cardpackBelongsToCurrentUser);
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const api = useApi();
 
-class Cardpack extends Component<CardpackProps, CardpackState> {
-  constructor(props: CardpackProps) {
-    super(props);
-
-    this.toggleLike = this.toggleLike.bind(this);
-    this.openDeleteDialog = this.openDeleteDialog.bind(this);
-    this.closeDeleteDialog = this.closeDeleteDialog.bind(this);
-    this.deleteCardpack = this.deleteCardpack.bind(this);
-
-    this.state = {
-      isLiked: this.props.currentUser.id === this.props.cardpack.owner.id ? undefined : null,
-      showDeleteDialog: false,
-      isDeleting: false
-    };
-
-    if (this.state.isLiked === null) {
-      this.props.api.main.cardpackIsFavorited(this.props.cardpack.id)
+  useEffect(() => {
+    if (!cardpackBelongsToCurrentUser) {
+      api.main.cardpackIsFavorited(props.cardpack.id)
         .then((isLiked) => {
-          this.setState({isLiked});
+          setIsLiked(isLiked);
+          setLoadingIsLiked(false);
         });
     }
-  }
+  }, []);
 
-  public render() {
-    return (
-      <div>
-        <Card className='card'>
-          <CardHeader
-            title={this.props.cardpack.name}
-            subheader={`Created ${convertTime(this.props.cardpack.createdAt)}`}
-          />
-          <CardActions>
-            <NavLink to={`/cardpack?id=${this.props.cardpack.id}`} style={navItemStyle}>
-              <Button>
-                View
-              </Button>
-            </NavLink>
+  const toggleLike = async () => {
+    if (!loadingIsLiked) {
+      setLoadingIsLiked(true);
+      if (isLiked) {
+        await api.main.unfavoriteCardpack(props.cardpack.id);
+        setIsLiked(false);
+      } else {
+        await api.main.favoriteCardpack(props.cardpack.id);
+        setIsLiked(true);
+      }
+      setLoadingIsLiked(false);
+    }
+  };
+
+  const openDeleteDialog = () => {
+    setShowDeleteDialog(true);
+  };
+
+  const closeDeleteDialog = () => {
+    setShowDeleteDialog(false);
+  };
+
+  const deleteCardpack = () => {
+    setIsDeleting(true);
+    api.main.deleteCardpack(props.cardpack.id)
+        .then(() => {
+          setIsDeleting(false);
+          closeDeleteDialog();
+          if (props.onDelete) {
+            props.onDelete(props.cardpack.id);
+          }
+        })
+        .catch(() => {
+          setIsDeleting(false);
+          closeDeleteDialog();
+          dispatch(showStatusMessage('Error occured deleting cardpack'));
+        });
+  };
+
+  return (
+    <div>
+      <Card className='card'>
+        <CardHeader
+          title={props.cardpack.name}
+          subheader={`Created ${convertTime(props.cardpack.createdAt)}`}
+        />
+        <CardActions>
+          <NavLink to={`/cardpack?id=${props.cardpack.id}`} style={{textDecoration: 'none'}}>
+            <Button>
+              View
+            </Button>
+          </NavLink>
+          {
+            cardpackBelongsToCurrentUser &&
+            <Button onClick={openDeleteDialog}>
+              Delete
+            </Button>
+          }
+          <div style={{
+            position: 'relative'
+          }}>
             {
-              this.props.canDelete &&
-              <Button onClick={this.openDeleteDialog}>
-                Delete
-              </Button>
-            }
-            {
-              (this.state.isLiked === true || this.state.isLiked === false) &&
+              !cardpackBelongsToCurrentUser &&
               <IconButton
-                onClick={this.toggleLike}
+                onClick={toggleLike}
                 style={{
-                  color: this.state.isLiked ? '#d12743' : undefined,
-                  transition: 'all .2s ease-in'
+                  color: isLiked ? '#d12743' : undefined,
+                  transition: 'all .15s ease-in'
                 }}
               >
                 <FavoriteIcon/>
               </IconButton>
             }
             {
-              this.state.isLiked === null &&
-              <CircularProgress/>
+              loadingIsLiked &&
+              <CircularProgress size={36} style={{
+                position: 'absolute',
+                top: 5,
+                left: 6,
+                zIndex: 1
+              }}/>
             }
-          </CardActions>
-        </Card>
-        {
-            this.state.isDeleting ?
-              <Dialog open={this.state.showDeleteDialog} onClose={this.closeDeleteDialog}>
-                <DialogTitle>Delete Cardpack</DialogTitle>
-                <DialogContent>
-                  <div style={{textAlign: 'center'}}>
-                    <CircularProgress size={50}/>
-                  </div>
-                </DialogContent>
-                <DialogActions>
-                  <Button variant={'outlined'} disabled={true}>Yes</Button>
-                  <Button variant={'contained'} color={'primary'} disabled={true}>No</Button>
-                </DialogActions>
-              </Dialog> :
-              <Dialog open={this.state.showDeleteDialog} onClose={this.closeDeleteDialog}>
-                <DialogTitle>Delete Cardpack</DialogTitle>
-                <DialogContent>This is irreversible, are you sure?</DialogContent>
-                <DialogActions>
-                  <Button variant={'outlined'} onClick={this.deleteCardpack}>Yes</Button>
-                  <Button variant={'contained'} color={'primary'} onClick={this.closeDeleteDialog}>No</Button>
-                </DialogActions>
-              </Dialog>
-        }
-      </div>
-    );
-  }
+          </div>
+        </CardActions>
+      </Card>
+      {
+          isDeleting ?
+            <Dialog open={showDeleteDialog} onClose={closeDeleteDialog}>
+              <DialogTitle>Delete Cardpack</DialogTitle>
+              <DialogContent>
+                <div style={{textAlign: 'center'}}>
+                  <CircularProgress size={50}/>
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <Button variant={'outlined'} disabled={true}>Yes</Button>
+                <Button variant={'contained'} color={'primary'} disabled={true}>No</Button>
+              </DialogActions>
+            </Dialog> :
+            <Dialog open={showDeleteDialog} onClose={closeDeleteDialog}>
+              <DialogTitle>Delete Cardpack</DialogTitle>
+              <DialogContent>This is irreversible, are you sure?</DialogContent>
+              <DialogActions>
+                <Button variant={'outlined'} onClick={deleteCardpack}>Yes</Button>
+                <Button variant={'contained'} color={'primary'} onClick={closeDeleteDialog}>No</Button>
+              </DialogActions>
+            </Dialog>
+      }
+    </div>
+  );
+};
 
-  private async toggleLike() {
-    if (this.state.isLiked) {
-      await this.props.api.main.unfavoriteCardpack(this.props.cardpack.id);
-      this.setState({isLiked: false});
-    } else {
-      await this.props.api.main.favoriteCardpack(this.props.cardpack.id);
-      this.setState({isLiked: true});
-    }
-  }
-
-  private openDeleteDialog() {
-    this.setState({showDeleteDialog: true});
-  }
-
-  private closeDeleteDialog() {
-    this.setState({showDeleteDialog: false});
-  }
-
-  private deleteCardpack() {
-    this.setState({isDeleting: true});
-    this.props.api.main.deleteCardpack(this.props.cardpack.id)
-        .then(() => {
-          this.setState({isDeleting: false});
-          this.closeDeleteDialog();
-          if (this.props.onDelete) {
-            this.props.onDelete(this.props.cardpack.id);
-          }
-        })
-        .catch(() => {
-          this.setState({isDeleting: false});
-          this.closeDeleteDialog();
-          this.props.showStatusMessage('Error occured deleting cardpack');
-        });
-  }
-}
-
-const StyledCardpack = withStyles(styles)(Cardpack);
-
-const ApiWrappedCardpack = ApiContextWrapper(StyledCardpack);
-
-const mapStateToProps = ({global: {user}}: any) => ({
-  currentUser: user
-});
-
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({
-  showStatusMessage
-}, dispatch);
-
-export default connect(mapStateToProps, mapDispatchToProps)(ApiWrappedCardpack);
+export default Cardpack;

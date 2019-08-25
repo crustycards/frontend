@@ -13,13 +13,39 @@ export default (server: Server, gameUrl: string) => {
     },
     {
       method: 'DELETE',
-      path: '/api/game/players',
+      path: '/api/game/players/kick',
       handler: (request: Request, h: ProxyResponseToolkit) => {
-        const {kickerId, kickeeId} = request.query;
-        if (kickerId === undefined || kickeeId === undefined) {
-          throw Boom.badRequest('Must provide query parameters for kickerId and kickeeId');
+        const {kickerUserId, kickeeUserId} = request.query;
+        if (kickerUserId === undefined || kickeeUserId === undefined) {
+          throw Boom.badRequest('Must provide query parameters for kickerUserId and kickeeUserId');
         } else {
-          return h.proxy({uri: `${gameUrl}/${kickerId}/game/players/${kickeeId}`});
+          return h.proxy({uri: `${gameUrl}/${kickerUserId}/game/players/kick/${kickeeUserId}`});
+        }
+      },
+      options: {payload: {parse: false}}
+    },
+    {
+      method: 'DELETE',
+      path: '/api/game/players/ban',
+      handler: (request: Request, h: ProxyResponseToolkit) => {
+        const {bannerUserId, banneeUserId} = request.query;
+        if (bannerUserId === undefined || banneeUserId === undefined) {
+          throw Boom.badRequest('Must provide query parameters for bannerUserId and banneeUserId');
+        } else {
+          return h.proxy({uri: `${gameUrl}/${bannerUserId}/game/players/ban/${banneeUserId}`});
+        }
+      },
+      options: {payload: {parse: false}}
+    },
+    {
+      method: 'PUT',
+      path: '/api/game/players/unban',
+      handler: (request: Request, h: ProxyResponseToolkit) => {
+        const {unbannerUserId, unbanneeUserId} = request.query;
+        if (unbannerUserId === undefined || unbanneeUserId === undefined) {
+          throw Boom.badRequest('Must provide query parameters for unbannerUserId and unbanneeUserId');
+        } else {
+          return h.proxy({uri: `${gameUrl}/${unbannerUserId}/game/players/unban/${unbanneeUserId}`});
         }
       },
       options: {payload: {parse: false}}

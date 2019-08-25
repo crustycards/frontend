@@ -1,7 +1,7 @@
 import {Typography} from '@material-ui/core';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import { BlackCard, LocalGameData, WhiteCard } from '../../api/dao';
+import {useSelector} from 'react-redux';
+import {StoreState} from '../../store';
 import CAHBlackCard from '../shells/CAHBlackCard';
 
 const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
@@ -56,14 +56,14 @@ const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
   return injectedBlackTextElements;
 };
 
-interface CurrentBlackCardProps {
-  card: BlackCard;
-  hand: WhiteCard[];
-  queuedCardIds: string[];
-}
+const CurrentBlackCard = () => {
+  const {card, hand, queuedCardIds} = useSelector(({game}: StoreState) => ({
+    card: game.currentBlackCard,
+    hand: game.hand,
+    queuedCardIds: game.queuedCardIds
+  }));
 
-const CurrentBlackCard = ({card, hand, queuedCardIds}: CurrentBlackCardProps) => (
-  card ?
+  return card ?
     <CAHBlackCard
       card={{
         ...card,
@@ -73,13 +73,7 @@ const CurrentBlackCard = ({card, hand, queuedCardIds}: CurrentBlackCardProps) =>
       }}
     />
     :
-    <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING', id: null, answerFields: null, cardpackId: null}} />
-);
+    <CAHBlackCard hideAnswerCount card={{text: 'GAME NOT RUNNING', id: null, answerFields: null, cardpackId: null}} />;
+};
 
-const mapStateToProps = ({game}: {game: LocalGameData}) => ({
-  card: game.currentBlackCard,
-  hand: game.hand,
-  queuedCardIds: game.queuedCardIds
-});
-
-export default connect(mapStateToProps)(CurrentBlackCard);
+export default CurrentBlackCard;

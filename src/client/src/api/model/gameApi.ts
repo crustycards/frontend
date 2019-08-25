@@ -20,7 +20,9 @@ interface GameApi {
   getGameList(): Promise<GameInfo[]>;
   playCards(cardIds: string[]): Promise<void>;
   unPlayCards(): Promise<void>;
-  kickPlayer(playerId: string): Promise<void>;
+  kickPlayer(playerId: string): Promise<GameData>;
+  banPlayer(playerId: string): Promise<GameData>;
+  unbanPlayer(playerId: string): Promise<GameData>;
   vote(cardId: string): Promise<void>;
   startNextRound(): Promise<void>;
   sendMessage(text: string): Promise<GameData>;

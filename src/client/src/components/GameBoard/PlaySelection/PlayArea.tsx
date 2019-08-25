@@ -1,13 +1,10 @@
 import * as React from 'react';
-import {connect} from 'react-redux';
-import { BlackCard, LocalGameData } from '../../../api/dao';
+import {useSelector} from 'react-redux';
+import {StoreState} from '../../../store';
 import PlaySlot from './PlaySlot';
 
-interface PlayAreaProps {
-  currentBlackCard: BlackCard;
-}
-
-const PlayArea = ({currentBlackCard}: PlayAreaProps) => {
+const PlayArea = () => {
+  const {currentBlackCard} = useSelector(({game: {currentBlackCard}}: StoreState) => ({currentBlackCard}));
   const elems = [];
   for (let i = 0; i < currentBlackCard.answerFields; i++) {
     elems.push(<PlaySlot index={i} key={i}/>);
@@ -15,8 +12,4 @@ const PlayArea = ({currentBlackCard}: PlayAreaProps) => {
   return <div>{elems}</div>;
 };
 
-const mapStateToProps = ({game}: {game: LocalGameData}) => ({
-  currentBlackCard: game.currentBlackCard
-});
-
-export default connect(mapStateToProps)(PlayArea);
+export default PlayArea;
