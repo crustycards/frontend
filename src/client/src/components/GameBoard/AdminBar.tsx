@@ -1,9 +1,10 @@
-import {AppBar, Button, Theme, Toolbar, WithStyles, withStyles} from '@material-ui/core';
+import {AppBar, Button, Toolbar} from '@material-ui/core';
+import {makeStyles} from '@material-ui/styles';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {ApiContextWrapper} from '../../api/context';
-import {GameData, User} from '../../api/dao';
-import Api from '../../api/model/api';
+import {useSelector} from 'react-redux';
+import {useApi} from '../../api/context';
+import {StoreState} from '../../store';
+import {PlayerBanMenu, PlayerKickMenu, PlayerUnbanMenu} from './PlayerManagementMenus';
 
 const buttonStyle = {
   height: '36px',
@@ -12,21 +13,19 @@ const buttonStyle = {
   color: 'white'
 };
 
-const styles = (theme: Theme) => ({
+const useStyles = makeStyles({
   adminBar: {
     borderRadius: '5px',
     margin: '8px 0'
   }
 });
 
-interface AdminBarProps extends WithStyles<typeof styles> {
-  api: Api;
-  user: User;
-  game: GameData;
-}
+const AdminBar = () => {
+  const api = useApi();
+  const classes = useStyles({});
+  const {game} = useSelector(({game}: StoreState) => ({game}));
 
-const AdminBar = (props: AdminBarProps) => (
-  <AppBar className={props.classes.adminBar} position={'static'}>
+  return <AppBar className={classes.adminBar} position={'static'}>
     <Toolbar style={{padding: 0}}>
       <h2
         style={{lineHeight: '66px', margin: '0 10px', fontSize: '1.2em'}}
@@ -35,48 +34,41 @@ const AdminBar = (props: AdminBarProps) => (
       </h2>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>
+        <PlayerKickMenu buttonStyle={buttonStyle}/>
+        <PlayerBanMenu buttonStyle={buttonStyle}/>
+        <PlayerUnbanMenu buttonStyle={buttonStyle}/>
+        <Button
+          color={'secondary'}
+          variant={'contained'}
+          onClick={() => api.game.addArtificialPlayers(1)}
+          style={buttonStyle}
+        >
+          Add AI
+        </Button>
+        <Button
+          color={'secondary'}
+          variant={'contained'}
+          onClick={() => api.game.removeArtificialPlayers(1)}
+          style={buttonStyle}
+          disabled={!game.artificialPlayers.length && !game.queuedArtificialPlayers.length}
+        >
+          Remove AI
+        </Button>
         {
-          props.game.ownerId === props.user.id &&
+          game.stage === 'notRunning' ?
           <Button
             color={'secondary'}
             variant={'contained'}
-            onClick={() => props.api.game.addArtificialPlayers(1)}
-            style={buttonStyle}
-          >
-            Add Artificial Player
-          </Button>
-        }
-        {
-          props.game.ownerId === props.user.id &&
-          <Button
-            color={'secondary'}
-            variant={'contained'}
-            onClick={() => props.api.game.removeArtificialPlayers(1)}
-            style={buttonStyle}
-            disabled={!props.game.artificialPlayers.length && !props.game.queuedArtificialPlayers.length}
-          >
-            Remove Artificial Player
-          </Button>
-        }
-        {
-          props.game.ownerId === props.user.id &&
-          props.game.stage === 'notRunning' &&
-          <Button
-            color={'secondary'}
-            variant={'contained'}
-            onClick={props.api.game.startGame}
+            onClick={api.game.startGame}
             style={buttonStyle}
           >
             Start Game
           </Button>
-        }
-        {
-          props.game.ownerId === props.user.id &&
-          props.game.stage !== 'notRunning' &&
+          :
           <Button
             color={'secondary'}
             variant={'contained'}
-            onClick={props.api.game.stopGame}
+            onClick={api.game.stopGame}
             style={buttonStyle}
           >
             Stop Game
@@ -84,13 +76,7 @@ const AdminBar = (props: AdminBarProps) => (
         }
       </div>
     </Toolbar>
-  </AppBar>
-);
+  </AppBar>;
+};
 
-const StyledAdminBar = withStyles(styles)(AdminBar);
-
-const ApiWrappedAdminBar = ApiContextWrapper(StyledAdminBar);
-
-const mapStateToProps = ({game, global: {user}}: any) => ({game, user});
-
-export default connect(mapStateToProps)(ApiWrappedAdminBar);
+export default AdminBar;

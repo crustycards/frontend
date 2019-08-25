@@ -1,33 +1,23 @@
 import {Button} from '@material-ui/core';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {ApiContextWrapper} from '../../../api/context';
-import {BlackCard, User, WhitePlayedEntry} from '../../../api/dao';
-import Api from '../../../api/model/api';
-import {canPlay, hasPlayed} from '../../../store';
+import {useSelector} from 'react-redux';
+import {useApi} from '../../../api/context';
+import {canPlay, hasPlayed, StoreState} from '../../../store';
 import PlayArea from './PlayArea';
 import Tray from './Tray';
 
-interface PlaySelectionProps {
-  queuedCardIds: string[];
-  stage: string;
-  whitePlayed: WhitePlayedEntry[];
-  currentBlackCard: BlackCard;
-  user: User;
-  judgeId: string;
-  api: Api;
-}
+const PlaySelection = () => {
+  const api = useApi();
+  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
+  const {
+    queuedCardIds,
+    stage,
+    whitePlayed,
+    currentBlackCard,
+    judgeId
+  } = game;
 
-const PlaySelection = ({
-  queuedCardIds,
-  stage,
-  whitePlayed,
-  currentBlackCard,
-  user,
-  judgeId,
-  api
-}: PlaySelectionProps) => (
-  <div>
+  return <div>
     {
       canPlay({whitePlayed, currentBlackCard, user, judgeId}) ?
         <div>
@@ -61,29 +51,7 @@ const PlaySelection = ({
           }
         </div>
     }
-  </div>
-);
+  </div>;
+};
 
-const ContextLinkedPlaySelection = ApiContextWrapper(PlaySelection);
-
-const mapStateToProps = ({
-  game: {
-    queuedCardIds,
-    stage,
-    whitePlayed,
-    currentBlackCard,
-    judgeId
-  },
-  global: {
-    user
-  }
-}: any) => ({
-  queuedCardIds,
-  stage,
-  whitePlayed,
-  currentBlackCard,
-  user,
-  judgeId
-});
-
-export default connect(mapStateToProps)(ContextLinkedPlaySelection);
+export default PlaySelection;

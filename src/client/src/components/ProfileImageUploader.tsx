@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {Component} from 'react';
-import { FileWithPreview } from 'react-dropzone';
+import {FileWithPath} from 'react-dropzone';
 import {ApiContextWrapper} from '../api/context';
 import Api from '../api/model/api';
 import FileUploader from './FileUploader';
@@ -28,8 +28,8 @@ class ProfileImageUploader extends Component<UploaderProps> {
   }
 
   private async handleUpload(
-    acceptedFiles: FileWithPreview[],
-    rejectedFiles: FileWithPreview[],
+    acceptedFiles: FileWithPath[],
+    rejectedFiles: FileWithPath[],
     event: React.DragEvent<HTMLDivElement>
   ) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {

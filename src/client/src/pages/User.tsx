@@ -123,7 +123,6 @@ class User extends Component<UserProps, UserState> {
               }
               <CardpackList
                 cardpacks={this.state.cardpacks}
-                canDelete={this.state.isCurrentUser}
                 onDelete={(id) => {
                   this.setState({
                     cardpacks: this.state.cardpacks.filter((cardpack) => cardpack.id !== id)

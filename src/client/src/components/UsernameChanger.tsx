@@ -1,72 +1,52 @@
 import {Button, CircularProgress, TextField} from '@material-ui/core';
 import * as React from 'react';
-import {Component} from 'react';
-import {ApiContextWrapper} from '../api/context';
-import Api from '../api/model/api';
+import {useState} from 'react';
+import {useApi} from '../api/context';
 
 interface UsernameChangerProps {
-  api: Api;
   onSubmit?(username: string): void;
 }
 
-interface UsernameChangerState {
-  newUsername: string;
-  isLoading: boolean;
-}
+const UsernameChanger = (props: UsernameChangerProps) => {
+  const [newUsername, setNewUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const api = useApi();
 
-class UsernameChanger extends Component<UsernameChangerProps, UsernameChangerState> {
-  constructor(props: UsernameChangerProps) {
-    super(props);
-
-    this.setUsername = this.setUsername.bind(this);
-    this.handleNewUsernameChange = this.handleNewUsernameChange.bind(this);
-
-    this.state = {
-      newUsername: '',
-      isLoading: false
-    };
-  }
-
-  public render() {
-    return (
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        this.setUsername();
-      }}>
-        <TextField
-          style={{marginTop: '0'}}
-          label={'New Username'}
-          value={this.state.newUsername}
-          onChange={this.handleNewUsernameChange}
-        />
-        <Button
-          style={{margin: '13px 0 0 10px'}}
-          color={'primary'}
-          variant={'contained'}
-          type={'submit'}
-          disabled={this.state.newUsername === '' || this.state.isLoading}
-        >
-          {this.state.isLoading ? <CircularProgress size={24}/> : 'Save'}
-        </Button>
-      </form>
-    );
-  }
-
-  private setUsername() {
-    this.setState({isLoading: true});
-    this.props.api.main.setUsername(this.state.newUsername)
+  const setUsername = () => {
+    setIsLoading(true);
+    api.main.setUsername(newUsername)
         .then(() => {
-          if (this.props.onSubmit) {
-            this.props.onSubmit(this.state.newUsername);
+          if (props.onSubmit) {
+            props.onSubmit(newUsername);
           }
 
-          this.setState({isLoading: false, newUsername: ''});
+          setNewUsername('');
+          setIsLoading(false);
         });
-  }
+  };
 
-  private handleNewUsernameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    this.setState({newUsername: e.target.value});
-  }
-}
+  return (
+    <form onSubmit={(e) => {
+      e.preventDefault();
+      setUsername();
+    }}>
+      <TextField
+        style={{marginTop: '0'}}
+        label={'New Username'}
+        value={newUsername}
+        onChange={(e) => setNewUsername(e.target.value)}
+      />
+      <Button
+        style={{margin: '13px 0 0 10px'}}
+        color={'primary'}
+        variant={'contained'}
+        type={'submit'}
+        disabled={newUsername === '' || isLoading}
+      >
+        {isLoading ? <CircularProgress size={24}/> : 'Save'}
+      </Button>
+    </form>
+  );
+};
 
-export default ApiContextWrapper(UsernameChanger);
+export default UsernameChanger;

@@ -1,23 +1,23 @@
 import {Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import * as React from 'react';
-import {ApiContextWrapper} from '../api/context';
+import {useApi} from '../api/context';
 import {User} from '../api/dao';
-import Api from '../api/model/api';
 
 interface SentFriendRequestProps {
-  api: Api;
   user: User;
 }
 
-const SentFriendRequest = (props: SentFriendRequestProps) => (
-  <Card className='card'>
+const SentFriendRequest = (props: SentFriendRequestProps) => {
+  const api = useApi();
+
+  return <Card className='card'>
     <CardHeader
       title={props.user.name}
     />
     <CardActions>
-      <Button onClick={props.api.main.removeFriend.bind(null, props.user.id)}>Revoke</Button>
+      <Button onClick={api.main.removeFriend.bind(null, props.user.id)}>Revoke</Button>
     </CardActions>
-  </Card>
-);
+  </Card>;
+};
 
-export default ApiContextWrapper(SentFriendRequest);
+export default SentFriendRequest;

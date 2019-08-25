@@ -101,7 +101,8 @@ export const setGameState = (payload: GameData) => ({
   payload
 });
 
-export const queueCard = (payload: {index: number, cardId: string}) => ({
+// TODO - Remove index argument since it's not used.
+export const queueCard = (payload: {cardId: string}) => ({
   type: QUEUE_CARD,
   payload
 });

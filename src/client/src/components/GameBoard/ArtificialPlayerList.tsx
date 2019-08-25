@@ -1,7 +1,8 @@
 import {List, ListItem, ListItemText, ListSubheader} from '@material-ui/core';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {ArtificialPlayer, LocalGameData} from '../../api/dao';
+import {useSelector} from 'react-redux';
+import {ArtificialPlayer} from '../../api/dao';
+import {StoreState} from '../../store';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
@@ -29,13 +30,13 @@ const renderQueuedArtificialPlayer = (player: ArtificialPlayer) => (
   </ListItem>
 );
 
-interface ArtificialPlayerListProps {
-  artificialPlayers: ArtificialPlayer[];
-  queuedArtificialPlayers: ArtificialPlayer[];
-}
+const ArtificialPlayerList = () => {
+  const {artificialPlayers, queuedArtificialPlayers} = useSelector(({game}: StoreState) => ({
+    artificialPlayers: game.artificialPlayers,
+    queuedArtificialPlayers: game.queuedArtificialPlayers
+  }));
 
-const ArtificialPlayerList = ({artificialPlayers, queuedArtificialPlayers}: ArtificialPlayerListProps) => (
-  <div className={'panel'}>
+  return <div className={'panel'}>
     <List subheader={<ListSubheader>Artificial Players</ListSubheader>} style={styles}>
       {artificialPlayers.map((player, index) => {
         return (<div key={index}>
@@ -47,12 +48,7 @@ const ArtificialPlayerList = ({artificialPlayers, queuedArtificialPlayers}: Arti
         </div>
       ))}
     </List>
-  </div>
-);
+  </div>;
+};
 
-const mapStateToProps = ({game}: {game: LocalGameData}) => ({
-  artificialPlayers: game.artificialPlayers,
-  queuedArtificialPlayers: game.queuedArtificialPlayers
-});
-
-export default connect(mapStateToProps)(ArtificialPlayerList);
+export default ArtificialPlayerList;

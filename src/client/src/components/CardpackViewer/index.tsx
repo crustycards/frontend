@@ -1,7 +1,7 @@
 import {Button, CircularProgress, Grid, LinearProgress, Tab, Tabs} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
-import { FileWithPreview } from 'react-dropzone';
+import {FileWithPath} from 'react-dropzone';
 import {connect} from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 import {ApiContextWrapper} from '../../api/context';
@@ -32,7 +32,7 @@ interface CardpackViewerState {
 
 class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState> {
 
-  private static convertFileToCardpackData(file: FileWithPreview) {
+  private static convertFileToCardpackData(file: FileWithPath) {
     return new Promise((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
@@ -258,8 +258,8 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
   }
 
   private async handleUpload(
-    acceptedFiles: FileWithPreview[],
-    rejectedFiles: FileWithPreview[],
+    acceptedFiles: FileWithPath[],
+    rejectedFiles: FileWithPath[],
     event: React.DragEvent<HTMLDivElement>
   ) {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {

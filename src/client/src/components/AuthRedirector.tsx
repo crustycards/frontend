@@ -1,29 +1,21 @@
 import * as React from 'react';
-import {Component} from 'react';
-import {connect} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Redirect} from 'react-router-dom';
-import {User} from '../api/dao';
+import {StoreState} from '../store';
 
-interface AuthRedirectorProps {
-  user: User;
-  path: string;
-}
+const AuthRedirector = () => {
+  const {user, path} = useSelector(({global: {user}, router}: StoreState) => ({
+    user,
+    path: router.location.pathname
+  }));
 
-class AuthRedirector extends Component<AuthRedirectorProps> {
-  public render() {
-    if (this.props.user && this.props.path === '/login') {
-      return <Redirect to={'/'} />;
-    } else if (!this.props.user && this.props.path !== '/login') {
-      return <Redirect to={'/login'} />;
-    } else {
-      return null;
-    }
+  if (user && path === '/login') {
+    return <Redirect to={'/'} />;
+  } else if (!user && path !== '/login') {
+    return <Redirect to={'/login'} />;
+  } else {
+    return null;
   }
-}
+};
 
-const mapStateToProps = ({global: {user}, router}: any) => ({
-  user,
-  path: router.location.pathname
-});
-
-export default connect(mapStateToProps)(AuthRedirector);
+export default AuthRedirector;

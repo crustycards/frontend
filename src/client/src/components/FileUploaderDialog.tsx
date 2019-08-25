@@ -7,7 +7,7 @@ import {
   WithStyles
 } from '@material-ui/core';
 import * as React from 'react';
-import { FileWithPreview } from 'react-dropzone';
+import {FileWithPath} from 'react-dropzone';
 import FileUploader from './FileUploader';
 
 const styles = (theme: Theme) => ({
@@ -24,8 +24,8 @@ interface UploaderProps extends WithStyles<typeof styles> {
   type?: string;
   isVisible: boolean;
   onUpload(
-      acceptedFiles: FileWithPreview[],
-      rejectedFiles: FileWithPreview[],
+      acceptedFiles: FileWithPath[],
+      rejectedFiles: FileWithPath[],
       event: React.DragEvent<HTMLDivElement>
   ): void;
   onClose?(): void;

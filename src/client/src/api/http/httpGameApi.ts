@@ -129,10 +129,33 @@ export default class HttpGameApi implements GameApi {
   }
 
   public kickPlayer(playerId: string) {
-    return axios.delete(`/api/game/players?${queryString.stringify({
-      kickerId: this.userId,
-      kickeeId: playerId
-    })}`).then(() => null);
+    return axios.delete(`/api/game/players/kick?${queryString.stringify({
+      kickerUserId: this.userId,
+      kickeeUserId: playerId
+    })}`)
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  public banPlayer(playerId: string) {
+    return axios.delete(`/api/game/players/ban?${queryString.stringify({
+      bannerUserId: this.userId,
+      banneeUserId: playerId
+    })}`)
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  public unbanPlayer(playerId: string) {
+    return axios.put(`/api/game/players/unban?${queryString.stringify({
+      unbannerUserId: this.userId,
+      unbanneeUserId: playerId
+    })}`)
+      .then((response) => {
+        return response.data;
+      });
   }
 
   public vote(cardId: string) {

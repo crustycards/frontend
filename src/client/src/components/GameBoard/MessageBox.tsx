@@ -1,10 +1,10 @@
 import {Button, Divider, Paper, TextField, Typography} from '@material-ui/core';
 import * as React from 'react';
-import {connect} from 'react-redux';
+import {connect, useSelector} from 'react-redux';
 import {Dispatch} from 'redux';
 import {Field, FormErrors, InjectedFormProps, reduxForm, reset, SubmitHandler} from 'redux-form';
-import {ApiContextWrapper} from '../../api/context';
-import Api from '../../api/model/api';
+import {useApi} from '../../api/context';
+import { StoreState } from '../../store';
 
 const renderTextField = ({
   input,
@@ -36,12 +36,15 @@ const validate = (values: MessageFormData) => {
 };
 
 interface MessageBoxProps extends InjectedFormProps {
-  api: Api;
   handleSubmit: SubmitHandler<MessageFormData>;
-  messages: any[];
 }
 
 const MessageBox = (props: MessageBoxProps) => {
+  const api = useApi();
+  const {messages} = useSelector(({game}: StoreState) => ({
+    messages: game.messages
+  }));
+
   return (
     <div className={'panel'}>
       <h2 className={'center'}>Chat</h2>
@@ -54,7 +57,7 @@ const MessageBox = (props: MessageBoxProps) => {
           flexDirection: 'column-reverse'
         }}
       >
-        {props.messages.map((message, i) => (
+        {messages.map((message, i) => (
           <Paper
             key={i}
             style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}
@@ -68,7 +71,7 @@ const MessageBox = (props: MessageBoxProps) => {
       <form
         autoComplete={'off'}
         onSubmit={props.handleSubmit(({messageText}) => {
-          props.api.game.sendMessage(messageText);
+          api.game.sendMessage(messageText);
         })}
       >
         <Field
@@ -90,14 +93,6 @@ const MessageBox = (props: MessageBoxProps) => {
   );
 };
 
-const ContextLinkedMessageBox = ApiContextWrapper(MessageBox);
-
-const mapStateToProps = ({game}: any) => ({
-  messages: game.messages
-});
-
-const ReduxConnectedMessageBox = connect(mapStateToProps)(ContextLinkedMessageBox);
-
 const onSubmitSuccess = (_: any, dispatch: Dispatch) =>
   dispatch(reset('gameMessage'));
 
@@ -105,4 +100,4 @@ export default reduxForm({
   form: 'gameMessage',
   validate,
   onSubmitSuccess
-})(ReduxConnectedMessageBox);
+})(MessageBox);

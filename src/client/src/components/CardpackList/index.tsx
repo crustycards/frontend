@@ -4,7 +4,6 @@ import Cardpack from './Cardpack';
 
 interface CardpackListProps {
   cardpacks: CardpackDao[];
-  canDelete: boolean;
   onDelete?(cardpackId: string): void;
 }
 
@@ -14,7 +13,6 @@ const CardpackList = (props: CardpackListProps) => (
       <Cardpack
         key={index}
         cardpack={cardpack}
-        canDelete={props.canDelete}
         onDelete={props.onDelete}
       />
     ))}

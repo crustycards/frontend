@@ -4,124 +4,99 @@ import {
   CardActions,
   CardHeader,
   CircularProgress,
-  Theme,
-  withStyles,
-  WithStyles
+  Theme
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
+import {makeStyles} from '@material-ui/styles';
+import {push} from 'connected-react-router';
 import * as React from 'react';
-import {Component} from 'react';
-import {connect} from 'react-redux';
-import {ApiContextWrapper} from '../../api/context';
-import {GameData, GameInfo} from '../../api/dao';
-import Api from '../../api/model/api';
+import {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
+import {useApi} from '../../api/context';
+import {StoreState} from '../../store';
 
-const styles = (theme: Theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   leftIcon: {
     marginRight: theme.spacing(1)
   }
-});
+}));
 
-interface GameListProps extends WithStyles<typeof styles> {
-  api: Api;
-  games: GameInfo[];
-  game?: GameData;
-}
+const GameList = () => {
+  const api = useApi();
+  const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState(true);
+  const {game, games} = useSelector(({game, games}: StoreState) => ({game, games}));
+  const classes = useStyles({});
 
-interface GameListState {
-  isLoading: boolean;
-}
+  const refresh = () => {
+    setIsLoading(true);
+    api.game.getGameList().then(() => setIsLoading(false));
+  };
 
-class GameList extends Component<GameListProps, GameListState> {
-  constructor(props: GameListProps) {
-    super(props);
+  useEffect(() => {
+    refresh();
+  }, []);
 
-    this.state = {
-      isLoading: true
-    };
-
-    this.refresh = this.refresh.bind(this);
+  if (isLoading) {
+    return <div>
+      <h2>Games</h2>
+      <div className='center'><CircularProgress size={80} thickness={5} /></div>
+    </div>;
   }
 
-  public componentDidMount() {
-    this.refresh();
-  }
-
-  public render() {
-    if (this.state.isLoading) {
-      return <div>
-        <h2>Games</h2>
-        <div className='center'><CircularProgress size={80} thickness={5} /></div>
-      </div>;
-    }
-
-    return (
-      <div>
-        <h2>Games</h2>
-        <Button
-          size={'small'}
-          style={{marginBottom: '5px'}}
-          onClick={this.refresh}
-          variant={'contained'}
-          color={'secondary'}
+  return (
+    <div>
+      <h2>Games</h2>
+      <Button
+        size={'small'}
+        style={{marginBottom: '5px'}}
+        onClick={refresh}
+        variant={'contained'}
+        color={'secondary'}
+      >
+        <RefreshIcon className={classes.leftIcon}/>
+        Refresh
+      </Button>
+      {games.map((gameInfo, index) => (
+        <Card
+          style={
+            game && game.name === gameInfo.name ?
+              {filter: 'brightness(90%)'}
+              :
+              {}
+          }
+          key={index}
+          className='card'
         >
-          <RefreshIcon className={this.props.classes.leftIcon}/>
-          Refresh
-        </Button>
-        {this.props.games.map((game, index) => (
-          <Card
-            style={
-              this.props.game &&
-              this.props.game.name === game.name ?
-                {filter: 'brightness(90%)'}
-                :
-                {}
+          <CardHeader
+            title={gameInfo.name}
+            subheader={`Host: ${gameInfo.owner.name}`}
+          />
+          <CardActions>
+            {
+              game && game.name === gameInfo.name ?
+                <Button onClick={() => {
+                  api.game.leaveGame().then(refresh);
+                }}>Leave</Button> :
+                <Button onClick={() => {
+                  api.game.joinGame(gameInfo.name).then(() => {
+                    dispatch(push('/game'));
+                  });
+                }}>Join</Button>
             }
-            key={index}
-            className='card'
-          >
-            <CardHeader
-              title={game.name}
-              subheader={`Host: ${game.owner.name}`}
-            />
-            <CardActions>
-              {
-                this.props.game && this.props.game.name === game.name ?
-                  <Button onClick={() => {
-                    this.props.api.game.leaveGame().then(this.refresh);
-                  }}>Leave</Button> :
-                  <Button onClick={() => {
-                    this.props.api.game.joinGame(game.name);
-                  }}>Join</Button> // Make join game and create game buttons bring you directly to current game page
-              }
-            </CardActions>
-          </Card>
-        ))}
-        {
-          this.props.games.length === 0 &&
-          <div className='center'>
-            <span>
-              There are no open games to join
-            </span>
-          </div>
-        }
-      </div>
-    );
-  }
+          </CardActions>
+        </Card>
+      ))}
+      {
+        games.length === 0 &&
+        <div className='center'>
+          <span>
+            There are no open games to join
+          </span>
+        </div>
+      }
+    </div>
+  );
+};
 
-  private refresh() {
-    this.setState({isLoading: true});
-    this.props.api.game.getGameList().then(() => this.setState({isLoading: false}));
-  }
-}
-
-const ContextLinkedGameList = ApiContextWrapper(GameList);
-
-const StyledGameList = withStyles(styles)(ContextLinkedGameList);
-
-const mapStateToProps = ({game, games}: any) => ({
-  game,
-  games
-});
-
-export default connect(mapStateToProps)(StyledGameList);
+export default GameList;

@@ -2,8 +2,9 @@ import {List, ListItem, ListItemIcon, ListItemText, ListSubheader} from '@materi
 import Check from '@material-ui/icons/Check';
 import Star from '@material-ui/icons/Star';
 import * as React from 'react';
-import {connect} from 'react-redux';
-import {BlackCard, LocalGameData, Player, WhitePlayedEntry} from '../../api/dao';
+import {connect, useSelector} from 'react-redux';
+import {BlackCard, Player, WhitePlayedEntry} from '../../api/dao';
+import {StoreState} from '../../store';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
@@ -70,17 +71,18 @@ const renderQueuedPlayer = (player: Player) => (
   </ListItem>
 );
 
-interface PlayerListProps {
-  players: Player[];
-  queuedPlayers: Player[];
-  ownerId: string;
-  judgeId: string;
-  whitePlayed: WhitePlayedEntry[];
-  currentBlackCard: BlackCard;
-}
+const PlayerList = () => {
+  const {game} = useSelector(({game}: StoreState) => ({game}));
+  const {
+    players,
+    queuedPlayers,
+    ownerId,
+    judgeId,
+    whitePlayed,
+    currentBlackCard
+  } = game;
 
-const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, currentBlackCard}: PlayerListProps) => (
-  <div className={'panel'}>
+  return <div className={'panel'}>
     <List subheader={<ListSubheader>Players</ListSubheader>} style={styles}>
       {players.map((player, index) => {
         return (<div key={index}>
@@ -103,16 +105,7 @@ const PlayerList = ({players, queuedPlayers, ownerId, judgeId, whitePlayed, curr
         </div>
       ))}
     </List>
-  </div>
-);
+  </div>;
+};
 
-const mapStateToProps = ({game}: {game: LocalGameData}) => ({
-  players: game.players,
-  queuedPlayers: game.queuedPlayers,
-  ownerId: game.ownerId,
-  judgeId: game.judgeId,
-  whitePlayed: game.whitePlayed,
-  currentBlackCard: game.currentBlackCard
-});
-
-export default connect(mapStateToProps)(PlayerList);
+export default PlayerList;
