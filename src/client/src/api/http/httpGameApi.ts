@@ -19,22 +19,6 @@ export default class HttpGameApi implements GameApi {
     handSize: number,
     cardpackIds: string[]
   ) {
-    if (maxPlayers < 4 || maxPlayers > 20) {
-      const message = 'Max players must be between 4 and 20';
-      return Promise.reject(message);
-    }
-    if (maxScore < 4 || maxScore > 20) {
-      const message = 'Max score must be between 4 and 20';
-      return Promise.reject(message);
-    }
-    if (!gameName) {
-      const message = 'Game name cannot be blank';
-      return Promise.reject(message);
-    }
-    if (!cardpackIds.length) {
-      const message = 'Must select at least one cardpack';
-      return Promise.reject(message);
-    }
     return axios.post(
       `/api/game/create/${this.userId}`,
       {
