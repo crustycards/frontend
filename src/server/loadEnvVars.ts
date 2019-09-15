@@ -8,7 +8,8 @@ const requiredVars = [
   'OAUTH_ENCRYPTION_PASSWORD',
   'API_URL',
   'GAME_SERVER_URL',
-  'AUTH_SERVER_URL'
+  'AUTH_SERVER_URL',
+  'RABBITMQ_URI'
 ];
 
 const assertVarsExist = () => {
@@ -24,11 +25,7 @@ const assertVarsExist = () => {
   }
 };
 
-interface StringHashObject {
-  [indexer: string]: string;
-}
-
-const defaultVals: StringHashObject = {
+const defaultVals: {[indexer: string]: string} = {
   NODE_ENV: 'production',
   PORT: '80'
 };

@@ -7,6 +7,7 @@ import {DndProvider} from 'react-dnd';
 import DragDropHTML5Backend from 'react-dnd-html5-backend';
 import {Provider} from 'react-redux';
 import {Route, Switch} from 'react-router';
+import * as Socket from 'socket.io-client';
 import {Provider as ApiContextProvider} from './api/context';
 import HttpAuthApi from './api/http/httpAuthApi';
 import HttpGameApi from './api/http/httpGameApi';
@@ -46,13 +47,28 @@ const store = createStore({history});
 
 bindGameApi(gameApi, store);
 
+// TODO - Add a fallback if socket connection fails
+const socket = Socket({
+  reconnection: true,
+  reconnectionDelay: 500,
+  reconnectionAttempts: Infinity
+});
+socket.on('connect', () => {
+  gameApi.getGameState(); // Socket will tell the client when the game state is updated
+                          // but we still need to fetch it for the initial render
+}).on('reconnect', () => {
+  gameApi.getGameState(); // Same reason as above
+}).on('message', (message: string) => {
+  if (message === 'GAME_UPDATED') {
+    gameApi.getGameState();
+  } else if (message === 'GAME_LIST_UPDATED') {
+    gameApi.getGameList();
+  }
+});
+
 // TODO - Uncomment two lines below once HTTPS is setup
 // initFirebase((payload) => console.log(payload))
 //   .then((token) => authApi.linkSessionToFirebase(token));
-
-setInterval(() => {
-  gameApi.getGameState();
-}, 500); // TODO - Find a way to remove this intermittent polling
 
 const theme = createMuiTheme({palette: {primary: blue, secondary: {main: '#43c6a8'}}});
 
