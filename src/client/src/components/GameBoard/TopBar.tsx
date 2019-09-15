@@ -2,10 +2,12 @@ import {AppBar, Button, Theme, Toolbar} from '@material-ui/core';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
+import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useDispatch} from 'react-redux';
 import {useApi} from '../../api/context';
 import {StoreState} from '../../store';
+import ViewPastRoundsDialog from './ViewPastRoundsDialog';
 
 const buttonStyle = {
   height: '36px',
@@ -23,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 
 const TopBar = () => {
   const api = useApi();
+  const [showPastRoundsDialog, setShowPastRoundsDialog] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
   const classes = useStyles({});
   const dispatch = useDispatch();
@@ -45,6 +48,15 @@ const TopBar = () => {
       </div>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>
+        <Button
+            color={'primary'}
+            variant={'contained'}
+            onClick={() => setShowPastRoundsDialog(!showPastRoundsDialog)}
+            style={buttonStyle}
+        >
+          Past Rounds
+        </Button>
+        <ViewPastRoundsDialog open={showPastRoundsDialog} onClose={() => setShowPastRoundsDialog(false)}/>
         {
           game.stage === 'roundEndPhase' &&
           <Button

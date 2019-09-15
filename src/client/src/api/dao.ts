@@ -43,15 +43,9 @@ export class Message {
   public text: string;
 }
 
-export class PlayerId {
-  public artificialPlayerUUID: string;
-  public realUser: boolean;
-  public userId: string;
-}
-
 export class WhitePlayedEntry {
   public cards: WhiteCard[];
-  public playerId: PlayerId;
+  public player: RealOrArtificialPlayer;
 }
 
 export class ArtificialPlayer {
@@ -59,9 +53,16 @@ export class ArtificialPlayer {
   public score: number;
 }
 
-export class Winner {
-  public user: User;
-  public artificialPlayerName: string;
+export class RealOrArtificialPlayer {
+  public user?: User;
+  public artificialPlayerName?: string;
+}
+
+export class PastRound {
+  public blackCard: BlackCard;
+  public whitePlayed: WhitePlayedEntry[];
+  public judge: User;
+  public winner: RealOrArtificialPlayer;
 }
 
 export class GameData {
@@ -80,8 +81,9 @@ export class GameData {
   public whitePlayed: WhitePlayedEntry[];
   public whitePlayedAnonymous: WhiteCard[][];
   public currentBlackCard: BlackCard;
-  public winner: Winner;
+  public winner: RealOrArtificialPlayer;
   public messages: Message[];
+  public pastRounds: PastRound[];
 }
 
 export class LocalGameData extends GameData {

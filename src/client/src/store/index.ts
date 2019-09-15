@@ -48,9 +48,11 @@ export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {
   return !!(
     whitePlayed &&
     user &&
-    whitePlayed.find((entry) => entry.playerId.userId === user.id) &&
+    whitePlayed.find((entry) => entry.player.user && entry.player.user.id === user.id) &&
     currentBlackCard &&
-    whitePlayed.find((entry) => entry.playerId.userId === user.id).cards.length === currentBlackCard.answerFields
+    whitePlayed.find((entry) => (
+      entry.player.user && entry.player.user.id === user.id
+    )).cards.length === currentBlackCard.answerFields
   );
 };
 
