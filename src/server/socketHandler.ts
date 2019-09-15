@@ -21,11 +21,9 @@ class SocketHandler {
     const io = SocketIO.listen(serverListener);
     io.sockets.on('connection', async (socket) => {
       const socketOwner = await this.getSocketOwner(socket);
-      console.log(`${socketOwner ? socketOwner.name : 'Anonymous user'} just connected!`);
       this.addSocket(socket, socketOwner);
 
       socket.on('disconnect', () => {
-        console.log(`${socketOwner ? socketOwner.name : 'Anonymous user'} disconnected!`);
         this.removeSocket(socket, socketOwner);
       });
     });

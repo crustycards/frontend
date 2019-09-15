@@ -48,6 +48,7 @@ const GameCreator = () => {
   const [maxPlayers, setMaxPlayers] = useState(8);
   const [maxScore, setMaxScore] = useState(8);
   const [handSize, setHandSize] = useState(8);
+  const [endlessMode, setEndlessMode] = useState(false);
   const [userCardpacks, setUserCardpacks] = useState([] as Cardpack[]);
   const [subscribedCardpacks, setSubscribedCardpacks] = useState([] as Cardpack[]);
   const [cardpacksSelected, setCardpacksSelected] = useState([] as string[]);
@@ -65,12 +66,21 @@ const GameCreator = () => {
     }
   };
 
+  const emptyFieldErrors = [];
+  if (!gameName) {
+    emptyFieldErrors.push('Game name cannot be blank');
+  }
+  if (!cardpacksSelected.length) {
+    emptyFieldErrors.push('Must select at least one cardpack');
+  }
+  const canSubmit = !emptyFieldErrors.length;
+
   const handleSubmit = () => {
     setIsCreatingGame(true);
     api.game.createGame(
       gameName,
       maxPlayers,
-      maxScore,
+      endlessMode ? 0 : maxScore,
       handSize,
       cardpacksSelected
     ).then(() => {
@@ -118,9 +128,16 @@ const GameCreator = () => {
             <Select
               value={maxScore}
               onChange={(e) => setMaxScore(parseInt(e.target.value as string, 10))}
+              disabled={endlessMode}
             >
               {generateNumberedMenuItems(4, 20)}
             </Select>
+            <br/>
+            <span>Endless Mode: </span>
+            <Checkbox
+              checked={endlessMode}
+              onChange={() => setEndlessMode(!endlessMode)}
+            />
             <br/>
             <span>Hand Size: </span>
             <Select
@@ -175,7 +192,10 @@ const GameCreator = () => {
         </Grid>
       </div>
       <div className={`center ${classes.wrapper}`}>
-        <Button disabled={isCreatingGame} type='submit' onClick={handleSubmit}>Submit</Button>
+        <Button type='submit' disabled={isCreatingGame || !canSubmit} onClick={handleSubmit}>Submit</Button>
+        {emptyFieldErrors.map((error, index) => (
+          <div key={index}>{error}</div>
+        ))}
         {isCreatingGame && <CircularProgress size={24} className={classes.buttonProgress} />}
       </div>
     </div>
