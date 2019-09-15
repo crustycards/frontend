@@ -92,9 +92,9 @@ const PlayerList = () => {
             judgeId,
             (
               whitePlayed &&
-              whitePlayed.find((entry) => entry.playerId.userId === player.id) &&
+              whitePlayed.find((entry) => entry.player.user && entry.player.user.id === player.id) &&
               currentBlackCard &&
-              whitePlayed.find((entry) => entry.playerId.userId === player.id)
+              whitePlayed.find((entry) => entry.player.user && entry.player.user.id === player.id)
                 .cards.length === currentBlackCard.answerFields
             )
           )}

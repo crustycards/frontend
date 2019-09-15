@@ -4,7 +4,7 @@ import {useState} from 'react';
 import {useSelector} from 'react-redux';
 import {useApi} from '../../api/context';
 import {StoreState} from '../../store';
-import WhiteCard from '../shells/CAHWhiteCard';
+import CAHWhiteCard from '../shells/CAHWhiteCard';
 
 const PlayedCards = () => {
   const api = useApi();
@@ -49,7 +49,7 @@ const PlayedCards = () => {
               }
             }
           >
-            {cards.map((card, index) => <WhiteCard card={card} key={index} />)}
+            {cards.map((card, index) => <CAHWhiteCard card={card} key={index} />)}
           </div>
         ))}
       </div>
@@ -61,29 +61,24 @@ const PlayedCards = () => {
       game.winner
     )
   ) {
-    const winnerIsRealUser = !!game.winner.user;
     return (
       <div className={'panel'}>
         {game.whitePlayed.map((entry, index) => (
           <div
-            style={(game.winner && winnerIsRealUser ?
-              game.winner.user.id === entry.playerId.userId :
-              game.winner.artificialPlayerName === entry.playerId.artificialPlayerUUID)
+            style={(game.winner && game.winner.user ?
+              entry.player.user && entry.player.user.id === game.winner.user.id :
+              game.winner.artificialPlayerName === entry.player.artificialPlayerName)
               ? {} : {opacity: 0.5}}
             className={'subpanel'}
             key={index}
           >
             <div>
               {
-                game.players.find((player) => player.id === entry.playerId.userId) ?
-                  game.players.find((player) => player.id === entry.playerId.userId).name
-                  :
-                  entry.playerId.artificialPlayerUUID ? entry.playerId.artificialPlayerUUID :
-                  'This user has left the game'
+                entry.player.user ? entry.player.user.name : entry.player.artificialPlayerName
               }
             </div>
             {entry.cards.map((card, index) => (
-              <WhiteCard
+              <CAHWhiteCard
                 card={card}
                 key={index}
               />
