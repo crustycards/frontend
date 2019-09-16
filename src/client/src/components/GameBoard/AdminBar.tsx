@@ -25,6 +25,16 @@ const AdminBar = () => {
   const classes = useStyles({});
   const {game} = useSelector(({game}: StoreState) => ({game}));
 
+  const canStartGame = () => {
+    if (game.players.length < 2) {
+      return false;
+    } else if (game.players.length + game.artificialPlayers.length < 3) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   return <AppBar className={classes.adminBar} position={'static'}>
     <Toolbar style={{padding: 0}}>
       <h2
@@ -61,6 +71,7 @@ const AdminBar = () => {
             variant={'contained'}
             onClick={api.game.startGame}
             style={buttonStyle}
+            disabled={!canStartGame()}
           >
             Start Game
           </Button>

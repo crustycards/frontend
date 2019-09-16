@@ -1,4 +1,4 @@
-import {AppBar, Button, Theme, Toolbar} from '@material-ui/core';
+import {AppBar, Button, Dialog, DialogActions, DialogContent, DialogTitle, Theme, Toolbar} from '@material-ui/core';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
@@ -26,6 +26,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 const TopBar = () => {
   const api = useApi();
   const [showPastRoundsDialog, setShowPastRoundsDialog] = useState(false);
+  const [showLeaveGameConfirmationDialog, setShowLeaveGameConfirmationDialog] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
   const classes = useStyles({});
   const dispatch = useDispatch();
@@ -71,13 +72,30 @@ const TopBar = () => {
         <Button
           color={'primary'}
           variant={'contained'}
-          onClick={() => {
-            api.game.leaveGame().then(() => dispatch(push('/gamelist')));
-          }}
+          onClick={() => setShowLeaveGameConfirmationDialog(true)}
           style={buttonStyle}
         >
           Leave Game
         </Button>
+        <Dialog open={showLeaveGameConfirmationDialog} onClose={() => setShowLeaveGameConfirmationDialog(false)}>
+          <DialogTitle>Leave Game</DialogTitle>
+          <DialogContent>Are you sure you want to leave?</DialogContent>
+          <DialogActions>
+            <Button
+              variant={'contained'}
+              color={'primary'}
+              onClick={() => api.game.leaveGame().then(() => dispatch(push('/gamelist')))}
+            >
+              Yes
+            </Button>
+            <Button
+              variant={'outlined'}
+              onClick={() => setShowLeaveGameConfirmationDialog(false)}
+            >
+              No
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     </Toolbar>
   </AppBar>;

@@ -27,7 +27,7 @@ const Game = () => {
       <div>
         <TopBar/>
         {game.ownerId === user.id && <AdminBar/>}
-        <Grid container spacing={8}>
+        <Grid container spacing={0}>
           <Grid item xs={12} sm={5} md={4}>
             <CurrentBlackCard/>
             <PlayerList/>
