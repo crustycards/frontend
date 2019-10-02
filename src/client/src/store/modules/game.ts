@@ -1,4 +1,4 @@
-import { GameData, WhiteCard } from '../../api/dao';
+import {GameData, WhiteCard} from '../../api/dao';
 
 const SET_GAME_STATE = 'game/SET_GAME_STATE';
 const QUEUE_CARD = 'game/QUEUE_CARD';

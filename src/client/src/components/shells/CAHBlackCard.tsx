@@ -2,7 +2,7 @@ import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/c
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {ApiContextWrapper} from '../../api/context';
-import { BlackCard } from '../../api/dao';
+import {BlackCard} from '../../api/dao';
 import Api from '../../api/model/api';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});

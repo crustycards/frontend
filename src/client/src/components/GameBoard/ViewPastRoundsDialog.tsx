@@ -1,5 +1,8 @@
 import {Button, Dialog, DialogContent} from '@material-ui/core';
-import {ArrowLeft, ArrowRight, KeyboardArrowLeft, KeyboardArrowRight} from '@material-ui/icons';
+import ArrowLeft from '@material-ui/icons/ArrowLeft';
+import ArrowRight from '@material-ui/icons/ArrowRight';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {StoreState} from '../../store';

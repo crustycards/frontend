@@ -1,49 +1,41 @@
-import {Button, Divider, Paper, TextField, Typography} from '@material-ui/core';
+import {CircularProgress, Divider, IconButton, InputBase, makeStyles, Paper, Typography} from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
-import {connect, useSelector} from 'react-redux';
-import {Dispatch} from 'redux';
-import {Field, FormErrors, InjectedFormProps, reduxForm, reset, SubmitHandler} from 'redux-form';
+import {useState} from 'react';
+import {useSelector} from 'react-redux';
 import {useApi} from '../../api/context';
-import { StoreState } from '../../store';
+import {StoreState} from '../../store';
 
-const renderTextField = ({
-  input,
-  label,
-  meta,
-  ...custom
-}: any) => (
-  <TextField
-    label={label}
-    {...input}
-    {...custom}
-  />
-);
-
-interface MessageFormData {
-  messageText: string;
-}
-
-const validate = (values: MessageFormData) => {
-  const {messageText} = values;
-
-  const errors: FormErrors<MessageFormData> = {};
-
-  if (!messageText) {
-    errors.messageText = 'Required';
+const useStyles = makeStyles((theme) => ({
+  textBoxRoot: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center'
+  },
+  textBoxInput: {
+    marginLeft: theme.spacing(1),
+    flex: 1
+  },
+  textBoxIconButton: {
+    padding: 10,
+    position: 'relative'
+  },
+  textBoxIconButtonCircularProgress: {
+    position: 'absolute',
+    top: 2,
+    left: -1,
+    zIndex: 1
   }
+}));
 
-  return errors;
-};
-
-interface MessageBoxProps extends InjectedFormProps {
-  handleSubmit: SubmitHandler<MessageFormData>;
-}
-
-const MessageBox = (props: MessageBoxProps) => {
+const MessageBox = () => {
   const api = useApi();
   const {messages} = useSelector(({game}: StoreState) => ({
     messages: game.messages
   }));
+  const [messageText, setMessageText] = useState('');
+  const [isSubmittingMessage, setIsSubmittingMessage] = useState(false);
+  const classes = useStyles({});
 
   return (
     <div className={'panel'}>
@@ -69,35 +61,36 @@ const MessageBox = (props: MessageBoxProps) => {
         ))}
       </div>
       <form
+        style={{marginBottom: 0}}
         autoComplete={'off'}
-        onSubmit={props.handleSubmit(({messageText}) => {
-          api.game.sendMessage(messageText);
-        })}
+        onSubmit={(e) => {
+          e.preventDefault(); // Stop page from refreshing
+          setIsSubmittingMessage(true);
+          api.game.sendMessage(messageText).then(() => {
+            setIsSubmittingMessage(false);
+            setMessageText('');
+          });
+        }}
       >
-        <Field
-          name='messageText'
-          component={renderTextField}
-          label='Message'
-        />
-        <br/>
-        <Button
-          style={{marginTop: '10px'}}
-          variant={'outlined'}
-          type={'submit'}
-          disabled={props.pristine || props.submitting}
-        >
-          Send
-        </Button>
+        <Paper className={classes.textBoxRoot}>
+          <InputBase
+            className={classes.textBoxInput}
+            placeholder={'Message'}
+            value={messageText}
+            onChange={(e) => setMessageText(e.target.value)}
+          />
+          <IconButton
+            className={classes.textBoxIconButton}
+            type={'submit'}
+            disabled={!messageText.length || isSubmittingMessage}
+          >
+            <SendIcon/>
+            {isSubmittingMessage && <CircularProgress size={40} className={classes.textBoxIconButtonCircularProgress}/>}
+          </IconButton>
+        </Paper>
       </form>
     </div>
   );
 };
 
-const onSubmitSuccess = (_: any, dispatch: Dispatch) =>
-  dispatch(reset('gameMessage'));
-
-export default reduxForm({
-  form: 'gameMessage',
-  validate,
-  onSubmitSuccess
-})(MessageBox);
+export default MessageBox;

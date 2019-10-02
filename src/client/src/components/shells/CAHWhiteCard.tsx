@@ -1,7 +1,7 @@
 import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {ApiContextWrapper} from '../../api/context';
-import { WhiteCard } from '../../api/dao';
+import {WhiteCard} from '../../api/dao';
 import Api from '../../api/model/api';
 
 interface CAHWhiteCardProps {
