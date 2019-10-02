@@ -1,104 +1,106 @@
-export class User {
-  public id: string;
-  public name: string;
+export interface User {
+  id: string;
+  name: string;
 }
 
-export class WhiteCard {
-  public id: string;
-  public text: string;
-  public cardpackId: string;
+export interface WhiteCard {
+  id: string;
+  text: string;
+  cardpackId: string;
 }
 
-export class JsonWhiteCard {
-  public text: string;
+export interface JsonWhiteCard {
+  text: string;
 }
 
-export class BlackCard {
-  public id: string;
-  public text: string;
-  public answerFields: number;
-  public cardpackId: string;
+export interface BlackCard {
+  id: string;
+  text: string;
+  answerFields: number;
+  cardpackId: string;
 }
 
-export class JsonBlackCard {
-  public text: string;
-  public answerFields: number;
+export interface JsonBlackCard {
+  text: string;
+  answerFields: number;
 }
 
-export class Cardpack {
-  public id: string;
-  public name: string;
-  public owner: User;
-  public whiteCards: WhiteCard[];
-  public blackCards: BlackCard[];
-  public createdAt: Date;
+export interface Cardpack {
+  id: string;
+  name: string;
+  owner: User;
+  whiteCards: WhiteCard[];
+  blackCards: BlackCard[];
+  createdAt: Date;
 }
 
-export class Player extends User {
-  public score: number;
+export interface Player extends User {
+  score: number;
 }
 
-export class Message {
-  public user: User;
-  public text: string;
+export interface Message {
+  user: User;
+  text: string;
 }
 
-export class WhitePlayedEntry {
-  public cards: WhiteCard[];
-  public player: RealOrArtificialPlayer;
+export interface WhitePlayedEntry {
+  cards: WhiteCard[];
+  player: RealOrArtificialPlayer;
 }
 
-export class ArtificialPlayer {
-  public name: string;
-  public score: number;
+export interface ArtificialPlayer {
+  name: string;
+  score: number;
 }
 
-export class RealOrArtificialPlayer {
-  public user?: User;
-  public artificialPlayerName?: string;
+export interface RealOrArtificialPlayer {
+  user?: User;
+  artificialPlayerName?: string;
 }
 
-export class PastRound {
-  public blackCard: BlackCard;
-  public whitePlayed: WhitePlayedEntry[];
-  public judge: User;
-  public winner: RealOrArtificialPlayer;
+export interface PastRound {
+  blackCard: BlackCard;
+  whitePlayed: WhitePlayedEntry[];
+  judge: User;
+  winner: RealOrArtificialPlayer;
 }
 
-export class GameData {
-  public name: string;
-  public maxPlayers: number;
-  public maxScore: number;
-  public stage: string;
-  public hand: WhiteCard[];
-  public players: Player[];
-  public artificialPlayers: ArtificialPlayer[];
-  public queuedPlayers: Player[];
-  public queuedArtificialPlayers: ArtificialPlayer[];
-  public bannedPlayers: User[];
-  public judgeId: string;
-  public ownerId: string;
-  public whitePlayed: WhitePlayedEntry[];
-  public whitePlayedAnonymous: WhiteCard[][];
-  public currentBlackCard: BlackCard;
-  public winner: RealOrArtificialPlayer;
-  public messages: Message[];
-  public pastRounds: PastRound[];
+export interface GameData {
+  name: string;
+  maxPlayers: number;
+  maxScore: number;
+  stage: string;
+  hand: WhiteCard[];
+  players: Player[];
+  artificialPlayers: ArtificialPlayer[];
+  queuedPlayers: Player[];
+  queuedArtificialPlayers: ArtificialPlayer[];
+  bannedPlayers: User[];
+  judgeId: string;
+  ownerId: string;
+  whitePlayed: WhitePlayedEntry[];
+  whitePlayedAnonymous: WhiteCard[][];
+  currentBlackCard: BlackCard;
+  winner: RealOrArtificialPlayer;
+  messages: Message[];
+  pastRounds: PastRound[];
 }
 
-export class LocalGameData extends GameData {
-  public queuedCardIds: string[];
+export interface LocalGameData extends GameData {
+  queuedCardIds: string[];
 }
 
-export class GameInfo {
-  public name: string;
-  public playerCount: number;
-  public maxPlayers: number;
-  public owner: User;
+export interface GameInfo {
+  name: string;
+  playerCount: number;
+  maxPlayers: number;
+  running: boolean;
+  lastActivity: Date;
+  owner: User;
 }
 
-export class Session {
-  public id: string;
-  public userId: string;
-  public createdAt: Date;
+export interface Session {
+  id: string;
+  userId: string;
+  createdAt: Date;
 }

@@ -2,9 +2,11 @@ import {
   Button,
   Card,
   CardActions,
+  CardContent,
   CardHeader,
   CircularProgress,
-  Theme
+  Theme,
+  Typography
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
 import {makeStyles} from '@material-ui/styles';
@@ -13,6 +15,7 @@ import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {useApi} from '../../api/context';
+import {convertTime} from '../../helpers/time';
 import {StoreState} from '../../store';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -72,6 +75,10 @@ const GameList = () => {
             title={gameInfo.name}
             subheader={`Host: ${gameInfo.owner.name}`}
           />
+          <CardContent style={{paddingTop: 0, paddingBottom: 0}}>
+            <Typography>{gameInfo.running ? 'In Progress' : 'Not Running'}</Typography>
+            <Typography>{`Last active ${convertTime(gameInfo.lastActivity)}`}</Typography>
+          </CardContent>
           <CardActions>
             {
               game && game.name === gameInfo.name ?

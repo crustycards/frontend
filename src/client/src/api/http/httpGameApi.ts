@@ -56,7 +56,7 @@ export default class HttpGameApi implements GameApi {
   }
 
   public leaveGame() {
-    return axios.delete(`/api/game/players/${this.userId}`)
+    return axios.delete(`/api/game/players/leave/${this.userId}`)
       .then((response) => {
         return response.data;
       });
@@ -101,7 +101,10 @@ export default class HttpGameApi implements GameApi {
     return axios.get('/api/games')
       .then((response) => {
         return response.data;
-      });
+      })
+      .then((gameInfoList) => (
+        gameInfoList.map((gameInfo: any) => ({...gameInfo, lastActivity: new Date(gameInfo.lastActivity)}))
+      ));
   }
 
   public playCards(cardIds: string[]) {
@@ -153,8 +156,7 @@ export default class HttpGameApi implements GameApi {
   public sendMessage(message: string) {
     return axios.put(
       `/api/game/messages/${this.userId}`,
-      message,
-      {headers: {'Content-Type': 'text/plain'}}
+      {messageText: message}
     )
       .then((response) => {
         return response.data;

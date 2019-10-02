@@ -18,7 +18,7 @@ import * as React from 'react';
 import {Component} from 'react';
 import * as _ from 'underscore';
 import {ApiContextWrapper} from '../api/context';
-import { Session } from '../api/dao';
+import {Session} from '../api/dao';
 import Api from '../api/model/api';
 import {convertTime} from '../helpers/time';
 

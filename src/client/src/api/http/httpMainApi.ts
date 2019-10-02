@@ -68,22 +68,22 @@ export default class HttpMainApi implements MainApi {
   }
 
   public searchUsers(query: string) {
-    return axios.get<User[]>(`/api/user/search?query=${query}`)
+    return axios.get<User[]>(`/api/search/user?query=${query}`)
       .then((res) => res.data);
   }
 
   public autocompleteUserSearch(query: string) {
-    return axios.get<string[]>(`/api/user/search/autocomplete?query=${query}`)
+    return axios.get<string[]>(`/api/search/user/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
 
   public searchCardpacks(query: string) {
-    return axios.get<Cardpack[]>(`/api/cardpack/search?query=${query}`)
+    return axios.get<Cardpack[]>(`/api/search/cardpack?query=${query}`)
       .then((res) => res.data.map(this.parseCardpack));
   }
 
   public autocompleteCardpackSearch(query: string) {
-    return axios.get<string[]>(`/api/cardpack/search/autocomplete?query=${query}`)
+    return axios.get<string[]>(`/api/search/cardpack/autocomplete?query=${query}`)
       .then((res) => res.data);
   }
 
@@ -101,7 +101,7 @@ export default class HttpMainApi implements MainApi {
   }
 
   public async cardpackIsFavorited(cardpackId: string) {
-    const res = await axios.get(`/api/cardpacks/favorited?userId=${this.userId}&cardpackId=${cardpackId}`);
+    const res = await axios.get(`/api/cardpacks/${this.userId}/favorited?cardpackId=${cardpackId}`);
     return res.data;
   }
 

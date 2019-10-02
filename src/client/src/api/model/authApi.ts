@@ -1,4 +1,4 @@
-import { Session } from '../dao';
+import {Session} from '../dao';
 
 interface AuthApi {
   linkSessionToFirebase(firebaseToken: string): Promise<void>;

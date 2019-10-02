@@ -2,8 +2,8 @@ import {List, ListItem, ListItemIcon, ListItemText, ListSubheader} from '@materi
 import Check from '@material-ui/icons/Check';
 import Star from '@material-ui/icons/Star';
 import * as React from 'react';
-import {connect, useSelector} from 'react-redux';
-import {BlackCard, Player, WhitePlayedEntry} from '../../api/dao';
+import {useSelector} from 'react-redux';
+import {Player} from '../../api/dao';
 import {StoreState} from '../../store';
 
 const styles: React.CSSProperties = {
@@ -12,54 +12,27 @@ const styles: React.CSSProperties = {
   padding: 0
 };
 
-// TODO - Render game owner uniquely
-
 const renderPlayer = (player: Player, ownerId: string, judgeId: string, hasPlayed: boolean) => {
-  if (player.id === ownerId && player.id === judgeId) {
-    return (
-      <ListItem>
-        <ListItemText
-          primary={player.name}
-          secondary={`Score: ${player.score}`}
-        />
-        <ListItemIcon>
-          <Star style={{float: 'right'}} />
-        </ListItemIcon>
-      </ListItem>
-    );
-  } else if (player.id === judgeId) {
-    return (
-      <ListItem>
-        <ListItemText
-          primary={player.name}
-          secondary={`Score: ${player.score}`}
-        />
-        <ListItemIcon>
-          <Star style={{float: 'right'}} />
-        </ListItemIcon>
-      </ListItem>
-    );
-  } else if (player.id === ownerId) {
-    return (
-      <ListItem>
-        <ListItemText
-          primary={player.name}
-          secondary={`Score: ${player.score}`}
-        />
-        {hasPlayed && <ListItemIcon><Check/></ListItemIcon>}
-      </ListItem>
-    );
-  } else {
-    return (
-      <ListItem>
-        <ListItemText
-          primary={player.name}
-          secondary={`Score: ${player.score}`}
-        />
-        {hasPlayed && <ListItemIcon><Check/></ListItemIcon>}
-      </ListItem>
-    );
+  // TODO - Render game owner uniquely
+  let playerIcon;
+  if (player.id === judgeId) {
+    playerIcon = <Star/>;
+  } else if (hasPlayed) {
+    playerIcon = <Check/>;
   }
+  return (
+    <ListItem>
+      <ListItemText
+        primary={player.name}
+        secondary={`Score: ${player.score}`}
+      />
+      {playerIcon &&
+        <ListItemIcon>
+          {playerIcon}
+        </ListItemIcon>
+      }
+    </ListItem>
+  );
 };
 
 const renderQueuedPlayer = (player: Player) => (
