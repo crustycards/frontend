@@ -47,22 +47,28 @@ const store = createStore({history});
 
 bindGameApi(gameApi, store);
 
-// TODO - Add a fallback if socket connection fails
+// Connect through socket.io
 const socket = Socket({
   reconnection: true,
   reconnectionDelay: 500,
   reconnectionAttempts: Infinity
 });
 socket.on('connect', () => {
-  gameApi.getGameState(); // Socket will tell the client when the game state is updated
-                          // but we still need to fetch it for the initial render
+  gameApi.getGameState(); // Fetch game state for the initial render
 }).on('reconnect', () => {
-  gameApi.getGameState(); // Same reason as above
+  gameApi.getGameState(); // Game state might be stale if reconnecting
 }).on('message', (message: string) => {
   if (message === 'GAME_UPDATED') {
     gameApi.getGameState();
   } else if (message === 'GAME_LIST_UPDATED') {
     gameApi.getGameList();
+  }
+});
+
+// Fallback to intermittent polling if socket.io can't connect
+setInterval(() => {
+  if (!socket.connected) {
+    gameApi.getGameState();
   }
 });
 

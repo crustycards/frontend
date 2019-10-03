@@ -1,4 +1,4 @@
-import {Avatar, Button, Card, CardActions, CardContent, CardHeader} from '@material-ui/core';
+import {Avatar, Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import * as React from 'react';
 import {Component} from 'react';
 import {NavLink} from 'react-router-dom';

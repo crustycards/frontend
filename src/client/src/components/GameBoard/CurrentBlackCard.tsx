@@ -1,41 +1,35 @@
 import {Typography} from '@material-ui/core';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
+import {removeAdjacentDuplicateCharacters} from '../../helpers/string';
 import {StoreState} from '../../store';
 import CAHBlackCard from '../shells/CAHBlackCard';
 
 const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
-  let tempText = blackCardText;
-  const tempWhiteTexts = [...whiteCardTextList];
+  const replacementIndicator = '_';
 
-  const replacementIndicator = '_____';
+  // Reduce all long underscore chains
+  blackCardText = removeAdjacentDuplicateCharacters(blackCardText, replacementIndicator);
 
-  while (true) {
-    const reducedUnderscoreText = tempText.replace(
-      replacementIndicator + '_',
-      replacementIndicator
-    );
-    if (reducedUnderscoreText === tempText) {
-      break;
-    } else {
-      tempText = reducedUnderscoreText;
+  // Remove single periods at the end of white card text
+  for (const i in whiteCardTextList) {
+    // ... shouldn't be reduced to ..
+    if (!whiteCardTextList[i] || whiteCardTextList[i].endsWith('..')) {
+      continue;
+    }
+
+    if (whiteCardTextList[i].endsWith('.')) {
+      // Remove period at the end
+      whiteCardTextList[i] = whiteCardTextList[i].slice(0, whiteCardTextList[i].length - 1);
     }
   }
 
-  for (const i in tempWhiteTexts) {
-    // TODO - Don't remove period if card ends in multiple ...'s
-    // TODO - handle underscored wrapped in quotation marks
-    if (tempWhiteTexts[i] && tempWhiteTexts[i].endsWith('.')) {
-      tempWhiteTexts[i] = tempWhiteTexts[i].slice(0, tempWhiteTexts[i].length - 1);
-    }
-  }
-
-  const splitBlackText = tempText.split(replacementIndicator);
+  const splitBlackText = blackCardText.split(replacementIndicator);
   const injectedBlackTextElements = [];
 
   for (let i = 0; i < splitBlackText.length - 1; i++) {
     injectedBlackTextElements.push(splitBlackText[i]);
-    if (tempWhiteTexts[i]) {
+    if (whiteCardTextList[i]) {
       injectedBlackTextElements.push(
         <Typography
           key={i}
@@ -44,11 +38,11 @@ const parseCardText = (blackCardText: string, whiteCardTextList: string[]) => {
           component={'div'}
           color={'secondary'}
         >
-          {tempWhiteTexts[i]}
+          {whiteCardTextList[i]}
         </Typography>
       );
     } else {
-      injectedBlackTextElements.push(replacementIndicator);
+      injectedBlackTextElements.push('_____');
     }
   }
   injectedBlackTextElements.push(splitBlackText[splitBlackText.length - 1]);
