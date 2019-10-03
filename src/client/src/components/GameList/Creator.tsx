@@ -2,12 +2,11 @@ import {
   Button,
   Checkbox,
   CircularProgress,
+  FormControlLabel,
   Grid,
   List,
   ListItem,
   ListItemText,
-  MenuItem,
-  Select,
   TextField,
   Theme
 } from '@material-ui/core';
@@ -18,14 +17,6 @@ import {useEffect, useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {useApi} from '../../api/context';
 import {Cardpack} from '../../api/dao';
-
-const generateNumberedMenuItems = (startNum: number, endNum: number): JSX.Element[] => {
-  const items = [];
-  for (let i = startNum; i <= endNum; i++) {
-    items.push(<MenuItem value={i} key={i}>{i}</MenuItem>);
-  }
-  return items;
-};
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,11 +34,46 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+const updateBoundedNumber = (
+  currentValue: {str: string, num: number},
+  newStrValue: string,
+  setNewValue: (val: {str: string, num: number}) => void,
+  lowerBound: number,
+  upperBound: number
+) => {
+  const newStrParsed = parseInt(newStrValue, 10);
+  let newNum = newStrParsed;
+
+  if (isNaN(newStrParsed)) {
+    newNum = currentValue.num;
+  } else if (newStrParsed < lowerBound) {
+    newNum = lowerBound;
+  } else if (newStrParsed > upperBound) {
+    newNum = upperBound;
+  }
+
+  setNewValue({str: newStrValue, num: newNum});
+};
+
+const resolveBoundedNumber = (
+  currentValue: {str: string, num: number},
+  setNewValue: (val: {str: string, num: number}) => void
+) => {
+  if (currentValue.str !== currentValue.num.toString()) {
+    setNewValue({str: currentValue.num.toString(), num: currentValue.num});
+  }
+};
+
 const GameCreator = () => {
   const [gameName, setGameName] = useState('');
-  const [maxPlayers, setMaxPlayers] = useState(8);
-  const [maxScore, setMaxScore] = useState(8);
-  const [handSize, setHandSize] = useState(8);
+  // These states contain a matching string and number to allow
+  // the user to type potentially invalid values (such as clearing
+  // the textbox and typing '10') and still remember the last
+  // valid number that was entered so that it can be set back if
+  // the user clicks away while the textbox is still blank.
+  const [maxPlayers, setMaxPlayers] = useState({str: '8', num: 8});
+  const [maxScore, setMaxScore] = useState({str: '8', num: 8});
+  const [handSize, setHandSize] = useState({str: '8', num: 8});
   const [endlessMode, setEndlessMode] = useState(false);
   const [userCardpacks, setUserCardpacks] = useState([] as Cardpack[]);
   const [subscribedCardpacks, setSubscribedCardpacks] = useState([] as Cardpack[]);
@@ -79,9 +105,9 @@ const GameCreator = () => {
     setIsCreatingGame(true);
     api.game.createGame(
       gameName,
-      maxPlayers,
-      endlessMode ? 0 : maxScore,
-      handSize,
+      maxPlayers.num,
+      endlessMode ? 0 : maxScore.num,
+      handSize.num,
       cardpacksSelected
     ).then(() => {
       dispatch(push('/game'));
@@ -109,43 +135,52 @@ const GameCreator = () => {
       <div className='content-wrap'>
         <Grid container spacing={8}>
           <Grid item xs={12} sm={5} className={'center'}>
-            <TextField
-              name='gameName'
-              label='Game Name'
-              value={gameName}
-              onChange={(e) => setGameName(e.target.value)}
-            />
-            <br/>
-            <span>Max Players: </span>
-            <Select
-              value={maxPlayers}
-              onChange={(e) => setMaxPlayers(parseInt(e.target.value as string, 10))}
-            >
-              {generateNumberedMenuItems(4, 20)}
-            </Select>
-            <br/>
-            <span>Winning Score: </span>
-            <Select
-              value={maxScore}
-              onChange={(e) => setMaxScore(parseInt(e.target.value as string, 10))}
-              disabled={endlessMode}
-            >
-              {generateNumberedMenuItems(4, 20)}
-            </Select>
-            <br/>
-            <span>Endless Mode: </span>
-            <Checkbox
-              checked={endlessMode}
-              onChange={() => setEndlessMode(!endlessMode)}
-            />
-            <br/>
-            <span>Hand Size: </span>
-            <Select
-              value={handSize}
-              onChange={(e) => setHandSize(parseInt(e.target.value as string, 10))}
-            >
-              {generateNumberedMenuItems(3, 20)}
-            </Select>
+            <div style={{maxWidth: '200px', textAlign: 'center', display: 'inline-block'}}>
+              <TextField
+                label={'Game Name'}
+                value={gameName}
+                onChange={(e) => setGameName(e.target.value)}
+              />
+              <div style={{marginTop: '8px'}}>
+                <TextField
+                  style={{width: '47%', float: 'left'}}
+                  label={'Max Players'}
+                  value={maxPlayers.str}
+                  inputProps={{min: 2, max: 100}}
+                  onChange={(e) => updateBoundedNumber(maxPlayers, e.target.value, setMaxPlayers, 2, 100)}
+                  onBlur={() => resolveBoundedNumber(maxPlayers, setMaxPlayers)}
+                  type={'number'}
+                />
+                <TextField
+                  style={{width: '47%', float: 'right'}}
+                  label={'Winning Score'}
+                  value={maxScore.str}
+                  inputProps={{min: 1, max: 100}}
+                  onChange={(e) => updateBoundedNumber(maxScore, e.target.value, setMaxScore, 1, 100)}
+                  onBlur={() => resolveBoundedNumber(maxScore, setMaxScore)}
+                  type={'number'}
+                  disabled={endlessMode}
+                />
+              </div>
+              <FormControlLabel
+                style={{marginTop: '5px', marginBottom: '5px'}}
+                control={
+                  <Checkbox
+                    checked={endlessMode}
+                    onChange={() => setEndlessMode(!endlessMode)}
+                  />
+                }
+                label={'Endless Mode'}
+              />
+              <TextField
+                label={'Hand Size'}
+                value={handSize.str}
+                inputProps={{min: 3, max: 20}}
+                onChange={(e) => updateBoundedNumber(handSize, e.target.value, setHandSize, 3, 20)}
+                onBlur={() => resolveBoundedNumber(handSize, setHandSize)}
+                type={'number'}
+              />
+            </div>
           </Grid>
           <Grid item xs={12} sm={7}>
             <div className='subpanel'>

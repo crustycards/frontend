@@ -1,4 +1,4 @@
-import {connectRouter, routerMiddleware} from 'connected-react-router';
+import {routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import {applyMiddleware, compose, createStore} from 'redux';
 import {BlackCard, User, WhitePlayedEntry} from '../api/dao';
