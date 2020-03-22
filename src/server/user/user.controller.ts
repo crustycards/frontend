@@ -22,9 +22,9 @@ export class UserController {
 
   @UseGuards(AuthGuard('cookie'))
   @Get('user/profileimage/:userId')
-  public async getUserProfileImage(@Res() response: Response, @Param('userId') userId: string) {
-    response.type('png');
-    response.send(await this.userService.getUserProfileImage(userId));
+  public async getUserProfileImage(@Res() res: Response, @Param('userId') userId: string) {
+    res.type('png');
+    res.send(await this.userService.getUserProfileImage(userId));
   }
 
   @UseGuards(AuthGuard('cookie'))

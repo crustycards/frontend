@@ -5,7 +5,6 @@ import {
   HttpException,
   NotFoundException
 } from '@nestjs/common';
-import * as cookie from 'cookie';
 import {Request, Response} from 'express';
 import * as fs from 'fs';
 import {User} from './user/interfaces/user.interface';
@@ -42,7 +41,7 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
 
     let user: User;
     if (request.headers.cookie) {
-      const sessionId = cookie.parse(request.headers.cookie).session;
+      const sessionId = request.cookies.session;
       if (sessionId) {
         user = await this.userService.getBySessionId(sessionId);
       }
