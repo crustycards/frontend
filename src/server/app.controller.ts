@@ -1,6 +1,5 @@
 import {Controller, Get, Req, Res, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
-import * as cookie from 'cookie';
 import {Request, Response} from 'express';
 import * as fs from 'fs';
 import * as typescript from 'typescript';
@@ -18,23 +17,23 @@ export class AppController {
 
   @UseGuards(AuthGuard('cookie'))
   @Get('logout')
-  public async logout(@Req() request: Request, @Res() response: Response): Promise<void> {
+  public async logout(@Req() req: Request, @Res() res: Response): Promise<void> {
     // This should be safe since the AuthGuard above will
     // filter out any requests that don't have a session cookie
-    const sessionId = cookie.parse(request.headers.cookie).session;
+    const sessionId = req.cookies.session;
     await this.authService.deleteSession(sessionId);
-    response.clearCookie('session').redirect('/login');
+    res.clearCookie('session').redirect('/login');
   }
 
   @Get('favicon.ico')
-  public async getFavicon(@Res() response: Response): Promise<any> {
-    response.setHeader('Content-Type', 'image/x-icon');
-    response.send(this.favicon);
+  public async getFavicon(@Res() res: Response): Promise<any> {
+    res.setHeader('Content-Type', 'image/x-icon');
+    res.send(this.favicon);
   }
 
   @Get('firebase-messaging-sw.js')
-  public async getFirebaseServiceWorker(@Req() request: Request, @Res() response: Response): Promise<void> {
-    response.setHeader('Content-Type', 'application/javascript');
-    response.send(this.serviceWorker);
+  public async getFirebaseServiceWorker(@Res() res: Response): Promise<void> {
+    res.setHeader('Content-Type', 'application/javascript');
+    res.send(this.serviceWorker);
   }
 }

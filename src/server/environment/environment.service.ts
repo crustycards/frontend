@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import * as assert from 'assert';
 import * as dotEnv from 'dotenv';
 import {EnvironmentVariables} from './interfaces/environmentVariables.interface';
 
@@ -56,37 +55,30 @@ export class EnvironmentService {
       process.env[key] = value;
     });
 
-    const applyDefaultValues = () => {
-      for (const key in this.defaultVals) {
-        if (!process.env[key]) {
-          process.env[key] = this.defaultVals[key];
-        }
+    // Apply default values
+    for (const key in this.defaultVals) {
+      if (!process.env[key]) {
+        process.env[key] = this.defaultVals[key];
       }
-    };
+    }
 
-    const assertVarsExist = () => {
-      const missingVars: string[] = [];
-      this.requiredVars.forEach((varName) => {
-        if (!process.env[varName]) {
-          missingVars.push(varName);
-        }
-      });
-
-      if (missingVars.length) {
-        throw new Error(`Missing the following environment variables: ${JSON.stringify(missingVars)}`);
+    // Assert vars exist
+    const missingVars: string[] = [];
+    this.requiredVars.forEach((varName) => {
+      if (!process.env[varName]) {
+        missingVars.push(varName);
       }
-    };
+    });
+    if (missingVars.length) {
+      throw new Error(`Missing the following environment variables: ${JSON.stringify(missingVars)}`);
+    }
 
-    applyDefaultValues();
+    if (!['development', 'test', 'production'].includes(process.env.NODE_ENV)) {
+      throw Error('NODE_ENV must be either development, test, or production');
+    }
 
-    assertVarsExist();
-
-    assert([
-      'development',
-      'test',
-      'production'
-    ].includes(process.env.NODE_ENV), 'NODE_ENV must be either development, test, or production');
-
-    assert(!isNaN(parseInt(process.env.PORT, 10)), 'PORT must be an integer');
+    if (isNaN(parseInt(process.env.PORT, 10))) {
+      throw Error('PORT must be an integer');
+    }
   }
 }
