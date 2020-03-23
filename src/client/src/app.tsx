@@ -19,7 +19,6 @@ import {bindGameApi} from './api/reduxBind';
 import AuthRedirector from './components/AuthRedirector';
 import Navbar from './components/Navbar';
 import StatusBar from './components/StatusBar';
-import {init as initFirebase} from './firebase';
 import Cardpack from './pages/Cardpack';
 import Game from './pages/Game';
 import GameList from './pages/GameList';
@@ -71,10 +70,6 @@ setInterval(() => {
     gameApi.getGameState();
   }
 });
-
-// TODO - Uncomment two lines below once HTTPS is setup
-// initFirebase((payload) => console.log(payload))
-//   .then((token) => authApi.linkSessionToFirebase(token));
 
 const theme = createMuiTheme({palette: {primary: blue, secondary: {main: '#43c6a8'}}});
 

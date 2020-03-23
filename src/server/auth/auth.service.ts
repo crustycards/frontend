@@ -33,8 +33,4 @@ export class AuthService {
   public async deleteUserSessions(userId: string): Promise<void> {
     await axios.delete(`${this.authServiceUrl}/sessions?userId=${userId}`);
   }
-
-  public async linkSessionToFirebase(sessionId: string, firebaseToken: string): Promise<void> {
-    await axios.put(`${this.authServiceUrl}/session/${sessionId}?token=${firebaseToken}`);
-  }
 }

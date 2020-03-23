@@ -44,13 +44,4 @@ export class AuthController {
   public deleteUserSessions(@Query('userId') userId: string): Promise<void> {
     return this.authService.deleteUserSessions(userId);
   }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Put('api/session')
-  public async linkSessionToFirebase(@Req() req: Request, @Query('token') firebaseToken: string): Promise<void> {
-    // Session should never be null because this routed has a cookie AuthGuard.
-    // This verifies that the user is logged in.
-    const session = await this.authService.getSessionById(req.cookies.session);
-    await this.authService.linkSessionToFirebase(session.id, firebaseToken);
-  }
 }

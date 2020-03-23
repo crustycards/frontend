@@ -11,11 +11,6 @@ export default class HttpAuthApi implements AuthApi {
     _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
   }
 
-  public linkSessionToFirebase(firebaseToken: string) {
-    return axios.put(`/api/session?token=${firebaseToken}`)
-      .then(() => null);
-  }
-
   public getUserSessions() {
     return axios.get(`/api/sessions?userId=${this.userId}`)
       .then((response) => (response.data))

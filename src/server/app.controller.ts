@@ -9,10 +9,6 @@ import {AuthService} from './auth/auth.service';
 export class AppController {
   private favicon = fs.readFileSync(`${__dirname}/../client/dist/favicon.ico`);
 
-  private serviceWorker = typescript.transpile(fs.readFileSync(
-    `${__dirname}/../client/src/serviceWorker/serviceWorker.ts`
-  ).toString());
-
   constructor(private readonly authService: AuthService) {}
 
   @UseGuards(AuthGuard('cookie'))
@@ -29,11 +25,5 @@ export class AppController {
   public async getFavicon(@Res() res: Response): Promise<any> {
     res.setHeader('Content-Type', 'image/x-icon');
     res.send(this.favicon);
-  }
-
-  @Get('firebase-messaging-sw.js')
-  public async getFirebaseServiceWorker(@Res() res: Response): Promise<void> {
-    res.setHeader('Content-Type', 'application/javascript');
-    res.send(this.serviceWorker);
   }
 }
