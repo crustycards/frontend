@@ -122,7 +122,7 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
         getSuggestionValue={({label}) => (label)}
         renderSuggestion={renderSuggestion}
         inputProps={{
-          classes,
+          // classes, TODO - Uncomment this line and fix build failures it causes.
           placeholder: this.props.label || '',
           value: this.state.value,
           onChange: this.handleChange,
