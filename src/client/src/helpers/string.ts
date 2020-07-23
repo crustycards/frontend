@@ -1,4 +1,5 @@
-export const removeAdjacentDuplicateCharacters = (input: string, character: string) => {
+export const removeAdjacentDuplicateCharacters =
+(input: string, character: string) => {
   if (character.length !== 1) {
     throw Error('Character must have a length of 1');
   }

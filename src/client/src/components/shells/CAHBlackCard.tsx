@@ -1,52 +1,56 @@
 import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
-import {ApiContextWrapper} from '../../api/context';
-import {BlackCard} from '../../api/dao';
-import Api from '../../api/model/api';
+import {BlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {deleteBlackCard} from '../../api/cardpackService';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 
-interface DisplayableBlackCard extends BlackCard {
-  text: any; // TODO - Narrow down typing here (string | (string | Element)[])
-}
-
 interface CAHBlackCardProps {
-  api: Api;
-  card: DisplayableBlackCard;
-  isOwner?: boolean;
+  card: BlackCard;
+  showDeleteButton?: boolean;
   hideAnswerCount?: boolean;
+  overrideTextElements?: (string | JSX.Element)[];
   onDelete?(cardId: string): void;
 }
 
+// TODO - Display fields from WhiteCard other than text and answerFields.
 const CAHBlackCard = (props: CAHBlackCardProps) => {
   const removeCard = () => {
-    props.api.main.deleteBlackCard(props.card.cardpackId, props.card.id).then((data) => {
+    deleteBlackCard(props.card.getName()).then((data) => {
       if (props.onDelete) {
-        props.onDelete(props.card.id);
+        props.onDelete(props.card.getName());
       }
-      return data;
     });
   };
 
-  return <MuiThemeProvider theme={darkTheme}>
-    <Card className='card'>
-      <CardContent>
-        <Typography align={'left'} gutterBottom variant={'h6'}>
-          {props.card.text}
-        </Typography>
-        {
-          !props.hideAnswerCount &&
-          <Typography align={'left'} color={'textSecondary'} variant={'body1'}>
-            {`Answers: ${props.card.answerFields}`}
+  return (
+    <MuiThemeProvider theme={darkTheme}>
+      <Card className='card'>
+        <CardContent>
+          <Typography align={'left'} gutterBottom variant={'h6'}>
+            {props.overrideTextElements || props.card.getText()}
           </Typography>
-        }
-      </CardContent>
-      <CardActions>
-        {props.isOwner && <Button onClick={removeCard}>Delete</Button>}
-      </CardActions>
-    </Card>
-  </MuiThemeProvider>;
+          {
+            !props.hideAnswerCount &&
+            <Typography
+              align={'left'}
+              color={'textSecondary'}
+              variant={'body1'}
+            >
+              {`Answers: ${props.card.getAnswerFields()}`}
+            </Typography>
+          }
+        </CardContent>
+        <CardActions>
+          {
+            props.showDeleteButton &&
+              <Button onClick={removeCard}>Delete</Button>
+          }
+        </CardActions>
+      </Card>
+    </MuiThemeProvider>
+  );
 };
 
-export default ApiContextWrapper(CAHBlackCard);
+export default CAHBlackCard;

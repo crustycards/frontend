@@ -7,24 +7,33 @@ import {
 } from '@nestjs/common';
 import {Request, Response} from 'express';
 import * as fs from 'fs';
-import {User} from './user/interfaces/user.interface';
+import {User, UserSettings} from '../../proto-gen-out/api/model_pb';
+import {serializePreloadedState} from '../client/src/helpers/proto';
+import {AuthService} from './auth/auth.service';
 import {UserService} from './user/user.service';
 
-// This filter catches any 404 errors and instead returns the single-page-web-app html
+// This filter catches any 404 errors and instead returns the
+// single-page-web-app html.
 
 @Catch(NotFoundException)
 export class NotFoundExceptionFilter implements ExceptionFilter {
-  private static html = fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
-  private static bundle = fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
+  private static html =
+    fs.readFileSync(`${__dirname}/../client/dist/index.html`).toString();
+  private static bundle =
+    fs.readFileSync(`${__dirname}/../client/dist/bundle.js`).toString();
 
-  private static generateHtmlWithScript = (user?: User) => (
+  private static generateHtmlWithScript =
+  (user?: User, userSettings?: UserSettings) => (
     `<script>
-      window.__PRELOADED_STATE__ = ${JSON.stringify({user})}
+      window.__PRELOADED_STATE__ = '${serializePreloadedState({user, userSettings})}'
     </script>
     ${NotFoundExceptionFilter.html}`
   )
 
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly userService: UserService
+  ) {}
 
   public async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
@@ -36,17 +45,43 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     }
 
     if (request.path.endsWith('/bundle.js')) {
-      return response.status(200).contentType('applicaton/javascript').send(NotFoundExceptionFilter.bundle);
+      return response.status(200)
+                     .contentType('applicaton/javascript')
+                     .send(NotFoundExceptionFilter.bundle);
     }
 
-    let user: User;
+    let dataFetchPromises: Promise<any>[] = [];
+    let user: User | undefined;
+    let userSettings: UserSettings | undefined;
+
     if (request.headers.cookie) {
-      const sessionId = request.cookies.session;
-      if (sessionId) {
-        user = await this.userService.getBySessionId(sessionId);
+      const authToken = request.cookies.authToken;
+      if (authToken) {
+        const userName = this.authService.decodeJwtToUserName(authToken);
+        if (userName) {
+          dataFetchPromises = [
+            this.userService.getUser(userName)
+              .then((fetchedUser) => user = fetchedUser),
+            this.userService.getUserSettings(`${userName}/settings`)
+              .then((fetchedUserSettings) => userSettings = fetchedUserSettings)
+          ];
+        }
       }
     }
 
-    return response.status(200).contentType('html').send(NotFoundExceptionFilter.generateHtmlWithScript(user));
+    try {
+      await Promise.all(dataFetchPromises);
+    } catch (err) {
+      // Most likely, the user does not exist if this block
+      // is hit, in which case the error should be ignored.
+
+      // TODO - Refactor this to make sure to only ignore
+      // the error if it's from the user not existing.
+    }
+
+    return response.status(200)
+                   .contentType('html')
+                   .send(NotFoundExceptionFilter
+                     .generateHtmlWithScript(user, userSettings));
   }
 }

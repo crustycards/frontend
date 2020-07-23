@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
+    "strict": true,
     "module": "commonjs",
     "lib": ["es7", "dom"],
     "target": "es2017",

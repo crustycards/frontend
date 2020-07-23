@@ -1,82 +1,59 @@
 import {Avatar, Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import * as React from 'react';
-import {Component} from 'react';
+import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
-import {ApiContextWrapper} from '../../api/context';
-import {User} from '../../api/dao';
-import Api from '../../api/model/api';
+import {User} from '../../../../../proto-gen-out/api/model_pb';
+import {useUserService} from '../../api/context';
 import {stringToCssColor} from '../../helpers/colorGenerator';
 
 interface UserCardProps {
-  api: Api;
-  showFriendButton?: boolean;
-  showUnfriendButton?: boolean;
   user: User;
 }
 
-interface UserCardState {
-  imgError: boolean;
-}
+const UserCard = (props: UserCardProps) => {
+  const [imgError, setImgError] = useState(false);
+  const userService = useUserService();
 
-class UserCard extends Component<UserCardProps, UserCardState> {
-  constructor(props: UserCardProps) {
-    super(props);
-
-    this.state = {
-      imgError: false
-    };
-  }
-
-  public render() {
-    return (
-      <Card className='card'>
-        <CardHeader
-          title={
-            <div style={{height: '50px'}}>
-              {
-                this.state.imgError === false ?
+  return (
+    <Card className='card'>
+      <CardHeader
+        title={
+          <div style={{height: '50px'}}>
+            {
+              imgError === false ?
                 <Avatar
-                  onError={() => this.setState({imgError: true})}
+                  onError={() => setImgError(true)}
                   style={{float: 'left'}}
-                  src={this.props.api.main.getProfileImageUrl(this.props.user.id)}
+                  src={userService.getUserProfileImageUrl(props.user.getName())}
                 />
                 :
                 <Avatar
-                  style={{float: 'left', backgroundColor: stringToCssColor(this.props.user.id)}}
+                  style={{
+                    float: 'left',
+                    backgroundColor: stringToCssColor(props.user.getName())
+                  }}
                 >
-                  {this.props.user.name.charAt(0).toUpperCase()}
+                  {props.user.getDisplayName().charAt(0).toUpperCase()}
                 </Avatar>
-              }
-              <div style={{padding: '5px 50px'}}>{this.props.user.name}</div>
+            }
+            <div style={{padding: '5px 50px'}}>
+              {props.user.getDisplayName()}
             </div>
-          }
-        />
-        <CardActions>
-          {
-            this.props.showFriendButton &&
-            <Button
-              onClick={this.props.api.main.addFriend.bind(null, this.props.user.id)}
-            >
-              Add as Friend
-            </Button>
-          }
-          {
-            this.props.showUnfriendButton &&
-            <Button
-              onClick={this.props.api.main.removeFriend.bind(null, this.props.user.id)}
-            >
-              Unfriend
-            </Button>
-          }
-          <NavLink to={`/user?id=${this.props.user.id}`} style={{textDecoration: 'none'}}>
-            <Button>
-              View Profile
-            </Button>
-          </NavLink>
-        </CardActions>
-      </Card>
-    );
-  }
-}
+          </div>
+        }
+      />
+      <CardActions>
+        <NavLink
+          to={`/${props.user.getName()}`}
+          style={{textDecoration: 'none'}}
+        >
+          <Button>
+            View Profile
+          </Button>
+        </NavLink>
+      </CardActions>
+    </Card>
+  );
+};
 
-export default ApiContextWrapper(UserCard);
+export default UserCard;

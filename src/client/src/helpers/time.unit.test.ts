@@ -1,3 +1,4 @@
+import {Timestamp} from 'google-protobuf/google/protobuf/timestamp_pb';
 import {convertTime} from './time';
 
 const seconds = (count: number) => (count * 1000);
@@ -42,5 +43,21 @@ describe('time', () => {
     expect(convertTime(new Date(millisNow - days(1)), now)).toEqual('on August 25 2018');
     expect(convertTime(new Date(millisNow - days(365)), now)).toEqual('on August 26 2017');
     expect(convertTime(new Date(millisNow - days(100)), now)).toEqual('on May 18 2018');
+  });
+
+  it('should convert timestamp proto', () => {
+    const timeStamp = new Timestamp();
+    // Could be either value depending on
+    // the time zone these tests are run in.
+    expect([
+      'on December 31 1969',
+      'on January 1 1970'
+    ]).toContainEqual(convertTime(timeStamp, now));
+    timeStamp.setSeconds(new Date(millisNow).getTime() / 1000);
+    expect(convertTime(timeStamp, now)).toEqual('just now');
+    timeStamp.setSeconds(timeStamp.getSeconds() - 2);
+    expect(convertTime(timeStamp, now)).toEqual('2 seconds ago');
+    timeStamp.setNanos(2000000000); // 2 seconds.
+    expect(convertTime(timeStamp, now)).toEqual('just now');
   });
 });

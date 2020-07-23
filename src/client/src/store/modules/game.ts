@@ -1,113 +1,195 @@
-import {GameData, WhiteCard} from '../../api/dao';
+import {GameView, PlayableWhiteCard} from '../../../../../proto-gen-out/game/game_service_pb';
 
 const SET_GAME_STATE = 'game/SET_GAME_STATE';
 const QUEUE_CARD = 'game/QUEUE_CARD';
 const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
-const SET_HAND = 'game/SET_HAND';
-const ADD_CARD_TO_HAND = 'game/ADD_CARD_TO_HAND';
-const ADD_PLAYER = 'game/ADD_PLAYER';
 
-interface ReduxGameData extends GameData {
-  queuedCardIds: string[];
+export interface QueuedCardId {
+  cardName: string;
+  isBlank: boolean;
 }
 
-export default (state: ReduxGameData = null, {type, payload}: {type: string, payload: any}): ReduxGameData => {
+// TODO - Move some of these helper functions to a separate helper file.
+
+const playableWhiteCardToQueuedCardId =
+(card?: PlayableWhiteCard): QueuedCardId | undefined => {
+  if (!card) {
+    return;
+  }
+
+  let cardName: string = '';
+
+  const whiteCard = card.getWhiteCard();
+  const blankCard = card.getBlankCard();
+  if (whiteCard) {
+    cardName = whiteCard.getName();
+  } else if (blankCard) {
+    cardName = blankCard.getId();
+  } else {
+    return;
+  }
+
+  return {cardName, isBlank: card.hasBlankCard()};
+};
+
+const queuedCardIdsAreEqual = (
+  one: QueuedCardId | undefined,
+  two: QueuedCardId | undefined
+): boolean => {
+  if (!one || !two) {
+    return false;
+  }
+  return one.cardName === two.cardName && one.isBlank === two.isBlank;
+};
+
+export const queuedCardIdPointsToPlayableCard =
+(queuedCardId: QueuedCardId | null, card: PlayableWhiteCard): boolean => {
+  if (!queuedCardId) {
+    return false;
+  }
+  return queuedCardIdsAreEqual(
+    queuedCardId, playableWhiteCardToQueuedCardId(card));
+};
+
+interface ReduxGameData {
+  view?: GameView;
+  // The length of this field will always be the same as the
+  // current black card's answer field count - or 0 if there
+  // is no current black card. This way, users can select
+  // cards out of order without them automatically collapsing.
+  queuedCardIds: (QueuedCardId | null)[];
+}
+
+const cleanseQueuedCardIds = (
+  hand: PlayableWhiteCard[],
+  maxQueuedCards: number,
+  prevQueuedCardIds: (QueuedCardId | null)[]): (QueuedCardId | null)[] => {
+  const stringifiedHandCardLookup: Set<string> = hand
+    .map((card) => playableWhiteCardToQueuedCardId(card) || null)
+    .reduce((acc, id) => {
+      acc.add(JSON.stringify(id));
+      return acc;
+    }, new Set<string>());
+
+  const cleansedQueuedCardIds = [...prevQueuedCardIds]
+    .slice(0, maxQueuedCards).map((queuedCardId) => {
+      if (queuedCardId === null) {
+        return null;
+      } else if (stringifiedHandCardLookup.has(JSON.stringify(queuedCardId))) {
+        return queuedCardId;
+      } else {
+        return null;
+      }
+    });
+
+  while (cleansedQueuedCardIds.length < maxQueuedCards) {
+    cleansedQueuedCardIds.push(null);
+  }
+
+  return cleansedQueuedCardIds;
+};
+
+const defaultState: ReduxGameData = {view: undefined, queuedCardIds: []};
+
+export default (
+  state: ReduxGameData = defaultState,
+  {type, payload}: {type: string, payload: any}
+): ReduxGameData => {
   let queuedCardIds;
-  let cardIdQueueIndex;
-  let queueAlreadyContainsCardId;
 
   switch (type) {
     case SET_GAME_STATE:
-      if (payload === null) {
-        return null;
-      } else if (!payload.currentBlackCard) {
-        return {...payload, queuedCardIds: []};
-      } else if (
-        state === null
-        || state.queuedCardIds.length !== payload.currentBlackCard.answerFields
-        || !state.queuedCardIds.reduce(
-          (acc, id) => (acc && (id === null || payload.hand.map((card: WhiteCard) => card.id).includes(id))),
-          true
-        )
-      ) {
-        const queuedCardIds = [];
-        for (let i = 0; i < payload.currentBlackCard.answerFields; i++) {
-          queuedCardIds.push(null);
-        }
-        return {...payload, queuedCardIds};
+      const gameView: GameView | undefined = payload;
+      if (gameView === undefined) {
+        return defaultState;
+      } else if (gameView.getStage() !== GameView.Stage.PLAY_PHASE
+              || !gameView.hasCurrentBlackCard()) {
+        // TODO - Also enter this conditional if the
+        // current user has already played this round.
+        return {view: gameView, queuedCardIds: []};
       } else {
-        return {...payload, queuedCardIds: state.queuedCardIds};
+        return {
+          view: gameView,
+          queuedCardIds: cleanseQueuedCardIds(
+            gameView.getHandList(),
+            gameView.getCurrentBlackCard()?.getAnswerFields() || 0,
+            state.queuedCardIds
+          )
+        };
       }
     case QUEUE_CARD:
-      cardIdQueueIndex = state.queuedCardIds.findIndex((id) => id === payload.cardId);
-      queueAlreadyContainsCardId = cardIdQueueIndex !== -1;
-      if (queueAlreadyContainsCardId) {
-        if (payload.index === undefined) {
-          throw new Error(
-            'Payload must contain index when moving currently queued card to a new queued position'
-          );
+      const queueCardPayload: QueueCardPayload = payload;
+
+      const currentCardIdQueueIndex = state.queuedCardIds.findIndex((id) =>
+        queuedCardIdPointsToPlayableCard(id, queueCardPayload.card));
+      // If the card we're queueing is already queued up, that
+      // means the user is moving it to a different queue spot.
+      if (currentCardIdQueueIndex !== -1) {
+        if (queueCardPayload.index === undefined) {
+          throw new Error('Payload must contain index when moving currently queued card to a new queued position');
         }
         queuedCardIds = [...state.queuedCardIds];
-        queuedCardIds[cardIdQueueIndex] = queuedCardIds[payload.index];
-        queuedCardIds[payload.index] = payload.cardId;
+
+        // Swap queued cards.
+        const tempCardId = queuedCardIds[currentCardIdQueueIndex];
+        queuedCardIds[currentCardIdQueueIndex] =
+          queuedCardIds[queueCardPayload.index];
+        queuedCardIds[queueCardPayload.index] = tempCardId;
 
         return {...state, queuedCardIds};
-      } else if (typeof payload.index !== 'number') {
+      }
+
+      let queueCardPayloadIndex = queueCardPayload.index;
+
+      if (typeof queueCardPayloadIndex !== 'number') {
         const openIndex = state.queuedCardIds.findIndex((id) => id === null);
         if (openIndex === -1) {
-          return {...state, queuedCardIds: state.queuedCardIds};
+          return {...state};
         }
-        // TODO - Don't edit the payload in the line below since it screws with redux dev tools
-        payload.index = openIndex;
+        queueCardPayloadIndex = openIndex;
       }
 
       if (
-        payload.index < 0 ||
-        payload.index > state.hand.length ||
-        state.queuedCardIds.includes(payload.cardId)
+        state.queuedCardIds[queueCardPayloadIndex] === undefined
       ) {
-        return {...state, queuedCardIds: state.queuedCardIds};
+        return {...state};
       }
 
       queuedCardIds = [...state.queuedCardIds];
-      queuedCardIds[payload.index] = payload.cardId;
+      queuedCardIds[queueCardPayloadIndex] =
+        playableWhiteCardToQueuedCardId(queueCardPayload.card) ||
+        queuedCardIds[queueCardPayloadIndex];
       return {...state, queuedCardIds};
     case UNQUEUE_CARD:
+      const playableWhiteCard: PlayableWhiteCard = payload;
       queuedCardIds = [...state.queuedCardIds];
-      queuedCardIds[queuedCardIds.findIndex((id) => id === payload)] = null;
+      const indexToClear = queuedCardIds.findIndex((id) =>
+        queuedCardIdPointsToPlayableCard(id, playableWhiteCard));
+      if (indexToClear > -1) {
+        queuedCardIds[indexToClear] = null;
+      }
       return {...state, queuedCardIds};
-    case SET_HAND:
-      return {
-        ...state,
-        hand: payload
-      };
-    case ADD_CARD_TO_HAND:
-      return {
-        ...state,
-        hand: state.hand.concat([payload])
-      };
-    case ADD_PLAYER:
-      return {
-        ...state,
-        players: state.players.concat([payload])
-      };
     default:
       return state;
   }
 };
 
-export const setGameState = (payload: GameData) => ({
+export const setGameState = (payload: GameView | undefined) => ({
   type: SET_GAME_STATE,
   payload
 });
 
-// TODO - Remove index argument since it's not used.
-export const queueCard = (payload: {cardId: string}) => ({
+interface QueueCardPayload {
+  card: PlayableWhiteCard;
+  index?: number;
+}
+
+export const queueCard = (payload: QueueCardPayload) => ({
   type: QUEUE_CARD,
   payload
 });
 
-export const unqueueCard = (cardId: string) => ({
+export const unqueueCard = (card: PlayableWhiteCard) => ({
   type: UNQUEUE_CARD,
-  payload: cardId
+  payload: card
 });

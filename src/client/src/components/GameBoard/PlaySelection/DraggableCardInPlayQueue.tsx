@@ -1,13 +1,13 @@
 import * as React from 'react';
-import {ConnectDragSource, DragObjectWithType, DragSource, useDrag} from 'react-dnd';
+import {ConnectDragSource, DragSource} from 'react-dnd';
 import {useDispatch} from 'react-redux';
-import {WhiteCard} from '../../../api/dao';
+import {PlayableWhiteCard} from '../../../../../../proto-gen-out/game/game_service_pb';
 import {cardInHand} from '../../../dndTypes';
 import {unqueueCard} from '../../../store/modules/game';
-import CAHWhiteCard from '../../shells/CAHWhiteCard';
+import CAHPlayableWhiteCard from '../../shells/CAHPlayableWhiteCard';
 
 interface DraggableCardProps {
-  card: WhiteCard;
+  card: PlayableWhiteCard;
   isDragging: boolean;
   connectDragSource: ConnectDragSource;
 }
@@ -17,17 +17,17 @@ const DraggableCard = (props: DraggableCardProps) => {
 
   return props.connectDragSource(
     <div
-      onClick={() => dispatch(unqueueCard(props.card.id))}
+      onClick={() => dispatch(unqueueCard(props.card))}
       style={{opacity: props.isDragging ? 0.5 : 1}}
     >
-      <CAHWhiteCard {...props} />
+      <CAHPlayableWhiteCard card={props.card}/>
     </div>
   );
 };
 
 export default DragSource(
   cardInHand,
-  {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
+  {beginDrag: (props: DraggableCardProps) => (props.card)},
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()

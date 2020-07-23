@@ -4,9 +4,8 @@ export interface EnvironmentVariables {
   googleClientId: Readonly<string>;
   googleClientSecret: Readonly<string>;
   googleRedirectDomain: Readonly<string>;
-  oAuthEncryptionPassword: Readonly<string>;
   apiUrl: Readonly<string>;
   gameServerUrl: Readonly<string>;
-  authServerUrl: Readonly<string>;
   rabbitMQURI: Readonly<string>;
+  jwtSecret: Readonly<string>;
 }

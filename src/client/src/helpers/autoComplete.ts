@@ -1,9 +1,5 @@
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Guide/Regular_Expressions#Using_special_characters
 const specialCharsRegex = /[.*+?^${}()|[\]\\]/g;
-
-// http://www.ecma-international.org/ecma-262/5.1/#sec-15.10.2.6
 const wordCharacterRegex = /[a-z0-9_]/i;
-
 const whitespacesRegex = /\s+/;
 
 const escapeRegexCharacters = (str: string) => (str.replace(specialCharsRegex, '\\$&'));
@@ -13,7 +9,7 @@ const match = (text: string, query: string): number[][] => (
     .trim()
     .split(whitespacesRegex)
     .filter((word) => (word.length > 0))
-    .reduce((result, word) => {
+    .reduce<number[][]>((result, word) => {
       const wordLen = word.length;
       const prefix = wordCharacterRegex.test(word[0]) ? '\\b' : '';
       const regex = new RegExp(prefix + escapeRegexCharacters(word), 'i');

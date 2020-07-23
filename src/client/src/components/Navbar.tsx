@@ -11,11 +11,9 @@ import {
   Typography
 } from '@material-ui/core';
 import ExitToApp from '@material-ui/icons/ExitToApp';
-import Home from '@material-ui/icons/Home';
 import MenuIcon from '@material-ui/icons/Menu';
 import Person from '@material-ui/icons/Person';
-// TODO - Change import below back to icons/Settings
-import Settings from '@material-ui/icons/SettingsApplications';
+import Settings from '@material-ui/icons/Settings';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import ViewList from '@material-ui/icons/ViewList';
 import {makeStyles} from '@material-ui/styles';
@@ -40,11 +38,16 @@ const useStyles = makeStyles({
 });
 
 const Navbar = () => {
-  const classes = useStyles({});
-  const {isOpen, user} = useSelector(({global: {navbarOpen, user}}: StoreState) => ({
+  const classes = useStyles();
+
+  const {
+    isOpen,
+    user
+  } = useSelector(({global: {navbarOpen, user}}: StoreState) => ({
     isOpen: navbarOpen,
     user
   }));
+
   const dispatch = useDispatch();
 
   return <div>
@@ -76,13 +79,7 @@ const Navbar = () => {
         <div>
           {[
             {
-              to: '/',
-              onClick: () => dispatch(closeNavbar()),
-              icon: <Home/>,
-              text: 'Home'
-            },
-            {
-              to: `/user?id=${user.id}`,
+              to: `/${user.getName()}`,
               onClick: () => dispatch(closeNavbar()),
               icon: <Person/>,
               text: 'Profile'
@@ -126,7 +123,7 @@ const Navbar = () => {
         </div>
         :
         <div>
-          <ListItem button onClick={() => redirectTo('/logout')}>
+          <ListItem button onClick={() => redirectTo('/login')}>
             <ListItemIcon>
               <ExitToApp/>
             </ListItemIcon>

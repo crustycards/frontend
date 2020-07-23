@@ -1,113 +1,418 @@
-import {Body, Controller, Delete, Get, Param, Put, Query, UseGuards} from '@nestjs/common';
+import {Body, Controller, Post, Res, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
-import {Cardpack} from '../cardpack/interfaces/cardpack.interface';
+import {Response} from 'express';
+import {
+  GetCardpackRequest,
+  CreateCardpackRequest,
+  ListCardpacksRequest,
+  UpdateCardpackRequest,
+  DeleteCardpackRequest,
+  CreateBlackCardRequest,
+  CreateWhiteCardRequest,
+  ListBlackCardsRequest,
+  ListWhiteCardsRequest,
+  UpdateBlackCardRequest,
+  UpdateWhiteCardRequest,
+  DeleteBlackCardRequest,
+  DeleteWhiteCardRequest,
+  BatchCreateBlackCardsRequest,
+  BatchCreateWhiteCardsRequest,
+  BatchDeleteBlackCardsRequest,
+  BatchDeleteWhiteCardsRequest,
+  UndeleteCardpackRequest,
+  UndeleteBlackCardRequest,
+  UndeleteWhiteCardRequest,
+  LikeCardpackRequest,
+  UnlikeCardpackRequest,
+  CheckDoesUserLikeCardpackRequest,
+  CardpackSearchRequest,
+  AutocompleteCardpackSearchRequest
+} from '../../../proto-gen-out/api/cardpack_service_pb';
+import {handleRequest} from '../rpc';
 import {CardpackService} from './cardpack.service';
-import {BlackCard} from './interfaces/blackCard.interface';
-import {JsonBlackCard} from './interfaces/jsonBlackCard.interface';
-import {JsonWhiteCard} from './interfaces/jsonWhiteCard.interface';
-import {WhiteCard} from './interfaces/whiteCard.interface';
 
 @Controller('api')
 export class CardpackController {
   constructor(private readonly cardpackService: CardpackService) {}
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('cardpacks/:userId')
-  public createCardpack(@Param('userId') userId: string, @Body('name') name: string): Promise<Cardpack> {
-    return this.cardpackService.createCardpack(userId, name);
+  @Post('CardpackService/CreateCardpack')
+  public async createCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CreateCardpackRequest.deserializeBinary,
+      this.cardpackService.client.createCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('cardpack/:cardpackId')
-  public getCardpackById(@Param('cardpackId') cardpackId: string): Promise<Cardpack> {
-    return this.cardpackService.getCardpackById(cardpackId);
+  @Post('CardpackService/GetCardpack')
+  public async getCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      GetCardpackRequest.deserializeBinary,
+      this.cardpackService.client.getCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('cardpacks/:userId')
-  public getCardpacksByUser(@Param('userId') userId: string): Promise<Cardpack[]> {
-    return this.cardpackService.getCardpacksByUser(userId);
-  }
-
-  // TODO - Enable this route and pipe it through to the client
-  // @UseGuards(AuthGuard('cookie'))
-  // @Patch('')
-  // patchCardpack(): Promise<void> {
-  //   return this.cardpackService.patchCardpack();
-  // }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Delete('cardpack/:cardpackId')
-  public deleteCardpack(@Param('cardpackId') cardpackId: string): Promise<void> {
-    return this.cardpackService.deleteCardpack(cardpackId);
+  @Post('CardpackService/ListCardpacks')
+  public async listCardpacks(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      ListCardpacksRequest.deserializeBinary,
+      this.cardpackService.client.listCardpacks,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('cardpack/cards/white/:cardpackId')
-  public createWhiteCards(
-    @Param('cardpackId') cardpackId: string,
-    @Body() cards: JsonWhiteCard[]
-  ): Promise<WhiteCard[]> {
-    return this.cardpackService.createWhiteCards(cardpackId, cards);
+  @Post('CardpackService/UpdateCardpack')
+  public async updateCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UpdateCardpackRequest.deserializeBinary,
+      this.cardpackService.client.updateCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('cardpack/cards/black/:cardpackId')
-  public createBlackCards(
-    @Param('cardpackId') cardpackId: string,
-    @Body() cards: JsonBlackCard[]
-  ): Promise<BlackCard[]> {
-    return this.cardpackService.createBlackCards(cardpackId, cards);
+  @Post('CardpackService/DeleteCardpack')
+  public async deleteCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      DeleteCardpackRequest.deserializeBinary,
+      this.cardpackService.client.deleteCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('/cards/white/:cardId')
-  public deleteWhiteCard(@Query('cardpackId') cardpackId: string, @Param('cardId') cardId: string): Promise<void> {
-    return this.cardpackService.deleteWhiteCard(cardpackId, cardId);
+  @Post('CardpackService/CreateBlackCard')
+  public async createBlackCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CreateBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.createBlackCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('/cards/black/:cardId')
-  public deleteBlackCard(@Query('cardpackId') cardpackId: string, @Param('cardId') cardId: string): Promise<void> {
-    return this.cardpackService.deleteBlackCard(cardpackId, cardId);
+  @Post('CardpackService/CreateWhiteCard')
+  public async createWhiteCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CreateWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.createWhiteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('cardpacks/favorite/:userId')
-  public favoriteCardpack(@Query('cardpackId') cardpackId: string, @Param('userId') userId: string): Promise<void> {
-    return this.cardpackService.favoriteCardpack(userId, cardpackId);
+  @Post('CardpackService/ListBlackCards')
+  public async listBlackCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      ListBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.listBlackCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('cardpacks/favorite/:userId')
-  public unfavoriteCardpack(@Query('cardpackId') cardpackId: string, @Param('userId') userId: string): Promise<void> {
-    return this.cardpackService.unfavoriteCardpack(userId, cardpackId);
+  @Post('CardpackService/ListWhiteCards')
+  public async listWhiteCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      ListWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.listWhiteCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('cardpacks/favorite/:userId')
-  public getFavoritedCardpacks(@Param('userId') userId: string): Promise<Cardpack[]> {
-    return this.cardpackService.getFavoritedCardpacks(userId);
+  @Post('CardpackService/UpdateBlackCard')
+  public async updateBlackCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UpdateBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.updateBlackCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('cardpacks/:userId/favorited')
-  public checkIfCardpackIsFavorited(
-    @Param('userId') userId: string,
-    @Query('cardpackId') cardpackId: string
-  ): Promise<boolean> {
-    return this.cardpackService.checkIfCardpackIsFavorited(userId, cardpackId);
+  @Post('CardpackService/UpdateWhiteCard')
+  public async updateWhiteCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UpdateWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.updateWhiteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('search/cardpack')
-  public searchCardpacks(@Query('query') query: string): Promise<Cardpack[]> {
-    return this.cardpackService.searchCardpacks(query);
+  @Post('CardpackService/DeleteBlackCard')
+  public async deleteBlackCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      DeleteBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.deleteBlackCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('search/cardpack/autocomplete')
-  public searchCardpacksAutocomplete(@Query('query') query: string): Promise<string[]> {
-    return this.cardpackService.searchCardpacksAutocomplete(query);
+  @Post('CardpackService/DeleteWhiteCard')
+  public async deleteWhiteCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      DeleteWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.deleteWhiteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/BatchCreateBlackCards')
+  public async batchCreateBlackCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      BatchCreateBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchCreateBlackCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/BatchCreateWhiteCards')
+  public async batchCreateWhiteCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      BatchCreateWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchCreateWhiteCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/BatchDeleteBlackCards')
+  public async batchDeleteBlackCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      BatchDeleteBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchDeleteBlackCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/BatchDeleteWhiteCards')
+  public async batchDeleteWhiteCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      BatchDeleteWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchDeleteWhiteCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UndeleteCardpack')
+  public async undeleteCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UndeleteCardpackRequest.deserializeBinary,
+      this.cardpackService.client.undeleteCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UndeleteBlackCard')
+  public async undeleteBlackCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UndeleteBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.undeleteBlackCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UndeleteWhiteCard')
+  public async undeleteWhiteCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UndeleteWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.undeleteWhiteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/LikeCardpack')
+  public async likeCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      LikeCardpackRequest.deserializeBinary,
+      this.cardpackService.client.likeCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UnlikeCardpack')
+  public async unlikeCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UnlikeCardpackRequest.deserializeBinary,
+      this.cardpackService.client.unlikeCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/CheckDoesUserLikeCardpack')
+  public async checkDoesUserLikeCardpack(
+    @Body() body: any,
+    @Res() res: Response
+  ) {
+    handleRequest(
+      body,
+      res,
+      CheckDoesUserLikeCardpackRequest.deserializeBinary,
+      this.cardpackService.client.checkDoesUserLikeCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/CardpackSearch')
+  public async cardpackSearch(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CardpackSearchRequest.deserializeBinary,
+      this.cardpackService.client.cardpackSearch,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/AutocompleteCardpackSearch')
+  public async autocompleteCardpackSearch(
+    @Body() body: any,
+    @Res() res: Response
+  ) {
+    handleRequest(
+      body,
+      res,
+      AutocompleteCardpackSearchRequest.deserializeBinary,
+      this.cardpackService.client.autocompleteCardpackSearch,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 }

@@ -1,143 +1,295 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, Query, UseGuards} from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Query,
+  UseGuards,
+  Res
+} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
+import {
+  SearchGamesRequest,
+  CreateGameRequest,
+  StartGameRequest,
+  StopGameRequest,
+  JoinGameRequest,
+  LeaveGameRequest,
+  KickUserRequest,
+  BanUserRequest,
+  UnbanUserRequest,
+  PlayCardsRequest,
+  UnplayCardsRequest,
+  VoteCardRequest,
+  VoteStartNextRoundRequest,
+  AddArtificialPlayerRequest,
+  RemoveArtificialPlayerRequest,
+  CreateChatMessageRequest,
+  GetGameViewRequest
+} from '../../../proto-gen-out/game/game_service_pb';
 import {GameService} from './game.service';
-import {GameData} from './interfaces/gameData.interface';
-import {GameInfo} from './interfaces/gameInfo.interface';
+import {handleRequest} from '../rpc';
+import {Response} from 'express';
 
 @Controller('api')
 export class GameController {
   constructor(private readonly gameService: GameService) {}
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/create/:userId')
-  public createGame(
-    @Body() createGameData: {
-      gameName: string,
-      maxPlayers: number,
-      maxScore: number,
-      handSize: number,
-      cardpackIds: string[]
-    },
-    @Param('userId') userId: string
-  ): Promise<GameData> {
-    return this.gameService.createGame(
-      userId,
-      createGameData.gameName,
-      createGameData.maxPlayers,
-      createGameData.maxScore,
-      createGameData.handSize,
-      createGameData.cardpackIds
+  @Post('GameService/SearchGames')
+  public async searchGames(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      SearchGamesRequest.deserializeBinary,
+      this.gameService.client.searchGames,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
     );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/start/:userId')
-  public startGame(@Param('userId') userId: string): Promise<GameData> {
-    return this.gameService.startGame(userId);
+  @Post('GameService/CreateGame')
+  public async createGame(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CreateGameRequest.deserializeBinary,
+      this.gameService.client.createGame,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/stop/:userId')
-  public stopGame(@Param('userId') userId: string): Promise<GameData> {
-    return this.gameService.stopGame(userId);
+  @Post('GameService/StartGame')
+  public async startGame(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      StartGameRequest.deserializeBinary,
+      this.gameService.client.startGame,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/join/:userId')
-  public joinGame(@Param('userId') userId: string, @Query('gameName') gameName: string): Promise<GameData> {
-    return this.gameService.joinGame(userId, gameName);
+  @Post('GameService/StopGame')
+  public async stopGame(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      StopGameRequest.deserializeBinary,
+      this.gameService.client.stopGame,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('game/players/leave/:userId')
-  public leaveGame(@Param('userId') userId: string): Promise<void> {
-    return this.gameService.leaveGame(userId);
+  @Post('GameService/JoinGame')
+  public async joinGame(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      JoinGameRequest.deserializeBinary,
+      this.gameService.client.joinGame,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/artificialPlayers/add/:userId')
-  public addArtificialPlayers(
-    @Param('userId') userId: string,
-    @Body() data: {artificialPlayerName: string, amount: number}
-  ): Promise<GameData> {
-    return this.gameService.addArtificialPlayers(userId, data);
+  @Post('GameService/LeaveGame')
+  public async leaveGame(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      LeaveGameRequest.deserializeBinary,
+      this.gameService.client.leaveGame,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('game/artificialPlayers/remove/:userId')
-  public removeArtificialPlayers(
-    @Param('userId') userId: string,
-    @Body() data: {artificialPlayerName: string, amount: number}
-  ): Promise<GameData> {
-    return this.gameService.removeArtificialPlayers(userId, data);
+  @Post('GameService/KickUser')
+  public async kickUser(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      KickUserRequest.deserializeBinary,
+      this.gameService.client.kickUser,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('game/:userId')
-  public getGameState(@Param('userId') userId: string): Promise<GameData> {
-    return this.gameService.getGameState(userId);
+  @Post('GameService/BanUser')
+  public async banUser(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      BanUserRequest.deserializeBinary,
+      this.gameService.client.banUser,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('games')
-  public getGameList(): Promise<GameInfo[]> {
-    return this.gameService.getGameList();
+  @Post('GameService/UnbanUser')
+  public async unbanUser(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UnbanUserRequest.deserializeBinary,
+      this.gameService.client.unbanUser,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('game/play/:userId')
-  public playCards(@Param('userId') userId: string, @Body() cardIds: string[]): Promise<void> {
-    return this.gameService.playCards(userId, cardIds);
+  @Post('GameService/PlayCards')
+  public async playCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      PlayCardsRequest.deserializeBinary,
+      this.gameService.client.playCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('game/play/:userId')
-  public unPlayCards(@Param('userId') userId: string): Promise<void> {
-    return this.gameService.unPlayCards(userId);
+  @Post('GameService/UnplayCards')
+  public async unplayCards(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UnplayCardsRequest.deserializeBinary,
+      this.gameService.client.unplayCards,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('game/players/kick')
-  public kickPlayer(
-    @Query('kickerUserId') kickerUserId: string,
-    @Query('kickeeUserId') kickeeUserId: string
-  ): Promise<GameData> {
-    return this.gameService.kickPlayer(kickerUserId, kickeeUserId);
+  @Post('GameService/VoteCard')
+  public async voteCard(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      VoteCardRequest.deserializeBinary,
+      this.gameService.client.voteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Delete('game/players/ban')
-  public banPlayer(
-    @Query('bannerUserId') bannerUserId: string,
-    @Query('banneeUserId') banneeUserId: string
-  ): Promise<GameData> {
-    return this.gameService.banPlayer(bannerUserId, banneeUserId);
+  @Post('GameService/VoteStartNextRound')
+  public async voteStartNextRound(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      VoteStartNextRoundRequest.deserializeBinary,
+      this.gameService.client.voteStartNextRound,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('game/players/unban')
-  public unbanPlayer(
-    @Query('unbannerUserId') unbannerUserId: string,
-    @Query('unbanneeUserId') unbanneeUserId: string
-  ): Promise<GameData> {
-    return this.gameService.unbanPlayer(unbannerUserId, unbanneeUserId);
+  @Post('GameService/AddArtificialPlayer')
+  public async addArtificialPlayer(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      AddArtificialPlayerRequest.deserializeBinary,
+      this.gameService.client.addArtificialPlayer,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('game/vote/:userId')
-  public vote(@Param('userId') userId: string, @Query('cardId') cardId: string): Promise<void> {
-    return this.gameService.vote(userId, cardId);
+  @Post('GameService/RemoveArtificialPlayer')
+  public async removeArtificialPlayer(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      RemoveArtificialPlayerRequest.deserializeBinary,
+      this.gameService.client.removeArtificialPlayer,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('game/continue/:userId')
-  public startNextRound(@Param('userId') userId: string): Promise<void> {
-    return this.gameService.startNextRound(userId);
+  @Post('GameService/CreateChatMessage')
+  public async createChatMessage(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      CreateChatMessageRequest.deserializeBinary,
+      this.gameService.client.createChatMessage,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('game/messages/:userId')
-  public sendMessage(@Param('userId') userId: string, @Body('messageText') messageText: string): Promise<GameData> {
-    return this.gameService.sendMessage(userId, messageText);
+  @Post('GameService/GetGameView')
+  public async getGameView(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      GetGameViewRequest.deserializeBinary,
+      this.gameService.client.getGameView,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 }

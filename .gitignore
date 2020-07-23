@@ -3,6 +3,7 @@ node_modules
 /coverage
 
 /src/client/dist/bundle.js
+/proto-gen-out
 
 # VS Code
 .vscode/

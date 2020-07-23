@@ -1,249 +1,178 @@
-import {Button, CircularProgress, Grid, LinearProgress, Tab, Tabs} from '@material-ui/core';
+import {
+  Button,
+  CircularProgress,
+  LinearProgress,
+  Tab,
+  Tabs,
+  Theme,
+  GridList,
+  GridListTile
+} from '@material-ui/core';
+import {createStyles, makeStyles} from '@material-ui/styles';
 import * as React from 'react';
-import {Component} from 'react';
+import {useState, useEffect} from 'react';
 import {FileWithPath} from 'react-dropzone';
-import {connect} from 'react-redux';
+import * as InfiniteScroll from 'react-infinite-scroller';
 import SwipeableViews from 'react-swipeable-views';
-import {ApiContextWrapper} from '../../api/context';
-import {Cardpack, JsonBlackCard, JsonWhiteCard, User} from '../../api/dao';
-import Api from '../../api/model/api';
-import {parse, stringify} from '../../helpers/cardpackFileHandler';
+import {
+  BatchCreateBlackCardsRequest,
+  BatchCreateWhiteCardsRequest,
+  CreateBlackCardRequest,
+  CreateWhiteCardRequest,
+  ListBlackCardsRequest,
+  ListWhiteCardsRequest
+} from '../../../../../proto-gen-out/api/cardpack_service_pb';
+import {BlackCard, Cardpack, User, WhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {
+  batchCreateBlackCards,
+  batchCreateWhiteCards,
+  getCardpack,
+  listBlackCards,
+  listWhiteCards,
+  createWhiteCard,
+  createBlackCard
+} from '../../api/cardpackService';
+import {
+  parseFromJson,
+  stringifyToJson
+} from '../../helpers/cardpackFileHandler';
 import FileUploaderDialog from '../FileUploaderDialog';
+import BlackCardAdder from './BlackCardAdder';
+import WhiteCardAdder from './WhiteCardAdder';
 import CAHBlackCard from '../shells/CAHBlackCard';
 import CAHWhiteCard from '../shells/CAHWhiteCard';
-import TabbedList from '../TabbedList';
-import CardAdder from './CardAdder';
+import {useGlobalStyles} from '../../styles/globalStyles';
+import {useSelector} from 'react-redux';
+import {StoreState} from '../../store';
+
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    cardList: {
+      height: '200px',
+      overflowX: 'hidden',
+      overflowY: 'scroll'
+    }
+  })
+);
 
 interface CardpackViewerProps {
-  api: Api;
-  cardpackId: string;
-  user: User;
+  cardpackName: string;
 }
 
-interface CardpackViewerState {
-  newCardName: string;
-  newCardType: string; // TODO - Change to ENUM
-  newCardAnswerFields: number;
-  cardpack: Cardpack;
-  slideIndex: number;
-  isUploading: boolean;
-  showUploadDialogBox: boolean;
-}
+// TODO - Allow users to download cardpacks as either
+// json or plaintext (and upload as either as well).
 
-class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState> {
+const CardpackViewer = (props: CardpackViewerProps) => {
+  const {currentUser} = useSelector(
+    ({global: {user}}: StoreState) => ({currentUser: user})
+  );
+  const [
+    cardpack,
+    setCardpack
+  ] = useState<Cardpack | null | undefined>(undefined);
 
-  private static convertFileToCardpackData(file: FileWithPath) {
-    return new Promise((resolve, reject) => {
+  const classes = useStyles();
+  const globalClasses = useGlobalStyles();
+
+  const [blackCards, setBlackCards] = useState<BlackCard[] | undefined>([]);
+  const [nextBlackCardPageToken, setNextBlackCardPageToken] = useState('');
+  const [hasMoreBlackCards, setHasMoreBlackCards] = useState(true);
+  const [isLoadingBlackCards, setIsLoadingBlackCards] = useState(false);
+
+  const [whiteCards, setWhiteCards] = useState<WhiteCard[] | undefined>([]);
+  const [nextWhiteCardPageToken, setNextWhiteCardPageToken] = useState('');
+  const [hasMoreWhiteCards, setHasMoreWhiteCards] = useState(true);
+  const [isLoadingWhiteCards, setIsLoadingWhiteCards] = useState(false);
+
+  const [slideIndex, setSlideIndex] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
+  const [showUploadDialogBox, setShowUploadDialogBox] = useState(false);
+
+  const convertFileToCardpackData = async (file: FileWithPath) => {
+    const fileData = await new Promise<string | ArrayBuffer | null>
+    ((resolve, reject) => {
       const fileReader = new FileReader();
       fileReader.onload = () => {
         resolve(fileReader.result);
       };
       fileReader.readAsText(file);
-    })
-      .then(parse);
-  }
-  constructor(props: CardpackViewerProps) {
-    super(props);
-    this.addWhiteCards = this.addWhiteCards.bind(this);
-    this.addBlackCards = this.addBlackCards.bind(this);
-    this.downloadStringifiedCards = this.downloadStringifiedCards.bind(this);
-    this.handleUpload = this.handleUpload.bind(this);
-    this.handleTabChange = this.handleTabChange.bind(this);
-    this.state = {
-      newCardName: '',
-      newCardType: 'white',
-      newCardAnswerFields: 1,
-      cardpack: undefined,
-      slideIndex: 0,
-      isUploading: false,
-      showUploadDialogBox: false
-    };
+    });
 
-    this.openUploadDialog = this.openUploadDialog.bind(this);
-    this.closeUploadDialog = this.closeUploadDialog.bind(this);
-
-    this.fetchCurrentCardpack();
-  }
-
-  public render() {
-    if (this.state.cardpack === null) {
-      return (
-        <div className='panel'>Cardpack does not exist</div>
-      );
+    if (fileData === null) {
+      throw new Error('Failed to parse cardpack data - File data is null');
+    } else if (fileData instanceof ArrayBuffer) {
+      // This should never happen since we're calling `readAsText()` on the
+      // FileReader above. This is only here to make Typescript happy.
+      throw new Error('Failed to parse cardpack data - Got ArrayBuffer instead of string');
     }
+    return parseFromJson(fileData);
+  };
 
-    const isOwner = this.props.user &&
-      this.state.cardpack &&
-      this.state.cardpack.owner &&
-      this.props.user.id === this.state.cardpack.owner.id;
-
-    return (
-      <div className='panel'>
-        {this.state.cardpack ?
-          <div>
-            <div className='center'>{this.state.cardpack.name}</div>
-            <Grid container spacing={8}>
-              <Grid item xs={8}>
-                {isOwner && <CardAdder
-                  addCard={(cardData) => {
-                    cardData.type === 'white' ?
-                      this.addWhiteCards([{text: cardData.text}])
-                      :
-                      this.addBlackCards([
-                        {
-                          text: cardData.text,
-                          answerFields: cardData.answerFields
-                        }
-                      ]);
-                  }}
-                  type={this.state.slideIndex ? 'black' : 'white'}
-                />}
-              </Grid>
-              <Grid item xs={4}>
-                {this.state.cardpack &&
-                  <div>
-                    <Button
-                      style={{margin: '2px'}}
-                      variant={'outlined'}
-                      onClick={this.downloadStringifiedCards}
-                    >
-                      Download
-                    </Button>
-                    {
-                      isOwner &&
-                      <div style={{display: 'inline'}}>
-                        <Button
-                          style={{margin: '2px'}}
-                          variant={'outlined'}
-                          disabled={this.state.isUploading}
-                          onClick={this.openUploadDialog}
-                        >
-                          Upload
-                        </Button>
-                        <FileUploaderDialog
-                          titleText={'Upload cardpack *.txt file'}
-                          type={'text/*'}
-                          onUpload={this.handleUpload}
-                          onClose={this.closeUploadDialog}
-                          isVisible={this.state.showUploadDialogBox}
-                        />
-                      </div>
-                    }
-                  </div>
-                }
-                {this.state.isUploading && <CircularProgress/>}
-              </Grid>
-            </Grid>
-            <div>
-              <Tabs
-                onChange={this.handleTabChange}
-                value={this.state.slideIndex}
-              >
-                <Tab label='White Cards'/>
-                <Tab label='Black Cards'/>
-              </Tabs>
-              <SwipeableViews
-                onChangeIndex={this.handleTabChange}
-                index={this.state.slideIndex}
-              >
-                <TabbedList>
-                  {this.state.cardpack.whiteCards.map((card, index) =>
-                    <CAHWhiteCard
-                      key={index}
-                      card={card}
-                      isOwner={isOwner}
-                      onDelete={(cardId) => this.setState({
-                        cardpack: {
-                          ...this.state.cardpack,
-                          whiteCards: this.state.cardpack.whiteCards.filter(
-                            (card) => card.id !== cardId
-                          )
-                        }
-                      })}
-                    />
-                  )}
-                </TabbedList>
-                <TabbedList
-                  columns={3}
-                  itemsPerTab={12}
-                >
-                  {this.state.cardpack.blackCards.map((card, index) =>
-                    <CAHBlackCard
-                      key={index}
-                      card={card}
-                      isOwner={isOwner}
-                      onDelete={(cardId) => this.setState({
-                        cardpack: {
-                          ...this.state.cardpack,
-                          blackCards: this.state.cardpack.blackCards.filter(
-                            (card) => card.id !== cardId
-                          )
-                        }
-                      })}
-                    />
-                  )}
-                </TabbedList>
-              </SwipeableViews>
-            </div>
-          </div>
-          :
-          <LinearProgress/>}
-      </div>
-    );
+  const openUploadDialog = () => {
+    setShowUploadDialogBox(true);
   }
 
-  private openUploadDialog() {
-    this.setState({showUploadDialogBox: true});
+  const closeUploadDialog = () => {
+    setShowUploadDialogBox(false);
   }
 
-  private closeUploadDialog() {
-    this.setState({showUploadDialogBox: false});
-  }
-
-  private fetchCurrentCardpack() {
-    this.props.api.main.getCardpack(this.props.cardpackId)
+  const fetchCurrentCardpack = async () => {
+    await getCardpack(props.cardpackName)
       .then((cardpack) => {
-        this.setState({cardpack});
+        setCardpack(cardpack);
       })
       .catch(() => {
-        this.setState({cardpack: null});
+        setCardpack(null);
       });
   }
 
-  private addWhiteCards(cards: JsonWhiteCard[]) {
-    return this.props.api.main.createWhiteCards(this.props.cardpackId, cards).then((createdCards) => {
-      this.setState({
-        cardpack: {
-          ...this.state.cardpack,
-          whiteCards: [
-            ...this.state.cardpack.whiteCards,
-            ...createdCards
-          ]
-        }
-      });
-      return createdCards;
+  const addBlackCard = (card: BlackCard) => {
+    createBlackCard(props.cardpackName, card).then((createdCard) => {
+      // TODO - Add this card to the component state.
     });
   }
 
-  private addBlackCards(cards: JsonBlackCard[]) {
-    return this.props.api.main.createBlackCards(this.state.cardpack.id, cards).then((createdCards) => {
-      this.setState({
-        cardpack: {
-          ...this.state.cardpack,
-          blackCards: [
-            ...this.state.cardpack.blackCards,
-            ...createdCards
-          ]
-        }
-      });
-      return createdCards;
+  const addBlackCards = (cards: BlackCard[]) => {
+    const batchCreateBlackCardsRequest = new BatchCreateBlackCardsRequest();
+    batchCreateBlackCardsRequest.setParent(props.cardpackName);
+    cards.forEach((card) => {
+      const createBlackCardRequest = new CreateBlackCardRequest();
+      createBlackCardRequest.setBlackCard(card);
+      batchCreateBlackCardsRequest.addRequests(createBlackCardRequest);
+    });
+    batchCreateBlackCards(batchCreateBlackCardsRequest).then((response) => {
+      const createdCards = response.getBlackCardsList();
+      // TODO - Add these cards to the component state.
     });
   }
 
-  private downloadStringifiedCards() {
+  const addWhiteCard = (card: WhiteCard) => {
+    createWhiteCard(props.cardpackName, card).then((createdCard) => {
+      // TODO - Add this card to the component state.
+    });
+  }
+
+  const addWhiteCards = (cards: WhiteCard[]) => {
+    const batchCreateWhiteCardsRequest = new BatchCreateWhiteCardsRequest();
+    batchCreateWhiteCardsRequest.setParent(props.cardpackName);
+    cards.forEach((card) => {
+      const createWhiteCardRequest = new CreateWhiteCardRequest();
+      createWhiteCardRequest.setWhiteCard(card);
+      batchCreateWhiteCardsRequest.addRequests(createWhiteCardRequest);
+    });
+    batchCreateWhiteCards(batchCreateWhiteCardsRequest).then((response) => {
+      const createdCards = response.getWhiteCardsList();
+      // TODO - Add these cards to the component state.
+    });
+  }
+
+  const downloadStringifiedCards = () => {
     const download = (filename: string, text: string) => {
       const element = document.createElement('a');
-      element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute(
+        'href',
+        'data:text/plain;charset=utf-8,' + encodeURIComponent(text)
+      );
       element.setAttribute('download', filename);
       element.style.display = 'none';
       document.body.appendChild(element);
@@ -251,37 +180,201 @@ class CardpackViewer extends Component<CardpackViewerProps, CardpackViewerState>
       document.body.removeChild(element);
     };
     // Start file download.
-    download(this.state.cardpack.name, stringify({
-      whiteCards: this.state.cardpack.whiteCards,
-      blackCards: this.state.cardpack.blackCards
-    }));
+    // TODO - Uncomment and fix this.
+    // download(cardpack.name, stringifyToJson({
+    //   whiteCards: cardpack.whiteCards,
+    //   blackCards: cardpack.blackCards
+    // }));
   }
 
-  private async handleUpload(
+  const handleUpload = async (
     acceptedFiles: FileWithPath[],
     rejectedFiles: FileWithPath[],
     event: React.DragEvent<HTMLDivElement>
-  ) {
+  ) => {
     if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
-      this.closeUploadDialog();
+      closeUploadDialog();
       const file = acceptedFiles[0];
-      const {whiteCards, blackCards} = await CardpackViewer.convertFileToCardpackData(file);
-      this.setState({isUploading: true}, () => {
-        Promise.all([
-          this.addWhiteCards(whiteCards),
-          this.addBlackCards(blackCards)
-        ]).then(() => this.setState({isUploading: false}));
-      });
+      const {whiteCards, blackCards} = await convertFileToCardpackData(file);
+      setIsUploading(true);
+      await Promise.all([
+        addWhiteCards(whiteCards),
+        addBlackCards(blackCards)
+      ]);
+      setIsUploading(false);
     }
+  };
+
+  const handleTabChange = (_: any, value: number) => {
+    setSlideIndex(value);
+  };
+
+  useEffect(() => {
+    fetchCurrentCardpack();
+  }, []);
+
+  if (cardpack === null) {
+    return <div className={globalClasses.panel}>Cardpack does not exist</div>;
   }
 
-  private handleTabChange(_: any, value: number) {
-    this.setState({slideIndex: value});
+  if (cardpack === undefined) {
+    return <LinearProgress/>;
   }
+
+  const isOwner = currentUser
+    && cardpack.getName().startsWith(currentUser.getName());
+
+  return (
+    <div className={globalClasses.panel}>
+      <div>
+        <div className='center'>{cardpack.getDisplayName()}</div>
+          {cardpack &&
+            <div>
+              <Button
+                style={{margin: '2px'}}
+                variant={'outlined'}
+                onClick={downloadStringifiedCards}
+              >
+                Download
+              </Button>
+              {
+                isOwner &&
+                <div style={{display: 'inline'}}>
+                  <Button
+                    style={{margin: '2px'}}
+                    variant={'outlined'}
+                    disabled={isUploading}
+                    onClick={openUploadDialog}
+                  >
+                    Upload
+                  </Button>
+                  <FileUploaderDialog
+                    titleText={'Upload cardpack *.txt file'}
+                    type={'text/*'}
+                    onUpload={handleUpload}
+                    onClose={closeUploadDialog}
+                    isVisible={showUploadDialogBox}
+                  />
+                </div>
+              }
+            </div>
+          }
+          {isUploading && <CircularProgress/>}
+        <div>
+          <Tabs
+            onChange={handleTabChange}
+            value={slideIndex}
+          >
+            <Tab label='White Cards'/>
+            <Tab label='Black Cards'/>
+          </Tabs>
+          <SwipeableViews
+            onChangeIndex={handleTabChange}
+            index={slideIndex}
+          >
+            <div>
+              <WhiteCardAdder addCard={(card) => addWhiteCard(card)}/>
+              {
+                whiteCards === undefined ?
+                  <div>Failed to load cards!</div> :
+                  <div className={classes.cardList}>
+                    <InfiniteScroll
+                      useWindow={false}
+                      loadMore={async () => {
+                        if (!isLoadingWhiteCards) {
+                          const request = new ListWhiteCardsRequest();
+                          request.setPageToken(nextWhiteCardPageToken);
+                          request.setPageSize(10);
+                          request.setParent(cardpack.getName());
+                          setIsLoadingWhiteCards(true);
+                          try {
+                            const response = await listWhiteCards(request);
+                            const nextPageToken = response.getNextPageToken();
+                            setNextWhiteCardPageToken(nextPageToken);
+                            if (nextPageToken.length === 0) {
+                              setHasMoreWhiteCards(false);
+                            }
+                            setWhiteCards([
+                              ...whiteCards,
+                              ...response.getWhiteCardsList()
+                            ]);
+                          } catch (err) {
+                            setWhiteCards(undefined);
+                          } finally {
+                            setIsLoadingWhiteCards(false);
+                          }
+                        }
+                      }}
+                      loader={<CircularProgress/>}
+                      hasMore={hasMoreWhiteCards}
+                    >
+                      {
+                        <GridList cols={4}>
+                          {whiteCards.map((c, i) => (
+                            <GridListTile style={{height: 'auto'}} key={i}>
+                              <CAHWhiteCard card={c}/>
+                            </GridListTile>
+                          ))}
+                        </GridList>
+                      }
+                    </InfiniteScroll>
+                  </div>
+              }
+            </div>
+            <div>
+              <BlackCardAdder addCard={(card) => addBlackCard(card)}/>
+              {
+                blackCards === undefined ?
+                  <div>Failed to load cards!</div> :
+                  <div className={classes.cardList}>
+                    <InfiniteScroll
+                      useWindow={false}
+                      loadMore={async () => {
+                        if (!isLoadingBlackCards) {
+                          const request = new ListBlackCardsRequest();
+                          request.setPageToken(nextBlackCardPageToken);
+                          request.setPageSize(10);
+                          request.setParent(cardpack.getName());
+                          setIsLoadingBlackCards(true);
+                          try {
+                            const response = await listBlackCards(request);
+                            const nextPageToken = response.getNextPageToken();
+                            setNextBlackCardPageToken(nextPageToken);
+                            if (nextPageToken.length === 0) {
+                              setHasMoreBlackCards(false);
+                            }
+                            setBlackCards([
+                              ...blackCards,
+                              ...response.getBlackCardsList()
+                            ]);
+                          } catch (err) {
+                            setBlackCards(undefined);
+                          } finally {
+                            setIsLoadingBlackCards(false);
+                          }
+                        }
+                      }}
+                      loader={<CircularProgress/>}
+                      hasMore={hasMoreBlackCards}
+                    >
+                      {
+                        <GridList cols={4}>
+                          {blackCards.map((c, i) => (
+                            <GridListTile style={{height: 'auto'}} key={i}>
+                              <CAHBlackCard card={c}/>
+                            </GridListTile>
+                          ))}
+                        </GridList>
+                      }
+                    </InfiniteScroll>
+                  </div>
+              }
+            </div>
+          </SwipeableViews>
+        </div>
+      </div>
+    </div>
+  );
 }
 
-const ContextLinkedCardpackViewer = ApiContextWrapper(CardpackViewer);
-
-const mapStateToProps = ({global: {user}}: any) => ({user});
-
-export default connect(mapStateToProps)(ContextLinkedCardpackViewer);
+export default CardpackViewer;

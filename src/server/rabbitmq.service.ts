@@ -9,10 +9,12 @@ interface AMQPGameMessage {
 
 @Injectable()
 export class RabbitMQService {
-  private gameMessageCallbacks: Array<(message: AMQPGameMessage) => void> = [];
+  private gameMessageCallbacks: ((message: AMQPGameMessage) => void)[] = [];
 
   constructor(private readonly envService: EnvironmentService) {
-    this.init(); // No need to use 'await' because RabbitMQ requires message acknowledgement
+    // No need to use 'await' because
+    // RabbitMQ requires message acknowledgement.
+    this.init();
   }
 
   public onGameMessage(callback: (message: AMQPGameMessage) => void) {
@@ -20,18 +22,22 @@ export class RabbitMQService {
   }
 
   private async init() {
-    const messageQueue = await AMQP.connect(this.envService.getArgs().rabbitMQURI);
+    const messageQueue = await AMQP.connect(
+      this.envService.getArgs().rabbitMQURI);
     const channel = await messageQueue.createChannel();
     await channel.consume('GAME', (message) => {
-      const data: AMQPGameMessage = JSON.parse(message.content.toString());
-      this.gameMessageCallbacks.forEach((cb) => {
-        try {
-          cb(data);
-        } catch (err) {
-          // Callback is registered from outside code, so there's nothing we need to handle here
-        }
-      });
-      channel.ack(message);
+      if (message) {
+        const data: AMQPGameMessage = JSON.parse(message.content.toString());
+        this.gameMessageCallbacks.forEach((cb) => {
+          try {
+            cb(data);
+          } catch (err) {
+            // Callback is registered from outside code, so
+            // there's nothing we need to handle here
+          }
+        });
+        channel.ack(message);
+      }
     });
   }
 }

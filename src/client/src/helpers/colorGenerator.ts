@@ -43,8 +43,17 @@ const hsvToRgb = (h: number, s: number, v: number): Color => {
       case 3: r = p, g = q, b = v; break;
       case 4: r = t, g = p, b = v; break;
       case 5: r = v, g = p, b = q; break;
+      default:
+        // This won't ever happen thanks to the `i % 6`
+        // but the default case is needed to prevent
+        // Typescript errors.
+        throw new Error();
   }
-  return new Color(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+  return new Color(
+    Math.round(r * 255),
+    Math.round(g * 255),
+    Math.round(b * 255)
+  );
 };
 
 const parseHexString = (str: string, charsPerNumber = 8): number[] => {

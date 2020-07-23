@@ -2,7 +2,7 @@
   "extends": "tslint:recommended",
   "rules": {
       "max-line-length": {
-          "options": [120]
+          "options": [80]
       },
       "new-parens": true,
       "no-arg": true,
@@ -29,12 +29,9 @@
       "interface-name": [true, "never-prefix"],
       "no-shadowed-variable": false,
       "no-bitwise": false,
-      "no-var-requires": false
-  },
-  "jsRules": {
-      "max-line-length": {
-          "options": [120]
-      }
+      "no-var-requires": false,
+      "cyclomatic-complexity": [true, 15],
+      "strict-type-predicates": true
   },
   "linterOptions": {
     "exclude": ["node_modules/**/*.ts", "node_modules/**/*.tsx"]

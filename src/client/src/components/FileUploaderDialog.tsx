@@ -32,8 +32,17 @@ interface UploaderProps extends WithStyles<typeof styles> {
 }
 
 const FileUploaderDialog = (props: UploaderProps) => (
-  <Dialog open={props.isVisible} fullWidth={true} onClose={props.onClose || (() => null)}>
-    {props.titleText && <DialogTitle style={{textAlign: 'center'}}>{props.titleText}</DialogTitle>}
+  <Dialog
+    open={props.isVisible}
+    fullWidth={true}
+    onClose={props.onClose || (() => null)}
+  >
+    {
+      props.titleText &&
+        <DialogTitle style={{textAlign: 'center'}}>
+          {props.titleText}
+        </DialogTitle>
+    }
     <DialogContent>
       <FileUploader type={props.type} onUpload={props.onUpload}/>
     </DialogContent>

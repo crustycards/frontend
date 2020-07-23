@@ -13,6 +13,8 @@ import {createStyles, makeStyles} from '@material-ui/styles';
 import * as React from 'react';
 import ProfileImageUploader from './ProfileImageUploader';
 import UsernameChanger from './UsernameChanger';
+import {useUserService} from '../api/context';
+import {User} from '../../../../proto-gen-out/api/model_pb';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,27 +26,37 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface ProfileEditorDialogProps {
+  currentUser: User;
   isVisible: boolean;
   onClose?(): void;
-  onUsernameChange?(newUsername: string): void;
+  onDisplayNameChange?(newDisplayName: string): void;
 }
 
 const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
-  // TODO - Find a way to remove undefined argument here without getting a Typescript type error
-  const classes = useStyles(undefined);
+  const userService = useUserService();
+  const classes = useStyles();
 
   return (
-    <Dialog open={props.isVisible} fullWidth={true} onClose={props.onClose || (() => null)}>
+    <Dialog
+      open={props.isVisible}
+      fullWidth={true}
+      onClose={props.onClose || (() => null)}
+    >
       <DialogTitle style={{textAlign: 'center'}}>Edit Profile</DialogTitle>
       <DialogContent>
         <ExpansionPanel>
           <ExpansionPanelSummary
             expandIcon={<ExpandMoreIcon/>}
           >
-            <Typography className={classes.heading}>Upload Profile Picture</Typography>
+            <Typography className={classes.heading}>
+              Upload Profile Picture
+            </Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <ProfileImageUploader/>
+            <ProfileImageUploader
+              userService={userService}
+              currentUser={props.currentUser}
+            />
           </ExpansionPanelDetails>
         </ExpansionPanel>
         <ExpansionPanel>
@@ -54,7 +66,9 @@ const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
             <Typography className={classes.heading}>Change Username</Typography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
-            <UsernameChanger onSubmit={props.onUsernameChange ? props.onUsernameChange : (() => null)}/>
+            <UsernameChanger
+              onSubmit={props.onDisplayNameChange || (() => null)}
+            />
           </ExpansionPanelDetails>
         </ExpansionPanel>
       </DialogContent>

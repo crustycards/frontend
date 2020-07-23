@@ -43,7 +43,9 @@ class UrlImage extends Component<UrlImageProps, UrlImageState> {
           style={this.props.imageStyle}
         />
         {
-          this.state.isLoading && !!this.props.loadingView && this.props.loadingView
+          this.state.isLoading
+            && !!this.props.loadingView
+            && this.props.loadingView
         }
       </div>
     );

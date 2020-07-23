@@ -2,7 +2,14 @@ import {MenuItem, Paper, TextField, Theme, withStyles, WithStyles} from '@materi
 import * as React from 'react';
 import {Component} from 'react';
 import * as Autosuggest from 'react-autosuggest';
-import * as _ from 'underscore';
+import {
+  RenderInputComponent,
+  RenderSuggestion,
+  RenderSuggestionsContainer,
+  SuggestionsFetchRequestedParams,
+  ChangeEvent
+} from 'react-autosuggest';
+import {throttle} from 'underscore';
 import parseHighlights from '../helpers/autoComplete';
 
 const styles = (theme: Theme) => ({
@@ -26,7 +33,8 @@ const styles = (theme: Theme) => ({
   }
 });
 
-const renderInput: Autosuggest.RenderInputComponent<string> = (inputProps: any) => {
+const renderInput: RenderInputComponent<AutoCompleteSuggestion> =
+(inputProps: any) => {
   const {classes, ref, ...other} = inputProps;
 
   return (
@@ -42,7 +50,8 @@ const renderInput: Autosuggest.RenderInputComponent<string> = (inputProps: any) 
   );
 };
 
-const renderSuggestion: Autosuggest.RenderSuggestion<any> = (suggestion, {query, isHighlighted}) => {
+const renderSuggestion: RenderSuggestion<any> =
+(suggestion, {query, isHighlighted}) => {
   const parts = parseHighlights(suggestion.label, query);
 
   return (
@@ -64,7 +73,8 @@ const renderSuggestion: Autosuggest.RenderSuggestion<any> = (suggestion, {query,
   );
 };
 
-const renderSuggestionsContainer: Autosuggest.RenderSuggestionsContainer = ({containerProps, children}) => (
+const renderSuggestionsContainer: RenderSuggestionsContainer =
+({containerProps, children}) => (
   <Paper {...containerProps} square>
     {children}
   </Paper>
@@ -93,11 +103,13 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     this.state = {
       value: '',
       suggestions: [],
-      submit: _.throttle(this.props.onSubmit, 100, {trailing: false})
+      submit: throttle(this.props.onSubmit, 100, {trailing: false})
     };
 
-    this.handleSuggestionsFetchRequested = this.handleSuggestionsFetchRequested.bind(this);
-    this.handleSuggestionsClearRequested = this.handleSuggestionsClearRequested.bind(this);
+    this.handleSuggestionsFetchRequested =
+      this.handleSuggestionsFetchRequested.bind(this);
+    this.handleSuggestionsClearRequested =
+      this.handleSuggestionsClearRequested.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
   }
@@ -117,12 +129,15 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
         suggestions={this.state.suggestions}
         onSuggestionsFetchRequested={this.handleSuggestionsFetchRequested}
         onSuggestionsClearRequested={this.handleSuggestionsClearRequested}
-        onSuggestionSelected={(e, {suggestionValue}) => this.state.submit(suggestionValue)}
+        onSuggestionSelected={
+          (e, {suggestionValue}) => this.state.submit(suggestionValue)
+        }
         renderSuggestionsContainer={renderSuggestionsContainer}
         getSuggestionValue={({label}) => (label)}
         renderSuggestion={renderSuggestion}
         inputProps={{
-          // classes, TODO - Uncomment this line and fix build failures it causes.
+          // classes, TODO - Uncomment this line
+          // and fix build failures it causes.
           placeholder: this.props.label || '',
           value: this.state.value,
           onChange: this.handleChange,
@@ -132,8 +147,11 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     );
   }
 
-  private async handleSuggestionsFetchRequested({value}: Autosuggest.SuggestionsFetchRequestedParams) {
-    const suggestions = (await this.props.getSuggestions(value)).map((label) => ({label}));
+  private async handleSuggestionsFetchRequested(
+    {value}: SuggestionsFetchRequestedParams
+  ) {
+    const suggestions = (await this.props.getSuggestions(value))
+                                         .map((label) => ({label}));
     this.setState({suggestions});
   }
 
@@ -141,7 +159,7 @@ class AutoComplete extends Component<AutoCompleteProps, AutoCompleteState> {
     this.setState({suggestions: []});
   }
 
-  private handleChange(event: React.FormEvent<any>, {newValue}: Autosuggest.ChangeEvent) {
+  private handleChange(event: React.FormEvent<any>, {newValue}: ChangeEvent) {
     this.setState({value: newValue});
   }
 

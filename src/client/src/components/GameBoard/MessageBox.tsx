@@ -1,10 +1,19 @@
-import {CircularProgress, Divider, IconButton, InputBase, makeStyles, Paper, Typography} from '@material-ui/core';
+import {
+  CircularProgress,
+  Divider,
+  IconButton,
+  InputBase,
+  makeStyles,
+  Paper,
+  Typography
+} from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useApi} from '../../api/context';
-import {StoreState} from '../../store';
+import {ChatMessage} from '../../../../../proto-gen-out/game/game_service_pb';
+import {GameService} from '../../api/gameService';
+import {useGlobalStyles} from '../../styles/globalStyles';
+import {convertTime} from '../../helpers/time';
 
 const useStyles = makeStyles((theme) => ({
   textBoxRoot: {
@@ -28,18 +37,26 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const MessageBox = () => {
-  const api = useApi();
-  const {messages} = useSelector(({game}: StoreState) => ({
-    messages: game.messages
-  }));
+interface MessageBoxProps {
+  gameService: GameService;
+  messages: ChatMessage[];
+}
+
+const MessageBox = (props: MessageBoxProps) => {
   const [messageText, setMessageText] = useState('');
   const [isSubmittingMessage, setIsSubmittingMessage] = useState(false);
-  const classes = useStyles({});
+  const classes = useStyles();
+  const globalClasses = useGlobalStyles();
 
   return (
-    <div className={'panel'}>
-      <h2 className={'center'}>Chat</h2>
+    <div className={globalClasses.panel}>
+      <Typography
+        variant={'h5'}
+        style={{textAlign: 'center'}}
+        color={'textPrimary'}
+      >
+        Chat
+      </Typography>
       <Divider style={{margin: '10px 0'}} />
       <div
         style={{
@@ -49,16 +66,24 @@ const MessageBox = () => {
           flexDirection: 'column-reverse'
         }}
       >
-        {messages.map((message, i) => (
-          <Paper
-            key={i}
-            style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}
-          >
-            <Typography variant={'body1'}>
-              <b>{message.user.name + ': '}</b>{message.text}
-            </Typography>
-          </Paper>
-        ))}
+        {
+          props.messages.map((message, i) => (
+            <Paper
+              key={i}
+              style={{marginBottom: '8px', marginRight: '5px', padding: '5px'}}
+            >
+              <Typography variant={'body1'}>
+                {/* TODO - Display message create time
+                and any other remaining fields. */}
+                <b>
+                  {`${(message.getUser()?.getDisplayName() || 'Unknown User')}: `}
+                </b>
+                {message.getText()}
+              </Typography>
+              {convertTime(message.getCreateTime())}
+            </Paper>
+          ))
+        }
       </div>
       <form
         style={{marginBottom: 0}}
@@ -66,7 +91,7 @@ const MessageBox = () => {
         onSubmit={(e) => {
           e.preventDefault(); // Stop page from refreshing
           setIsSubmittingMessage(true);
-          api.game.sendMessage(messageText).then(() => {
+          props.gameService.createChatMessage(messageText).then(() => {
             setIsSubmittingMessage(false);
             setMessageText('');
           });
@@ -85,7 +110,13 @@ const MessageBox = () => {
             disabled={!messageText.length || isSubmittingMessage}
           >
             <SendIcon/>
-            {isSubmittingMessage && <CircularProgress size={40} className={classes.textBoxIconButtonCircularProgress}/>}
+            {
+              isSubmittingMessage &&
+                <CircularProgress
+                  size={40}
+                  className={classes.textBoxIconButtonCircularProgress}
+                />
+            }
           </IconButton>
         </Paper>
       </form>

@@ -3,20 +3,33 @@ variables:
 
 test:
   stage: test
-  image: node:carbon
+  image: node:14.4.0
   services:
     - docker:dind
-    - node:carbon
+    - node:14.4.0
   script:
+    # Install protocol buffers.
+    - PROTOC_ZIP=protoc-3.11.4-linux-x86_64.zip
+    - curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/$PROTOC_ZIP
+    - unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
+    - unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
+    - rm -f $PROTOC_ZIP
+    # Install submodules.
+    - git submodule update --init --recursive
+    # Install dependencies.
     - npm install
+    # Generate protobuf code.
+    - npm run build-proto-linux
+    - npm run build-grpc-linux
+    # Run tests.
     - npm test
 
 lint:
   stage: test
-  image: node:carbon
+  image: node:14.4.0
   services:
     - docker:dind
-    - node:carbon
+    - node:14.4.0
   script:
     - npm install
     - npm run lint
