@@ -17,7 +17,8 @@ export const SHA256 = (s: string): string => {
 
   const Ch = (x: number, y: number, z: number) => (((x & y) ^ ((~x) & z)));
 
-  const Maj = (x: number, y: number, z: number) => ((x & y) ^ (x & z) ^ (y & z));
+  const Maj =
+  (x: number, y: number, z: number) => ((x & y) ^ (x & z) ^ (y & z));
 
   const Sigma0256 = (x: number) => (S(x, 2) ^ S(x, 13) ^ S(x, 22));
 
@@ -78,10 +79,15 @@ export const SHA256 = (s: string): string => {
         if (j < 16) {
           W[j] = m[j + i];
         } else {
-          W[j] = safeAdd(safeAdd(safeAdd(Gamma1256(W[j - 2]), W[j - 7]), Gamma0256(W[j - 15])), W[j - 16]);
+          W[j] = safeAdd(safeAdd(
+            safeAdd(Gamma1256(W[j - 2]), W[j - 7]),
+            Gamma0256(W[j - 15])
+          ), W[j - 16]);
         }
 
-        T1 = safeAdd(safeAdd(safeAdd(safeAdd(h, Sigma1256(e)), Ch(e, f, g)), K[j]), W[j]);
+        T1 = safeAdd(safeAdd(safeAdd(
+          safeAdd(h, Sigma1256(e)), Ch(e, f, g)
+        ), K[j]), W[j]);
         T2 = safeAdd(Sigma0256(a), Maj(a, b, c));
         h = g;
         g = f;

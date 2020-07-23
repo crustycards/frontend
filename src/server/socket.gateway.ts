@@ -5,27 +5,26 @@ import {
 } from '@nestjs/websockets';
 import * as cookie from 'cookie';
 import {Socket} from 'socket.io';
+import {AuthService} from './auth/auth.service';
 import {RabbitMQService} from './rabbitmq.service';
-import {User} from './user/interfaces/user.interface';
-import {UserService} from './user/user.service';
 
 @WebSocketGateway()
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  private socketsByUserId: Map<string, Set<Socket>> = new Map();
-  private userIdsBySocket: Map<Socket, string> = new Map();
+  private socketsByUserName: Map<string, Set<Socket>> = new Map();
+  private userNamesBySocket: Map<Socket, string> = new Map();
   private anonymousSockets: Set<Socket> = new Set();
 
-  constructor(private readonly userService: UserService, rabbitMQService: RabbitMQService) {
+  constructor(
+    private readonly authService: AuthService,
+    rabbitMQService: RabbitMQService
+  ) {
     rabbitMQService.onGameMessage((message) => {
       switch (message.type) {
         case 'GAME_UPDATED':
-          const userIds: string[] = message.payload;
-          userIds.forEach((userId) => {
-            this.sendMessageToUser(userId, 'GAME_UPDATED');
+          const userNames: string[] = message.payload;
+          userNames.forEach((userName) => {
+            this.sendMessageToUser(userName, 'GAME_UPDATED');
           });
-          break;
-        case 'GAME_LIST_UPDATED':
-          this.sendMessageToAllAuthenticatedUsers('GAME_LIST_UPDATED');
           break;
       }
     });
@@ -33,68 +32,62 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
   // Called automatically from OnGatewayConnection
   public async handleConnection(socket: Socket) {
-    const user = await this.getSocketOwner(socket);
+    const userName = await this.getSocketOwnerName(socket);
 
-    if (!user) {
+    if (!userName) {
       this.anonymousSockets.add(socket);
     } else {
-      this.userIdsBySocket.set(socket, user.id);
-      if (!this.socketsByUserId.has(user.id)) {
-        this.socketsByUserId.set(user.id, new Set());
+      this.userNamesBySocket.set(socket, userName);
+      if (!this.socketsByUserName.has(userName)) {
+        this.socketsByUserName.set(userName, new Set());
       }
-      this.socketsByUserId.get(user.id).add(socket);
+      const byUserNameEntry = this.socketsByUserName.get(userName);
+      if (byUserNameEntry !== undefined) {
+        byUserNameEntry.add(socket);
+      }
     }
   }
 
   // Called automatically from OnGatewayDisconnect
   public async handleDisconnect(socket: Socket) {
-    const userId = this.userIdsBySocket.get(socket);
+    const userName = this.userNamesBySocket.get(socket);
 
-    if (!userId) {
+    if (!userName) {
       this.anonymousSockets.delete(socket);
     } else {
-      this.userIdsBySocket.delete(socket);
-      this.socketsByUserId.get(userId).delete(socket);
-      if (this.socketsByUserId.get(userId).size === 0) {
-        this.socketsByUserId.delete(userId);
+      this.userNamesBySocket.delete(socket);
+      const byUserNameEntry = this.socketsByUserName.get(userName);
+      if (byUserNameEntry) {
+        byUserNameEntry.delete(socket);
+        if (byUserNameEntry.size === 0) {
+          this.socketsByUserName.delete(userName);
+        }
       }
     }
   }
 
-  private sendMessageToUser(userId: string, message: any) {
-    if (this.socketsByUserId.has(userId)) {
-      this.socketsByUserId.get(userId).forEach((socket) => {
+  private sendMessageToUser(userName: string, message: any) {
+    const socketEntry = this.socketsByUserName.get(userName);
+    if (socketEntry) {
+      socketEntry.forEach((socket) => {
         socket.send(message);
       });
     }
   }
 
-  private sendMessageToAllAuthenticatedUsers(message: any) {
-    this.socketsByUserId.forEach((socketSet) => {
-      socketSet.forEach((socket) => {
-        socket.send(message);
-      });
-    });
-  }
-
-  private sendMessageToAllAnonymousUsers(message: any) {
-    this.anonymousSockets.forEach((socket) => {
-      socket.send(message);
-    });
-  }
-
-  private async getSocketOwner(socket: Socket): Promise<User> {
-    let user: User;
+  private async getSocketOwnerName(socket: Socket):
+  Promise<string | undefined> {
+    let userName: string | undefined;
     try {
       if (socket.request.headers.cookie) {
-        const sessionId = cookie.parse(socket.request.headers.cookie).session;
-        if (sessionId) {
-          user = await this.userService.getBySessionId(sessionId);
+        const authToken = cookie.parse(socket.request.headers.cookie).authToken;
+        if (authToken) {
+          userName = this.authService.decodeJwtToUserName(authToken);
         }
       }
     } catch (err) {
       // User remains undefined
     }
-    return user;
+    return userName;
   }
 }

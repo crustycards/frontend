@@ -1,41 +1,43 @@
-import {JsonBlackCard, JsonWhiteCard} from '../api/dao';
+import {BlackCard, Cardpack, WhiteCard} from '../../../../proto-gen-out/api/model_pb';
 
-interface ParsedCardpack {
-  whiteCards: JsonWhiteCard[];
-  blackCards: JsonBlackCard[];
+// TODO - Implement and test all functions in this file.
+
+interface CardpackAndCards {
+  cardpack: Cardpack;
+  blackCards: BlackCard[];
+  whiteCards: WhiteCard[];
 }
 
-export const parse = (str: string): ParsedCardpack => {
-  const cardpack = JSON.parse(str);
-
-  if (typeof cardpack.whiteCards !== 'object' || cardpack.whiteCards.constructor !== Array) {
-    throw new Error('White cards must be an array');
-  }
-
-  if (typeof cardpack.blackCards !== 'object' || cardpack.blackCards.constructor !== Array) {
-    throw new Error('Black cards must be an array');
-  }
-
-  const whiteCards = cardpack.whiteCards.map((whiteCard: any) => ({
-    text: whiteCard.text
-  }));
-
-  const blackCards = cardpack.blackCards.map((blackCard: any) => ({
-    text: blackCard.text,
-    answerFields: blackCard.answerFields || 1
-  }));
-
-  return {whiteCards, blackCards};
+export const stringifyToJson = (cardpackAndCards: CardpackAndCards): string => {
+  return JSON.stringify({
+    cardpack: cardpackAndCards.cardpack.toObject(),
+    whiteCards: cardpackAndCards.whiteCards
+      .map((whiteCard) => (whiteCard.toObject())),
+    blackCards: cardpackAndCards.blackCards
+      .map((blackCard) => (blackCard.toObject()))
+  }, null, 2).replace(/\n/g, '\r\n');
 };
 
-export const stringify = ({whiteCards, blackCards}: ParsedCardpack) => (
-  JSON.stringify({
-    whiteCards: whiteCards.map((whiteCard) => ({
-      text: whiteCard.text
-    })),
-    blackCards: blackCards.map((blackCard) => ({
-      text: blackCard.text,
-      answerFields: blackCard.answerFields || 1
-    }))
-  }, null, 2).replace(/\n/g, '\r\n')
-);
+export const parseFromJson = (str: string): CardpackAndCards => {
+  // TODO - Implement and test.
+  return {
+    cardpack: new Cardpack(),
+    blackCards: [],
+    whiteCards: []
+  };
+};
+
+export const stringifyToPlainText =
+(cardpackAndCards: CardpackAndCards): string => {
+  // TODO - Implement and test.
+  return '';
+};
+
+export const parseFromPlainText = (str: string): CardpackAndCards => {
+  // TODO - Implement and test.
+  return {
+    cardpack: new Cardpack(),
+    blackCards: [],
+    whiteCards: []
+  };
+};

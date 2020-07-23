@@ -1,7 +1,13 @@
-import {Body, Controller, Delete, Get, Param, Patch, Put, Query, Res, UseGuards} from '@nestjs/common';
+import {Body, Controller, Post, Res, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {Response} from 'express';
-import {User} from './interfaces/user.interface';
+import {
+  GetUserRequest,
+  GetUserSettingsRequest,
+  UpdateUserRequest,
+  UpdateUserSettingsRequest
+} from '../../../proto-gen-out/api/user_service_pb';
+import {handleRequest} from '../rpc';
 import {UserService} from './user.service';
 
 @Controller('api')
@@ -9,51 +15,62 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('user/:userId')
-  public getUserById(@Param('userId') userId: string): Promise<User> {
-    return this.userService.getById(userId);
+  @Post('UserService/GetUser')
+  public async getUser(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      GetUserRequest.deserializeBinary,
+      this.userService.client.getUser,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Patch('user/:userId')
-  public patchUser(@Param('userId') userId: string, @Body() data: any[]) {
-    return this.userService.patchUser(userId, data);
+  @Post('UserService/UpdateUser')
+  public async updateUser(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UpdateUserRequest.deserializeBinary,
+      this.userService.client.updateUser,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Get('user/profileimage/:userId')
-  public async getUserProfileImage(@Res() res: Response, @Param('userId') userId: string) {
-    res.type('png');
-    res.send(await this.userService.getUserProfileImage(userId));
+  @Post('UserService/GetUserSettings')
+  public async getUserSettings(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      GetUserSettingsRequest.deserializeBinary,
+      this.userService.client.getUserSettings,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Put('user/profileimage/:userId')
-  public setUserProfileImage(@Param('userId') userId: string, @Body() data: Buffer): Promise<void> {
-    return this.userService.setUserProfileImage(userId, data.buffer);
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Get('search/user')
-  public searchUsers(@Query('query') query: string): Promise<User[]> {
-    return this.userService.searchUsers(query);
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Get('search/user/autocomplete')
-  public searchUsersAutocomplete(@Query('query') query: string): Promise<string[]> {
-    return this.userService.searchUsersAutocomplete(query);
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Put('user/friends')
-  public addFriend(@Query('userId') userId: string, @Query('friendId') friendId: string) {
-    return this.userService.addFriend(userId, friendId);
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Delete('user/friends')
-  public removeFriend(@Query('userId') userId: string, @Query('friendId') friendId: string) {
-    return this.userService.removeFriend(userId, friendId);
+  @Post('UserService/UpdateUserSettings')
+  public async updateUserSettings(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UpdateUserSettingsRequest.deserializeBinary,
+      this.userService.client.updateUserSettings,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
   }
 }

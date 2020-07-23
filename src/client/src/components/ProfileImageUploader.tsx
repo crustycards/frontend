@@ -1,43 +1,63 @@
 import * as React from 'react';
-import {Component} from 'react';
 import {FileWithPath} from 'react-dropzone';
-import {ApiContextWrapper} from '../api/context';
-import Api from '../api/model/api';
+import {useUserService} from '../api/context';
+import {UserService} from '../api/userService';
 import FileUploader from './FileUploader';
+import {User} from '../../../../proto-gen-out/api/model_pb';
 
-interface UploaderProps {
-  api: Api;
+const blobToString = (blob: Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (e.target?.error) {
+        reject(e.target.error);
+      } else if (e.target?.result) {
+        resolve(e.target.result as string);
+      } else {
+        reject('Missing onload event target or error');
+      }
+    };
+    reader.readAsBinaryString(blob);
+  });
+};
+
+const handleUpload = async (
+  userService: UserService,
+  userName: string,
+  acceptedFiles: FileWithPath[],
+  rejectedFiles: FileWithPath[]
+) => {
+  if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
+    const file = acceptedFiles[0];
+    await userService.updateCurrentUserProfileImage(await blobToString(file));
+    // Refresh page so that the user can see their new profile picture.
+    window.location.reload();
+  }
+};
+
+interface ProfileImageUploaderProps {
+  userService: UserService;
+  currentUser: User;
 }
 
-class ProfileImageUploader extends Component<UploaderProps> {
-  constructor(props: UploaderProps) {
-    super(props);
+const ProfileImageUploader = (props: ProfileImageUploaderProps) => {
+  const userService = useUserService();
 
-    this.handleUpload = this.handleUpload.bind(this);
-  }
+  return (
+    <div style={{width: '100%'}}>
+      <FileUploader
+        type={'image/*'}
+        onUpload={
+          (acceptedFiles, rejectedFiles) => handleUpload(
+            userService,
+            props.currentUser.getName(),
+            acceptedFiles,
+            rejectedFiles
+          )
+        }
+      />
+    </div>
+  );
+};
 
-  public render() {
-    return (
-      <div style={{width: '100%'}}>
-        <FileUploader
-          type={'image/*'}
-          onUpload={this.handleUpload}
-        />
-      </div>
-    );
-  }
-
-  private async handleUpload(
-    acceptedFiles: FileWithPath[],
-    rejectedFiles: FileWithPath[],
-    event: React.DragEvent<HTMLDivElement>
-  ) {
-    if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
-      const file = acceptedFiles[0];
-      await this.props.api.main.setProfileImage(file.slice());
-      window.location.reload(); // Refresh page so that the user can see their new profile picture
-    }
-  }
-}
-
-export default ApiContextWrapper(ProfileImageUploader);
+export default ProfileImageUploader;

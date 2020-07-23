@@ -1,34 +1,57 @@
 import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
-import {useApi} from '../../../api/context';
+import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/game/game_service_pb';
+import {useGameService} from '../../../api/context';
 import {canPlay, hasPlayed, StoreState} from '../../../store';
+import {queuedCardIdPointsToPlayableCard, QueuedCardId} from '../../../store/modules/game';
 import PlayArea from './PlayArea';
 import Tray from './Tray';
+import {BlackCard, User} from '../../../../../../proto-gen-out/api/model_pb';
+import {GameService} from '../../../api/gameService';
 
-const PlaySelection = () => {
-  const api = useApi();
-  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
-  const {
-    queuedCardIds,
-    stage,
-    whitePlayed,
-    currentBlackCard,
-    judgeId
-  } = game;
+interface PlaySelectionProps {
+  gameService: GameService;
+  currentUser: User;
+  gameView: GameView;
+  queuedCardIds: (QueuedCardId | null)[];
+}
+
+const PlaySelection = (props: PlaySelectionProps) => {
+  const currentBlackCard = props.gameView.getCurrentBlackCard();
 
   return <div>
     {
-      canPlay({whitePlayed, currentBlackCard, user, judgeId}) ?
+      canPlay(props.gameView, props.currentUser) ?
         <div>
-          <Tray/>
-          <PlayArea/>
+          <Tray
+            currentUser={props.currentUser}
+            gameView={props.gameView}
+            queuedCardIds={props.queuedCardIds}
+          />
+          {
+            currentBlackCard &&
+              <PlayArea
+                gameView={props.gameView}
+                playSlots={currentBlackCard.getAnswerFields()}
+              />
+          }
           <Button
             variant={'contained'}
             color={'secondary'}
-            disabled={queuedCardIds.includes(null)}
+            disabled={props.queuedCardIds.includes(null)}
             onClick={() => {
-              api.game.playCards(queuedCardIds);
+              props.gameService.playCards(
+                props.queuedCardIds.map(
+                  (queuedCardId) => props.gameView.getHandList().find((card) =>
+                    queuedCardIdPointsToPlayableCard(queuedCardId, card))
+                ).reduce<PlayableWhiteCard[]>((acc, card) => {
+                  if (card) {
+                    acc.push(card);
+                  }
+                  return acc;
+                }, [])
+              );
             }}
           >
             Play
@@ -36,18 +59,23 @@ const PlaySelection = () => {
         </div>
         :
         <div>
-          <Tray/>
+          <Tray
+            currentUser={props.currentUser}
+            gameView={props.gameView}
+            queuedCardIds={props.queuedCardIds}
+          />
           {
-            hasPlayed({whitePlayed, currentBlackCard, user}) && stage === 'playPhase' &&
-            <Button
-              variant={'contained'}
-              color={'secondary'}
-              onClick={() => {
-                api.game.unPlayCards();
-              }}
-            >
-              Revert Play
-            </Button>
+            hasPlayed(props.currentUser, props.gameView) &&
+            props.gameView.getStage() === GameView.Stage.PLAY_PHASE &&
+              <Button
+                variant={'contained'}
+                color={'secondary'}
+                onClick={() => {
+                  props.gameService.unplayCards();
+                }}
+              >
+                Revert Play
+              </Button>
           }
         </div>
     }

@@ -1,7 +1,8 @@
 import {routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import {applyMiddleware, compose, createStore} from 'redux';
-import {BlackCard, User, WhitePlayedEntry} from '../api/dao';
+import {User} from '../../../../proto-gen-out/api/model_pb';
+import {GameView} from '../../../../proto-gen-out/game/game_service_pb';
 import createRootReducer from './modules';
 
 declare global {
@@ -31,41 +32,31 @@ export default ({history, preloadedState = {}}: CreateStore) => {
   );
 };
 
-interface HasPlayed {
-  whitePlayed?: WhitePlayedEntry[];
-  currentBlackCard?: BlackCard;
-  user?: User;
-}
-
-interface CanPlay extends HasPlayed {
-  judgeId: string;
-}
-
 // The Typescript type of the entire Redux state
 export type StoreState = ReturnType<ReturnType<typeof createRootReducer>>;
 
-export const hasPlayed = ({whitePlayed, currentBlackCard, user}: HasPlayed) => {
-  return !!(
-    whitePlayed &&
-    user &&
-    whitePlayed.find((entry) => entry.player.user && entry.player.user.id === user.id) &&
-    currentBlackCard &&
-    whitePlayed.find((entry) => (
-      entry.player.user && entry.player.user.id === user.id
-    )).cards.length === currentBlackCard.answerFields
-  );
+export const hasPlayed = (user: User, view: GameView): boolean => {
+  if (!view.hasCurrentBlackCard() || !user) {
+    return false;
+  }
+
+  const userEntry = view.getWhitePlayedList().find((entry) => {
+    return entry.getPlayer()?.getUser()?.getName() === user.getName();
+  });
+
+  if (!userEntry) {
+    return false;
+  }
+
+  return userEntry.getCardTextsList().length ===
+    view.getCurrentBlackCard()?.getAnswerFields();
 };
 
-export const canPlay = ({whitePlayed, currentBlackCard, user, judgeId}: CanPlay) => {
-  if (hasPlayed({whitePlayed, currentBlackCard, user})) {
-    return false;
-  }
-
-  const userId = user.id;
-
-  if (!currentBlackCard) {
-    return false;
-  }
-
-  return userId !== judgeId;
+export const canPlay = (view: GameView, user: User) => {
+  return !hasPlayed(user, view)
+      && view.hasCurrentBlackCard()
+      && view.getStage() === GameView.Stage.PLAY_PHASE
+      && user
+      && view.hasJudge()
+      && user.getName() !== view.getJudge()?.getName();
 };

@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {withStyles} from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
-import {User} from '../../api/dao';
+import {User} from '../../../../../proto-gen-out/api/model_pb';
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
@@ -23,11 +23,11 @@ interface UserListMenuProps {
   buttonText: string;
   buttonStyle: React.CSSProperties;
   users: User[];
-  onUserSelect: (userId: string) => void;
+  onUserSelect: (userName: string) => void;
 }
 
 const UserListMenu = (props: UserListMenuProps) => {
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
 
   return (
     props.users.length ?
@@ -62,13 +62,13 @@ const UserListMenu = (props: UserListMenuProps) => {
                 key={index}
                 onClick={() => {
                   setAnchorEl(null);
-                  props.onUserSelect(user.id);
+                  props.onUserSelect(user.getName());
                 }}
               >
                 <ListItemIcon>
                   <SendIcon/>
                 </ListItemIcon>
-                <ListItemText primary={user.name} />
+                <ListItemText primary={user.getDisplayName()} />
               </StyledMenuItem>
             ))
           }

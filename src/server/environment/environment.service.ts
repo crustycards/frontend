@@ -1,23 +1,28 @@
 import {Injectable} from '@nestjs/common';
 import * as dotEnv from 'dotenv';
-import {EnvironmentVariables} from './interfaces/environmentVariables.interface';
+import {
+  EnvironmentVariables
+} from './interfaces/environmentVariables.interface';
+
+const getEnvVarOrThrowError = (varName: string): string => {
+  const envVar = process.env[varName];
+  if (envVar === undefined) {
+    throw new Error(`Missing the following environment variable: ${JSON.stringify(varName)}.`);
+  }
+  return envVar;
+}
+
+const parseIntOrThrow = (envVar: string): number => {
+  const parsedInt = parseInt(envVar, 10);
+  if (isNaN(parsedInt)) {
+    throw new Error(`Environment variable '${JSON.stringify(envVar)}' must be parseable as an integer.`);
+  }
+  return parsedInt;
+}
 
 @Injectable()
 export class EnvironmentService {
   private environmentVariables: EnvironmentVariables;
-
-  private requiredVars = [
-    'PORT',
-    'NODE_ENV',
-    'GOOGLE_CLIENT_ID',
-    'GOOGLE_CLIENT_SECRET',
-    'GOOGLE_REDIRECT_DOMAIN',
-    'OAUTH_ENCRYPTION_PASSWORD',
-    'API_URL',
-    'GAME_SERVER_URL',
-    'AUTH_SERVER_URL',
-    'RABBITMQ_URI'
-  ];
 
   private defaultVals: {[indexer: string]: string} = {
     PORT: '80',
@@ -25,27 +30,6 @@ export class EnvironmentService {
   };
 
   constructor() {
-    this.applyAndValidateEnvVars();
-
-    this.environmentVariables = {
-      port: parseInt(process.env.PORT, 10),
-      nodeEnv: process.env.NODE_ENV,
-      googleClientId: process.env.GOOGLE_CLIENT_ID,
-      googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
-      googleRedirectDomain: process.env.GOOGLE_REDIRECT_DOMAIN,
-      oAuthEncryptionPassword: process.env.OAUTH_ENCRYPTION_PASSWORD,
-      apiUrl: process.env.API_URL,
-      gameServerUrl: process.env.GAME_SERVER_URL,
-      authServerUrl: process.env.AUTH_SERVER_URL,
-      rabbitMQURI: process.env.RABBITMQ_URI
-    };
-  }
-
-  public getArgs(): EnvironmentVariables {
-    return this.environmentVariables;
-  }
-
-  private applyAndValidateEnvVars() {
     // Load .env file
     dotEnv.config();
 
@@ -62,23 +46,25 @@ export class EnvironmentService {
       }
     }
 
-    // Assert vars exist
-    const missingVars: string[] = [];
-    this.requiredVars.forEach((varName) => {
-      if (!process.env[varName]) {
-        missingVars.push(varName);
-      }
-    });
-    if (missingVars.length) {
-      throw new Error(`Missing the following environment variables: ${JSON.stringify(missingVars)}`);
-    }
-
-    if (!['development', 'test', 'production'].includes(process.env.NODE_ENV)) {
+    const nodeEnv = getEnvVarOrThrowError('NODE_ENV');
+    if (!['development', 'test', 'production'].includes(nodeEnv)) {
       throw Error('NODE_ENV must be either development, test, or production');
     }
 
-    if (isNaN(parseInt(process.env.PORT, 10))) {
-      throw Error('PORT must be an integer');
-    }
+    this.environmentVariables = {
+      port: parseIntOrThrow(getEnvVarOrThrowError('PORT')),
+      nodeEnv: getEnvVarOrThrowError('NODE_ENV'),
+      googleClientId: getEnvVarOrThrowError('GOOGLE_CLIENT_ID'),
+      googleClientSecret: getEnvVarOrThrowError('GOOGLE_CLIENT_SECRET'),
+      googleRedirectDomain: getEnvVarOrThrowError('GOOGLE_REDIRECT_DOMAIN'),
+      apiUrl: getEnvVarOrThrowError('API_URL'),
+      gameServerUrl: getEnvVarOrThrowError('GAME_SERVER_URL'),
+      rabbitMQURI: getEnvVarOrThrowError('RABBITMQ_URI'),
+      jwtSecret: getEnvVarOrThrowError('JWT_SECRET')
+    };
+  }
+
+  public getArgs(): EnvironmentVariables {
+    return this.environmentVariables;
   }
 }

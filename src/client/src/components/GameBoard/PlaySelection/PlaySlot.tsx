@@ -2,37 +2,45 @@ import * as React from 'react';
 import {ConnectDropTarget, DropTarget} from 'react-dnd';
 import {connect, useSelector} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
+import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/game/game_service_pb';
 import {cardInHand, cardInPlayQueue} from '../../../dndTypes';
 import {StoreState} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
+import {queuedCardIdPointsToPlayableCard} from '../../../store/modules/game';
 import DraggableCardInPlayQueue from './DraggableCardInPlayQueue';
+import {useGlobalStyles} from '../../../styles/globalStyles';
 
 interface PlaySlotProps {
+  gameView: GameView;
   index: number;
   connectDropTarget: ConnectDropTarget;
-  queueCard: ({index, cardId}: {index: number, cardId: string}) => void;
+  queueCard: ({index, card}: {index: number, card: PlayableWhiteCard}) => void;
 }
 
 const PlaySlot = (props: PlaySlotProps) => {
   const {game} = useSelector(({game}: StoreState) => ({game}));
-  const {queuedCardIds, hand} = game;
 
-  if (queuedCardIds[props.index]) {
-    const card = hand.find(
-      (card) => card.id === queuedCardIds[props.index]
+  const globalClasses = useGlobalStyles();
+
+  if (game.queuedCardIds[props.index]) {
+    const card = props.gameView.getHandList().find(
+      (card) => queuedCardIdPointsToPlayableCard(
+        game.queuedCardIds[props.index], card)
     );
     return props.connectDropTarget(
       <div>
-        <DraggableCardInPlayQueue
-          key={card.id}
-          card={card}
-        />
+        {
+          card ?
+            <DraggableCardInPlayQueue card={card}/>
+            :
+            <div>Invalid queued card!</div>
+        }
       </div>
     );
   } else {
     return props.connectDropTarget(
       <div
-        className={'panel'}
+        className={globalClasses.panel}
         style={{
           textAlign: 'center',
           borderStyle: 'dotted',
@@ -46,14 +54,21 @@ const PlaySlot = (props: PlaySlotProps) => {
   }
 };
 
-const mapDispatchToProps = (dispatch: Dispatch) => bindActionCreators({queueCard}, dispatch);
+const mapDispatchToProps =
+(dispatch: Dispatch) => bindActionCreators({queueCard}, dispatch);
 
-const DropTargetPlaySlot = DropTarget([cardInHand, cardInPlayQueue], {drop: (props: PlaySlotProps, monitor) => {
-  props.queueCard({index: props.index, cardId: monitor.getItem().cardId});
-}}, (connect, monitor) => ({
-  connectDropTarget: connect.dropTarget(),
-  isOver: monitor.isOver(),
-  canDrop: monitor.canDrop()
-}))(PlaySlot);
+const DropTargetPlaySlot = DropTarget(
+  [cardInHand, cardInPlayQueue],
+  {
+    drop: (props: PlaySlotProps, monitor) => {
+      props.queueCard({index: props.index, card: monitor.getItem()});
+    }
+  },
+  (connect, monitor) => ({
+    connectDropTarget: connect.dropTarget(),
+    isOver: monitor.isOver(),
+    canDrop: monitor.canDrop()
+  }))(PlaySlot);
 
+// TODO - Remove `connect` and `mapDispatchToProps` and use React hooks.
 export default connect(null, mapDispatchToProps)(DropTargetPlaySlot);

@@ -1,10 +1,11 @@
 import {AppBar, Button, Toolbar} from '@material-ui/core';
 import {makeStyles} from '@material-ui/styles';
 import * as React from 'react';
-import {useSelector} from 'react-redux';
-import {useApi} from '../../api/context';
-import {StoreState} from '../../store';
-import {PlayerBanMenu, PlayerKickMenu, PlayerUnbanMenu} from './PlayerManagementMenus';
+import {GameView, Player} from '../../../../../proto-gen-out/game/game_service_pb';
+import {GameService} from '../../api/gameService';
+import {User} from '../../../../../proto-gen-out/api/model_pb';
+import UserListMenu from './UserListMenu';
+import {filterPlayerListToUserList} from '../../helpers/proto';
 
 const buttonStyle = {
   height: '36px',
@@ -20,19 +21,23 @@ const useStyles = makeStyles({
   }
 });
 
-const AdminBar = () => {
-  const api = useApi();
-  const classes = useStyles({});
-  const {game} = useSelector(({game}: StoreState) => ({game}));
+interface AdminBarProps {
+  gameService: GameService;
+  players: Player[];
+  queuedPlayers: Player[];
+  bannedUsers: User[];
+  gameStage: GameView.Stage;
+}
+
+const AdminBar = (props: AdminBarProps) => {
+  const classes = useStyles();
 
   const canStartGame = () => {
-    if (game.players.length < 2) {
-      return false;
-    } else if (game.players.length + game.artificialPlayers.length < 3) {
-      return false;
-    } else {
-      return true;
-    }
+    const realPlayerCount = props.players.filter(
+      (player) => player.hasUser()).length;
+    const artificialPlayerCount =
+      props.players.filter((player) => player.hasArtificialUser()).length;
+    return realPlayerCount >= 2 && realPlayerCount + artificialPlayerCount >= 3;
   };
 
   return <AppBar className={classes.adminBar} position={'static'}>
@@ -44,13 +49,28 @@ const AdminBar = () => {
       </h2>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>
-        <PlayerKickMenu buttonStyle={buttonStyle}/>
-        <PlayerBanMenu buttonStyle={buttonStyle}/>
-        <PlayerUnbanMenu buttonStyle={buttonStyle}/>
+        <UserListMenu
+          buttonText={'Kick'}
+          buttonStyle={buttonStyle}
+          users={filterPlayerListToUserList(props.players)}
+          onUserSelect={(userName) => props.gameService.kickUser(userName)}
+        />
+        <UserListMenu
+          buttonText={'Ban'}
+          buttonStyle={buttonStyle}
+          users={filterPlayerListToUserList(props.players)}
+          onUserSelect={(userName) => props.gameService.banUser(userName)}
+        />
+        <UserListMenu
+          buttonText={'Unban'}
+          buttonStyle={buttonStyle}
+          users={props.bannedUsers}
+          onUserSelect={(userName) => props.gameService.unbanUser(userName)}
+        />
         <Button
           color={'secondary'}
           variant={'contained'}
-          onClick={() => api.game.addArtificialPlayers(1)}
+          onClick={() => props.gameService.addArtificialPlayer()}
           style={buttonStyle}
         >
           Add AI
@@ -58,18 +78,23 @@ const AdminBar = () => {
         <Button
           color={'secondary'}
           variant={'contained'}
-          onClick={() => api.game.removeArtificialPlayers(1)}
+          onClick={() => props.gameService.removeArtificialPlayer()}
           style={buttonStyle}
-          disabled={!game.artificialPlayers.length && !game.queuedArtificialPlayers.length}
+          disabled={
+            !props.players.filter(
+              (player) => player.hasArtificialUser()).length &&
+            !props.queuedPlayers.filter(
+              (player) => player.hasArtificialUser()).length
+          }
         >
           Remove AI
         </Button>
         {
-          game.stage === 'notRunning' ?
+          props.gameStage === GameView.Stage.NOT_RUNNING ?
           <Button
             color={'secondary'}
             variant={'contained'}
-            onClick={api.game.startGame}
+            onClick={props.gameService.startGame}
             style={buttonStyle}
             disabled={!canStartGame()}
           >
@@ -79,7 +104,7 @@ const AdminBar = () => {
           <Button
             color={'secondary'}
             variant={'contained'}
-            onClick={api.game.stopGame}
+            onClick={props.gameService.stopGame}
             style={buttonStyle}
           >
             Stop Game

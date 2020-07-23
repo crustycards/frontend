@@ -12,6 +12,8 @@ import {SocketGateway} from './socket.gateway';
 import {TerminusOptionsService} from './terminusOptions.service';
 import {UserModule} from './user/user.module';
 
+// TODO - When running the server, it logs a warning message that forRootAsync
+// is deprecated. We need to refactor this to resolve that warning.
 @Module({
   imports: [
     AuthModule,

@@ -1,25 +1,23 @@
-import * as React from 'react';
+import {createContext} from 'react';
 import {useContext} from 'react';
-import Api from './model/api';
+import {GameService} from './gameService';
+import {UserService} from './userService';
 
-type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
-interface InjectedApiProps {
-  api: Api;
+interface Services {
+  gameService?: GameService;
+  userService: UserService;
 }
 
-const Context = React.createContext<Api>(undefined);
+const Context = createContext<Services>({userService: new UserService()});
 
 export const Provider = Context.Provider;
 export const Consumer = Context.Consumer;
 
-export const ApiContextWrapper = <P extends InjectedApiProps, R = Omit<P, 'api'>>
-(Component: React.ComponentType<P>): React.SFC<R> => ((props: any) => ( // TODO - Remove 'any'
-  <Consumer>
-    {(api) => (<Component api={api} {...{...props, api}}/>)}
-  </Consumer>
-));
+// Returns undefined if user is not logged in.
+export const useGameService = (): GameService | undefined => {
+  return useContext(Context).gameService;
+};
 
-export const useApi = () => {
-  return useContext(Context);
+export const useUserService = (): UserService => {
+  return useContext(Context).userService;
 };

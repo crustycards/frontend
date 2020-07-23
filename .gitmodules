@@ -1,0 +1,3 @@
+[submodule "cards-proto"]
+	path = cards-proto
+	url = https://gitlab.com/cards-against-humanity/cards-proto.git

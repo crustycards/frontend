@@ -1,90 +1,131 @@
 import {Button} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
-import {useSelector} from 'react-redux';
-import {useApi} from '../../api/context';
-import {StoreState} from '../../store';
+import {WhiteCard, User} from '../../../../../proto-gen-out/api/model_pb';
+import {
+  GameView,
+  Player,
+  WhiteCardsPlayed
+} from '../../../../../proto-gen-out/game/game_service_pb';
+import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHWhiteCard from '../shells/CAHWhiteCard';
+import {GameService} from '../../api/gameService';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
-const PlayedCards = () => {
-  const api = useApi();
-  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
-  const [selectedSetIndex, setSelectedSetIndex] = useState(null);
+interface PlayedCardsProps {
+  gameService: GameService;
+  gameWinner: Player | undefined;
+  currentUser: User;
+  judge?: User;
+  gameStage: GameView.Stage;
+  whitePlayedList: WhiteCardsPlayed[];
+}
 
-  if (game.stage === 'judgePhase') {
+// TODO - This component has a lot of repeated code.
+// Condense it downas much as possible.
+// TODO - This component should definitely have some tests to make sure it can
+// handle random invalid inputs, especially for game.view.whitePlayed.
+const PlayedCards = (props: PlayedCardsProps) => {
+  const [selectedSetIndex, setSelectedSetIndex] = useState<number | null>(null);
+
+  const globalClasses = useGlobalStyles();
+
+  if (props.gameStage === GameView.Stage.JUDGE_PHASE) {
     return (
-      <div className={'panel'}>
-        {user.id === game.judgeId &&
-          <Button
-            variant={'contained'}
-            color={'secondary'}
-            disabled={selectedSetIndex === null}
-            onClick={() => {
-              api.game.vote(
-                game.whitePlayedAnonymous[selectedSetIndex][0].id
-              );
-              setSelectedSetIndex(null);
-            }}
-          >
-            Vote
-          </Button>
+      <div className={globalClasses.panel}>
+        {
+          props.judge?.getName() === props.currentUser.getName() &&
+            <Button
+              variant={'contained'}
+              color={'secondary'}
+              disabled={selectedSetIndex === null}
+              onClick={() => {
+                if (selectedSetIndex !== null) {
+                  // TODO - Set selected index to null only after voteCard
+                  // promise resolves, and show loading spinner until then.
+                  props.gameService.voteCard(selectedSetIndex);
+                  setSelectedSetIndex(null);
+                }
+              }}
+            >
+              Vote
+            </Button>
         }
-        {game.whitePlayedAnonymous.map((cards, index) => (
-          <div
-            className={'subpanel'}
-            key={index}
-            onClick={() => {
-              if (user.id === game.judgeId) {
-                setSelectedSetIndex(index);
-              }
-            }}
-            style={index === selectedSetIndex ?
-              {
-                background: 'green',
-                transition: 'background .25s ease'
-              }
-              :
-              {
-                transition: 'background .2s ease'
-              }
-            }
-          >
-            {cards.map((card, index) => <CAHWhiteCard card={card} key={index} />)}
-          </div>
-        ))}
+        {
+          props.whitePlayedList
+            .map((entry) => entry.getCardTextsList())
+            .map((cardTexts, index) => (
+              <div
+                className={globalClasses.subpanel}
+                key={index}
+                onClick={() => {
+                  if (props.judge?.getName() === props.currentUser.getName()) {
+                    setSelectedSetIndex(index);
+                  }
+                }}
+                style={index === selectedSetIndex ?
+                  {
+                    background: 'green',
+                    transition: 'background .25s ease'
+                  }
+                  :
+                  {
+                    transition: 'background .2s ease'
+                  }
+                }
+              >
+                {
+                  cardTexts.map((cardText) => {
+                    const card = new WhiteCard();
+                    card.setText(cardText);
+                    return card;
+                  }).map((card, index) =>
+                    <CAHWhiteCard card={card} key={index}/>
+                  )
+                }
+              </div>
+            ))
+        }
       </div>
     );
   } else if (
-    game.stage === 'roundEndPhase' ||
-    (
-      game.stage === 'notRunning' &&
-      game.winner
-    )
+    props.gameWinner && (props.gameStage === GameView.Stage.ROUND_END_PHASE ||
+    props.gameStage === GameView.Stage.NOT_RUNNING)
   ) {
     return (
-      <div className={'panel'}>
-        {game.whitePlayed.map((entry, index) => (
-          <div
-            style={(game.winner && game.winner.user ?
-              entry.player.user && entry.player.user.id === game.winner.user.id :
-              game.winner.artificialPlayerName === entry.player.artificialPlayerName)
-              ? {} : {opacity: 0.5}}
-            className={'subpanel'}
-            key={index}
-          >
-            <div>
-              {
-                entry.player.user ? entry.player.user.name : entry.player.artificialPlayerName
+      <div className={globalClasses.panel}>
+        {
+          props.whitePlayedList.filter(
+            (entry) => entry.hasPlayer()
+          ).map((entry, index) => (
+            <div
+              style={
+                playersAreEqual(props.gameWinner, entry.getPlayer()) ?
+                  {}
+                  :
+                  {opacity: 0.5}
               }
+              className={globalClasses.subpanel}
+              key={index}
+            >
+              <div>
+                {
+                  getPlayerDisplayName(entry.getPlayer())
+                }
+              </div>
+              {entry.getCardTextsList().map((cardText) => {
+                const card = new WhiteCard();
+                card.setText(cardText);
+                return card;
+              }).map((card, index) => (
+                <CAHWhiteCard
+                  card={card}
+                  key={index}
+                />
+              ))}
             </div>
-            {entry.cards.map((card, index) => (
-              <CAHWhiteCard
-                card={card}
-                key={index}
-              />
-            ))}
-          </div>
-        ))}
+          ))
+        }
       </div>
     );
   } else {

@@ -1,48 +1,44 @@
 import * as React from 'react';
 import {ConnectDragSource, DragSource} from 'react-dnd';
-import {useDispatch, useSelector} from 'react-redux';
-import {User, WhiteCard} from '../../../api/dao';
+import {useDispatch} from 'react-redux';
+import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/game/game_service_pb';
 import {cardInPlayQueue} from '../../../dndTypes';
-import {canPlay, StoreState} from '../../../store';
+import {canPlay} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
-import CAHWhiteCard from '../../shells/CAHWhiteCard';
+import CAHPlayableWhiteCard from '../../shells/CAHPlayableWhiteCard';
+import {User} from '../../../../../../proto-gen-out/api/model_pb';
 
 interface DraggableCardProps {
-  card: WhiteCard;
-  connectDragSource: ConnectDragSource;
+  currentUser: User;
+  gameView: GameView;
+  card: PlayableWhiteCard;
   isDragging: boolean;
+  connectDragSource: ConnectDragSource;
 }
 
 const DraggableCard = (props: DraggableCardProps) => {
-  const {game, user} = useSelector(({game, global: {user}}: StoreState) => ({game, user}));
-  const {whitePlayed, currentBlackCard, judgeId} = game;
   const dispatch = useDispatch();
 
   return props.connectDragSource(
     <div
       onClick={() => (
-        canPlay({whitePlayed, currentBlackCard, user, judgeId}) &&
-        dispatch(queueCard({cardId: props.card.id}))
+        canPlay(props.gameView, props.currentUser) &&
+        dispatch(queueCard({card: props.card}))
       )}
       style={{
         opacity: (props.isDragging ||
-          !canPlay({
-            whitePlayed,
-            currentBlackCard,
-            user,
-            judgeId
-          }) ? 0.5 : 1
+          !canPlay(props.gameView, props.currentUser) ? 0.5 : 1
         )
       }}
     >
-      <CAHWhiteCard card={props.card} />
+      <CAHPlayableWhiteCard card={props.card} />
     </div>
   );
 };
 
 export default DragSource(
   cardInPlayQueue,
-  {beginDrag: (props: DraggableCardProps) => ({cardId: props.card.id})},
+  {beginDrag: (props: DraggableCardProps) => (props.card)},
   (connect, monitor) => ({
     connectDragSource: connect.dragSource(),
     isDragging: monitor.isDragging()

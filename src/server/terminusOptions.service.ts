@@ -21,7 +21,10 @@ export class TerminusOptionsService implements TerminusOptionsFactory {
       url: '/api/health',
       healthIndicators: [
         async () => this.dns.pingCheck('google', 'https://google.com'),
-        async () => this.memory.checkHeap('memoryHeap', 1 * TerminusOptionsService.bytesInGigabyte)
+        async () => this.memory.checkHeap(
+          'memoryHeap',
+          1 * TerminusOptionsService.bytesInGigabyte
+        )
       ]
     };
     return {
