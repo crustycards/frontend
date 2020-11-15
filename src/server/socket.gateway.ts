@@ -31,8 +31,8 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
   }
 
   // Called automatically from OnGatewayConnection
-  public async handleConnection(socket: Socket) {
-    const userName = await this.getSocketOwnerName(socket);
+  public handleConnection(socket: Socket) {
+    const userName = this.getSocketOwnerName(socket);
 
     if (!userName) {
       this.anonymousSockets.add(socket);
@@ -75,8 +75,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
   }
 
-  private async getSocketOwnerName(socket: Socket):
-  Promise<string | undefined> {
+  private getSocketOwnerName(socket: Socket): string | undefined {
     let userName: string | undefined;
     try {
       if (socket.request.headers.cookie) {

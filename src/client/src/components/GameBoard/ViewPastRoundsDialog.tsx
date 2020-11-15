@@ -4,14 +4,12 @@ import ArrowRight from '@material-ui/icons/ArrowRight';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import * as React from 'react';
-import {useSelector} from 'react-redux';
-import {WhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
-import {StoreState} from '../../store';
-import CAHBlackCard from '../shells/CAHBlackCard';
-import CAHWhiteCard from '../shells/CAHWhiteCard';
-import {PastRound} from '../../../../../proto-gen-out/game/game_service_pb';
+import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
+import {PastRound} from '../../../../../proto-gen-out/api/game_service_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
+import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 
 interface ViewPastRoundsDialogProps {
   pastRounds: PastRound[];
@@ -33,7 +31,8 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
 
   if (!props.pastRounds.length) {
     return <Dialog open={props.open} onClose={props.onClose}>
-      No round are available!
+      {/* TODO - Wrap this text in Typography. */}
+      No rounds are available!
     </Dialog>;
   }
 
@@ -42,6 +41,7 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
   const visibleRound = props.pastRounds[roundIndex];
   const visibleRoundBlackCard = visibleRound.getBlackCard();
 
+  // TODO - Event.keyCode is deprecated. Replace it with Event.key.
   const handleKeyDown = (e: React.KeyboardEvent) => {
     // Key codes for up/left arrow keys.
     if ((e.keyCode === 37 || e.keyCode === 38) && canGoToPreviousRound) {
@@ -89,9 +89,12 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
           </Button>
         </div>
         <div style={{display: 'block', textAlign: 'center'}}>
-          {`Judge: ${visibleRound.getJudge()?.getName() || 'Unknown'}`}
+          {`Judge: ${visibleRound.getJudge()?.getDisplayName() || 'Unknown'}`}
         </div>
-        {visibleRoundBlackCard && <CAHBlackCard card={visibleRoundBlackCard}/>}
+        {
+          visibleRoundBlackCard &&
+            <CAHBlackCardInRound card={visibleRoundBlackCard}/>
+        }
         <div className={globalClasses.panel}>
             {visibleRound.getWhitePlayedList().map((entry, index) => (
               <div
@@ -108,11 +111,11 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
                   {getPlayerDisplayName(entry.getPlayer())}
                 </div>
                 {entry.getCardTextsList().map((cardText) => {
-                  const card = new WhiteCard();
+                  const card = new CustomWhiteCard();
                   card.setText(cardText);
                   return card;
                 }).map((card, index) => (
-                  <CAHWhiteCard
+                  <CAHCustomWhiteCard
                     card={card}
                     key={index}
                   />

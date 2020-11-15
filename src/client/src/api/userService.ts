@@ -1,6 +1,5 @@
 import {FieldMask} from 'google-protobuf/google/protobuf/field_mask_pb';
 import {Store} from 'redux';
-import * as _ from 'underscore';
 import {User, UserProfileImage, UserSettings, GameConfig} from '../../../../proto-gen-out/api/model_pb';
 import {
   GetUserRequest,
@@ -9,6 +8,7 @@ import {
   UpdateUserSettingsRequest
 } from '../../../../proto-gen-out/api/user_service_pb';
 import {makeRpcFromBrowser} from '../../../server/rpc';
+import {bindAllFunctionsToSelf} from '../helpers/bindAll';
 import {StoreState} from '../store';
 import {setUser, setUserSettings} from '../store/modules/global';
 
@@ -30,7 +30,7 @@ export class UserService {
   constructor(
     private readonly currentUserName?: string,
     private readonly store?: Store<StoreState>) {
-    _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
+    bindAllFunctionsToSelf(this);
   }
 
   public async getUser(userName: string): Promise<User> {

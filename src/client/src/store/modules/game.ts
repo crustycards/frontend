@@ -1,12 +1,19 @@
-import {GameView, PlayableWhiteCard} from '../../../../../proto-gen-out/game/game_service_pb';
+import {GameView, PlayableWhiteCard} from '../../../../../proto-gen-out/api/game_service_pb';
+import {getAnswerFieldsForBlackCardInRound} from '../../helpers/proto';
 
 const SET_GAME_STATE = 'game/SET_GAME_STATE';
 const QUEUE_CARD = 'game/QUEUE_CARD';
 const UNQUEUE_CARD = 'game/UNQUEUE_CARD';
 
+export enum QueuedCardIdType {
+  Default,
+  Custom,
+  Blank
+}
+
 export interface QueuedCardId {
   cardName: string;
-  isBlank: boolean;
+  cardType: QueuedCardIdType;
 }
 
 // TODO - Move some of these helper functions to a separate helper file.
@@ -17,19 +24,26 @@ const playableWhiteCardToQueuedCardId =
     return;
   }
 
-  let cardName: string = '';
-
-  const whiteCard = card.getWhiteCard();
-  const blankCard = card.getBlankCard();
-  if (whiteCard) {
-    cardName = whiteCard.getName();
-  } else if (blankCard) {
-    cardName = blankCard.getId();
-  } else {
-    return;
+  if (card.hasDefaultWhiteCard()) {
+    return {
+      cardName: card.getDefaultWhiteCard()?.getName() || '',
+      cardType: QueuedCardIdType.Default
+    };
   }
 
-  return {cardName, isBlank: card.hasBlankCard()};
+  if (card.hasCustomWhiteCard()) {
+    return {
+      cardName: card.getCustomWhiteCard()?.getName() || '',
+      cardType: QueuedCardIdType.Custom
+    };
+  }
+
+  if (card.hasBlankWhiteCard()) {
+    return {
+      cardName: card.getBlankWhiteCard()?.getId() || '',
+      cardType: QueuedCardIdType.Blank
+    };
+  }
 };
 
 const queuedCardIdsAreEqual = (
@@ -39,7 +53,7 @@ const queuedCardIdsAreEqual = (
   if (!one || !two) {
     return false;
   }
-  return one.cardName === two.cardName && one.isBlank === two.isBlank;
+  return one.cardName === two.cardName && one.cardType === two.cardType;
 };
 
 export const queuedCardIdPointsToPlayableCard =
@@ -112,7 +126,8 @@ export default (
           view: gameView,
           queuedCardIds: cleanseQueuedCardIds(
             gameView.getHandList(),
-            gameView.getCurrentBlackCard()?.getAnswerFields() || 0,
+            getAnswerFieldsForBlackCardInRound(
+              gameView.getCurrentBlackCard()) || 0,
             state.queuedCardIds
           )
         };

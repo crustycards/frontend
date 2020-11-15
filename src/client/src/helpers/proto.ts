@@ -1,5 +1,5 @@
 import {User, UserSettings} from '../../../../proto-gen-out/api/model_pb';
-import {Player, PlayableWhiteCard} from '../../../../proto-gen-out/game/game_service_pb';
+import {Player, PlayableWhiteCard, BlackCardInRound} from '../../../../proto-gen-out/api/game_service_pb';
 import {
   opaqueSerializedStringToUint8Array,
   uint8ArrayToOpaqueSerializedString
@@ -37,7 +37,7 @@ export const playersAreEqual =
 
   if (oneArtificialUser && twoArtificialUser) {
     return !!oneArtificialUser.getId().length
-        && twoArtificialUser.getId() === twoArtificialUser.getId();
+        && oneArtificialUser.getId() === twoArtificialUser.getId();
   }
 
   return false;
@@ -63,17 +63,56 @@ export const getPlayerDisplayName = (player?: Player): string => {
 
 export const getDisplayTextForPlayableWhiteCard =
 (card: PlayableWhiteCard): string => {
-  const blankCard = card.getBlankCard();
-  if (blankCard) {
-    return blankCard.getOpenText();
+  const blankWhiteCard = card.getBlankWhiteCard();
+  if (blankWhiteCard) {
+    return blankWhiteCard.getOpenText();
   }
 
-  const whiteCard = card.getWhiteCard();
-  if (whiteCard) {
-    return whiteCard.getText();
+  const customWhiteCard = card.getCustomWhiteCard();
+  if (customWhiteCard) {
+    return customWhiteCard.getText();
+  }
+
+  const defaultWhiteCard = card.getDefaultWhiteCard();
+  if (defaultWhiteCard) {
+    return defaultWhiteCard.getText();
   }
 
   return 'Unknown';
+};
+
+export const getDisplayTextForBlackCardInRound =
+(card: BlackCardInRound): string => {
+  const customBlackCard = card.getCustomBlackCard();
+  if (customBlackCard) {
+    return customBlackCard.getText();
+  }
+
+  const defaultBlackCard = card.getDefaultBlackCard();
+  if (defaultBlackCard) {
+    return defaultBlackCard.getText();
+  }
+
+  return 'Unknown';
+};
+
+export const getAnswerFieldsForBlackCardInRound =
+(card?: BlackCardInRound): number | undefined => {
+  if (card === undefined) {
+    return undefined;
+  }
+
+  const customBlackCard = card.getCustomBlackCard();
+  if (customBlackCard) {
+    return customBlackCard.getAnswerFields();
+  }
+
+  const defaultBlackCard = card.getDefaultBlackCard();
+  if (defaultBlackCard) {
+    return defaultBlackCard.getAnswerFields();
+  }
+
+  return undefined;
 };
 
 interface PreloadedState {

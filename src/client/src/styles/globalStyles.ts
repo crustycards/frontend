@@ -22,6 +22,13 @@ export const useGlobalStyles = makeStyles((theme: Theme) =>
       maxWidth: '1000px',
       margin: '0 auto',
       padding: '10px'
+    },
+    center: {
+      textAlign: 'center'
+    },
+    card: {
+      minWidth: '10em',
+      margin: '3px'
     }
   })
 );

@@ -19,7 +19,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {convertTime} from '../../helpers/time';
 import {StoreState} from '../../store';
 import {GameService} from '../../api/gameService';
-import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/game/game_service_pb';
+import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/api/game_service_pb';
 import NumberBoundTextField from '../NumberBoundTextField';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
@@ -39,6 +39,7 @@ interface GameListProps {
 const GameList = (props: GameListProps) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [loadingError, setLoadingError] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
   const classes = useStyles();
   const globalClasses = useGlobalStyles();
@@ -60,6 +61,9 @@ const GameList = (props: GameListProps) => {
       searchGamesRequest.setGameStageFilter(gameStageFilter);
       props.gameService.searchGames(searchGamesRequest).then((games) => {
         setGames(games);
+      }).catch(() => {
+        setLoadingError(true);
+      }).finally(() => {
         setIsLoading(false);
       });
     }
@@ -69,30 +73,48 @@ const GameList = (props: GameListProps) => {
     refresh();
   }, []);
 
+  const header = (
+    <Typography
+      className={classes.gameListHeader}
+      variant={'h4'}
+      align={'center'}
+    >
+      Games
+    </Typography>
+  );
+
   if (isLoading) {
-    return <div>
-      <Typography
-        className={classes.gameListHeader}
-        variant={'h4'}
-        color={'textPrimary'}
-        align={'center'}
-      >
-        Games
-      </Typography>
-      <div className='center'><CircularProgress size={80} thickness={5} /></div>
-    </div>;
+    return (
+      <div>
+        {header}
+        <div className={globalClasses.center}>
+          <CircularProgress size={80} thickness={5}/>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadingError) {
+    return (
+      <div style={{textAlign: 'center'}}>
+        {header}
+        <Typography color={'error'}>Failed to load games.</Typography>
+        <Button
+          size={'small'}
+          onClick={refresh}
+          variant={'contained'}
+          color={'secondary'}
+        >
+          <RefreshIcon className={classes.leftIcon}/>
+          Try Again
+        </Button>
+      </div>
+    );
   }
 
   return (
     <div>
-      <Typography
-        className={classes.gameListHeader}
-        variant={'h4'}
-        color={'textPrimary'}
-        align={'center'}
-      >
-        Games
-      </Typography>
+      {header}
       {games.map((gameInfo, index) => (
         <Card
           style={
@@ -102,7 +124,7 @@ const GameList = (props: GameListProps) => {
               {}
           }
           key={index}
-          className='card'
+          className={globalClasses.card}
         >
           <CardHeader
             title={gameInfo.getConfig()?.getDisplayName() || 'Unknown'}
@@ -133,7 +155,7 @@ const GameList = (props: GameListProps) => {
       ))}
       {
         games.length === 0 &&
-        <div className='center'>
+        <div className={globalClasses.center}>
           <span>
             There are no open games to join
           </span>
@@ -142,7 +164,7 @@ const GameList = (props: GameListProps) => {
 
       <div className={globalClasses.contentWrap}>
         <Grid container spacing={8}>
-          <Grid item xs={12} sm={5} className={'center'}>
+          <Grid item xs={12} sm={5} className={globalClasses.center}>
             <div style={{maxWidth: '200px', textAlign: 'center', display: 'inline-block'}}>
               <TextField
                 label={'Query'}
@@ -165,7 +187,6 @@ const GameList = (props: GameListProps) => {
                 size={'small'}
                 style={{marginBottom: '5px', marginTop: '10px'}}
                 onClick={refresh}
-                disabled={isLoading}
                 variant={'contained'}
                 color={'secondary'}
               >

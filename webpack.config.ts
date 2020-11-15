@@ -23,24 +23,39 @@ const config: webpack.Configuration = {
         }
       },
       {
-        test: /\.scss$/,
-        use: [
-          {
-            loader: 'style-loader' // creates style nodes from JS strings
-          },
-          {
-            loader: 'css-loader' // translates CSS into CommonJS
-          },
-          {
-            loader: 'sass-loader' // compiles Sass to CSS
-          }
-        ]
-      },
-      {
         test: /\.(jpg|png|svg)$/,
         loader: 'url-loader',
         options: {
-          limit: 25000
+          limit: 25000,
+          esModule: false // TODO - Remove this line and convert images to esModule imports.
+        },
+      },
+      {
+        test: /\.tsx?$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['@babel/preset-typescript'],
+            plugins: [
+              [
+                require('babel-plugin-transform-imports'), {
+                  '@material-ui/core': {
+                    transform: (importName: string, matches: any) => {
+                      return `@material-ui/core/esm/${importName}`;
+                    },
+                    preventFullImport: true
+                  },
+                  '@material-ui/icons': {
+                    transform: (importName: string, matches: any) => {
+                      return `'@material-ui/icons/esm/${importName}`;
+                    },
+                    preventFullImport: true
+                  }
+                }
+              ]
+            ]
+          }
         }
       }
     ]

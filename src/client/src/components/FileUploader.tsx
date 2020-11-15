@@ -1,9 +1,5 @@
-import {
-  Theme,
-  Typography,
-  withStyles,
-  WithStyles
-} from '@material-ui/core';
+import {Theme, Typography} from '@material-ui/core';
+import {withStyles, WithStyles} from '@material-ui/styles';
 import {CSSProperties} from '@material-ui/styles';
 import * as React from 'react';
 import {useMemo} from 'react';

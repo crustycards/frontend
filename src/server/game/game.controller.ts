@@ -1,12 +1,7 @@
 import {
   Body,
   Controller,
-  Delete,
-  Get,
-  Param,
   Post,
-  Put,
-  Query,
   UseGuards,
   Res
 } from '@nestjs/common';
@@ -29,7 +24,7 @@ import {
   RemoveArtificialPlayerRequest,
   CreateChatMessageRequest,
   GetGameViewRequest
-} from '../../../proto-gen-out/game/game_service_pb';
+} from '../../../proto-gen-out/api/game_service_pb';
 import {GameService} from './game.service';
 import {handleRequest} from '../rpc';
 import {Response} from 'express';

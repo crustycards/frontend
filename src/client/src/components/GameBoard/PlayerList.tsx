@@ -9,21 +9,15 @@ import {
 import Check from '@material-ui/icons/Check';
 import Star from '@material-ui/icons/Star';
 import * as React from 'react';
-import {GameView, Player} from '../../../../../proto-gen-out/game/game_service_pb';
-import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
+import {GameView, Player} from '../../../../../proto-gen-out/api/game_service_pb';
+import {getPlayerDisplayName} from '../../helpers/proto';
+import {playerHasPlayed} from '../../store';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
   maxHeight: '100%',
   padding: 0
-};
-
-const hasPlayed = (player: Player, game: GameView): boolean => {
-  const playerEntry = game.getWhitePlayedList().find((entry) => (
-    entry.hasPlayer() && playersAreEqual(entry.getPlayer(), player)
-  ));
-  return !!(playerEntry?.getCardTextsList().length);
 };
 
 const renderPlayer = (
@@ -43,7 +37,7 @@ const renderPlayer = (
       <ListItem>
         <ListItemText
           primary={
-            <Typography color={'textPrimary'}>
+            <Typography>
               {getPlayerDisplayName(player)}
             </Typography>
           }
@@ -63,7 +57,7 @@ const renderPlayer = (
       <ListItem>
         <ListItemText
           primary={
-            <Typography color={'textPrimary'}>
+            <Typography>
               {getPlayerDisplayName(player)}
             </Typography>
           }
@@ -80,7 +74,7 @@ const renderQueuedPlayer = (player: Player) => (
   <ListItem disabled>
     <ListItemText
       primary={
-        <Typography color={'textPrimary'}>
+        <Typography>
           {getPlayerDisplayName(player)}
         </Typography>
       }
@@ -127,7 +121,7 @@ const PlayerList = (props: PlayerListProps) => {
                     player,
                     ownerName,
                     judgeName,
-                    hasPlayed(player, props.gameView)
+                    playerHasPlayed(player, props.gameView)
                   )}
                 </div>);
               }).concat(queuedRealPlayers.map((player, index) =>
@@ -151,7 +145,7 @@ const PlayerList = (props: PlayerListProps) => {
                     player,
                     ownerName,
                     judgeName,
-                    hasPlayed(player, props.gameView)
+                    playerHasPlayed(player, props.gameView)
                   )}
                 </div>);
               }).concat(queuedArtificialPlayers.map((player, index) =>

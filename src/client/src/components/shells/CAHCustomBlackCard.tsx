@@ -1,32 +1,34 @@
 import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
-import {BlackCard} from '../../../../../proto-gen-out/api/model_pb';
-import {deleteBlackCard} from '../../api/cardpackService';
+import {CustomBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {deleteCustomBlackCard} from '../../api/cardpackService';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 
-interface CAHBlackCardProps {
-  card: BlackCard;
+interface CAHCustomBlackCardProps {
+  card: CustomBlackCard;
   showDeleteButton?: boolean;
   hideAnswerCount?: boolean;
   overrideTextElements?: (string | JSX.Element)[];
   onDelete?(cardId: string): void;
 }
 
-// TODO - Display fields from WhiteCard other than text and answerFields.
-const CAHBlackCard = (props: CAHBlackCardProps) => {
+const CAHCustomBlackCard = (props: CAHCustomBlackCardProps) => {
   const removeCard = () => {
-    deleteBlackCard(props.card.getName()).then((data) => {
+    deleteCustomBlackCard(props.card.getName()).then((data) => {
       if (props.onDelete) {
         props.onDelete(props.card.getName());
       }
     });
   };
 
+  const globalClasses = useGlobalStyles();
+
   return (
     <MuiThemeProvider theme={darkTheme}>
-      <Card className='card'>
+      <Card className={globalClasses.card}>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             {props.overrideTextElements || props.card.getText()}
@@ -53,4 +55,4 @@ const CAHBlackCard = (props: CAHBlackCardProps) => {
   );
 };
 
-export default CAHBlackCard;
+export default CAHCustomBlackCard;

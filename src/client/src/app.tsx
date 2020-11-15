@@ -1,4 +1,4 @@
-import {blue} from '@material-ui/core/colors';
+import {blue, teal} from '@material-ui/core/colors';
 import {
   createMuiTheme,
   MuiThemeProvider,
@@ -22,16 +22,17 @@ import {UserService} from './api/userService';
 import AuthRedirector from './components/AuthRedirector';
 import Navbar from './components/Navbar';
 import StatusBar from './components/StatusBar';
-import CardpackPage from './pages/CardpackPage';
+import CustomCardpackListPage from './pages/CustomCardpackListPage';
+import CustomCardpackPage from './pages/CustomCardpackPage';
 import GamePage from './pages/GamePage';
 import GameListPage from './pages/GameListPage';
-import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import NotFoundPage from './pages/NotFoundPage';
 import SettingsPage from './pages/SettingsPage';
 import UserPage from './pages/UserPage';
 import createStore, {StoreState} from './store/index';
-import './styles/index.scss';
+import DefaultCardpackListPage from './pages/DefaultCardpackListPage';
+import DefaultCardpackPage from './pages/DefaultCardpackPage';
 
 const history = createBrowserHistory();
 const store = createStore({history});
@@ -87,35 +88,10 @@ export const App = () => (
   </Provider>
 );
 
-const ThemedSubApp = () => {
-  const {userSettings} = useSelector(
-    ({global: {userSettings}}: StoreState) => ({userSettings})
-  );
-  const isDarkMode =
-    userSettings?.getColorScheme() === UserSettings.ColorScheme.DEFAULT_DARK;
-
-  const theme = createMuiTheme({
-    palette: {
-      primary: blue,
-      secondary: {
-        main: '#43c6a8'
-      },
-      type: isDarkMode ? 'dark' : 'light'
-    }
-  });
-
-  return (
-    <MuiThemeProvider theme={theme}>
-      <SubApp/>
-    </MuiThemeProvider>
-  );
-};
-
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       backgroundColor: theme.palette.background.default,
-      padding: theme.spacing(1),
       height: '100%',
       overflowY: 'auto'
     }
@@ -127,15 +103,33 @@ const SubApp = () => {
 
   return (
     <div className={classes.root}>
+      {/* This meta tag makes the mobile experience
+      much better by preventing text from being tiny. */}
+      <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
       <AuthRedirector/>
       <Navbar/>
       <StatusBar/>
       <Switch>
-        <Route exact path='/' component={HomePage}/>
+        <Route exact path='/' component={AuthRedirector}/>
+        <Route
+          exact
+          path='/users/:user/cardpacks'
+          component={CustomCardpackListPage}
+        />
         <Route
           exact
           path='/users/:user/cardpacks/:cardpack'
-          component={CardpackPage}
+          component={CustomCardpackPage}
+        />
+        <Route
+          exact
+          path='/defaultCardpacks'
+          component={DefaultCardpackListPage}
+        />
+        <Route
+          exact
+          path='/defaultCardpacks/:cardpack'
+          component={DefaultCardpackPage}
         />
         <Route exact path='/users/:user' component={UserPage}/>
         <Route exact path='/login' component={LoginPage}/>
@@ -145,5 +139,35 @@ const SubApp = () => {
         <Route component={NotFoundPage}/>
       </Switch>
     </div>
+  );
+};
+
+const ThemedSubApp = () => {
+  const {userSettings} = useSelector(
+    ({global: {userSettings}}: StoreState) => ({userSettings})
+  );
+  const isDarkMode =
+    userSettings?.getColorScheme() === UserSettings.ColorScheme.DEFAULT_DARK;
+
+  const theme = createMuiTheme({
+    palette: {
+      primary: blue,
+      secondary: teal,
+      type: isDarkMode ? 'dark' : 'light'
+    },
+    props: {
+      MuiAppBar: {
+        color: isDarkMode ? 'default' : 'primary'
+      },
+      MuiTypography: {
+        color: 'textPrimary'
+      }
+    }
+  });
+
+  return (
+    <MuiThemeProvider theme={theme}>
+      <SubApp/>
+    </MuiThemeProvider>
   );
 };

@@ -1,5 +1,4 @@
 import {Injectable} from '@nestjs/common';
-import * as grpc from 'grpc';
 import * as jwt from 'jsonwebtoken';
 import {EnvironmentService} from '../environment/environment.service';
 

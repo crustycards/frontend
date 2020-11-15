@@ -23,25 +23,21 @@ const GameListPage = () => {
   if (!gameService || !currentUser || !currentUserSettings) {
     return (
       <div className={globalClasses.contentWrap}>
-        <div className={globalClasses.panel}>
-          <div>Must be logged in to view games.</div>
-        </div>
+        Must be logged in to view games.
       </div>
     );
   }
 
   return (
     <div className={globalClasses.contentWrap}>
-      <div className={globalClasses.panel}>
-        <GameCreator
-          gameService={gameService}
-          userService={userService}
-          currentUser={currentUser}
-          quickStartGameConfig={currentUserSettings.getQuickStartGameConfig()}
-        />
-        <Divider style={{marginTop: '10px', marginBottom: '10px'}} />
-        <GameList gameService={gameService}/>
-      </div>
+      <GameCreator
+        gameService={gameService}
+        userService={userService}
+        currentUser={currentUser}
+        quickStartGameConfig={currentUserSettings.getQuickStartGameConfig()}
+      />
+      <Divider style={{marginTop: '10px', marginBottom: '10px'}} />
+      <GameList gameService={gameService}/>
     </div>
   );
 };

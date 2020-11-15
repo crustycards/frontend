@@ -1,14 +1,14 @@
-import {Button} from '@material-ui/core';
+import {Button, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
-import {WhiteCard, User} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard, User} from '../../../../../proto-gen-out/api/model_pb';
 import {
   GameView,
   Player,
   WhiteCardsPlayed
-} from '../../../../../proto-gen-out/game/game_service_pb';
+} from '../../../../../proto-gen-out/api/game_service_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
-import CAHWhiteCard from '../shells/CAHWhiteCard';
+import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
 import {GameService} from '../../api/gameService';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
@@ -22,7 +22,7 @@ interface PlayedCardsProps {
 }
 
 // TODO - This component has a lot of repeated code.
-// Condense it downas much as possible.
+// Condense it down as much as possible.
 // TODO - This component should definitely have some tests to make sure it can
 // handle random invalid inputs, especially for game.view.whitePlayed.
 const PlayedCards = (props: PlayedCardsProps) => {
@@ -30,107 +30,84 @@ const PlayedCards = (props: PlayedCardsProps) => {
 
   const globalClasses = useGlobalStyles();
 
-  if (props.gameStage === GameView.Stage.JUDGE_PHASE) {
-    return (
-      <div className={globalClasses.panel}>
-        {
-          props.judge?.getName() === props.currentUser.getName() &&
-            <Button
-              variant={'contained'}
-              color={'secondary'}
-              disabled={selectedSetIndex === null}
-              onClick={() => {
-                if (selectedSetIndex !== null) {
-                  // TODO - Set selected index to null only after voteCard
-                  // promise resolves, and show loading spinner until then.
-                  props.gameService.voteCard(selectedSetIndex);
-                  setSelectedSetIndex(null);
-                }
-              }}
-            >
-              Vote
-            </Button>
-        }
-        {
-          props.whitePlayedList
-            .map((entry) => entry.getCardTextsList())
-            .map((cardTexts, index) => (
-              <div
-                className={globalClasses.subpanel}
-                key={index}
-                onClick={() => {
-                  if (props.judge?.getName() === props.currentUser.getName()) {
-                    setSelectedSetIndex(index);
-                  }
-                }}
-                style={index === selectedSetIndex ?
-                  {
-                    background: 'green',
-                    transition: 'background .25s ease'
-                  }
-                  :
-                  {
-                    transition: 'background .2s ease'
-                  }
-                }
-              >
-                {
-                  cardTexts.map((cardText) => {
-                    const card = new WhiteCard();
-                    card.setText(cardText);
-                    return card;
-                  }).map((card, index) =>
-                    <CAHWhiteCard card={card} key={index}/>
-                  )
-                }
-              </div>
-            ))
-        }
-      </div>
-    );
-  } else if (
-    props.gameWinner && (props.gameStage === GameView.Stage.ROUND_END_PHASE ||
-    props.gameStage === GameView.Stage.NOT_RUNNING)
-  ) {
-    return (
-      <div className={globalClasses.panel}>
-        {
-          props.whitePlayedList.filter(
-            (entry) => entry.hasPlayer()
-          ).map((entry, index) => (
-            <div
-              style={
-                playersAreEqual(props.gameWinner, entry.getPlayer()) ?
-                  {}
-                  :
-                  {opacity: 0.5}
+  const canVote = props.judge?.getName() === props.currentUser.getName()
+               && props.gameStage === GameView.Stage.JUDGE_PHASE;
+
+  const nonEmptyWhitePlayedList = props.whitePlayedList
+    .filter((entry) => entry.getCardTextsList().length > 0);
+
+  if (!canVote && selectedSetIndex != null) {
+    setSelectedSetIndex(null);
+  }
+
+  if (nonEmptyWhitePlayedList.length === 0) {
+    return <div></div>;
+  }
+
+  return (
+    <div className={globalClasses.panel}>
+      {
+        canVote &&
+          <Button
+            variant={'contained'}
+            color={'secondary'}
+            disabled={selectedSetIndex === null}
+            onClick={() => {
+              if (selectedSetIndex !== null) {
+                // TODO - Set selected index to null only after voteCard
+                // promise resolves, and show loading spinner until then.
+                props.gameService.voteCard(selectedSetIndex + 1);
+                setSelectedSetIndex(null);
               }
+            }}
+          >
+            Vote
+          </Button>
+      }
+      {
+        nonEmptyWhitePlayedList
+          .map((entry, index) => (
+            <div
               className={globalClasses.subpanel}
               key={index}
-            >
-              <div>
-                {
-                  getPlayerDisplayName(entry.getPlayer())
+              onClick={() => {
+                if (canVote) {
+                  setSelectedSetIndex(index);
                 }
-              </div>
-              {entry.getCardTextsList().map((cardText) => {
-                const card = new WhiteCard();
-                card.setText(cardText);
-                return card;
-              }).map((card, index) => (
-                <CAHWhiteCard
-                  card={card}
-                  key={index}
-                />
-              ))}
+              }}
+              style={
+                {
+                  // TODO - Instead of green, let's use the
+                  // primary color from the Material UI theme.
+                  background: index === selectedSetIndex ? 'green' : undefined,
+                  transition: 'background .3s ease',
+                  opacity: (
+                    props.gameWinner === undefined
+                    || playersAreEqual(props.gameWinner, entry.getPlayer())
+                  ) ? undefined : 0.5
+                }
+              }
+            >
+              {
+                entry.hasPlayer() &&
+                  <Typography>
+                    {getPlayerDisplayName(entry.getPlayer())}
+                  </Typography>
+              }
+              {
+                entry.getCardTextsList().map((cardText) => {
+                  const card = new CustomWhiteCard();
+                  card.setText(cardText);
+                  return card;
+                }).map((card, index) =>
+                  <CAHCustomWhiteCard card={card} key={index}/>
+                )
+              }
             </div>
           ))
-        }
-      </div>
-    );
-  } else {
-    return null;
-  }
+      }
+    </div>
+  );
 };
 
 export default PlayedCards;

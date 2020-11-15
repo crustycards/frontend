@@ -21,6 +21,8 @@ test:
     # Generate protobuf code.
     - npm run build-proto-linux
     - npm run build-grpc-linux
+    # Check for Typescript type errors.
+    - npm run check-typescript-types
     # Run tests.
     - npm test
 

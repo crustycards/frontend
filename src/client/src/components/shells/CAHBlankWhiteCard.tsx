@@ -2,7 +2,8 @@ import {Card, CardContent, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {
   BlankWhiteCard
-} from '../../../../../proto-gen-out/game/game_service_pb';
+} from '../../../../../proto-gen-out/api/game_service_pb';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface CAHBlankWhiteCardProps {
   card: BlankWhiteCard;
@@ -12,8 +13,10 @@ interface CAHBlankWhiteCardProps {
 const CAHBlankWhiteCard = (props: CAHBlankWhiteCardProps) => {
   // TODO - Wrap in white theme
 
+  const globalClasses = useGlobalStyles();
+
   return (
-    <Card className='card'>
+    <Card className={globalClasses.card}>
       <CardContent>
         <Typography align={'left'} variant={'body2'}>
           {props.card.getOpenText()}

@@ -1,5 +1,4 @@
 import {Store} from 'redux';
-import * as _ from 'underscore';
 import {GameConfig} from '../../../../proto-gen-out/api/model_pb';
 import {
   AddArtificialPlayerRequest,
@@ -24,11 +23,12 @@ import {
   UnbanUserRequest,
   UnplayCardsRequest,
   VoteCardRequest
-} from '../../../../proto-gen-out/game/game_service_pb';
+} from '../../../../proto-gen-out/api/game_service_pb';
 import {StoreState} from '../store';
 import {setGameState} from '../store/modules/game';
 import {makeRpcFromBrowser} from '../../../server/rpc';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
+import {bindAllFunctionsToSelf} from '../helpers/bindAll';
 
 // We're using a class here rather than exporting the raw RPC functions for two
 // reasons.
@@ -42,11 +42,10 @@ import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 // its methods in order to automatically dispatch an action to update the game
 // state when needed.
 export class GameService {
-  // TODO - Convert all methods in this class to async/await.
   constructor(
     private readonly currentUserName: string,
     private readonly store?: Store<StoreState>) {
-    _.bindAll(this, ...Object.getOwnPropertyNames(Object.getPrototypeOf(this)));
+    bindAllFunctionsToSelf(this);
   }
 
   public async searchGames(request: SearchGamesRequest): Promise<GameInfo[]> {

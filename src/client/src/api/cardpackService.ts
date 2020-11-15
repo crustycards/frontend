@@ -1,283 +1,337 @@
 import {
-  AutocompleteCardpackSearchRequest,
-  AutocompleteCardpackSearchResponse,
-  BatchCreateBlackCardsRequest,
-  BatchCreateBlackCardsResponse,
-  BatchCreateWhiteCardsRequest,
-  BatchCreateWhiteCardsResponse,
-  BatchDeleteBlackCardsRequest,
-  BatchDeleteBlackCardsResponse,
-  BatchDeleteWhiteCardsRequest,
-  BatchDeleteWhiteCardsResponse,
-  CardpackSearchRequest,
-  CardpackSearchResponse,
-  CheckDoesUserLikeCardpackRequest,
-  CheckDoesUserLikeCardpackResponse,
-  CreateBlackCardRequest,
-  CreateCardpackRequest,
-  CreateWhiteCardRequest,
-  DeleteBlackCardRequest,
-  DeleteCardpackRequest,
-  DeleteWhiteCardRequest,
-  GetCardpackRequest,
-  LikeCardpackRequest,
-  ListBlackCardsRequest,
-  ListBlackCardsResponse,
-  ListCardpacksRequest,
-  ListCardpacksResponse,
-  ListWhiteCardsRequest,
-  ListWhiteCardsResponse,
-  UndeleteBlackCardRequest,
-  UndeleteCardpackRequest,
-  UndeleteWhiteCardRequest,
-  UnlikeCardpackRequest,
-  UpdateBlackCardRequest,
-  UpdateCardpackRequest,
-  UpdateWhiteCardRequest
+  AutocompleteCustomCardpackSearchRequest,
+  AutocompleteCustomCardpackSearchResponse,
+  BatchCreateCustomBlackCardsRequest,
+  BatchCreateCustomBlackCardsResponse,
+  BatchCreateCustomWhiteCardsRequest,
+  BatchCreateCustomWhiteCardsResponse,
+  BatchDeleteCustomBlackCardsRequest,
+  BatchDeleteCustomBlackCardsResponse,
+  BatchDeleteCustomWhiteCardsRequest,
+  BatchDeleteCustomWhiteCardsResponse,
+  CustomCardpackSearchRequest,
+  CustomCardpackSearchResponse,
+  CheckDoesUserLikeCustomCardpackRequest,
+  CheckDoesUserLikeCustomCardpackResponse,
+  CreateCustomBlackCardRequest,
+  CreateCustomCardpackRequest,
+  CreateCustomWhiteCardRequest,
+  DeleteCustomBlackCardRequest,
+  DeleteCustomCardpackRequest,
+  DeleteCustomWhiteCardRequest,
+  GetCustomCardpackRequest,
+  LikeCustomCardpackRequest,
+  ListCustomBlackCardsRequest,
+  ListCustomBlackCardsResponse,
+  ListCustomCardpacksRequest,
+  ListCustomCardpacksResponse,
+  ListCustomWhiteCardsRequest,
+  ListCustomWhiteCardsResponse,
+  UndeleteCustomBlackCardRequest,
+  UndeleteCustomCardpackRequest,
+  UndeleteCustomWhiteCardRequest,
+  UnlikeCustomCardpackRequest,
+  UpdateCustomBlackCardRequest,
+  UpdateCustomCardpackRequest,
+  UpdateCustomWhiteCardRequest,
+  GetDefaultCardpackRequest,
+  ListDefaultCardpacksRequest,
+  ListDefaultCardpacksResponse,
+  ListDefaultBlackCardsResponse,
+  ListDefaultWhiteCardsRequest,
+  ListDefaultWhiteCardsResponse,
+  ListDefaultBlackCardsRequest
 } from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {BlackCard, Cardpack, WhiteCard} from '../../../../proto-gen-out/api/model_pb';
+import {CustomBlackCard, CustomCardpack, CustomWhiteCard, DefaultCardpack} from '../../../../proto-gen-out/api/model_pb';
 import {makeRpcFromBrowser} from '../../../server/rpc';
 
-export const createCardpack = (parentUserName: string, cardpack: Cardpack):
-Promise<Cardpack> => {
-  const request = new CreateCardpackRequest();
+export const createCustomCardpack =
+(parentUserName: string, customCardpack: CustomCardpack):
+Promise<CustomCardpack> => {
+  const request = new CreateCustomCardpackRequest();
   request.setParent(parentUserName);
-  request.setCardpack(cardpack);
+  request.setCustomCardpack(customCardpack);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/CreateCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/CreateCustomCardpack',
+    CustomCardpack.deserializeBinary
   );
 };
 
-export const getCardpack = (cardpackName: string): Promise<Cardpack> => {
-  const request = new GetCardpackRequest();
-  request.setName(cardpackName);
+export const getCustomCardpack =
+(customCardpackName: string): Promise<CustomCardpack> => {
+  const request = new GetCustomCardpackRequest();
+  request.setName(customCardpackName);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/GetCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/GetCustomCardpack',
+    CustomCardpack.deserializeBinary
   );
 };
 
-export const listCardpacks = (request: ListCardpacksRequest):
-Promise<ListCardpacksResponse> => {
+export const listCustomCardpacks = (request: ListCustomCardpacksRequest):
+Promise<ListCustomCardpacksResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/ListCardpacks',
-    ListCardpacksResponse.deserializeBinary
+    'CardpackService/ListCustomCardpacks',
+    ListCustomCardpacksResponse.deserializeBinary
   );
 };
 
-export const updateCardpack = (request: UpdateCardpackRequest):
-Promise<Cardpack> => {
+export const updateCustomCardpack = (request: UpdateCustomCardpackRequest):
+Promise<CustomCardpack> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UpdateCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/UpdateCustomCardpack',
+    CustomCardpack.deserializeBinary
   );
 };
 
-export const deleteCardpack = (cardpackName: string): Promise<Cardpack> => {
-  const request = new DeleteCardpackRequest();
-  request.setName(cardpackName);
+export const deleteCustomCardpack = (customCardpackName: string):
+Promise<CustomCardpack> => {
+  const request = new DeleteCustomCardpackRequest();
+  request.setName(customCardpackName);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/DeleteCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/DeleteCustomCardpack',
+    CustomCardpack.deserializeBinary
   );
 };
 
-export const createBlackCard =
-(parentCardpackName: string, card: BlackCard): Promise<BlackCard> => {
-  const request = new CreateBlackCardRequest();
-  request.setParent(parentCardpackName);
-  request.setBlackCard(card);
+export const createCustomBlackCard =
+(parentCustomCardpackName: string, card: CustomBlackCard):
+Promise<CustomBlackCard> => {
+  const request = new CreateCustomBlackCardRequest();
+  request.setParent(parentCustomCardpackName);
+  request.setCustomBlackCard(card);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/CreateBlackCard',
-    BlackCard.deserializeBinary
+    'CardpackService/CreateCustomBlackCard',
+    CustomBlackCard.deserializeBinary
   );
 };
 
-export const createWhiteCard =
-(parentCardpackName: string, card: WhiteCard): Promise<WhiteCard> => {
-  const request = new CreateWhiteCardRequest();
-  request.setParent(parentCardpackName);
-  request.setWhiteCard(card);
+export const createCustomWhiteCard =
+(parentCustomCardpackName: string, card: CustomWhiteCard):
+Promise<CustomWhiteCard> => {
+  const request = new CreateCustomWhiteCardRequest();
+  request.setParent(parentCustomCardpackName);
+  request.setCustomWhiteCard(card);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/CreateWhiteCard',
-    WhiteCard.deserializeBinary
+    'CardpackService/CreateCustomWhiteCard',
+    CustomWhiteCard.deserializeBinary
   );
 };
 
-export const listBlackCards = (request: ListBlackCardsRequest):
-Promise<ListBlackCardsResponse> => {
+export const listCustomBlackCards = (request: ListCustomBlackCardsRequest):
+Promise<ListCustomBlackCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/ListBlackCards',
-    ListBlackCardsResponse.deserializeBinary
+    'CardpackService/ListCustomBlackCards',
+    ListCustomBlackCardsResponse.deserializeBinary
   );
 };
 
-export const listWhiteCards = (request: ListWhiteCardsRequest):
-Promise<ListWhiteCardsResponse> => {
+export const listCustomWhiteCards = (request: ListCustomWhiteCardsRequest):
+Promise<ListCustomWhiteCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/ListWhiteCards',
-    ListWhiteCardsResponse.deserializeBinary
+    'CardpackService/ListCustomWhiteCards',
+    ListCustomWhiteCardsResponse.deserializeBinary
   );
 };
 
-export const updateBlackCard = (request: UpdateBlackCardRequest):
-Promise<BlackCard> => {
+export const updateCustomBlackCard = (request: UpdateCustomBlackCardRequest):
+Promise<CustomBlackCard> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UpdateBlackCard',
-    BlackCard.deserializeBinary
+    'CardpackService/UpdateCustomBlackCard',
+    CustomBlackCard.deserializeBinary
   );
 };
 
-export const updateWhiteCard = (request: UpdateWhiteCardRequest):
-Promise<WhiteCard> => {
+export const updateCustomWhiteCard = (request: UpdateCustomWhiteCardRequest):
+Promise<CustomWhiteCard> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UpdateWhiteCard',
-    WhiteCard.deserializeBinary
+    'CardpackService/UpdateCustomWhiteCard',
+    CustomWhiteCard.deserializeBinary
   );
 };
 
-export const deleteBlackCard = (blackCardName: string): Promise<BlackCard> => {
-  const request = new DeleteBlackCardRequest();
-  request.setName(blackCardName);
+export const deleteCustomBlackCard =
+(customBlackCardName: string): Promise<CustomBlackCard> => {
+  const request = new DeleteCustomBlackCardRequest();
+  request.setName(customBlackCardName);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/DeleteBlackCard',
-    BlackCard.deserializeBinary
+    'CardpackService/DeleteCustomBlackCard',
+    CustomBlackCard.deserializeBinary
   );
 };
 
-export const deleteWhiteCard = (whiteCardName: string): Promise<WhiteCard> => {
-  const request = new DeleteWhiteCardRequest();
-  request.setName(whiteCardName);
+export const deleteCustomWhiteCard =
+(customWhiteCardName: string): Promise<CustomWhiteCard> => {
+  const request = new DeleteCustomWhiteCardRequest();
+  request.setName(customWhiteCardName);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/DeleteWhiteCard',
-    WhiteCard.deserializeBinary
+    'CardpackService/DeleteCustomWhiteCard',
+    CustomWhiteCard.deserializeBinary
   );
 };
 
-export const batchCreateBlackCards =
-(request: BatchCreateBlackCardsRequest):
-Promise<BatchCreateBlackCardsResponse> => {
+export const batchCreateCustomBlackCards =
+(request: BatchCreateCustomBlackCardsRequest):
+Promise<BatchCreateCustomBlackCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/BatchCreateBlackCards',
-    BatchCreateBlackCardsResponse.deserializeBinary
+    'CardpackService/BatchCreateCustomBlackCards',
+    BatchCreateCustomBlackCardsResponse.deserializeBinary
   );
 };
 
-export const batchCreateWhiteCards =
-(request: BatchCreateWhiteCardsRequest):
-Promise<BatchCreateWhiteCardsResponse> => {
+export const batchCreateCustomWhiteCards =
+(request: BatchCreateCustomWhiteCardsRequest):
+Promise<BatchCreateCustomWhiteCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/BatchCreateWhiteCards',
-    BatchCreateWhiteCardsResponse.deserializeBinary
+    'CardpackService/BatchCreateCustomWhiteCards',
+    BatchCreateCustomWhiteCardsResponse.deserializeBinary
   );
 };
 
-export const batchDeleteBlackCards =
-(request: BatchDeleteBlackCardsRequest):
-Promise<BatchDeleteBlackCardsResponse> => {
+export const batchDeleteCustomBlackCards =
+(request: BatchDeleteCustomBlackCardsRequest):
+Promise<BatchDeleteCustomBlackCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/BatchDeleteBlackCards',
-    BatchDeleteBlackCardsResponse.deserializeBinary
+    'CardpackService/BatchDeleteCustomBlackCards',
+    BatchDeleteCustomBlackCardsResponse.deserializeBinary
   );
 };
 
-export const batchDeleteWhiteCards =
-(request: BatchDeleteWhiteCardsRequest):
-Promise<BatchDeleteWhiteCardsResponse> => {
+export const batchDeleteCustomWhiteCards =
+(request: BatchDeleteCustomWhiteCardsRequest):
+Promise<BatchDeleteCustomWhiteCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/BatchDeleteWhiteCards',
-    BatchDeleteWhiteCardsResponse.deserializeBinary
+    'CardpackService/BatchDeleteCustomWhiteCards',
+    BatchDeleteCustomWhiteCardsResponse.deserializeBinary
   );
 };
 
-export const undeleteCardpack = (request: UndeleteCardpackRequest):
-Promise<Cardpack> => {
+export const getDefaultCardpack =
+(defaultCardpackName: string): Promise<DefaultCardpack> => {
+  const request = new GetDefaultCardpackRequest();
+  request.setName(defaultCardpackName);
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UndeleteCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/GetDefaultCardpack',
+    DefaultCardpack.deserializeBinary
   );
 };
 
-export const undeleteBlackCard = (request: UndeleteBlackCardRequest):
-Promise<BlackCard> => {
+export const listDefaultCardpacks = (request: ListDefaultCardpacksRequest):
+Promise<ListDefaultCardpacksResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UndeleteBlackCard',
-    BlackCard.deserializeBinary
+    'CardpackService/ListDefaultCardpacks',
+    ListDefaultCardpacksResponse.deserializeBinary
   );
 };
 
-export const undeleteWhiteCard = (request: UndeleteWhiteCardRequest):
-Promise<WhiteCard> => {
+export const listDefaultBlackCards = (request: ListDefaultBlackCardsRequest):
+Promise<ListDefaultBlackCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UndeleteWhiteCard',
-    WhiteCard.deserializeBinary
+    'CardpackService/ListDefaultBlackCards',
+    ListDefaultBlackCardsResponse.deserializeBinary
   );
 };
 
-export const likeCardpack = (request: LikeCardpackRequest):
-Promise<Cardpack> => {
+export const listDefaultWhiteCards = (request: ListDefaultWhiteCardsRequest):
+Promise<ListDefaultWhiteCardsResponse> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/LikeCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/ListDefaultWhiteCards',
+    ListDefaultWhiteCardsResponse.deserializeBinary
   );
 };
 
-export const unlikeCardpack = (request: UnlikeCardpackRequest):
-Promise<Cardpack> => {
+export const undeleteCustomCardpack = (request: UndeleteCustomCardpackRequest):
+Promise<CustomCardpack> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/UnlikeCardpack',
-    Cardpack.deserializeBinary
+    'CardpackService/UndeleteCustomCardpack',
+    CustomCardpack.deserializeBinary
   );
 };
 
-export const checkDoesUserLikeCardpack =
-(request: CheckDoesUserLikeCardpackRequest):
-Promise<CheckDoesUserLikeCardpackResponse> => {
+export const undeleteCustomBlackCard =
+(request: UndeleteCustomBlackCardRequest):
+Promise<CustomBlackCard> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/CheckDoesUserLikeCardpack',
-    CheckDoesUserLikeCardpackResponse.deserializeBinary
+    'CardpackService/UndeleteCustomBlackCard',
+    CustomBlackCard.deserializeBinary
   );
 };
 
-export const cardpackSearch = (request: CardpackSearchRequest):
-Promise<CardpackSearchResponse> => {
+export const undeleteCustomWhiteCard =
+(request: UndeleteCustomWhiteCardRequest):
+Promise<CustomWhiteCard> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/CardpackSearch',
-    CardpackSearchResponse.deserializeBinary
+    'CardpackService/UndeleteCustomWhiteCard',
+    CustomWhiteCard.deserializeBinary
   );
 };
 
-export const autocompleteCardpackSearch =
-(request: AutocompleteCardpackSearchRequest):
-Promise<AutocompleteCardpackSearchResponse> => {
+export const likeCustomCardpack = (request: LikeCustomCardpackRequest):
+Promise<CustomCardpack> => {
   return makeRpcFromBrowser(
     request,
-    'CardpackService/AutocompleteCardpackSearch',
-    AutocompleteCardpackSearchResponse.deserializeBinary
+    'CardpackService/LikeCustomCardpack',
+    CustomCardpack.deserializeBinary
+  );
+};
+
+export const unlikeCustomCardpack = (request: UnlikeCustomCardpackRequest):
+Promise<CustomCardpack> => {
+  return makeRpcFromBrowser(
+    request,
+    'CardpackService/UnlikeCustomCardpack',
+    CustomCardpack.deserializeBinary
+  );
+};
+
+export const checkDoesUserLikeCustomCardpack =
+(request: CheckDoesUserLikeCustomCardpackRequest):
+Promise<CheckDoesUserLikeCustomCardpackResponse> => {
+  return makeRpcFromBrowser(
+    request,
+    'CardpackService/CheckDoesUserLikeCustomCardpack',
+    CheckDoesUserLikeCustomCardpackResponse.deserializeBinary
+  );
+};
+
+export const customCardpackSearch = (request: CustomCardpackSearchRequest):
+Promise<CustomCardpackSearchResponse> => {
+  return makeRpcFromBrowser(
+    request,
+    'CardpackService/CustomCardpackSearch',
+    CustomCardpackSearchResponse.deserializeBinary
+  );
+};
+
+export const autocompleteCustomCardpackSearch =
+(request: AutocompleteCustomCardpackSearchRequest):
+Promise<AutocompleteCustomCardpackSearchResponse> => {
+  return makeRpcFromBrowser(
+    request,
+    'CardpackService/AutocompleteCustomCardpackSearch',
+    AutocompleteCustomCardpackSearchResponse.deserializeBinary
   );
 };
