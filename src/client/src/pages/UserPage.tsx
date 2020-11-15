@@ -1,28 +1,45 @@
-import {CircularProgress, Fab, Grid, Typography} from '@material-ui/core';
+import {CircularProgress, Fab, Grid, Typography, Avatar, Badge, Theme} from '@material-ui/core';
+import {makeStyles} from '@material-ui/styles';
 import EditIcon from '@material-ui/icons/Edit';
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';
-import {ListCardpacksRequest} from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {Cardpack, User} from '../../../../proto-gen-out/api/model_pb';
+import {ListCustomCardpacksRequest} from '../../../../proto-gen-out/api/cardpack_service_pb';
+import {CustomCardpack, User} from '../../../../proto-gen-out/api/model_pb';
 import {useUserService} from '../api/context';
-import CardpackCreator from '../components/CardpackCreator';
+import CustomCardpackCreator from '../components/CustomCardpackCreator';
 import ProfileEditorDialog from '../components/ProfileEditorDialog';
-import UrlImage from '../components/UrlImage';
 import {StoreState} from '../store';
 import * as InfiniteScroll from 'react-infinite-scroller';
-import {listCardpacks} from '../api/cardpackService';
-import CardpackCard from '../components/CardpackCard';
+import {listCustomCardpacks} from '../api/cardpackService';
+import CAHCustomCardpack from '../components/shells/CAHCustomCardpack';
 import {useGlobalStyles} from '../styles/globalStyles';
 import {RouteComponentProps} from 'react-router';
+import ResourceNotFound from '../components/ResourceNotFound';
+
+const useStyles = makeStyles((theme: Theme) => ({
+  profileImage: {
+    width: theme.spacing(15),
+    height: theme.spacing(15)
+  }
+}));
 
 const UserPage = (props: RouteComponentProps<{user: string}>) => {
   const [isLoadingUser, setIsLoadingUser] = useState(true);
   const [user, setUser] = useState<User | undefined>(undefined);
-  const [isLoadingCardpacks, setIsLoadingCardpacks] = useState(false);
-  const [cardpacks, setCardpacks] = useState<Cardpack[] | undefined>([]);
-  const [nextCardpackPageToken, setNextCardpackPageToken] = useState('');
-  const [hasMoreCardpacks, setHasMoreCardpacks] = useState(true);
+  const [
+    isLoadingCustomCardpacks,
+    setIsLoadingCustomCardpacks
+  ] = useState(false);
+  const [
+    customCardpacks,
+    setCustomCardpacks
+  ] = useState<CustomCardpack[] | undefined>([]);
+  const [
+    nextCustomCardpackPageToken,
+    setNextCustomCardpackPageToken
+  ] = useState('');
+  const [hasMoreCustomCardpacks, setHasMoreCustomCardpacks] = useState(true);
   const [showProfileEditorDialog, setShowProfileEditorDialog] = useState(false);
 
   const {currentUser} = useSelector(
@@ -30,6 +47,7 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
   );
 
   const globalClasses = useGlobalStyles();
+  const classes = useStyles();
 
   const userService = useUserService();
 
@@ -60,14 +78,18 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
         margin: 0,
         transform: 'translate(-50%, -50%)'
       }}>
-        <h1>Loading User Page</h1>
+        <Typography
+          variant={'h3'}
+        >
+          Loading User Page
+        </Typography>
         <CircularProgress size={100}/>
       </div>
     );
   }
 
   if (user === undefined) {
-    return (<h1>User Not Found</h1>);
+    return <ResourceNotFound resourceType={'User'}/>;
   }
 
   return (
@@ -75,16 +97,28 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
       <div className={globalClasses.panel}>
         <Grid container spacing={8}>
           <Grid item xs={12} md={5}>
-            <UrlImage
-              url={userService.getUserProfileImageUrl(user.getName())}
-              loadingView={<CircularProgress/>}
-              errorView={<div>No profile image</div>}
-              imageStyle={{
-                height: '150px',
-                width: '150px',
-                borderRadius: '5px'
+            <Badge
+              overlap={'circle'}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right'
               }}
-            />
+              badgeContent={
+                currentUser && isCurrentUser &&
+                  <Fab
+                    size={'small'}
+                    color={'secondary'}
+                    onClick={() => setShowProfileEditorDialog(true)}
+                  >
+                    <EditIcon/>
+                  </Fab>
+              }
+            >
+              <Avatar
+                src={userService.getUserProfileImageUrl(user.getName())}
+                className={classes.profileImage}
+              />
+            </Badge>
             <Typography
               variant={'h5'}
             >
@@ -93,13 +127,6 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
             {
               currentUser && isCurrentUser &&
                 <div>
-                  <Fab
-                    color={'secondary'}
-                    aria-label={'Edit'}
-                    onClick={() => setShowProfileEditorDialog(true)}
-                  >
-                    <EditIcon/>
-                  </Fab>
                   <ProfileEditorDialog
                     currentUser={currentUser}
                     isVisible={showProfileEditorDialog}
@@ -117,49 +144,54 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
           <Grid item xs={12} md={7}>
             {
               currentUser && isCurrentUser &&
-                <CardpackCreator
+                <CustomCardpackCreator
                   user={currentUser}
-                  onSubmit={(cardpack) => {
-                    if (cardpacks !== undefined) {
-                      setCardpacks([...cardpacks, cardpack]);
+                  onSubmit={(customCardpack) => {
+                    if (customCardpacks !== undefined) {
+                      setCustomCardpacks([...customCardpacks, customCardpack]);
                     }
                   }}
                 />
             }
             {
-              cardpacks === undefined ?
+              customCardpacks === undefined ?
                 <div>Failed to load cardpacks!</div> :
                 <InfiniteScroll
                   loadMore={async () => {
-                    if (!isLoadingCardpacks) {
-                      const request = new ListCardpacksRequest();
-                      request.setPageToken(nextCardpackPageToken);
+                    if (!isLoadingCustomCardpacks) {
+                      const request = new ListCustomCardpacksRequest();
+                      request.setPageToken(nextCustomCardpackPageToken);
                       request.setPageSize(5);
                       request.setParent(user.getName());
-                      setIsLoadingCardpacks(true);
+                      setIsLoadingCustomCardpacks(true);
                       try {
-                        const response = await listCardpacks(request);
+                        const response = await listCustomCardpacks(request);
                         const nextPageToken = response.getNextPageToken();
-                        setNextCardpackPageToken(nextPageToken);
+                        setNextCustomCardpackPageToken(nextPageToken);
                         if (nextPageToken.length === 0) {
-                          setHasMoreCardpacks(false);
+                          setHasMoreCustomCardpacks(false);
                         }
-                        setCardpacks([
-                          ...cardpacks,
-                          ...response.getCardpacksList()
+                        setCustomCardpacks([
+                          ...customCardpacks,
+                          ...response.getCustomCardpacksList()
                         ]);
                       } catch (err) {
-                        setCardpacks(undefined);
+                        setCustomCardpacks(undefined);
                       } finally {
-                        setIsLoadingCardpacks(false);
+                        setIsLoadingCustomCardpacks(false);
                       }
                     }
                   }}
                   loader={<CircularProgress/>}
-                  hasMore={hasMoreCardpacks}
+                  hasMore={hasMoreCustomCardpacks}
                 >
-                  {cardpacks.map((cardpack, index) => {
-                    return <CardpackCard cardpack={cardpack} key={index}/>;
+                  {customCardpacks.map((customCardpack, index) => {
+                    return (
+                      <CAHCustomCardpack
+                        customCardpack={customCardpack}
+                        key={index}
+                      />
+                    );
                   })}
                 </InfiniteScroll>
             }

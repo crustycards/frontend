@@ -11,15 +11,8 @@ import PlaySelection from '../components/GameBoard/PlaySelection/index';
 import TopBar from '../components/GameBoard/TopBar';
 import {StoreState} from '../store';
 import {useGameService} from '../api/context';
-import {filterPlayerListToUserList, getPlayerDisplayName} from '../helpers/proto';
+import {filterPlayerListToUserList} from '../helpers/proto';
 import {useGlobalStyles} from '../styles/globalStyles';
-
-const gameAlertStyle = {
-  display: 'block',
-  width: 'auto',
-  margin: '10px',
-  fontSize: '1.5em'
-};
 
 const GamePage = () => {
   const {
@@ -37,7 +30,7 @@ const GamePage = () => {
     // TODO - Redirect to login page (if this doesn't happen already).
     return (
       <div className={globalClasses.contentWrap}>
-        <div className={`center ${globalClasses.panel}`}>
+        <div className={`${globalClasses.center} ${globalClasses.panel}`}>
           {`You must be logged in to join a game.`}
         </div>
       </div>
@@ -47,8 +40,8 @@ const GamePage = () => {
   if (!game.view) {
     return (
       <div>
-        <div className={'center'} style={{padding: '10px'}}>
-          <Typography variant={'h6'} color={'textPrimary'} align={'center'}>
+        <div className={globalClasses.center} style={{padding: '10px'}}>
+          <Typography variant={'h6'} align={'center'}>
             You're not in a game.
           </Typography>
           <NavLink
@@ -68,7 +61,7 @@ const GamePage = () => {
     );
   }
 
-  const isOwner = currentUser?.getName() === game.view?.getOwner()?.getName();
+  const isOwner = currentUser?.getName() === game.view.getOwner()?.getName();
 
   return (
     <div>
@@ -88,20 +81,21 @@ const GamePage = () => {
               gameService={gameService}
               players={game.view.getPlayersList()}
               queuedPlayers={game.view.getQueuedPlayersList()}
-              bannedUsers={game.view.getBannedPlayersList()}
+              bannedUsers={game.view.getBannedUsersList()}
               gameStage={game.view.getStage()}
             />
         }
         <Grid container spacing={0}>
           <Grid item xs={12} sm={5} md={4}>
             <CurrentBlackCard
+              currentBlackCard={game.view.getCurrentBlackCard()}
               hand={game.view.getHandList()}
               queuedCardIds={game.queuedCardIds}
             />
             <PlayerList gameView={game.view}/>
             <MessageBox
               gameService={gameService}
-              messages={game.view.getChatMessagesList()}
+              messages={game.view.getChatMessagesList().reverse()}
             />
           </Grid>
           <Grid item xs={12} sm={7} md={8}>
@@ -115,15 +109,24 @@ const GamePage = () => {
                 />
             }
             {
+              game.view.getJudge()?.getName() === currentUser.getName() &&
+                <Typography
+                  variant={'h5'}
+                  className={`${globalClasses.center} ${globalClasses.panel}`}
+                >
+                  You are the Judge
+                </Typography>
+            }
+            {
               filterPlayerListToUserList(game.view.getQueuedPlayersList())
                 .map((user) => user.getName())
                 .includes(currentUser.getName()) &&
-              <span
-                className={`center ${globalClasses.panel}`}
-                style={gameAlertStyle}
-              >
-                Waiting until the next round to join game...
-              </span>
+                  <Typography
+                    variant={'h5'}
+                    className={`${globalClasses.center} ${globalClasses.panel}`}
+                  >
+                    Waiting until the next round to join game...
+                  </Typography>
             }
             <PlayedCards
               gameService={gameService}
@@ -133,26 +136,6 @@ const GamePage = () => {
               gameStage={game.view.getStage()}
               whitePlayedList={game.view.getWhitePlayedList()}
             />
-            {
-              game.view.getJudge()?.getName() === currentUser.getName() &&
-              <span
-                className={`center ${globalClasses.panel}`}
-                style={gameAlertStyle}
-              >
-                You are the Judge
-              </span>
-            }
-            {
-              game.view.hasWinner() &&
-              // TODO - See if this should be uncommented or removed.
-              // game.view.getStage() === GameView.Stage.NOT_RUNNING &&
-              <span
-                className={`center ${globalClasses.panel}`}
-                style={gameAlertStyle}
-              >
-                Winner: {getPlayerDisplayName(game.view.getWinner())}
-              </span>
-            }
           </Grid>
         </Grid>
       </div>

@@ -1,32 +1,32 @@
 import {Button, CircularProgress, TextField} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
-import {Cardpack, User} from '../../../../proto-gen-out/api/model_pb';
-import {createCardpack} from '../api/cardpackService';
+import {CustomCardpack, User} from '../../../../proto-gen-out/api/model_pb';
+import {createCustomCardpack} from '../api/cardpackService';
 
-interface CardpackCreatorProps {
+interface CustomCardpackCreatorProps {
   user: User;
-  onSubmit?(cardpack: Cardpack): void;
+  onSubmit?(customCardpack: CustomCardpack): void;
 }
 
-const CardpackCreator = (props: CardpackCreatorProps) => {
-  const [cardpackName, setCardpackName] = useState('');
+const CustomCardpackCreator = (props: CustomCardpackCreatorProps) => {
+  const [customCardpackName, setCustomCardpackName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCardpackNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCardpackName(e.target.value);
+    setCustomCardpackName(e.target.value);
   };
 
   return (
     <form onSubmit={(e) => {
       e.preventDefault();
       setIsLoading(true);
-      const cardpack = new Cardpack();
-      cardpack.setDisplayName(cardpackName);
-      createCardpack(props.user.getName(), cardpack)
+      const customCardpack = new CustomCardpack();
+      customCardpack.setDisplayName(customCardpackName);
+      createCustomCardpack(props.user.getName(), customCardpack)
           .then((cardpack) => {
             setIsLoading(false);
-            setCardpackName('');
+            setCustomCardpackName('');
             if (props.onSubmit) {
               props.onSubmit(cardpack);
             }
@@ -34,13 +34,13 @@ const CardpackCreator = (props: CardpackCreatorProps) => {
     }}>
       <TextField
         label={'Cardpack Name'}
-        value={cardpackName}
+        value={customCardpackName}
         onChange={handleCardpackNameChange}
       />
       <br/>
       <Button
         type={'submit'}
-        disabled={cardpackName === '' || isLoading}
+        disabled={customCardpackName === '' || isLoading}
       >
         Create Cardpack
       </Button>
@@ -52,4 +52,4 @@ const CardpackCreator = (props: CardpackCreatorProps) => {
   );
 };
 
-export default CardpackCreator;
+export default CustomCardpackCreator;

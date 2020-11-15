@@ -1,24 +1,30 @@
 import * as React from 'react';
-import {PlayableWhiteCard} from '../../../../../proto-gen-out/game/game_service_pb';
+import {PlayableWhiteCard} from '../../../../../proto-gen-out/api/game_service_pb';
 import CAHBlankWhiteCard from './CAHBlankWhiteCard';
-import CAHWhiteCard from './CAHWhiteCard';
+import CAHWhiteCard from './CAHCustomWhiteCard';
+import CAHDefaultWhiteCard from './CAHDefaultWhiteCard';
 
 interface CAHPlayableWhiteCardProps {
   card: PlayableWhiteCard;
 }
 
 const CAHPlayableWhiteCard = (props: CAHPlayableWhiteCardProps) => {
-  const whiteCard = props.card.getWhiteCard();
-  if (whiteCard) {
-    return (<CAHWhiteCard card={whiteCard}/>);
+  const customWhiteCard = props.card.getCustomWhiteCard();
+  if (customWhiteCard) {
+    return (<CAHWhiteCard card={customWhiteCard}/>);
   }
 
-  const blankCard = props.card.getBlankCard();
-  if (blankCard) {
-    return (<CAHBlankWhiteCard card={blankCard}/>);
+  const blankWhiteCard = props.card.getBlankWhiteCard();
+  if (blankWhiteCard) {
+    return (<CAHBlankWhiteCard card={blankWhiteCard}/>);
   }
 
-  throw Error('Card does not contain property white_card or blank_card.');
+  const defaultWhiteCard = props.card.getDefaultWhiteCard();
+  if (defaultWhiteCard) {
+    return (<CAHDefaultWhiteCard card={defaultWhiteCard}/>);
+  }
+
+  throw Error('Card does not contain property custom_white_card, default_white_card, or blank_white_card.');
 };
 
 export default CAHPlayableWhiteCard;

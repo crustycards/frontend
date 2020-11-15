@@ -1,18 +1,19 @@
-import {BlackCard, WhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomBlackCard, CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
 import {
   BlankWhiteCard,
   GameView,
-  PlayableWhiteCard
-} from '../../../../../proto-gen-out/game/game_service_pb';
+  PlayableWhiteCard,
+  BlackCardInRound
+} from '../../../../../proto-gen-out/api/game_service_pb';
 import reducer from './game';
 import {queueCard, setGameState, unqueueCard} from './game';
 
 const createPlayableWhiteCard = (name: string): PlayableWhiteCard => {
   const playableWhiteCard = new PlayableWhiteCard();
-  const whiteCard = new WhiteCard();
-  whiteCard.setName(name);
-  whiteCard.setText(name);
-  playableWhiteCard.setWhiteCard(whiteCard);
+  const customWhiteCard = new CustomWhiteCard();
+  customWhiteCard.setName(name);
+  customWhiteCard.setText(name);
+  playableWhiteCard.setCustomWhiteCard(customWhiteCard);
   return playableWhiteCard;
 };
 
@@ -21,15 +22,18 @@ const createPlayableBlankWhiteCard = (name: string): PlayableWhiteCard => {
   const blankWhiteCard = new BlankWhiteCard();
   blankWhiteCard.setId(name);
   blankWhiteCard.setOpenText(name);
-  playableWhiteCard.setBlankCard(blankWhiteCard);
+  playableWhiteCard.setBlankWhiteCard(blankWhiteCard);
   return playableWhiteCard;
 };
 
-const createBlackCard = (name: string, answerFields: number): BlackCard => {
-  const card = new BlackCard();
-  card.setName(name);
-  card.setText(name);
-  card.setAnswerFields(answerFields);
+const createBlackCardInRound =
+(name: string, answerFields: number): BlackCardInRound => {
+  const card = new BlackCardInRound();
+  const customBlackCard = new CustomBlackCard();
+  customBlackCard.setName(name);
+  customBlackCard.setText(name);
+  customBlackCard.setAnswerFields(answerFields);
+  card.setCustomBlackCard(customBlackCard);
   return card;
 };
 
@@ -43,7 +47,7 @@ describe('setGameState', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Removes cards from queue that are no longer in the user's hand.
@@ -51,9 +55,9 @@ describe('setGameState', () => {
     state = reducer(state, queueCard({card: createPlayableWhiteCard('2')}));
     state = reducer(state, queueCard({card: createPlayableWhiteCard('3')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
     gameView.clearHandList();
     gameView.addHand(createPlayableWhiteCard('3'));
@@ -64,7 +68,7 @@ describe('setGameState', () => {
     expect(state.queuedCardIds).toEqual([
       null,
       null,
-      {cardName: '3', isBlank: false}
+      {cardName: '3', cardType: 1}
     ]);
   });
 
@@ -76,7 +80,7 @@ describe('setGameState', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Removes cards from queue when game stage is no longer PLAY_PHASE.
@@ -84,9 +88,9 @@ describe('setGameState', () => {
     state = reducer(state, queueCard({card: createPlayableWhiteCard('2')}));
     state = reducer(state, queueCard({card: createPlayableWhiteCard('3')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
     gameView.setStage(GameView.Stage.JUDGE_PHASE);
     state = reducer(state, setGameState(gameView));
@@ -102,7 +106,7 @@ describe('setGameState', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Removes cards from queue when game no longer has an active black card.
@@ -110,9 +114,9 @@ describe('setGameState', () => {
     state = reducer(state, queueCard({card: createPlayableWhiteCard('2')}));
     state = reducer(state, queueCard({card: createPlayableWhiteCard('3')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
     gameView.clearCurrentBlackCard();
     state = reducer(state, setGameState(gameView));
@@ -128,7 +132,7 @@ describe('setGameState', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Card queue is emptied when game state is set to undefined.
@@ -136,9 +140,9 @@ describe('setGameState', () => {
     state = reducer(state, queueCard({card: createPlayableWhiteCard('2')}));
     state = reducer(state, queueCard({card: createPlayableWhiteCard('3')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
     state = reducer(state, setGameState(undefined));
     expect(state.queuedCardIds).toEqual([]);
@@ -154,7 +158,7 @@ describe('queueCard', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Queueing an empty card to the next available index has no effect.
@@ -174,7 +178,7 @@ describe('queueCard', () => {
       index: 0
     }));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
+      {cardName: '1', cardType: 1},
       null,
       null
     ]);
@@ -183,7 +187,7 @@ describe('queueCard', () => {
       index: 0
     }));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
+      {cardName: '1', cardType: 1},
       null,
       null
     ]);
@@ -197,7 +201,7 @@ describe('queueCard', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Queueing a card with an index that's out of bounds has no effect.
@@ -221,20 +225,20 @@ describe('queueCard', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Can queue card to next available index.
     state = reducer(state, queueCard({card: createPlayableWhiteCard('1')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
+      {cardName: '1', cardType: 1},
       null,
       null
     ]);
     state = reducer(state, queueCard({card: createPlayableWhiteCard('2')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false},
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1},
       null
     ]);
 
@@ -245,8 +249,8 @@ describe('queueCard', () => {
     }));
     expect(state.queuedCardIds).toEqual([
       null,
-      {cardName: '2', isBlank: false},
-      {cardName: '1', isBlank: false}
+      {cardName: '2', cardType: 1},
+      {cardName: '1', cardType: 1}
     ]);
 
     // Can queue existing card to new filled index to swap with that index.
@@ -256,8 +260,8 @@ describe('queueCard', () => {
     }));
     expect(state.queuedCardIds).toEqual([
       null,
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1}
     ]);
 
     // Can queue existing card to its current position.
@@ -267,8 +271,8 @@ describe('queueCard', () => {
     }));
     expect(state.queuedCardIds).toEqual([
       null,
-      {cardName: '1', isBlank: false},
-      {cardName: '2', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '2', cardType: 1}
     ]);
 
     // Can queue new card to filled index to replace that card.
@@ -278,8 +282,8 @@ describe('queueCard', () => {
     }));
     expect(state.queuedCardIds).toEqual([
       null,
-      {cardName: '1', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '1', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
 
     // Can queue new blank card.
@@ -287,9 +291,9 @@ describe('queueCard', () => {
       card: createPlayableBlankWhiteCard('4')
     }));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '4', isBlank: true},
-      {cardName: '1', isBlank: false},
-      {cardName: '3', isBlank: false}
+      {cardName: '4', cardType: 2},
+      {cardName: '1', cardType: 1},
+      {cardName: '3', cardType: 1}
     ]);
   });
 });
@@ -303,7 +307,7 @@ describe('unqueueCard', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Unqueueing a card that's not in the queue has no effect.
@@ -319,13 +323,13 @@ describe('unqueueCard', () => {
     gameView.addHand(createPlayableWhiteCard('2'));
     gameView.addHand(createPlayableWhiteCard('3'));
     gameView.addHand(createPlayableWhiteCard('4'));
-    gameView.setCurrentBlackCard(createBlackCard('123', 3));
+    gameView.setCurrentBlackCard(createBlackCardInRound('123', 3));
     let state = reducer(undefined, setGameState(gameView));
 
     // Unqueueing a card that's not in the queue has no effect.
     state = reducer(state, queueCard({card: createPlayableWhiteCard('1')}));
     expect(state.queuedCardIds).toEqual([
-      {cardName: '1', isBlank: false},
+      {cardName: '1', cardType: 1},
       null,
       null
     ]);

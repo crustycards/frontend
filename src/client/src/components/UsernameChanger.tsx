@@ -1,9 +1,6 @@
 import {Button, CircularProgress, TextField} from '@material-ui/core';
-import {FieldMask} from 'google-protobuf/google/protobuf/field_mask_pb';
 import * as React from 'react';
 import {useState} from 'react';
-import {User} from '../../../../proto-gen-out/api/model_pb';
-import {UpdateUserRequest} from '../../../../proto-gen-out/api/user_service_pb';
 import {useUserService} from '../api/context';
 
 interface UsernameChangerProps {

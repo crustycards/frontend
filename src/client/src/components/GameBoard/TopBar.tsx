@@ -6,16 +6,15 @@ import {
   DialogContent,
   DialogTitle,
   Theme,
-  Toolbar
+  Toolbar,
+  Typography
 } from '@material-ui/core';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {GameView, PastRound} from '../../../../../proto-gen-out/game/game_service_pb';
-import {useGameService} from '../../api/context';
-import {StoreState} from '../../store';
+import {useDispatch} from 'react-redux';
+import {GameView, PastRound} from '../../../../../proto-gen-out/api/game_service_pb';
 import ViewPastRoundsDialog from './ViewPastRoundsDialog';
 import {User} from '../../../../../proto-gen-out/api/model_pb';
 import {GameService} from '../../api/gameService';
@@ -29,7 +28,6 @@ const buttonStyle = {
 const useStyles = makeStyles((theme: Theme) => createStyles({
   topBar: {
     backgroundColor: theme.palette.secondary.main,
-    borderRadius: '5px',
     margin: '8px 0'
   }
 }));
@@ -43,31 +41,30 @@ interface TopBarProps {
 }
 
 const TopBar = (props: TopBarProps) => {
-  const gameService = useGameService();
   const [showPastRoundsDialog, setShowPastRoundsDialog] = useState(false);
   const [
     showLeaveGameConfirmationDialog,
     setShowLeaveGameConfirmationDialog
   ] = useState(false);
-  const {game} = useSelector(({game}: StoreState) => ({game}));
   const classes = useStyles();
   const dispatch = useDispatch();
 
   return <AppBar className={classes.topBar} position={'static'}>
     <Toolbar style={{padding: 0}}>
       <div style={{height: '66px', float: 'left'}}>
-        <div>
-          <h2
-            style={{lineHeight: '36px', margin: '0 10px', fontSize: '1.2em'}}
-          >
-            {`Current game:  ${props.displayName}`}
-          </h2>
-        </div>
-        <h3
-          style={{float: 'left', lineHeight: '30px', margin: '0 10px', fontSize: '1em'}}
+        <Typography style={{lineHeight: '36px', margin: '0 10px', fontSize: '1.2em'}}>
+          {`Current game:  ${props.displayName}`}
+        </Typography>
+        <Typography
+          style={{
+            float: 'left',
+            lineHeight: '30px',
+            margin: '0 10px',
+            fontSize: '1em'
+          }}
         >
           {`Owner: ${props.owner?.getDisplayName() || 'Unknown'}`}
-        </h3>
+        </Typography>
       </div>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>

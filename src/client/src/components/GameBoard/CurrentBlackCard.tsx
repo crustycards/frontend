@@ -1,12 +1,15 @@
 import {Typography} from '@material-ui/core';
 import * as React from 'react';
-import {BlackCard} from '../../../../../proto-gen-out/api/model_pb';
-import {PlayableWhiteCard} from '../../../../../proto-gen-out/game/game_service_pb';
+import {PlayableWhiteCard, BlackCardInRound} from '../../../../../proto-gen-out/api/game_service_pb';
 import {removeAdjacentDuplicateCharacters} from '../../helpers/string';
-import {getDisplayTextForPlayableWhiteCard} from '../../helpers/proto';
+import {
+  getDisplayTextForPlayableWhiteCard,
+  getDisplayTextForBlackCardInRound
+} from '../../helpers/proto';
 import {queuedCardIdPointsToPlayableCard} from '../../store/modules/game';
-import CAHBlackCard from '../shells/CAHBlackCard';
 import {QueuedCardId} from '../../store/modules/game';
+import {DefaultBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 
 const parseCardText = (
   blackCardText: string,
@@ -58,29 +61,31 @@ const parseCardText = (
 };
 
 interface CurrentBlackCardProps {
-  currentBlackCard?: BlackCard;
+  currentBlackCard: BlackCardInRound | undefined;
   hand: PlayableWhiteCard[];
   queuedCardIds: (QueuedCardId | null)[];
 }
 
 const CurrentBlackCard = (props: CurrentBlackCardProps) => {
   if (!props.currentBlackCard) {
-    const gameNotRunningCard = new BlackCard();
-    gameNotRunningCard.setText('GAME NOT RUNNING');
-    return <CAHBlackCard hideAnswerCount card={gameNotRunningCard} />;
+    const gameNotRunningCard = new BlackCardInRound();
+    const defaultBlackCard = new DefaultBlackCard();
+    defaultBlackCard.setText('GAME NOT RUNNING');
+    gameNotRunningCard.setDefaultBlackCard(defaultBlackCard);
+    return <CAHBlackCardInRound hideAnswerCount card={gameNotRunningCard} />;
   }
 
   const overrideTextElements = parseCardText(
-    props.currentBlackCard.getText(),
+    getDisplayTextForBlackCardInRound(props.currentBlackCard),
     props.queuedCardIds.map((queuedCardId) => {
       const cardInHand = props.hand.find((card) =>
         queuedCardIdPointsToPlayableCard(queuedCardId, card));
-      return cardInHand ? getDisplayTextForPlayableWhiteCard(cardInHand) : 'Unknown Card';
+      return cardInHand ? getDisplayTextForPlayableWhiteCard(cardInHand) : '_____';
     })
   );
 
   return (
-    <CAHBlackCard
+    <CAHBlackCardInRound
       card={props.currentBlackCard}
       overrideTextElements={overrideTextElements}
     />

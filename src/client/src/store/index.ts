@@ -2,7 +2,7 @@ import {routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import {applyMiddleware, compose, createStore} from 'redux';
 import {User} from '../../../../proto-gen-out/api/model_pb';
-import {GameView} from '../../../../proto-gen-out/game/game_service_pb';
+import {GameView, Player} from '../../../../proto-gen-out/api/game_service_pb';
 import createRootReducer from './modules';
 
 declare global {
@@ -35,25 +35,23 @@ export default ({history, preloadedState = {}}: CreateStore) => {
 // The Typescript type of the entire Redux state
 export type StoreState = ReturnType<ReturnType<typeof createRootReducer>>;
 
-export const hasPlayed = (user: User, view: GameView): boolean => {
-  if (!view.hasCurrentBlackCard() || !user) {
+export const userHasPlayed = (user: User, view: GameView): boolean => {
+  const playerEntry = view.getWhitePlayedList().find((entry) => (
+    entry.getPlayer()?.getUser()?.getName() === user.getName()
+  ));
+  return !!playerEntry;
+};
+
+export const playerHasPlayed = (player: Player, view: GameView): boolean => {
+  const user = player.getUser();
+  if (user === undefined) {
     return false;
   }
-
-  const userEntry = view.getWhitePlayedList().find((entry) => {
-    return entry.getPlayer()?.getUser()?.getName() === user.getName();
-  });
-
-  if (!userEntry) {
-    return false;
-  }
-
-  return userEntry.getCardTextsList().length ===
-    view.getCurrentBlackCard()?.getAnswerFields();
+  return userHasPlayed(user, view);
 };
 
 export const canPlay = (view: GameView, user: User) => {
-  return !hasPlayed(user, view)
+  return !userHasPlayed(user, view)
       && view.hasCurrentBlackCard()
       && view.getStage() === GameView.Stage.PLAY_PHASE
       && user

@@ -1,5 +1,7 @@
 import * as React from 'react';
 import {Component} from 'react';
+// TODO - Convert these import to esModules.
+// This can be done by removing `esModule: false` in webpack.config.ts.
 const pressed = require('./pressed.png');
 const unpressed = require('./unpressed.png');
 

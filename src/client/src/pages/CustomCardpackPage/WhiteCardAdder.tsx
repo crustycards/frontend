@@ -9,27 +9,29 @@ import {
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {useState} from 'react';
-import {WhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
 const lightTheme = createMuiTheme({palette: {type: 'light'}});
 
 interface WhiteCardAdderProps {
-  addCard(card: WhiteCard): void;
+  addCard(card: CustomWhiteCard): void;
 }
 
 const WhiteCardAdder = (props: WhiteCardAdderProps) => {
-  const [card, setCard] = useState(new WhiteCard());
+  const [card, setCard] = useState(new CustomWhiteCard());
+  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
-    setCard(new WhiteCard());
+    setCard(new CustomWhiteCard());
   };
 
   const isSubmittable = card.getText().length > 0;
 
   return (
     <MuiThemeProvider theme={lightTheme}>
-      <Card className='card'>
+      <Card className={globalClasses.card}>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField

@@ -16,45 +16,48 @@ import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {NavLink} from 'react-router-dom';
 import {
-  CheckDoesUserLikeCardpackRequest,
-  LikeCardpackRequest,
-  UnlikeCardpackRequest
-} from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {Cardpack} from '../../../../proto-gen-out/api/model_pb';
+  CheckDoesUserLikeCustomCardpackRequest,
+  LikeCustomCardpackRequest,
+  UnlikeCustomCardpackRequest
+} from '../../../../../proto-gen-out/api/cardpack_service_pb';
+import {CustomCardpack} from '../../../../../proto-gen-out/api/model_pb';
 import {
-  checkDoesUserLikeCardpack,
-  deleteCardpack,
-  likeCardpack,
-  unlikeCardpack
-} from '../api/cardpackService';
-import {convertTime} from '../helpers/time';
-import {StoreState} from '../store';
-import {showStatusMessage} from '../store/modules/global';
+  checkDoesUserLikeCustomCardpack,
+  deleteCustomCardpack,
+  likeCustomCardpack,
+  unlikeCustomCardpack
+} from '../../api/cardpackService';
+import {convertTime} from '../../helpers/time';
+import {StoreState} from '../../store';
+import {showStatusMessage} from '../../store/modules/global';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
-interface CardpackCardProps {
-  cardpack: Cardpack;
-  onDelete?(cardpackName: string): void;
+interface CAHCustomCardpackProps {
+  customCardpack: CustomCardpack;
+  onDelete?(cardpack: string): void;
 }
 
-const CardpackCard = (props: CardpackCardProps) => {
+const CAHCustomCardpack = (props: CAHCustomCardpackProps) => {
   const {currentUser} = useSelector(
     ({global: {user}}: StoreState) => ({currentUser: user})
   );
   const dispatch = useDispatch();
-  const cardpackBelongsToCurrentUser = currentUser &&
-    props.cardpack.getName().startsWith(currentUser.getName());
+  const packBelongsToCurrentUser = currentUser &&
+    props.customCardpack.getName().startsWith(currentUser.getName());
   const [isLiked, setIsLiked] = useState(false);
   const [loadingIsLiked, setLoadingIsLiked] =
-    useState(currentUser && !cardpackBelongsToCurrentUser);
+    useState(currentUser && !packBelongsToCurrentUser);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
+  const globalClasses = useGlobalStyles();
+
   useEffect(() => {
-    if (currentUser && !cardpackBelongsToCurrentUser) {
-      const request = new CheckDoesUserLikeCardpackRequest();
-      request.setUserName(currentUser.getName());
-      request.setCardpackName(props.cardpack.getName());
-      checkDoesUserLikeCardpack(request)
+    if (currentUser && !packBelongsToCurrentUser) {
+      const request = new CheckDoesUserLikeCustomCardpackRequest();
+      request.setUser(currentUser.getName());
+      request.setCustomCardpack(props.customCardpack.getName());
+      checkDoesUserLikeCustomCardpack(request)
         .then((response) => {
           setIsLiked(response.getIsLiked());
           setLoadingIsLiked(false);
@@ -66,16 +69,16 @@ const CardpackCard = (props: CardpackCardProps) => {
     if (currentUser && !loadingIsLiked) {
       setLoadingIsLiked(true);
       if (isLiked) {
-        const request = new UnlikeCardpackRequest();
-        request.setUserName(currentUser.getName());
-        request.setCardpackName(props.cardpack.getName());
-        await unlikeCardpack(request);
+        const request = new UnlikeCustomCardpackRequest();
+        request.setUser(currentUser.getName());
+        request.setCustomCardpack(props.customCardpack.getName());
+        await unlikeCustomCardpack(request);
         setIsLiked(false);
       } else {
-        const request = new LikeCardpackRequest();
-        request.setUserName(currentUser.getName());
-        request.setCardpackName(props.cardpack.getName());
-        await likeCardpack(request);
+        const request = new LikeCustomCardpackRequest();
+        request.setUser(currentUser.getName());
+        request.setCustomCardpack(props.customCardpack.getName());
+        await likeCustomCardpack(request);
         setIsLiked(true);
       }
       setLoadingIsLiked(false);
@@ -90,14 +93,14 @@ const CardpackCard = (props: CardpackCardProps) => {
     setShowDeleteDialog(false);
   };
 
-  const deleteCardpackAction = () => {
+  const deleteCustomCardpackAction = () => {
     setIsDeleting(true);
-    deleteCardpack(props.cardpack.getName())
+    deleteCustomCardpack(props.customCardpack.getName())
         .then(() => {
           setIsDeleting(false);
           closeDeleteDialog();
           if (props.onDelete) {
-            props.onDelete(props.cardpack.getName());
+            props.onDelete(props.customCardpack.getName());
           }
         })
         .catch(() => {
@@ -109,19 +112,22 @@ const CardpackCard = (props: CardpackCardProps) => {
 
   return (
     <div>
-      <Card className='card'>
+      <Card className={globalClasses.card}>
         <CardHeader
-          title={props.cardpack.getDisplayName()}
-          subheader={`Created ${convertTime(props.cardpack.getCreateTime())}`}
+          title={props.customCardpack.getDisplayName()}
+          subheader={`Created ${convertTime(props.customCardpack.getCreateTime())}`}
         />
         <CardActions>
-          <NavLink to={`/${props.cardpack.getName()}`} style={{textDecoration: 'none'}}>
+          <NavLink
+            to={`/${props.customCardpack.getName()}`}
+            style={{textDecoration: 'none'}}
+          >
             <Button>
               View
             </Button>
           </NavLink>
           {
-            cardpackBelongsToCurrentUser &&
+            packBelongsToCurrentUser &&
               <Button onClick={openDeleteDialog}>
                 Delete
               </Button>
@@ -130,7 +136,7 @@ const CardpackCard = (props: CardpackCardProps) => {
             position: 'relative'
           }}>
             {
-              currentUser && !cardpackBelongsToCurrentUser &&
+              currentUser && !packBelongsToCurrentUser &&
                 <IconButton
                   onClick={toggleLike}
                   style={{
@@ -184,7 +190,7 @@ const CardpackCard = (props: CardpackCardProps) => {
             <DialogActions>
               <Button
                 variant={'outlined'}
-                onClick={deleteCardpackAction}
+                onClick={deleteCustomCardpackAction}
               >
                 Yes
               </Button>
@@ -202,4 +208,4 @@ const CardpackCard = (props: CardpackCardProps) => {
   );
 };
 
-export default CardpackCard;
+export default CAHCustomCardpack;

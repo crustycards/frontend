@@ -1,7 +1,7 @@
-import {AppBar, Button, Toolbar} from '@material-ui/core';
+import {AppBar, Button, Toolbar, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/styles';
 import * as React from 'react';
-import {GameView, Player} from '../../../../../proto-gen-out/game/game_service_pb';
+import {GameView, Player} from '../../../../../proto-gen-out/api/game_service_pb';
 import {GameService} from '../../api/gameService';
 import {User} from '../../../../../proto-gen-out/api/model_pb';
 import UserListMenu from './UserListMenu';
@@ -16,7 +16,6 @@ const buttonStyle = {
 
 const useStyles = makeStyles({
   adminBar: {
-    borderRadius: '5px',
     margin: '8px 0'
   }
 });
@@ -42,11 +41,9 @@ const AdminBar = (props: AdminBarProps) => {
 
   return <AppBar className={classes.adminBar} position={'static'}>
     <Toolbar style={{padding: 0}}>
-      <h2
-        style={{lineHeight: '66px', margin: '0 10px', fontSize: '1.2em'}}
-      >
+      <Typography style={{lineHeight: '66px', margin: '0 10px', fontSize: '1.2em'}}>
         {'Admin Panel'}
-      </h2>
+      </Typography>
       <div style={{flex: 1}}></div> {/* Pushes buttons to right edge */}
       <div style={{float: 'right'}}>
         <UserListMenu

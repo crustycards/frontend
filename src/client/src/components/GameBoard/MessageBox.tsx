@@ -3,19 +3,20 @@ import {
   Divider,
   IconButton,
   InputBase,
-  makeStyles,
   Paper,
+  Theme,
   Typography
 } from '@material-ui/core';
+import {makeStyles} from '@material-ui/styles';
 import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
 import {useState} from 'react';
-import {ChatMessage} from '../../../../../proto-gen-out/game/game_service_pb';
+import {ChatMessage} from '../../../../../proto-gen-out/api/game_service_pb';
 import {GameService} from '../../api/gameService';
 import {useGlobalStyles} from '../../styles/globalStyles';
 import {convertTime} from '../../helpers/time';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles((theme: Theme) => ({
   textBoxRoot: {
     padding: '2px 4px',
     display: 'flex',
@@ -53,7 +54,6 @@ const MessageBox = (props: MessageBoxProps) => {
       <Typography
         variant={'h5'}
         style={{textAlign: 'center'}}
-        color={'textPrimary'}
       >
         Chat
       </Typography>
@@ -80,7 +80,9 @@ const MessageBox = (props: MessageBoxProps) => {
                 </b>
                 {message.getText()}
               </Typography>
-              {convertTime(message.getCreateTime())}
+              <Typography variant={'body2'}>
+                {convertTime(message.getCreateTime())}
+              </Typography>
             </Paper>
           ))
         }

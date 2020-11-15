@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {Response} from 'express';
-import {ServiceError} from 'grpc';
+import {ServiceError} from '@grpc/grpc-js';
 import {
   opaqueSerializedStringToUint8Array,
   uint8ArrayToOpaqueSerializedString

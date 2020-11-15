@@ -1,4 +1,4 @@
-import {Switch} from '@material-ui/core';
+import {Switch, FormControlLabel, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
@@ -23,29 +23,31 @@ const ColorSchemeChanger = (props: ColorSchemeChangerProps) => {
 
   return (
     <div>
-      {/* TODO - Find a more Material-UI friendly
-      way to display the 'Dark Mode' label. */}
-      <div>Dark Mode</div>
-      <Switch
-        checked={isChecked}
-        disabled={isLoading}
-        onChange ={async (e, checked) => {
-          const newColorScheme = checked ?
-            DARK_COLOR_SCHEME : LIGHT_COLOR_SCHEME;
-          setIsChecked(checked);
-          setIsLoading(true);
-          const newUserSettings = props.userSettings.clone();
-          newUserSettings.setColorScheme(newColorScheme);
-          dispatch(setUserSettings(newUserSettings));
-          try {
-            await userService.updateCurrentUserColorScheme(newColorScheme);
-            dispatch(showStatusMessage('Settings saved!'));
-          } catch (e) {
-            dispatch(setUserSettings(props.userSettings));
-            dispatch(showStatusMessage('Settings could not be saved!'));
-          }
-          setIsLoading(false);
-        }}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={isChecked}
+            disabled={isLoading}
+            onChange ={async (e, checked) => {
+              const newColorScheme = checked ?
+                DARK_COLOR_SCHEME : LIGHT_COLOR_SCHEME;
+              setIsChecked(checked);
+              setIsLoading(true);
+              const newUserSettings = props.userSettings.clone();
+              newUserSettings.setColorScheme(newColorScheme);
+              dispatch(setUserSettings(newUserSettings));
+              try {
+                await userService.updateCurrentUserColorScheme(newColorScheme);
+                dispatch(showStatusMessage('Settings saved!'));
+              } catch (e) {
+                dispatch(setUserSettings(props.userSettings));
+                dispatch(showStatusMessage('Settings could not be saved!'));
+              }
+              setIsLoading(false);
+            }}
+          />
+        }
+        label={<Typography>{'Dark Mode'}</Typography>}
       />
     </div>
   );

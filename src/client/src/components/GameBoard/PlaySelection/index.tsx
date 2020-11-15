@@ -1,14 +1,13 @@
 import {Button} from '@material-ui/core';
 import * as React from 'react';
-import {useSelector} from 'react-redux';
-import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/game/game_service_pb';
-import {useGameService} from '../../../api/context';
-import {canPlay, hasPlayed, StoreState} from '../../../store';
+import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {canPlay, userHasPlayed} from '../../../store';
 import {queuedCardIdPointsToPlayableCard, QueuedCardId} from '../../../store/modules/game';
 import PlayArea from './PlayArea';
 import Tray from './Tray';
-import {BlackCard, User} from '../../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../../proto-gen-out/api/model_pb';
 import {GameService} from '../../../api/gameService';
+import {getAnswerFieldsForBlackCardInRound} from '../../../helpers/proto';
 
 interface PlaySelectionProps {
   gameService: GameService;
@@ -33,7 +32,9 @@ const PlaySelection = (props: PlaySelectionProps) => {
             currentBlackCard &&
               <PlayArea
                 gameView={props.gameView}
-                playSlots={currentBlackCard.getAnswerFields()}
+                playSlots={
+                  getAnswerFieldsForBlackCardInRound(currentBlackCard) || 0
+                }
               />
           }
           <Button
@@ -65,7 +66,7 @@ const PlaySelection = (props: PlaySelectionProps) => {
             queuedCardIds={props.queuedCardIds}
           />
           {
-            hasPlayed(props.currentUser, props.gameView) &&
+            userHasPlayed(props.currentUser, props.gameView) &&
             props.gameView.getStage() === GameView.Stage.PLAY_PHASE &&
               <Button
                 variant={'contained'}

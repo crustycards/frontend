@@ -2,31 +2,35 @@ import {Body, Controller, Post, Res, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {Response} from 'express';
 import {
-  GetCardpackRequest,
-  CreateCardpackRequest,
-  ListCardpacksRequest,
-  UpdateCardpackRequest,
-  DeleteCardpackRequest,
-  CreateBlackCardRequest,
-  CreateWhiteCardRequest,
-  ListBlackCardsRequest,
-  ListWhiteCardsRequest,
-  UpdateBlackCardRequest,
-  UpdateWhiteCardRequest,
-  DeleteBlackCardRequest,
-  DeleteWhiteCardRequest,
-  BatchCreateBlackCardsRequest,
-  BatchCreateWhiteCardsRequest,
-  BatchDeleteBlackCardsRequest,
-  BatchDeleteWhiteCardsRequest,
-  UndeleteCardpackRequest,
-  UndeleteBlackCardRequest,
-  UndeleteWhiteCardRequest,
-  LikeCardpackRequest,
-  UnlikeCardpackRequest,
-  CheckDoesUserLikeCardpackRequest,
-  CardpackSearchRequest,
-  AutocompleteCardpackSearchRequest
+  GetCustomCardpackRequest,
+  CreateCustomCardpackRequest,
+  ListCustomCardpacksRequest,
+  UpdateCustomCardpackRequest,
+  DeleteCustomCardpackRequest,
+  CreateCustomBlackCardRequest,
+  CreateCustomWhiteCardRequest,
+  ListCustomBlackCardsRequest,
+  ListCustomWhiteCardsRequest,
+  UpdateCustomBlackCardRequest,
+  UpdateCustomWhiteCardRequest,
+  DeleteCustomBlackCardRequest,
+  DeleteCustomWhiteCardRequest,
+  BatchCreateCustomBlackCardsRequest,
+  BatchCreateCustomWhiteCardsRequest,
+  BatchDeleteCustomBlackCardsRequest,
+  BatchDeleteCustomWhiteCardsRequest,
+  UndeleteCustomCardpackRequest,
+  UndeleteCustomBlackCardRequest,
+  UndeleteCustomWhiteCardRequest,
+  LikeCustomCardpackRequest,
+  UnlikeCustomCardpackRequest,
+  CheckDoesUserLikeCustomCardpackRequest,
+  CustomCardpackSearchRequest,
+  AutocompleteCustomCardpackSearchRequest,
+  GetDefaultCardpackRequest,
+  ListDefaultCardpacksRequest,
+  ListDefaultBlackCardsRequest,
+  ListDefaultWhiteCardsRequest
 } from '../../../proto-gen-out/api/cardpack_service_pb';
 import {handleRequest} from '../rpc';
 import {CardpackService} from './cardpack.service';
@@ -36,13 +40,13 @@ export class CardpackController {
   constructor(private readonly cardpackService: CardpackService) {}
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CreateCardpack')
-  public async createCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/CreateCustomCardpack')
+  public async createCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      CreateCardpackRequest.deserializeBinary,
-      this.cardpackService.client.createCardpack,
+      CreateCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.createCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -51,13 +55,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/GetCardpack')
-  public async getCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/GetCustomCardpack')
+  public async getCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      GetCardpackRequest.deserializeBinary,
-      this.cardpackService.client.getCardpack,
+      GetCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.getCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -66,13 +70,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/ListCardpacks')
-  public async listCardpacks(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListCustomCardpacks')
+  public async listCustomCardpacks(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      ListCardpacksRequest.deserializeBinary,
-      this.cardpackService.client.listCardpacks,
+      ListCustomCardpacksRequest.deserializeBinary,
+      this.cardpackService.client.listCustomCardpacks,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -81,13 +85,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UpdateCardpack')
-  public async updateCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/UpdateCustomCardpack')
+  public async updateCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UpdateCardpackRequest.deserializeBinary,
-      this.cardpackService.client.updateCardpack,
+      UpdateCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.updateCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -96,13 +100,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/DeleteCardpack')
-  public async deleteCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/DeleteCustomCardpack')
+  public async deleteCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      DeleteCardpackRequest.deserializeBinary,
-      this.cardpackService.client.deleteCardpack,
+      DeleteCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.deleteCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -111,13 +115,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CreateBlackCard')
-  public async createBlackCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/CreateCustomBlackCard')
+  public async createCustomBlackCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      CreateBlackCardRequest.deserializeBinary,
-      this.cardpackService.client.createBlackCard,
+      CreateCustomBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.createCustomBlackCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -126,13 +130,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CreateWhiteCard')
-  public async createWhiteCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/CreateCustomWhiteCard')
+  public async createCustomWhiteCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      CreateWhiteCardRequest.deserializeBinary,
-      this.cardpackService.client.createWhiteCard,
+      CreateCustomWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.createCustomWhiteCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -141,13 +145,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/ListBlackCards')
-  public async listBlackCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListCustomBlackCards')
+  public async listCustomBlackCards(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      ListBlackCardsRequest.deserializeBinary,
-      this.cardpackService.client.listBlackCards,
+      ListCustomBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.listCustomBlackCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -156,13 +160,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/ListWhiteCards')
-  public async listWhiteCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListCustomWhiteCards')
+  public async listCustomWhiteCards(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      ListWhiteCardsRequest.deserializeBinary,
-      this.cardpackService.client.listWhiteCards,
+      ListCustomWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.listCustomWhiteCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -171,13 +175,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UpdateBlackCard')
-  public async updateBlackCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/UpdateCustomBlackCard')
+  public async updateCustomBlackCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UpdateBlackCardRequest.deserializeBinary,
-      this.cardpackService.client.updateBlackCard,
+      UpdateCustomBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.updateCustomBlackCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -186,13 +190,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UpdateWhiteCard')
-  public async updateWhiteCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/UpdateCustomWhiteCard')
+  public async updateCustomWhiteCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UpdateWhiteCardRequest.deserializeBinary,
-      this.cardpackService.client.updateWhiteCard,
+      UpdateCustomWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.updateCustomWhiteCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -201,13 +205,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/DeleteBlackCard')
-  public async deleteBlackCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/DeleteCustomBlackCard')
+  public async deleteCustomBlackCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      DeleteBlackCardRequest.deserializeBinary,
-      this.cardpackService.client.deleteBlackCard,
+      DeleteCustomBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.deleteCustomBlackCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -216,13 +220,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/DeleteWhiteCard')
-  public async deleteWhiteCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/DeleteCustomWhiteCard')
+  public async deleteCustomWhiteCard(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      DeleteWhiteCardRequest.deserializeBinary,
-      this.cardpackService.client.deleteWhiteCard,
+      DeleteCustomWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.deleteCustomWhiteCard,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -231,13 +235,14 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchCreateBlackCards')
-  public async batchCreateBlackCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/BatchCreateCustomBlackCards')
+  public async batchCreateCustomBlackCards
+  (@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      BatchCreateBlackCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchCreateBlackCards,
+      BatchCreateCustomBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchCreateCustomBlackCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -246,13 +251,14 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchCreateWhiteCards')
-  public async batchCreateWhiteCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/BatchCreateCustomWhiteCards')
+  public async batchCreateCustomWhiteCards
+  (@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      BatchCreateWhiteCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchCreateWhiteCards,
+      BatchCreateCustomWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchCreateCustomWhiteCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -261,13 +267,14 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchDeleteBlackCards')
-  public async batchDeleteBlackCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/BatchDeleteCustomBlackCards')
+  public async batchDeleteCustomBlackCards
+  (@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      BatchDeleteBlackCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchDeleteBlackCards,
+      BatchDeleteCustomBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchDeleteCustomBlackCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -276,13 +283,14 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchDeleteWhiteCards')
-  public async batchDeleteWhiteCards(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/BatchDeleteCustomWhiteCards')
+  public async batchDeleteCustomWhiteCards
+  (@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      BatchDeleteWhiteCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchDeleteWhiteCards,
+      BatchDeleteCustomWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.batchDeleteCustomWhiteCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -291,13 +299,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UndeleteCardpack')
-  public async undeleteCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/GetDefaultCardpack')
+  public async getDefaultCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UndeleteCardpackRequest.deserializeBinary,
-      this.cardpackService.client.undeleteCardpack,
+      GetDefaultCardpackRequest.deserializeBinary,
+      this.cardpackService.client.getDefaultCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -306,13 +314,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UndeleteBlackCard')
-  public async undeleteBlackCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListDefaultCardpacks')
+  public async listDefaultCardpacks(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UndeleteBlackCardRequest.deserializeBinary,
-      this.cardpackService.client.undeleteBlackCard,
+      ListDefaultCardpacksRequest.deserializeBinary,
+      this.cardpackService.client.listDefaultCardpacks,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -321,13 +329,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UndeleteWhiteCard')
-  public async undeleteWhiteCard(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListDefaultBlackCards')
+  public async listDefaultBlackCards(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UndeleteWhiteCardRequest.deserializeBinary,
-      this.cardpackService.client.undeleteWhiteCard,
+      ListDefaultBlackCardsRequest.deserializeBinary,
+      this.cardpackService.client.listDefaultBlackCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -336,13 +344,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/LikeCardpack')
-  public async likeCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/ListDefaultWhiteCards')
+  public async listDefaultWhiteCards(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      LikeCardpackRequest.deserializeBinary,
-      this.cardpackService.client.likeCardpack,
+      ListDefaultWhiteCardsRequest.deserializeBinary,
+      this.cardpackService.client.listDefaultWhiteCards,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -351,13 +359,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/UnlikeCardpack')
-  public async unlikeCardpack(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/UndeleteCustomCardpack')
+  public async undeleteCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      UnlikeCardpackRequest.deserializeBinary,
-      this.cardpackService.client.unlikeCardpack,
+      UndeleteCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.undeleteCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -366,16 +374,78 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CheckDoesUserLikeCardpack')
-  public async checkDoesUserLikeCardpack(
+  @Post('CardpackService/UndeleteCustomBlackCard')
+  public async undeleteCustomBlackCard
+  (@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UndeleteCustomBlackCardRequest.deserializeBinary,
+      this.cardpackService.client.undeleteCustomBlackCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UndeleteCustomWhiteCard')
+  public async undeleteCustomWhiteCard
+  (@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UndeleteCustomWhiteCardRequest.deserializeBinary,
+      this.cardpackService.client.undeleteCustomWhiteCard,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/LikeCustomCardpack')
+  public async likeCustomCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      LikeCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.likeCustomCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/UnlikeCustomCardpack')
+  public async unlikeCustomCardpack(@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      UnlikeCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.unlikeCustomCardpack,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/CheckDoesUserLikeCustomCardpack')
+  public async checkDoesUserLikeCustomCardpack(
     @Body() body: any,
     @Res() res: Response
   ) {
     handleRequest(
       body,
       res,
-      CheckDoesUserLikeCardpackRequest.deserializeBinary,
-      this.cardpackService.client.checkDoesUserLikeCardpack,
+      CheckDoesUserLikeCustomCardpackRequest.deserializeBinary,
+      this.cardpackService.client.checkDoesUserLikeCustomCardpack,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -384,13 +454,13 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CardpackSearch')
-  public async cardpackSearch(@Body() body: any, @Res() res: Response) {
+  @Post('CardpackService/CustomCardpackSearch')
+  public async customCardpackSearch(@Body() body: any, @Res() res: Response) {
     handleRequest(
       body,
       res,
-      CardpackSearchRequest.deserializeBinary,
-      this.cardpackService.client.cardpackSearch,
+      CustomCardpackSearchRequest.deserializeBinary,
+      this.cardpackService.client.customCardpackSearch,
       (request) => {
         // TODO - Implement request validation.
         return request;
@@ -399,16 +469,16 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/AutocompleteCardpackSearch')
-  public async autocompleteCardpackSearch(
+  @Post('CardpackService/AutocompleteCustomCardpackSearch')
+  public async autocompleteCustomCardpackSearch(
     @Body() body: any,
     @Res() res: Response
   ) {
     handleRequest(
       body,
       res,
-      AutocompleteCardpackSearchRequest.deserializeBinary,
-      this.cardpackService.client.autocompleteCardpackSearch,
+      AutocompleteCustomCardpackSearchRequest.deserializeBinary,
+      this.cardpackService.client.autocompleteCustomCardpackSearch,
       (request) => {
         // TODO - Implement request validation.
         return request;

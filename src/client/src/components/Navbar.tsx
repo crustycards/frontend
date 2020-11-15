@@ -8,7 +8,8 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography
+  Typography,
+  Theme
 } from '@material-ui/core';
 import ExitToApp from '@material-ui/icons/ExitToApp';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -16,7 +17,7 @@ import Person from '@material-ui/icons/Person';
 import Settings from '@material-ui/icons/Settings';
 import VideogameAsset from '@material-ui/icons/VideogameAsset';
 import ViewList from '@material-ui/icons/ViewList';
-import {makeStyles} from '@material-ui/styles';
+import {makeStyles, createStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -27,15 +28,17 @@ const redirectTo = (url: string) => {
   window.location.replace(url);
 };
 
-const useStyles = makeStyles({
-  flex: {
-    flex: 1
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20
-  }
-});
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    flex: {
+      flex: 1
+    },
+    menuButton: {
+      marginLeft: -12,
+      marginRight: 20
+    }
+  })
+);
 
 const Navbar = () => {
   const classes = useStyles();
@@ -51,7 +54,7 @@ const Navbar = () => {
   const dispatch = useDispatch();
 
   return <div>
-    <AppBar position={'static'} style={{borderRadius: '5px'}}>
+    <AppBar position={'static'}>
       <Toolbar>
         <IconButton
           className={classes.menuButton}
@@ -67,7 +70,6 @@ const Navbar = () => {
         <Button
           color={'secondary'}
           variant={'contained'}
-          style={{color: 'white'}}
           onClick={() => dispatch(push('/game'))}
         >
           Current Game

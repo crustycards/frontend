@@ -9,8 +9,8 @@ const AuthRedirector = () => {
     path: router.location.pathname
   }));
 
-  if (user && path === '/login') {
-    return <Redirect to={'/'} />;
+  if (user && (path === '/login' || path === '/')) {
+    return <Redirect to={'/gamelist'} />;
   } else if (!user && path !== '/login') {
     return <Redirect to={'/login'} />;
   } else {

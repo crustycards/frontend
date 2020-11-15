@@ -1,3 +1,4 @@
 import * as React from 'react';
+import ResourceNotFound from '../components/ResourceNotFound';
 
-export default () => (<div>404</div>);
+export default () => (<ResourceNotFound resourceType={'404'}/>);

@@ -11,22 +11,24 @@ import {
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {useState} from 'react';
-import {BlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {useGlobalStyles} from '../../styles/globalStyles';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});
 
 interface BlackCardAdderProps {
-  addCard(card: BlackCard): void;
+  addCard(card: CustomBlackCard): void;
 }
 
 const getDefaultNewBlackCard = () => {
-  const card = new BlackCard();
+  const card = new CustomBlackCard();
   card.setAnswerFields(1);
   return card;
 };
 
 const BlackCardAdder = (props: BlackCardAdderProps) => {
   const [card, setCard] = useState(getDefaultNewBlackCard());
+  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
@@ -37,7 +39,7 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
 
   return (
     <MuiThemeProvider theme={darkTheme}>
-      <Card className='card'>
+      <Card className={globalClasses.card}>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField

@@ -2,7 +2,7 @@ import * as React from 'react';
 import {ConnectDropTarget, DropTarget} from 'react-dnd';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
-import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/game/game_service_pb';
+import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/api/game_service_pb';
 import {cardInHand} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {unqueueCard, QueuedCardId} from '../../../store/modules/game';
