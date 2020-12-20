@@ -32,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface GameListProps {
-  gameService: GameService
+  gameService: GameService,
+  openCreateGameDialog: () => void
 };
 
 const GameList = (props: GameListProps) => {
@@ -144,6 +145,8 @@ const GameList = (props: GameListProps) => {
               <RefreshIcon className={classes.leftIcon}/>
                 Refresh
             </Button>
+            <br/>
+            <Button onClick={props.openCreateGameDialog}>Create Game</Button>
           </div>
         </div>
       </div>
