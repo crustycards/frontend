@@ -7,7 +7,6 @@ import {
   CircularProgress,
   Theme,
   Typography,
-  Grid,
   TextField
 } from '@material-ui/core';
 import RefreshIcon from '@material-ui/icons/Refresh';
@@ -33,7 +32,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface GameListProps {
-  gameService: GameService
+  gameService: GameService,
+  openCreateGameDialog: () => void
 };
 
 const GameList = (props: GameListProps) => {
@@ -115,6 +115,41 @@ const GameList = (props: GameListProps) => {
   return (
     <div>
       {header}
+      <div className={globalClasses.contentWrap}>
+        <div style={{textAlign: 'center'}}>
+          <div style={{display: 'inline-block'}}>
+            <TextField
+              label={'Query'}
+              value={query}
+              onChange={(e) => {
+                setQuery(e.target.value);
+              }}
+            />
+            <div style={{marginTop: '8px'}}>
+              <NumberBoundTextField
+                style={{width: '47%', float: 'left'}}
+                label={'Player Slots Available'}
+                value={minAvailablePlayerSlots}
+                minValue={0}
+                maxValue={9}
+                onChange={setMinAvailablePlayerSlots}
+              />
+            </div>
+            <Button
+              size={'small'}
+              style={{marginBottom: '5px', marginTop: '10px'}}
+              onClick={refresh}
+              variant={'contained'}
+              color={'secondary'}
+            >
+              <RefreshIcon className={classes.leftIcon}/>
+                Refresh
+            </Button>
+            <br/>
+            <Button onClick={props.openCreateGameDialog}>Create Game</Button>
+          </div>
+        </div>
+      </div>
       {games.map((gameInfo, index) => (
         <Card
           style={
@@ -161,44 +196,6 @@ const GameList = (props: GameListProps) => {
           </span>
         </div>
       }
-
-      <div className={globalClasses.contentWrap}>
-        <Grid container spacing={8}>
-          <Grid item xs={12} sm={5} className={globalClasses.center}>
-            <div style={{maxWidth: '200px', textAlign: 'center', display: 'inline-block'}}>
-              <TextField
-                label={'Query'}
-                value={query}
-                onChange={(e) => {
-                  setQuery(e.target.value);
-                }}
-              />
-              <div style={{marginTop: '8px'}}>
-                <NumberBoundTextField
-                  style={{width: '47%', float: 'left'}}
-                  label={'Player Slots Available'}
-                  value={minAvailablePlayerSlots}
-                  minValue={0}
-                  maxValue={9}
-                  onChange={setMinAvailablePlayerSlots}
-                />
-              </div>
-              <Button
-                size={'small'}
-                style={{marginBottom: '5px', marginTop: '10px'}}
-                onClick={refresh}
-                variant={'contained'}
-                color={'secondary'}
-              >
-                <RefreshIcon className={classes.leftIcon}/>
-                Refresh
-              </Button>
-            </div>
-          </Grid>
-          <Grid item xs={12} sm={7}>
-          </Grid>
-        </Grid>
-      </div>
     </div>
   );
 };
