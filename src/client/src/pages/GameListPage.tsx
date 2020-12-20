@@ -1,6 +1,6 @@
 import {
   Dialog,
-  DialogContent,
+  DialogContent
 } from '@material-ui/core';
 import * as React from 'react';
 import GameCreator from '../components/GameList/GameCreator';
@@ -49,7 +49,10 @@ const GameListPage = () => {
           />
         </DialogContent>
       </Dialog>
-      <GameList gameService={gameService} openCreateGameDialog={() => setShowCreateGameDialog(true)}/>
+      <GameList
+        gameService={gameService}
+        openCreateGameDialog={() => setShowCreateGameDialog(true)}
+      />
     </div>
   );
 };
