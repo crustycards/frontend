@@ -17,16 +17,13 @@ import {
   DeleteCustomWhiteCardRequest,
   BatchCreateCustomBlackCardsRequest,
   BatchCreateCustomWhiteCardsRequest,
-  BatchDeleteCustomBlackCardsRequest,
-  BatchDeleteCustomWhiteCardsRequest,
+  ListFavoritedCustomCardpacksRequest,
   UndeleteCustomCardpackRequest,
   UndeleteCustomBlackCardRequest,
   UndeleteCustomWhiteCardRequest,
   LikeCustomCardpackRequest,
   UnlikeCustomCardpackRequest,
   CheckDoesUserLikeCustomCardpackRequest,
-  CustomCardpackSearchRequest,
-  AutocompleteCustomCardpackSearchRequest,
   GetDefaultCardpackRequest,
   ListDefaultCardpacksRequest,
   ListDefaultBlackCardsRequest,
@@ -267,38 +264,6 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchDeleteCustomBlackCards')
-  public async batchDeleteCustomBlackCards
-  (@Body() body: any, @Res() res: Response) {
-    handleRequest(
-      body,
-      res,
-      BatchDeleteCustomBlackCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchDeleteCustomBlackCards,
-      (request) => {
-        // TODO - Implement request validation.
-        return request;
-      }
-    );
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/BatchDeleteCustomWhiteCards')
-  public async batchDeleteCustomWhiteCards
-  (@Body() body: any, @Res() res: Response) {
-    handleRequest(
-      body,
-      res,
-      BatchDeleteCustomWhiteCardsRequest.deserializeBinary,
-      this.cardpackService.client.batchDeleteCustomWhiteCards,
-      (request) => {
-        // TODO - Implement request validation.
-        return request;
-      }
-    );
-  }
-
-  @UseGuards(AuthGuard('cookie'))
   @Post('CardpackService/GetDefaultCardpack')
   public async getDefaultCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
@@ -406,6 +371,22 @@ export class CardpackController {
   }
 
   @UseGuards(AuthGuard('cookie'))
+  @Post('CardpackService/ListFavoritedCustomCardpacks')
+  public async listFavoritedCustomCardpacks
+  (@Body() body: any, @Res() res: Response) {
+    handleRequest(
+      body,
+      res,
+      ListFavoritedCustomCardpacksRequest.deserializeBinary,
+      this.cardpackService.client.listFavoritedCustomCardpacks,
+      (request) => {
+        // TODO - Implement request validation.
+        return request;
+      }
+    );
+  }
+
+  @UseGuards(AuthGuard('cookie'))
   @Post('CardpackService/LikeCustomCardpack')
   public async likeCustomCardpack(@Body() body: any, @Res() res: Response) {
     handleRequest(
@@ -446,39 +427,6 @@ export class CardpackController {
       res,
       CheckDoesUserLikeCustomCardpackRequest.deserializeBinary,
       this.cardpackService.client.checkDoesUserLikeCustomCardpack,
-      (request) => {
-        // TODO - Implement request validation.
-        return request;
-      }
-    );
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/CustomCardpackSearch')
-  public async customCardpackSearch(@Body() body: any, @Res() res: Response) {
-    handleRequest(
-      body,
-      res,
-      CustomCardpackSearchRequest.deserializeBinary,
-      this.cardpackService.client.customCardpackSearch,
-      (request) => {
-        // TODO - Implement request validation.
-        return request;
-      }
-    );
-  }
-
-  @UseGuards(AuthGuard('cookie'))
-  @Post('CardpackService/AutocompleteCustomCardpackSearch')
-  public async autocompleteCustomCardpackSearch(
-    @Body() body: any,
-    @Res() res: Response
-  ) {
-    handleRequest(
-      body,
-      res,
-      AutocompleteCustomCardpackSearchRequest.deserializeBinary,
-      this.cardpackService.client.autocompleteCustomCardpackSearch,
       (request) => {
         // TODO - Implement request validation.
         return request;

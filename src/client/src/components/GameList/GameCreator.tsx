@@ -19,8 +19,16 @@ import {useState} from 'react';
 import {useDispatch} from 'react-redux';
 import {CustomCardpack, GameConfig, User, DefaultCardpack} from '../../../../../proto-gen-out/api/model_pb';
 import {GameService} from '../../api/gameService';
-import {listCustomCardpacks, listDefaultCardpacks} from '../../api/cardpackService';
-import {ListCustomCardpacksRequest, ListDefaultCardpacksRequest} from '../../../../../proto-gen-out/api/cardpack_service_pb';
+import {
+  listCustomCardpacks,
+  listFavoritedCustomCardpacks,
+  listDefaultCardpacks
+} from '../../api/cardpackService';
+import {
+  ListCustomCardpacksRequest,
+  ListDefaultCardpacksRequest,
+  ListFavoritedCustomCardpacksRequest
+} from '../../../../../proto-gen-out/api/cardpack_service_pb';
 import NumberBoundTextField from '../../components/NumberBoundTextField';
 import {UserService} from '../../api/userService';
 import {showStatusMessage} from '../../store/modules/global'
@@ -383,12 +391,11 @@ const GameCreator = (props: GameCreatorProps) => {
               headerName={'Your Favorited Cardpacks'}
               loadItems={
                 async (pageToken, amount) => {
-                  const request = new ListCustomCardpacksRequest();
+                  const request = new ListFavoritedCustomCardpacksRequest();
                   request.setPageToken(pageToken);
                   request.setPageSize(amount);
                   request.setParent(props.currentUser.getName());
-                  request.setShowFavorited(true);
-                  const response = await listCustomCardpacks(request);
+                  const response = await listFavoritedCustomCardpacks(request);
                   return {
                     items: response.getCustomCardpacksList(),
                     nextPageToken: response.getNextPageToken()
