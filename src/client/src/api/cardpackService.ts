@@ -1,16 +1,8 @@
 import {
-  AutocompleteCustomCardpackSearchRequest,
-  AutocompleteCustomCardpackSearchResponse,
   BatchCreateCustomBlackCardsRequest,
   BatchCreateCustomBlackCardsResponse,
   BatchCreateCustomWhiteCardsRequest,
   BatchCreateCustomWhiteCardsResponse,
-  BatchDeleteCustomBlackCardsRequest,
-  BatchDeleteCustomBlackCardsResponse,
-  BatchDeleteCustomWhiteCardsRequest,
-  BatchDeleteCustomWhiteCardsResponse,
-  CustomCardpackSearchRequest,
-  CustomCardpackSearchResponse,
   CheckDoesUserLikeCustomCardpackRequest,
   CheckDoesUserLikeCustomCardpackResponse,
   CreateCustomBlackCardRequest,
@@ -25,6 +17,8 @@ import {
   ListCustomBlackCardsResponse,
   ListCustomCardpacksRequest,
   ListCustomCardpacksResponse,
+  ListFavoritedCustomCardpacksRequest,
+  ListFavoritedCustomCardpacksResponse,
   ListCustomWhiteCardsRequest,
   ListCustomWhiteCardsResponse,
   UndeleteCustomBlackCardRequest,
@@ -202,26 +196,6 @@ Promise<BatchCreateCustomWhiteCardsResponse> => {
   );
 };
 
-export const batchDeleteCustomBlackCards =
-(request: BatchDeleteCustomBlackCardsRequest):
-Promise<BatchDeleteCustomBlackCardsResponse> => {
-  return makeRpcFromBrowser(
-    request,
-    'CardpackService/BatchDeleteCustomBlackCards',
-    BatchDeleteCustomBlackCardsResponse.deserializeBinary
-  );
-};
-
-export const batchDeleteCustomWhiteCards =
-(request: BatchDeleteCustomWhiteCardsRequest):
-Promise<BatchDeleteCustomWhiteCardsResponse> => {
-  return makeRpcFromBrowser(
-    request,
-    'CardpackService/BatchDeleteCustomWhiteCards',
-    BatchDeleteCustomWhiteCardsResponse.deserializeBinary
-  );
-};
-
 export const getDefaultCardpack =
 (defaultCardpackName: string): Promise<DefaultCardpack> => {
   const request = new GetDefaultCardpackRequest();
@@ -289,6 +263,16 @@ Promise<CustomWhiteCard> => {
   );
 };
 
+export const listFavoritedCustomCardpacks =
+(request: ListFavoritedCustomCardpacksRequest):
+Promise<ListFavoritedCustomCardpacksResponse> => {
+  return makeRpcFromBrowser(
+    request,
+    'CardpackService/ListFavoritedCustomCardpacks',
+    ListFavoritedCustomCardpacksResponse.deserializeBinary
+  );
+};
+
 export const likeCustomCardpack = (request: LikeCustomCardpackRequest):
 Promise<CustomCardpack> => {
   return makeRpcFromBrowser(
@@ -314,24 +298,5 @@ Promise<CheckDoesUserLikeCustomCardpackResponse> => {
     request,
     'CardpackService/CheckDoesUserLikeCustomCardpack',
     CheckDoesUserLikeCustomCardpackResponse.deserializeBinary
-  );
-};
-
-export const customCardpackSearch = (request: CustomCardpackSearchRequest):
-Promise<CustomCardpackSearchResponse> => {
-  return makeRpcFromBrowser(
-    request,
-    'CardpackService/CustomCardpackSearch',
-    CustomCardpackSearchResponse.deserializeBinary
-  );
-};
-
-export const autocompleteCustomCardpackSearch =
-(request: AutocompleteCustomCardpackSearchRequest):
-Promise<AutocompleteCustomCardpackSearchResponse> => {
-  return makeRpcFromBrowser(
-    request,
-    'CardpackService/AutocompleteCustomCardpackSearch',
-    AutocompleteCustomCardpackSearchResponse.deserializeBinary
   );
 };
