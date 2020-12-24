@@ -38,6 +38,7 @@ import {
 } from '../../../../proto-gen-out/api/cardpack_service_pb';
 import {CustomBlackCard, CustomCardpack, CustomWhiteCard, DefaultCardpack} from '../../../../proto-gen-out/api/model_pb';
 import {makeRpcFromBrowser} from '../../../server/rpc';
+import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 
 export const createCustomCardpack =
 (parentUserName: string, customCardpack: CustomCardpack):
@@ -274,20 +275,20 @@ Promise<ListFavoritedCustomCardpacksResponse> => {
 };
 
 export const likeCustomCardpack = (request: LikeCustomCardpackRequest):
-Promise<CustomCardpack> => {
+Promise<Empty> => {
   return makeRpcFromBrowser(
     request,
     'CardpackService/LikeCustomCardpack',
-    CustomCardpack.deserializeBinary
+    Empty.deserializeBinary
   );
 };
 
 export const unlikeCustomCardpack = (request: UnlikeCustomCardpackRequest):
-Promise<CustomCardpack> => {
+Promise<Empty> => {
   return makeRpcFromBrowser(
     request,
     'CardpackService/UnlikeCustomCardpack',
-    CustomCardpack.deserializeBinary
+    Empty.deserializeBinary
   );
 };
 

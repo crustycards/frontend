@@ -20,7 +20,6 @@ const CustomCardpackPage = (props: RouteComponentProps<{user: string}>) => {
         loadItems={
           async (pageToken, amount) => {
             const request = new ListCustomCardpacksRequest();
-            console.log(`users/${props.match.params.user}`);
             request.setParent(`users/${props.match.params.user}`);
             request.setPageToken(pageToken);
             request.setPageSize(amount);

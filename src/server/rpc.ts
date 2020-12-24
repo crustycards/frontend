@@ -38,6 +38,15 @@ export const makeRpcFromBrowser = async <
   }
 };
 
+const handleRpcError = (grpcError: ServiceError, res: Response<any>) => {
+  // 5 is the Grpc error code for NotFound.
+  if (grpcError.code === 5) {
+    return res.status(404).send(grpcError.message);
+  } else {
+    return res.status(400).send(grpcError.message);
+  }
+};
+
 // Dynamically handles an incoming rpc to the server.
 export const handleRequest =
 <RequestType, ResponseType extends {serializeBinary(): Uint8Array}>(
@@ -72,7 +81,7 @@ export const handleRequest =
 
     grpcMethod(request, (grpcError, grpcResponse) => {
       if (grpcError) {
-        return res.status(400).send(grpcError.message);
+        return handleRpcError(grpcError, res);
       } else {
         return res.send(uint8ArrayToOpaqueSerializedString(
           grpcResponse.serializeBinary()));
