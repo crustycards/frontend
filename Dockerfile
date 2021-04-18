@@ -13,7 +13,7 @@ RUN \
     git submodule update --init --recursive &&\
     # Install dependencies and compile bundle.
     npm install &&\
-    npm run build-prod-linux
+    npm run build-prod
 # TODO - Enable npm module pruning
 # RUN npm prune --production
 CMD ["npm", "start"]

@@ -19,8 +19,7 @@ test:
     # Install dependencies.
     - npm install
     # Generate protobuf code.
-    - npm run build-proto-linux
-    - npm run build-grpc-linux
+    - npm run generate-stubs
     # Check for Typescript type errors.
     - npm run check-typescript-types
     # Run tests.
