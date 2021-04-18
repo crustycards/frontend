@@ -4,10 +4,10 @@ import ArrowRight from '@material-ui/icons/ArrowRight';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import * as React from 'react';
-import {CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
-import {PastRound} from '../../../../../proto-gen-out/api/game_service_pb';
+import {PastRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 

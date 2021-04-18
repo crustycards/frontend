@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {PlayableWhiteCard} from '../../../../../proto-gen-out/api/game_service_pb';
+import {PlayableWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import CAHBlankWhiteCard from './CAHBlankWhiteCard';
 import CAHWhiteCard from './CAHCustomWhiteCard';
 import CAHDefaultWhiteCard from './CAHDefaultWhiteCard';

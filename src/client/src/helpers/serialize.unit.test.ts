@@ -1,4 +1,4 @@
-import {User} from '../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   opaqueSerializedStringToUint8Array,
   uint8ArrayToOpaqueSerializedString

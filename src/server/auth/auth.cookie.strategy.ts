@@ -1,7 +1,7 @@
 import {Injectable} from '@nestjs/common';
 import {Request} from 'express';
 import {use, Strategy} from 'passport';
-import {User} from '../../../proto-gen-out/api/model_pb';
+import {User} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {UserService} from '../user/user.service';
 import {AuthService} from './auth.service';
 

@@ -6,7 +6,7 @@ import {
 } from '@material-ui/core';
 import * as React from 'react';
 import {NavLink} from 'react-router-dom';
-import {DefaultCardpack} from '../../../../../proto-gen-out/api/model_pb';
+import {DefaultCardpack} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface CAHDefaultCardpackProps {

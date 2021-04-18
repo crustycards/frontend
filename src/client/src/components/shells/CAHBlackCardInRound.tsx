@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {BlackCardInRound} from '../../../../../proto-gen-out/api/game_service_pb';
+import {BlackCardInRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import CAHCustomBlackCard from './CAHCustomBlackCard';
 import CAHDefaultBlackCard from './CAHDefaultBlackCard';
 

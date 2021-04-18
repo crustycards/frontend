@@ -18,7 +18,7 @@ import {useDispatch, useSelector} from 'react-redux';
 import {convertTime} from '../../helpers/time';
 import {StoreState} from '../../store';
 import {GameService} from '../../api/gameService';
-import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/api/game_service_pb';
+import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import NumberBoundTextField from '../NumberBoundTextField';
 import {useGlobalStyles} from '../../styles/globalStyles';
 

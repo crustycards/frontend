@@ -9,7 +9,7 @@ import {
 import Check from '@material-ui/icons/Check';
 import Star from '@material-ui/icons/Star';
 import * as React from 'react';
-import {GameView, Player} from '../../../../../proto-gen-out/api/game_service_pb';
+import {GameView, Player} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {getPlayerDisplayName} from '../../helpers/proto';
 import {playerHasPlayed} from '../../store';
 import {useGlobalStyles} from '../../styles/globalStyles';

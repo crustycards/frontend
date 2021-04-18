@@ -2,7 +2,7 @@ import {Avatar, Button, Card, CardActions, CardHeader} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
-import {User} from '../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useUserService} from '../../api/context';
 import {stringToCssColor} from '../../helpers/colorGenerator';
 import {useGlobalStyles} from '../../styles/globalStyles';

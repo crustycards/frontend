@@ -1,10 +1,10 @@
-import {CustomBlackCard, CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomBlackCard, CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   BlankWhiteCard,
   GameView,
   PlayableWhiteCard,
   BlackCardInRound
-} from '../../../../../proto-gen-out/api/game_service_pb';
+} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import reducer from './game';
 import {queueCard, setGameState, unqueueCard} from './game';
 

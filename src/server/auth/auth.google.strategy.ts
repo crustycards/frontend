@@ -1,8 +1,8 @@
 import {Injectable} from '@nestjs/common';
 import {use} from 'passport';
 import {Strategy as PassportGoogleStrategy} from 'passport-google-oauth20';
-import {User} from '../../../proto-gen-out/api/model_pb';
-import {OAuthCredentials} from '../../../proto-gen-out/api/user_service_pb';
+import {User} from '../../../proto-gen-out/crusty_cards_api/model_pb';
+import {OAuthCredentials} from '../../../proto-gen-out/crusty_cards_api/user_service_pb';
 import {EnvironmentService} from '../environment/environment.service';
 import {UserService} from '../user/user.service';
 

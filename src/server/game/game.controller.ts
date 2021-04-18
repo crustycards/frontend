@@ -24,7 +24,7 @@ import {
   RemoveArtificialPlayerRequest,
   CreateChatMessageRequest,
   GetGameViewRequest
-} from '../../../proto-gen-out/api/game_service_pb';
+} from '../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {GameService} from './game.service';
 import {handleRequest} from '../rpc';
 import {Response} from 'express';

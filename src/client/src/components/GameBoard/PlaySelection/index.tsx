@@ -1,11 +1,11 @@
 import {Button} from '@material-ui/core';
 import * as React from 'react';
-import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {canPlay, userHasPlayed} from '../../../store';
 import {queuedCardIdPointsToPlayableCard, QueuedCardId} from '../../../store/modules/game';
 import PlayArea from './PlayArea';
 import Tray from './Tray';
-import {User} from '../../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {GameService} from '../../../api/gameService';
 import {getAnswerFieldsForBlackCardInRound} from '../../../helpers/proto';
 

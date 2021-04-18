@@ -9,7 +9,7 @@ import {
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {useState} from 'react';
-import {CustomWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 const lightTheme = createMuiTheme({palette: {type: 'light'}});

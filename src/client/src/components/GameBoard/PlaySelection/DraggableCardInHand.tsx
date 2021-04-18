@@ -1,12 +1,12 @@
 import * as React from 'react';
 import {ConnectDragSource, DragSource} from 'react-dnd';
 import {useDispatch} from 'react-redux';
-import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {cardInPlayQueue} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
 import CAHPlayableWhiteCard from '../../shells/CAHPlayableWhiteCard';
-import {User} from '../../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../../proto-gen-out/crusty_cards_api/model_pb';
 
 interface DraggableCardProps {
   currentUser: User;

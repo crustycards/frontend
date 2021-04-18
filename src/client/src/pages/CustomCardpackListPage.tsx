@@ -1,8 +1,8 @@
 import {List, ListItem} from '@material-ui/core';
 import * as React from 'react';
 import {RouteComponentProps} from 'react-router';
-import {ListCustomCardpacksRequest} from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {CustomCardpack} from '../../../../proto-gen-out/api/model_pb';
+import {ListCustomCardpacksRequest} from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
+import {CustomCardpack} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {listCustomCardpacks} from '../api/cardpackService';
 import ProtobufInfiniteScroller from '../components/ProtobufInfiniteScroller';
 import CAHCustomCardpack from '../components/shells/CAHCustomCardpack';

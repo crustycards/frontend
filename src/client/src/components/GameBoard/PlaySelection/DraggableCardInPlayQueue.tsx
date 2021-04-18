@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {ConnectDragSource, DragSource} from 'react-dnd';
 import {useDispatch} from 'react-redux';
-import {PlayableWhiteCard} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {PlayableWhiteCard} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {cardInHand} from '../../../dndTypes';
 import {unqueueCard} from '../../../store/modules/game';
 import CAHPlayableWhiteCard from '../../shells/CAHPlayableWhiteCard';

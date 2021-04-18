@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import * as grpc from '@grpc/grpc-js';
-import * as GameServiceGrpc from '../../../proto-gen-out/api/game_service_grpc_pb';
+import * as GameServiceGrpc from '../../../proto-gen-out/crusty_cards_api/game_service_grpc_pb';
 import {EnvironmentService} from '../environment/environment.service';
 import {bindAllFunctionsToSelf} from '../../client/src/helpers/bindAll';
 

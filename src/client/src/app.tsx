@@ -14,7 +14,7 @@ import DragDropHTML5Backend from 'react-dnd-html5-backend';
 import {Provider, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import * as Socket from 'socket.io-client';
-import {UserSettings} from '../../../proto-gen-out/api/model_pb';
+import {UserSettings} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPreloadedUser} from './getPreloadedState';
 import {Provider as GameServiceContextProvider} from './api/context';
 import {GameService} from './api/gameService';

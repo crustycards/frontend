@@ -11,7 +11,7 @@ import {makeStyles} from '@material-ui/styles';
 import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
 import {useState} from 'react';
-import {ChatMessage} from '../../../../../proto-gen-out/api/game_service_pb';
+import {ChatMessage} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {GameService} from '../../api/gameService';
 import {useGlobalStyles} from '../../styles/globalStyles';
 import {convertTime} from '../../helpers/time';

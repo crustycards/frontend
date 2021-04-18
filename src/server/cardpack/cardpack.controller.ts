@@ -28,7 +28,7 @@ import {
   ListDefaultCardpacksRequest,
   ListDefaultBlackCardsRequest,
   ListDefaultWhiteCardsRequest
-} from '../../../proto-gen-out/api/cardpack_service_pb';
+} from '../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
 import {handleRequest} from '../rpc';
 import {CardpackService} from './cardpack.service';
 

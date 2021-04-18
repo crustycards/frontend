@@ -1,5 +1,5 @@
-import {User, UserSettings} from '../../../../proto-gen-out/api/model_pb';
-import {Player, PlayableWhiteCard, BlackCardInRound} from '../../../../proto-gen-out/api/game_service_pb';
+import {User, UserSettings} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
+import {Player, PlayableWhiteCard, BlackCardInRound} from '../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {
   opaqueSerializedStringToUint8Array,
   uint8ArrayToOpaqueSerializedString

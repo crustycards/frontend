@@ -1,13 +1,13 @@
 import {Injectable} from '@nestjs/common';
 import * as grpc from '@grpc/grpc-js';
-import {User, UserSettings} from '../../../proto-gen-out/api/model_pb';
-import * as UserServiceGrpc from '../../../proto-gen-out/api/user_service_grpc_pb';
+import {User, UserSettings} from '../../../proto-gen-out/crusty_cards_api/model_pb';
+import * as UserServiceGrpc from '../../../proto-gen-out/crusty_cards_api/user_service_grpc_pb';
 import {
   GetOrCreateUserRequest,
   GetUserRequest,
   GetUserSettingsRequest,
   OAuthCredentials
-} from '../../../proto-gen-out/api/user_service_pb';
+} from '../../../proto-gen-out/crusty_cards_api/user_service_pb';
 import {bindAllFunctionsToSelf} from '../../client/src/helpers/bindAll';
 import {EnvironmentService} from '../environment/environment.service';
 

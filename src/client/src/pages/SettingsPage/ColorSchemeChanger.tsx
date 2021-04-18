@@ -2,7 +2,7 @@ import {Switch, FormControlLabel, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {UserSettings} from '../../../../../proto-gen-out/api/model_pb';
+import {UserSettings} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useUserService} from '../../api/context';
 import {setUserSettings, showStatusMessage} from '../../store/modules/global';
 

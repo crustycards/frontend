@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import {getDefaultCardpack} from '../../api/cardpackService';
-import {DefaultCardpack} from '../../../../../proto-gen-out/api/model_pb';
+import {DefaultCardpack} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   Card,
   CardContent,

@@ -12,12 +12,13 @@ import {
   Typography,
   Paper
 } from '@material-ui/core';
+import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {CustomCardpack, GameConfig, User, DefaultCardpack} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomCardpack, GameConfig, User, DefaultCardpack} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {GameService} from '../../api/gameService';
 import {
   listCustomCardpacks,
@@ -28,7 +29,7 @@ import {
   ListCustomCardpacksRequest,
   ListDefaultCardpacksRequest,
   ListFavoritedCustomCardpacksRequest
-} from '../../../../../proto-gen-out/api/cardpack_service_pb';
+} from '../../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
 import NumberBoundTextField from '../../components/NumberBoundTextField';
 import {UserService} from '../../api/userService';
 import {showStatusMessage} from '../../store/modules/global'
@@ -81,7 +82,7 @@ const fillGameConfigWithDefaultValues = (config: GameConfig) => {
 
   const maxScoreIsOutOfRange = config.getMaxScore() < minScoreLimit
                             || config.getMaxScore() > maxScoreLimit;
-  if (!config.getEndlessMode() && maxScoreIsOutOfRange) {
+  if (!config.hasEndlessMode() && maxScoreIsOutOfRange) {
     config.setMaxScore(defaultScoreLimit);
   }
 
@@ -231,18 +232,20 @@ const GameCreator = (props: GameCreatorProps) => {
                       newConfig.setMaxScore(num);
                       setConfig(newConfig);
                     }}
-                    disabled={config.getEndlessMode()}
+                    disabled={config.hasEndlessMode()}
                   />
                 </div>
                 <FormControlLabel
                   style={{marginTop: '5px', marginBottom: '5px'}}
                   control={
                     <Checkbox
-                      checked={config.getEndlessMode()}
+                      checked={config.hasEndlessMode()}
                       onChange={() => {
                         const newConfig = config.clone();
-                        newConfig.setEndlessMode(!config.getEndlessMode());
-                        if (!newConfig.getEndlessMode()) {
+                        if (!config.hasEndlessMode()) {
+                          newConfig.setEndlessMode(new Empty());
+                        }
+                        if (!newConfig.hasEndlessMode()) {
                           newConfig.setMaxScore(defaultScoreLimit);
                         }
                         setConfig(newConfig);

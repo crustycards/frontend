@@ -12,8 +12,8 @@
     "lint-clean": "npm run lint -- --fix",
     "check-typescript-types": "tsc --noEmit --skipLibCheck",
     "generate-stubs": "npm run generate-grpc && npm run generate-proto",
-    "generate-grpc": "mkdir -p proto-gen-out && grpc_tools_node_protoc --plugin=./node_modules/.bin/grpc_tools_node_protoc_plugin --js_out=import_style=commonjs,binary:./proto-gen-out --grpc_out=grpc_js:./proto-gen-out --proto_path=./cards-proto google/api/field_behavior.proto google/api/resource.proto ./cards-proto/api/model.proto ./cards-proto/api/cardpack_service.proto ./cards-proto/api/user_service.proto ./cards-proto/api/game_service.proto",
-    "generate-proto": "mkdir -p proto-gen-out && protoc --plugin=./node_modules/.bin/protoc-gen-ts.cmd --plugin=./node_modules/.bin/protoc-gen-grpc.cmd --js_out=import_style=commonjs,binary:./proto-gen-out --ts_out=proto-gen-out --proto_path=./cards-proto ./cards-proto/api/*.proto google/api/client.proto google/api/field_behavior.proto google/api/resource.proto google/api/annotations.proto google/api/http.proto"
+    "generate-grpc": "mkdir -p proto-gen-out && grpc_tools_node_protoc --plugin=./node_modules/.bin/grpc_tools_node_protoc_plugin --js_out=import_style=commonjs,binary:./proto-gen-out --grpc_out=grpc_js:./proto-gen-out --proto_path=./proto google/api/field_behavior.proto google/api/resource.proto ./proto/crusty_cards_api/model.proto ./proto/crusty_cards_api/cardpack_service.proto ./proto/crusty_cards_api/user_service.proto ./proto/crusty_cards_api/game_service.proto",
+    "generate-proto": "mkdir -p proto-gen-out && protoc --plugin=./node_modules/.bin/protoc-gen-ts.cmd --plugin=./node_modules/.bin/protoc-gen-grpc.cmd --js_out=import_style=commonjs,binary:./proto-gen-out --ts_out=proto-gen-out --proto_path=./proto ./proto/crusty_cards_api/*.proto google/api/client.proto google/api/field_behavior.proto google/api/resource.proto google/api/annotations.proto google/api/http.proto"
   },
   "author": "Thomas Volk",
   "license": "BOII",

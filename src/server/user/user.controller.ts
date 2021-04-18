@@ -6,7 +6,7 @@ import {
   GetUserSettingsRequest,
   UpdateUserRequest,
   UpdateUserSettingsRequest
-} from '../../../proto-gen-out/api/user_service_pb';
+} from '../../../proto-gen-out/crusty_cards_api/user_service_pb';
 import {handleRequest} from '../rpc';
 import {UserService} from './user.service';
 

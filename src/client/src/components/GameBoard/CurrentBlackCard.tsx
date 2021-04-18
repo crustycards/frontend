@@ -1,6 +1,6 @@
 import {Typography} from '@material-ui/core';
 import * as React from 'react';
-import {PlayableWhiteCard, BlackCardInRound} from '../../../../../proto-gen-out/api/game_service_pb';
+import {PlayableWhiteCard, BlackCardInRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {removeAdjacentDuplicateCharacters} from '../../helpers/string';
 import {
   getDisplayTextForPlayableWhiteCard,
@@ -8,7 +8,7 @@ import {
 } from '../../helpers/proto';
 import {queuedCardIdPointsToPlayableCard} from '../../store/modules/game';
 import {QueuedCardId} from '../../store/modules/game';
-import {DefaultBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {DefaultBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 
 const parseCardText = (

@@ -2,7 +2,7 @@ import {Card, CardContent, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {
   BlankWhiteCard
-} from '../../../../../proto-gen-out/api/game_service_pb';
+} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface CAHBlankWhiteCardProps {

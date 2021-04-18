@@ -1,6 +1,6 @@
 import * as React from 'react';
 import PlaySlot from './PlaySlot';
-import {GameView} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {GameView} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 
 interface PlayAreaProps {
   gameView: GameView;

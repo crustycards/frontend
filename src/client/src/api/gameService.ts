@@ -1,5 +1,5 @@
 import {Store} from 'redux';
-import {GameConfig} from '../../../../proto-gen-out/api/model_pb';
+import {GameConfig} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   AddArtificialPlayerRequest,
   BanUserRequest,
@@ -23,7 +23,7 @@ import {
   UnbanUserRequest,
   UnplayCardsRequest,
   VoteCardRequest
-} from '../../../../proto-gen-out/api/game_service_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {StoreState} from '../store';
 import {setGameState} from '../store/modules/game';
 import {makeRpcFromBrowser} from '../../../server/rpc';

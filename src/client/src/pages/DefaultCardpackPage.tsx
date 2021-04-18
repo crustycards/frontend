@@ -16,12 +16,12 @@ import SwipeableViews from 'react-swipeable-views';
 import {
   ListDefaultBlackCardsRequest,
   ListDefaultWhiteCardsRequest
-} from '../../../../proto-gen-out/api/cardpack_service_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
 import {
   DefaultBlackCard,
   DefaultCardpack,
   DefaultWhiteCard
-} from '../../../../proto-gen-out/api/model_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   getDefaultCardpack,
   listDefaultBlackCards,

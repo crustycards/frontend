@@ -1,7 +1,7 @@
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
-import {DefaultWhiteCard} from '../../../../../proto-gen-out/api/model_pb';
+import {DefaultWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 const lightTheme = createMuiTheme({palette: {type: 'light'}});

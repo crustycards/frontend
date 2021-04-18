@@ -1,7 +1,7 @@
 import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
-import {CustomBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {deleteCustomBlackCard} from '../../api/cardpackService';
 import {useGlobalStyles} from '../../styles/globalStyles';
 

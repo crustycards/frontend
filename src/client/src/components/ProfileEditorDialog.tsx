@@ -14,7 +14,7 @@ import * as React from 'react';
 import ProfileImageUploader from './ProfileImageUploader';
 import UsernameChanger from './UsernameChanger';
 import {useUserService} from '../api/context';
-import {User} from '../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

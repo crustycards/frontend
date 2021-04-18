@@ -3,7 +3,7 @@ import {FileWithPath} from 'react-dropzone';
 import {useUserService} from '../api/context';
 import {UserService} from '../api/userService';
 import FileUploader from './FileUploader';
-import {User} from '../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 
 const blobToString = (blob: Blob): Promise<string> => {
   return new Promise((resolve, reject) => {

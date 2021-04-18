@@ -1,7 +1,7 @@
 import {Controller, Get, Req, Res, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {Request, Response} from 'express';
-import {User} from '../../../proto-gen-out/api/model_pb';
+import {User} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {UserService} from '../user/user.service';
 import {AuthService} from './auth.service';
 

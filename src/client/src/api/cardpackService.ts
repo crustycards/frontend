@@ -35,8 +35,8 @@ import {
   ListDefaultWhiteCardsRequest,
   ListDefaultWhiteCardsResponse,
   ListDefaultBlackCardsRequest
-} from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {CustomBlackCard, CustomCardpack, CustomWhiteCard, DefaultCardpack} from '../../../../proto-gen-out/api/model_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
+import {CustomBlackCard, CustomCardpack, CustomWhiteCard, DefaultCardpack} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {makeRpcFromBrowser} from '../../../server/rpc';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 

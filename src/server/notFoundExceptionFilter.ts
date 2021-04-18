@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import {Request, Response} from 'express';
 import * as fs from 'fs';
-import {User, UserSettings} from '../../proto-gen-out/api/model_pb';
+import {User, UserSettings} from '../../proto-gen-out/crusty_cards_api/model_pb';
 import {serializePreloadedState} from '../client/src/helpers/proto';
 import {AuthService} from './auth/auth.service';
 import {UserService} from './user/user.service';

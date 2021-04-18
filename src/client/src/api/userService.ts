@@ -1,12 +1,12 @@
 import {FieldMask} from 'google-protobuf/google/protobuf/field_mask_pb';
 import {Store} from 'redux';
-import {User, UserProfileImage, UserSettings, GameConfig} from '../../../../proto-gen-out/api/model_pb';
+import {User, UserProfileImage, UserSettings, GameConfig} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   GetUserRequest,
   UpdateUserProfileImageRequest,
   UpdateUserRequest,
   UpdateUserSettingsRequest
-} from '../../../../proto-gen-out/api/user_service_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/user_service_pb';
 import {makeRpcFromBrowser} from '../../../server/rpc';
 import {bindAllFunctionsToSelf} from '../helpers/bindAll';
 import {StoreState} from '../store';

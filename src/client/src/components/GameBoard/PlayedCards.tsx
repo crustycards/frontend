@@ -1,12 +1,12 @@
 import {Button, Typography} from '@material-ui/core';
 import * as React from 'react';
 import {useState} from 'react';
-import {CustomWhiteCard, User} from '../../../../../proto-gen-out/api/model_pb';
+import {CustomWhiteCard, User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   GameView,
   Player,
   WhiteCardsPlayed
-} from '../../../../../proto-gen-out/api/game_service_pb';
+} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
 import {GameService} from '../../api/gameService';

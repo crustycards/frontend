@@ -1,4 +1,4 @@
-import {User, UserSettings} from '../../../../../proto-gen-out/api/model_pb';
+import {User, UserSettings} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPreloadedUser, getPreloadedUserSettings} from '../../getPreloadedState';
 
 const OPEN_NAVBAR = 'global/OPEN_NAVBAR';

@@ -6,7 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import {withStyles} from '@material-ui/core/styles';
 import SendIcon from '@material-ui/icons/Send';
 import * as React from 'react';
-import {User} from '../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {

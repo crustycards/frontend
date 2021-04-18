@@ -1,7 +1,7 @@
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
-import {DefaultBlackCard} from '../../../../../proto-gen-out/api/model_pb';
+import {DefaultBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
 const darkTheme = createMuiTheme({palette: {type: 'dark'}});

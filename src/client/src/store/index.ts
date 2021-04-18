@@ -1,8 +1,8 @@
 import {routerMiddleware} from 'connected-react-router';
 import {History} from 'history';
 import {applyMiddleware, compose, createStore} from 'redux';
-import {User} from '../../../../proto-gen-out/api/model_pb';
-import {GameView, Player} from '../../../../proto-gen-out/api/game_service_pb';
+import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
+import {GameView, Player} from '../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import createRootReducer from './modules';
 
 declare global {

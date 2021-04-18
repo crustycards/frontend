@@ -16,8 +16,8 @@ import SwipeableViews from 'react-swipeable-views';
 import {
   ListCustomBlackCardsRequest,
   ListCustomWhiteCardsRequest
-} from '../../../../proto-gen-out/api/cardpack_service_pb';
-import {CustomBlackCard, CustomCardpack, CustomWhiteCard} from '../../../../proto-gen-out/api/model_pb';
+} from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
+import {CustomBlackCard, CustomCardpack, CustomWhiteCard} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   getCustomCardpack,
   listCustomBlackCards,

@@ -1,4 +1,4 @@
-import {GameView, PlayableWhiteCard} from '../../../../../proto-gen-out/api/game_service_pb';
+import {GameView, PlayableWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {getAnswerFieldsForBlackCardInRound} from '../../helpers/proto';
 
 const SET_GAME_STATE = 'game/SET_GAME_STATE';

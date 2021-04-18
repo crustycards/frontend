@@ -14,9 +14,9 @@ import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';
-import {GameView, PastRound} from '../../../../../proto-gen-out/api/game_service_pb';
+import {GameView, PastRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import ViewPastRoundsDialog from './ViewPastRoundsDialog';
-import {User} from '../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {GameService} from '../../api/gameService';
 
 const buttonStyle = {

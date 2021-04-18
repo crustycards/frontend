@@ -2,13 +2,13 @@ import * as React from 'react';
 import {ConnectDropTarget, DropTarget} from 'react-dnd';
 import {connect} from 'react-redux';
 import {bindActionCreators, Dispatch} from 'redux';
-import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/api/game_service_pb';
+import {PlayableWhiteCard, GameView} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {cardInHand} from '../../../dndTypes';
 import {canPlay} from '../../../store';
 import {unqueueCard, QueuedCardId} from '../../../store/modules/game';
 import {queuedCardIdPointsToPlayableCard} from '../../../store/modules/game';
 import DraggableCardInHand from './DraggableCardInHand';
-import {User} from '../../../../../../proto-gen-out/api/model_pb';
+import {User} from '../../../../../../proto-gen-out/crusty_cards_api/model_pb';
 
 interface TrayProps {
   currentUser: User;
