@@ -7,8 +7,3 @@ node_modules
 
 # VS Code
 .vscode/
-
-package-lock.json
-.DS_Store
-
-package-lock.json
