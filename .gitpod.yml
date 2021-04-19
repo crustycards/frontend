@@ -1,2 +1,2 @@
 tasks:
-  - init: sudo apt install -y protobuf-compiler && npm install && npm test
+  - init: sudo apt install -y protobuf-compiler && npm install && npm run generate-stubs && npm test
