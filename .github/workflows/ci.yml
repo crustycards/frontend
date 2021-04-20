@@ -17,6 +17,7 @@ jobs:
           node-version: '15.x'
       - name: Install Protocol buffers
         run: |
+          apt-get update
           apt-get install unzip
           PROTOC_ZIP=protoc-3.11.4-linux-x86_64.zip
           curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/$PROTOC_ZIP
