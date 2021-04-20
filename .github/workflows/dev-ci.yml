@@ -1,0 +1,34 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - '!master'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - name: Node.js Setup
+        uses: actions/setup-node@v1
+        with:
+          node-version: '15.x'
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
+      - name: Build
+        run: |
+          npm ci
+          npm run generate-stubs
+          npm run check-typescript-types
+          npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: exit 0
