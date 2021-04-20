@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: cards-client
-        image: registry.gitlab.com/cards-against-humanity/cards-web-client:master
+        image: <IMAGE>
         imagePullPolicy: Always
         ports:
         - containerPort: 80
