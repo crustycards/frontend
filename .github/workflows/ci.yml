@@ -26,6 +26,9 @@ jobs:
   build:
     needs: test
     runs-on: ubuntu-latest
+    steps:
+      - name: Build
+        run: exit 0
   deploy:
     needs: build
     runs-on: ubuntu-latest
