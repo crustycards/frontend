@@ -15,15 +15,10 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '15.x'
-      - name: Install Protocol buffers
-        run: |
-          apt-get update
-          apt-get install unzip
-          PROTOC_ZIP=protoc-3.11.4-linux-x86_64.zip
-          curl -OL https://github.com/protocolbuffers/protobuf/releases/download/v3.11.4/$PROTOC_ZIP
-          unzip -o $PROTOC_ZIP -d /usr/local bin/protoc
-          unzip -o $PROTOC_ZIP -d /usr/local 'include/*'
-          rm -f $PROTOC_ZIP
+      - name: Install Protoc
+        uses: arduino/setup-protoc@v1
+        with:
+          version: '3.x'
       - name: Build
         run: |
           npm ci
