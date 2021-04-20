@@ -49,6 +49,10 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-service
+  annotations:
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "crusty-cards-main"
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "https"
+    service.beta.kubernetes.io/do-loadbalancer-hostname: "crusty.cards"
 spec:
   type: LoadBalancer
   ports:
