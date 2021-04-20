@@ -51,11 +51,11 @@ metadata:
   name: frontend-service
   annotations:
     service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
-    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "crusty-cards-main"
+    service.beta.kubernetes.io/do-loadbalancer-certificate-id: "dc4f6bb7-1ee5-45cd-9948-940b1e25bcb2"
     service.beta.kubernetes.io/do-loadbalancer-hostname: "crusty.cards"
-    service.beta.kubernetes.io/do-loadbalancer-http2-ports: "443"
     service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
     service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
+    service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
 spec:
   type: LoadBalancer
   ports:
