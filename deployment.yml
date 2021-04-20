@@ -53,7 +53,7 @@ metadata:
     service.beta.kubernetes.io/do-loadbalancer-algorithm: "round_robin"
     service.beta.kubernetes.io/do-loadbalancer-certificate-id: "dc4f6bb7-1ee5-45cd-9948-940b1e25bcb2"
     service.beta.kubernetes.io/do-loadbalancer-hostname: "crusty.cards"
-    service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
+    service.beta.kubernetes.io/do-loadbalancer-protocol: "https"
     service.beta.kubernetes.io/do-loadbalancer-redirect-http-to-https: "true"
     service.beta.kubernetes.io/do-loadbalancer-tls-ports: "443"
 spec:
