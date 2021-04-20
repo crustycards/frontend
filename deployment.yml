@@ -60,8 +60,12 @@ spec:
   type: LoadBalancer
   ports:
     - name: http
-      protocol: TCP
       port: 80
-      targetPort: 80
+      protocol: TCP
+      targetPort: http
+    - name: https
+      port: 443
+      protocol: TCP
+      targetPort: http
   selector:
     app: frontend
