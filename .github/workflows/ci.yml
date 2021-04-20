@@ -3,13 +3,9 @@ name: CI
 on: [push]
 
 jobs:
-  build:
-    container: golang:latest
+  test:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
         with:
           submodules: recursive
@@ -27,3 +23,14 @@ jobs:
           npm run generate-stubs
           npm run check-typescript-types
           npm test
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: production
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - name: Deploy to K8s
+        run: exit 0
