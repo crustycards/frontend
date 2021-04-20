@@ -33,7 +33,6 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment: production
-    if: github.ref == 'refs/heads/master'
     steps:
       - name: Deploy to K8s
         run: exit 0
