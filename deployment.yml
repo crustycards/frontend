@@ -44,5 +44,3 @@ spec:
           value: "amqps://jyyypmvw:EZ4c-MKeZF3Kbca7PasROWWL0Tv3vHw5@gull.rmq.cloudamqp.com/jyyypmvw"
         - name: JWT_SECRET
           value: "2fec78e04789a42014f03a52ac3010ae5226c344e3f1cfe6a8c6d7f7305ac5d8"
-      imagePullSecrets:
-      - name: regcred
