@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cards-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cards-client
+  template:
+    metadata:
+      labels:
+        app: cards-client
+    spec:
+      containers:
+      - name: cards-client
+        image: registry.gitlab.com/cards-against-humanity/cards-web-client:master
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 80
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 80
+          initialDelaySeconds: 20
+          periodSeconds: 20
+        env:
+        - name: GOOGLE_CLIENT_ID
+          value: "203333096571-34vrnets214h5eo88na2jshh4nthkts7.apps.googleusercontent.com"
+        - name: GOOGLE_CLIENT_SECRET
+          value: "0hZQtH-x5AT5YzhnID9FRh7-"
+        - name: GOOGLE_REDIRECT_DOMAIN
+          value: "http://crusty.cards"
+        - name: API_URL
+          value: "api.crusty.cards:50052"
+        - name: GAME_SERVER_URL
+          value: "game.crusty.cards:50052"
+        - name: RABBITMQ_URI
+          value: "amqps://jyyypmvw:EZ4c-MKeZF3Kbca7PasROWWL0Tv3vHw5@gull.rmq.cloudamqp.com/jyyypmvw"
+        - name: JWT_SECRET
+          value: "2fec78e04789a42014f03a52ac3010ae5226c344e3f1cfe6a8c6d7f7305ac5d8"
+      imagePullSecrets:
+      - name: regcred
