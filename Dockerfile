@@ -1,4 +1,6 @@
 FROM node:15.14.0 AS base
+COPY ./ ./app
+WORKDIR /app
 RUN \
     # Install protocol buffers.
     PROTOC_ZIP=protoc-3.11.4-linux-x86_64.zip &&\
@@ -13,7 +15,8 @@ RUN \
     npm run build-prod
 
 FROM node:15.14.0-alpine3.11
-COPY --from=base . .
+COPY --from=base ./app ./app
+WORKDIR /app
 EXPOSE 80
 # TODO - Enable npm module pruning
 # RUN npm prune --production
