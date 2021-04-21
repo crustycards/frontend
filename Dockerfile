@@ -1,7 +1,4 @@
-FROM node:15.14.0-alpine3.11
-EXPOSE 80
-COPY ./ ./app
-WORKDIR /app
+FROM node:15.14.0 AS base
 RUN \
     # Install protocol buffers.
     PROTOC_ZIP=protoc-3.11.4-linux-x86_64.zip &&\
@@ -12,8 +9,12 @@ RUN \
     # Install submodules.
     git submodule update --init --recursive &&\
     # Install dependencies and compile bundle.
-    npm install &&\
+    npm ci &&\
     npm run build-prod
+
+FROM node:15.14.0-alpine3.11
+COPY --from=base . .
+EXPOSE 80
 # TODO - Enable npm module pruning
 # RUN npm prune --production
 CMD ["npm", "start"]
