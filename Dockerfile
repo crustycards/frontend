@@ -1,4 +1,4 @@
-FROM node:14.4.0
+FROM node:15.14.0-alpine3.11
 EXPOSE 80
 COPY ./ ./app
 WORKDIR /app
