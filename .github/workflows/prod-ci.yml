@@ -28,7 +28,7 @@ jobs:
           npm run check-typescript-types
           npm test
   deploy:
-    needs: build
+    needs: test
     runs-on: ubuntu-latest
     environment: production
     steps:
