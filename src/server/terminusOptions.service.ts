@@ -1,6 +1,6 @@
 import {Injectable} from '@nestjs/common';
 import {
-  DNSHealthIndicator,
+  HttpHealthIndicator,
   MemoryHealthIndicator,
   TerminusEndpoint,
   TerminusModuleOptions,
@@ -12,7 +12,7 @@ export class TerminusOptionsService implements TerminusOptionsFactory {
   private static bytesInGigabyte = 1024 * 1024 * 1024;
 
   constructor(
-    private readonly dns: DNSHealthIndicator,
+    private readonly http: HttpHealthIndicator,
     private readonly memory: MemoryHealthIndicator
   ) {}
 
@@ -20,7 +20,7 @@ export class TerminusOptionsService implements TerminusOptionsFactory {
     const healthEndpoint: TerminusEndpoint = {
       url: '/api/health',
       healthIndicators: [
-        async () => this.dns.pingCheck('google', 'https://google.com'),
+        async () => this.http.pingCheck('google', 'https://google.com'),
         async () => this.memory.checkHeap(
           'memoryHeap',
           1 * TerminusOptionsService.bytesInGigabyte
