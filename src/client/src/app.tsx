@@ -10,7 +10,7 @@ import {ConnectedRouter} from 'connected-react-router';
 import {createBrowserHistory} from 'history';
 import * as React from 'react';
 import {DndProvider} from 'react-dnd';
-import DragDropHTML5Backend from 'react-dnd-html5-backend';
+import {HTML5Backend} from 'react-dnd-html5-backend';
 import {Provider, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
 import * as Socket from 'socket.io-client';
@@ -79,7 +79,7 @@ setInterval(() => {
 export const App = () => (
   <Provider store={store}>
     <ConnectedRouter history={history}>
-      <DndProvider backend={DragDropHTML5Backend}>
+      <DndProvider backend={HTML5Backend}>
         <GameServiceContextProvider value={{gameService, userService}}>
           <ThemedSubApp/>
         </GameServiceContextProvider>
