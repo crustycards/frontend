@@ -71,6 +71,7 @@ socket.on('connect', () => {
 setInterval(() => {
   if (!socket.connected) {
     if (gameService) {
+      // TODO - It looks like since upgrading to socket.io 4.x.x, this line is always being hit. Let's figure out what's happening.
       gameService.getGameView();
     }
   }
