@@ -10,16 +10,21 @@ import {
 } from '../../../proto-gen-out/crusty_cards_api/user_service_pb';
 import {bindAllFunctionsToSelf} from '../../client/src/helpers/bindAll';
 import {EnvironmentService} from '../environment/environment.service';
+import {mockUserServiceClient} from '../testMock/mockUserServiceClient';
 
 @Injectable()
 export class UserService {
   public client: UserServiceGrpc.UserServiceClient;
 
   constructor(envService: EnvironmentService) {
-    this.client = new UserServiceGrpc.UserServiceClient(
-      envService.getArgs().apiUrl,
-      grpc.credentials.createInsecure()
-    );
+    if (envService.getArgs().nodeEnv === 'test') {
+      this.client = mockUserServiceClient;
+    } else {
+      this.client = new UserServiceGrpc.UserServiceClient(
+        envService.getArgs().apiUrl,
+        grpc.credentials.createInsecure()
+      );
+    }
 
     bindAllFunctionsToSelf(this);
     bindAllFunctionsToSelf(this.client);
