@@ -37,6 +37,7 @@ export class CookieStrategy {
     use(
       'cookie',
       new PassportCookieStrategy('authToken', async (authToken, cb) => {
+        console.log('Auth Token:', authToken);
         if (!authToken) {
           return cb(undefined, undefined);
         }
