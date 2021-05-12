@@ -11,6 +11,7 @@ import {
 import {bindAllFunctionsToSelf} from '../../client/src/helpers/bindAll';
 import {EnvironmentService} from '../environment/environment.service';
 import {mockUserServiceClient} from '../testMock/mockUserServiceClient';
+import * as fs from 'fs';
 
 @Injectable()
 export class UserService {
@@ -31,6 +32,7 @@ export class UserService {
   }
 
   public getUser(name: string): Promise<User> {
+    fs.appendFileSync('test.txt', '\nCalling getUser()!');
     const request = new GetUserRequest();
     request.setName(name);
     return new Promise((resolve, reject) => {

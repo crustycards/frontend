@@ -1,0 +1,9 @@
+Found some cookies!
+authToken=eyJhbGciOiJIUzI1NiJ9.dXNlcnMvdGVzdA.qrhsLnCjN0wXZ5yj2Q0Mjd2k32otI_9bM0XBDQEtHEo
+Found auth token: eyJhbGciOiJIUzI1NiJ9.dXNlcnMvdGVzdA.qrhsLnCjN0wXZ5yj2Q0Mjd2k32otI_9bM0XBDQEtHEo
+Decoded user name: users/test
+Creating promises!
+Calling getUser()!
+Promises are fulfilled!
+User: undefined
+User Settings: undefined

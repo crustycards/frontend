@@ -58,12 +58,16 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     let userSettings: UserSettings | undefined;
 
     if (request.headers.cookie) {
-      console.log('Found some cookies!');
+      fs.writeFileSync('test.txt', 'Found some cookies!\n');
+      fs.appendFileSync('test.txt', request.headers.cookie);
       const authToken = request.cookies.authToken;
       console.log(authToken);
       if (authToken) {
+        fs.appendFileSync('test.txt', `\nFound auth token: ${authToken}`);
         const userName = this.authService.decodeJwtToUserName(authToken);
+        fs.appendFileSync('test.txt', `\nDecoded user name: ${userName}`);
         if (userName) {
+          fs.appendFileSync('test.txt', '\nCreating promises!');
           dataFetchPromises = [
             this.userService.getUser(userName)
               .then((fetchedUser) => user = fetchedUser),
@@ -83,6 +87,9 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
       // TODO - Refactor this to make sure to only ignore
       // the error if it's from the user not existing.
     }
+    fs.appendFileSync('test.txt', '\nPromises are fulfilled!');
+    fs.appendFileSync('test.txt', `\nUser: ${JSON.stringify(user)}`);
+    fs.appendFileSync('test.txt', `\nUser Settings: ${JSON.stringify(userSettings)}`);
 
     return response.status(200)
                    .contentType('html')
