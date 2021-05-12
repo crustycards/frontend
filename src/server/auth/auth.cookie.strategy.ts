@@ -4,6 +4,7 @@ import {use, Strategy} from 'passport';
 import {User} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {UserService} from '../user/user.service';
 import {AuthService} from './auth.service';
+import * as fs from 'fs';
 
 class PassportCookieStrategy extends Strategy {
   constructor(
@@ -38,26 +39,31 @@ export class CookieStrategy {
       'cookie',
       new PassportCookieStrategy('authToken', async (authToken, cb) => {
         console.log('Auth Token:', authToken);
-        if (!authToken) {
-          return cb(undefined, undefined);
-        }
+        await fs.writeFile('test2.txt', authToken, () => {});
+        const user = await userService.getUser('users/test');
+        const u = new User();
+        u.setName('Zach');
+        cb(undefined, u);
+        // if (!authToken) {
+        //   return cb(undefined, undefined);
+        // }
 
-        const decodedUserName = authService.decodeJwtToUserName(authToken);
+        // const decodedUserName = authService.decodeJwtToUserName(authToken);
 
-        if (decodedUserName === undefined) {
-          return cb(undefined, undefined);
-        }
+        // if (decodedUserName === undefined) {
+        //   return cb(undefined, undefined);
+        // }
 
-        // TODO - getUser() throwing an error doesn't necessarily mean that the
-        // user doesn't exist. Let's check whether that's the reason the
-        // request actually failed and call cb() with an error if it's not.
-        try {
-          const user = await userService.getUser(decodedUserName);
-          cb(undefined, user);
-        } catch (err) {
-          // User does not exist.
-          cb(undefined, undefined);
-        }
+        // // TODO - getUser() throwing an error doesn't necessarily mean that the
+        // // user doesn't exist. Let's check whether that's the reason the
+        // // request actually failed and call cb() with an error if it's not.
+        // try {
+        //   const user = await userService.getUser(decodedUserName);
+        //   cb(undefined, user);
+        // } catch (err) {
+        //   // User does not exist.
+        //   cb(undefined, undefined);
+        // }
       })
     );
   }

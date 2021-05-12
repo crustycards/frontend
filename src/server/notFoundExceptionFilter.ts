@@ -57,8 +57,13 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
     let user: User | undefined;
     let userSettings: UserSettings | undefined;
 
+    console.log('Looking for cookies...');
+    await fs.appendFile('test.txt', 'Looking for cookies...', () => {});
+    console.log(request.headers);
     if (request.headers.cookie) {
+      console.log('Found some cookies!');
       const authToken = request.cookies.authToken;
+      console.log(authToken);
       if (authToken) {
         const userName = this.authService.decodeJwtToUserName(authToken);
         if (userName) {

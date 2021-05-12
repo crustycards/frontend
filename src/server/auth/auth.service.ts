@@ -11,18 +11,19 @@ export class AuthService {
   }
 
   public decodeJwtToUserName(authToken: string): string | undefined {
-    try {
-      const decodedData = jwt.verify(
-        authToken,
-        this.envService.getArgs().jwtSecret
-      );
-      if (typeof decodedData === 'string') {
-        return decodedData;
-      } else {
-        return undefined;
-      }
-    } catch (err) {
-      return undefined;
-    }
+    return 'users/test';
+    // try {
+    //   const decodedData = jwt.verify(
+    //     authToken,
+    //     this.envService.getArgs().jwtSecret
+    //   );
+    //   if (typeof decodedData === 'string') {
+    //     return decodedData;
+    //   } else {
+    //     return undefined;
+    //   }
+    // } catch (err) {
+    //   return undefined;
+    // }
   }
 }

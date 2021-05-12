@@ -3,6 +3,7 @@ import {createMockJwt} from '../src/server/testMock/jwt';
 import {mockUserServiceClient} from '../src/server/testMock/mockUserServiceClient';
 import * as sinon from 'sinon';
 import {User} from '../proto-gen-out/crusty_cards_api/model_pb';
+import * as fs from 'fs';
 
 afterEach(() => {
   sinon.restore();
@@ -19,7 +20,8 @@ it('navigates to Google', async () => {
     await page.goto('http://localhost:3000/');
     await page.setCookie({
       name: 'authToken',
-      value: createMockJwt('users/test')
+      value: createMockJwt('users/test'),
+      url: 'http://localhost:3000/'
     });
 
     let image = await page.screenshot();
@@ -31,6 +33,8 @@ it('navigates to Google', async () => {
     user.setDisplayName('Tommy');
     await page.reload();
     // stub.yield(null, user);
+    const cookiesSet = await page.cookies('http://localhost:3000/');
+    await fs.writeFile('test.txt', JSON.stringify(cookiesSet), () => {});
     image = await page.screenshot();
     expect(image).toMatchImageSnapshot();
     await browser.close();
