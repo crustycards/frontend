@@ -52,7 +52,7 @@ export class EnvironmentService {
     }
 
     // Apply test default values
-    dotEnv.config({path: './example.env'});
+    dotEnv.config({path: '.example.env'});
 
     this.environmentVariables = {
       port: parseIntOrThrow(getEnvVarOrThrowError('PORT')),
