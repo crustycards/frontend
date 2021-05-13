@@ -51,6 +51,9 @@ export class EnvironmentService {
       throw Error('NODE_ENV must be either development, test, or production');
     }
 
+    // Apply test default values
+    dotEnv.config({path: './example.env'});
+
     this.environmentVariables = {
       port: parseIntOrThrow(getEnvVarOrThrowError('PORT')),
       nodeEnv: getEnvVarOrThrowError('NODE_ENV'),
