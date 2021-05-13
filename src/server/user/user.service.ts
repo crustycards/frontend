@@ -18,7 +18,9 @@ export class UserService {
   public client: UserServiceGrpc.UserServiceClient;
 
   constructor(envService: EnvironmentService) {
-    if (envService.getArgs().nodeEnv === 'test') {
+    console.log('YOYOYOYOYOOOOO!!!', envService.getArgs().nodeEnv);
+    if (envService.getArgs().nodeEnv.toLowerCase() === 'test') {
+      console.log('Setup mock user service client!');
       this.client = mockUserServiceClient;
     } else {
       this.client = new UserServiceGrpc.UserServiceClient(
