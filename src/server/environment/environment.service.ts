@@ -30,6 +30,17 @@ export class EnvironmentService {
   };
 
   constructor() {
+    // Apply test default values if NODE_ENV is explicitly set to 'test'
+    try {
+      const nodeEnv = getEnvVarOrThrowError('NODE_ENV');
+      if (nodeEnv === 'test') {
+        dotEnv.config({path: '.example.env'});
+      }
+    } catch {
+      // This just means that NODE_ENV is not explicitly set, which is allowed.
+      // We simply won't apply the example config.
+    }
+
     // Load .env file
     dotEnv.config();
 
@@ -50,9 +61,6 @@ export class EnvironmentService {
     if (!['development', 'test', 'production'].includes(nodeEnv)) {
       throw Error('NODE_ENV must be either development, test, or production');
     }
-
-    // Apply test default values
-    dotEnv.config({path: '.example.env'});
 
     this.environmentVariables = {
       port: parseIntOrThrow(getEnvVarOrThrowError('PORT')),
