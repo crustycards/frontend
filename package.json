@@ -8,7 +8,7 @@
     "start": "ts-node src/server/main.ts",
     "start-dev": "nodemon",
     "test": "jest",
-    "lint": "tslint 'src/**/**/*.ts' 'src/**/**/*.tsx'",
+    "lint": "tslint 'src/**/*.ts' 'src/**/*.tsx'",
     "lint-clean": "npm run lint -- --fix",
     "check-typescript-types": "tsc --noEmit --skipLibCheck",
     "generate-stubs": "npm run generate-grpc && npm run generate-proto",
