@@ -24,7 +24,7 @@ export class GoogleStrategy {
         user = await userService.getOrCreateUser(oauthCredentials, user);
         cb(undefined, user);
       } catch (err) {
-        cb(err);
+        cb(err as any);
       }
     }
     ));
