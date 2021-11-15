@@ -35,7 +35,7 @@ spec:
         - name: GOOGLE_CLIENT_SECRET
           value: "0hZQtH-x5AT5YzhnID9FRh7-"
         - name: GOOGLE_REDIRECT_DOMAIN
-          value: "http://crusty.cards"
+          value: "https://crusty.cards"
         - name: API_URL
           value: "api.crusty.cards:50052"
         - name: GAME_SERVER_URL
