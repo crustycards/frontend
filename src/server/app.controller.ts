@@ -1,4 +1,4 @@
-import {Controller, Get, Req, Res, UseGuards} from '@nestjs/common';
+import {Controller, Get, Req, Res, UseGuards, HttpStatus} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {Request, Response} from 'express';
 import * as fs from 'fs';
@@ -16,8 +16,14 @@ export class AppController {
 
 
   @Get('favicon.ico')
-  public async getFavicon(@Res() res: Response): Promise<any> {
-    res.setHeader('Content-Type', 'image/x-icon');
-    return this.favicon;
+  public async getFavicon(@Res() res: Response): Promise<void> {
+    res.setHeader('content-type', 'image/x-icon');
+    res.status(HttpStatus.OK).send(this.favicon);
+  }
+
+  @Get('healthz')
+  public async getHealthz(@Res() res: Response): Promise<void> {
+    res.setHeader('content-type', 'text/html');
+    res.status(HttpStatus.OK).send('<html><body><h1>200 OK</h1>Service ready.</body></html>');
   }
 }
