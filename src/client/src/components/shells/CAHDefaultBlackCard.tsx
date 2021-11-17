@@ -1,4 +1,4 @@
-import {Card, CardContent, Typography} from '@material-ui/core';
+import {Card, CardContent, Typography} from '@mui/material';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {DefaultBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';

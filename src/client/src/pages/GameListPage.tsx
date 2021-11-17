@@ -1,7 +1,7 @@
 import {
   Dialog,
   DialogContent
-} from '@material-ui/core';
+} from '@mui/material';
 import * as React from 'react';
 import GameCreator from '../components/GameList/GameCreator';
 import GameList from '../components/GameList/GameList';

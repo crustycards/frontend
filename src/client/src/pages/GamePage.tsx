@@ -1,4 +1,4 @@
-import {Button, Grid, Typography} from '@material-ui/core';
+import {Button, Grid, Typography} from '@mui/material';
 import * as React from 'react';
 import {useSelector} from 'react-redux';
 import {NavLink} from 'react-router-dom';

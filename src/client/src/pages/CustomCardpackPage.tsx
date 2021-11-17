@@ -7,7 +7,7 @@ import {
   GridList,
   GridListTile,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import * as React from 'react';
 import {useState, useEffect} from 'react';

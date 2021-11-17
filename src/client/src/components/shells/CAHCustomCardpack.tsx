@@ -9,8 +9,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton
-} from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+} from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';

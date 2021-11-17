@@ -1,8 +1,8 @@
-import {Button, Dialog, DialogContent} from '@material-ui/core';
-import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import ArrowRight from '@material-ui/icons/ArrowRight';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import {Button, Dialog, DialogContent} from '@mui/material';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as React from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
@@ -66,26 +66,26 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
             onClick={() => setRoundIndex(0)}
             disabled={!canGoToPreviousRound}
           >
-            <KeyboardArrowLeft/>
+            <KeyboardArrowLeftIcon/>
           </Button>
           <Button
             onClick={() => setRoundIndex(roundIndex - 1)}
             disabled={!canGoToPreviousRound}
           >
-            <ArrowLeft/>
+            <ArrowLeftIcon/>
           </Button>
           Round {roundIndex + 1} of {props.pastRounds.length}
           <Button
             onClick={() => setRoundIndex(roundIndex + 1)}
             disabled={!canGoToNextRound}
           >
-            <ArrowRight/>
+            <ArrowRightIcon/>
           </Button>
           <Button
             onClick={() => setRoundIndex(props.pastRounds.length - 1)}
             disabled={!canGoToNextRound}
           >
-            <KeyboardArrowRight/>
+            <KeyboardArrowRightIcon/>
           </Button>
         </div>
         <div style={{display: 'block', textAlign: 'center'}}>

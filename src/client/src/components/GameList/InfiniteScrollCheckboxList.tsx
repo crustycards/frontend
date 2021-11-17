@@ -6,7 +6,7 @@ import {
   Checkbox,
   ListItemText,
   Theme
-} from '@material-ui/core';
+} from '@mui/material';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {useGlobalStyles} from '../../styles/globalStyles';
 import ProtobufInfiniteScroller from '../ProtobufInfiniteScroller';

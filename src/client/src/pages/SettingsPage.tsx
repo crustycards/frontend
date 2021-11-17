@@ -3,7 +3,7 @@ import ColorSchemeChanger from './SettingsPage/ColorSchemeChanger';
 import {StoreState} from '../store';
 import {useSelector} from 'react-redux';
 import {useGlobalStyles} from '../styles/globalStyles';
-import {Typography, Paper, Theme} from '@material-ui/core';
+import {Typography, Paper, Theme} from '@mui/material';
 import {makeStyles} from '@material-ui/styles';
 
 const useStyles = makeStyles((theme: Theme) => ({

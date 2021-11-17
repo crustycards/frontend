@@ -1,4 +1,4 @@
-import {AppBar, Button, Toolbar, Typography} from '@material-ui/core';
+import {AppBar, Button, Toolbar, Typography} from '@mui/material';
 import {makeStyles} from '@material-ui/styles';
 import * as React from 'react';
 import {GameView, Player} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';

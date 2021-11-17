@@ -1,4 +1,4 @@
-import {List, ListItem} from '@material-ui/core';
+import {List, ListItem} from '@mui/material';
 import * as React from 'react';
 import {ListDefaultCardpacksRequest} from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
 import {DefaultCardpack} from '../../../../proto-gen-out/crusty_cards_api/model_pb';

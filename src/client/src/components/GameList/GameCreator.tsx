@@ -11,7 +11,7 @@ import {
   Theme,
   Typography,
   Paper
-} from '@material-ui/core';
+} from '@mui/material';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';

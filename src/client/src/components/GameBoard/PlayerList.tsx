@@ -5,9 +5,9 @@ import {
   ListItemText,
   ListSubheader,
   Typography
-} from '@material-ui/core';
-import Check from '@material-ui/icons/Check';
-import Star from '@material-ui/icons/Star';
+} from '@mui/material';
+import CheckIcon from '@mui/icons-material/Check';
+import StarIcon from '@mui/icons-material/Star';
 import * as React from 'react';
 import {GameView, Player} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {getPlayerDisplayName} from '../../helpers/proto';
@@ -29,9 +29,9 @@ const renderPlayer = (
     // TODO - Render game owner uniquely
     let playerIcon;
     if (judgeName === player.getUser()?.getName()) {
-      playerIcon = <Star/>;
+      playerIcon = <StarIcon/>;
     } else if (hasPlayed) {
-      playerIcon = <Check/>;
+      playerIcon = <CheckIcon/>;
     }
     return (
       <ListItem>

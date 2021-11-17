@@ -8,7 +8,7 @@ import {
   Theme,
   Toolbar,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';

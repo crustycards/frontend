@@ -10,13 +10,13 @@ import {
   Toolbar,
   Typography,
   Theme
-} from '@material-ui/core';
-import ExitToApp from '@material-ui/icons/ExitToApp';
-import MenuIcon from '@material-ui/icons/Menu';
-import Person from '@material-ui/icons/Person';
-import Settings from '@material-ui/icons/Settings';
-import VideogameAsset from '@material-ui/icons/VideogameAsset';
-import ViewList from '@material-ui/icons/ViewList';
+} from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import MenuIcon from '@mui/icons-material/Menu';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
+import ViewListIcon from '@mui/icons-material/ViewList';
 import {makeStyles, createStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
@@ -83,25 +83,25 @@ const Navbar = () => {
             {
               to: `/${user.getName()}`,
               onClick: () => dispatch(closeNavbar()),
-              icon: <Person/>,
+              icon: <PersonIcon/>,
               text: 'Profile'
             },
             {
               to: '/game',
               onClick: () => dispatch(closeNavbar()),
-              icon: <VideogameAsset/>,
+              icon: <VideogameAssetIcon/>,
               text: 'Current Game'
             },
             {
               to: '/gamelist',
               onClick: () => dispatch(closeNavbar()),
-              icon: <ViewList/>,
+              icon: <ViewListIcon/>,
               text: 'Find/Create a Game'
             },
             {
               to: '/settings',
               onClick: () => dispatch(closeNavbar()),
-              icon: <Settings/>,
+              icon: <SettingsIcon/>,
               text: 'Settings'
             }
           ].map(({to, onClick, icon, text}, index) => (
@@ -118,7 +118,7 @@ const Navbar = () => {
           <Divider/>
           <ListItem button onClick={() => redirectTo('/logout')}>
             <ListItemIcon>
-              <ExitToApp/>
+              <ExitToAppIcon/>
             </ListItemIcon>
             <ListItemText primary={'Logout'} />
           </ListItem>
@@ -127,7 +127,7 @@ const Navbar = () => {
         <div>
           <ListItem button onClick={() => redirectTo('/login')}>
             <ListItemIcon>
-              <ExitToApp/>
+              <ExitToAppIcon/>
             </ListItemIcon>
             <ListItemText primary={'Login'} />
           </ListItem>

@@ -1,4 +1,4 @@
-import {Button, CircularProgress, TextField} from '@material-ui/core';
+import {Button, CircularProgress, TextField} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomCardpack, User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';

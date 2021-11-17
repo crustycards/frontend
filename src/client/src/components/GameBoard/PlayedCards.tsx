@@ -1,4 +1,4 @@
-import {Button, Typography} from '@material-ui/core';
+import {Button, Typography} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomWhiteCard, User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';

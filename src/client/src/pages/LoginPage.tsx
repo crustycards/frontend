@@ -1,4 +1,4 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from '@mui/material';
 import * as React from 'react';
 import GoogleButton from '../components/GoogleButton/index';
 import {useGlobalStyles} from '../styles/globalStyles';

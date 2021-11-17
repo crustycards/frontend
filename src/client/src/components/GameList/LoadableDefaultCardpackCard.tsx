@@ -9,7 +9,7 @@ import {
   Button,
   CircularProgress,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {NavLink} from 'react-router-dom';
 import {useGlobalStyles} from '../../styles/globalStyles';
 

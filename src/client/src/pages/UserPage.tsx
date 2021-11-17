@@ -1,6 +1,6 @@
-import {CircularProgress, Fab, Grid, Typography, Avatar, Badge, Theme} from '@material-ui/core';
+import {CircularProgress, Fab, Grid, Typography, Avatar, Badge, Theme} from '@mui/material';
 import {makeStyles} from '@material-ui/styles';
-import EditIcon from '@material-ui/icons/Edit';
+import EditIcon from '@mui/icons-material/Edit';
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import {useSelector} from 'react-redux';

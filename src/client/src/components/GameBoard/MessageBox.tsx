@@ -6,9 +6,9 @@ import {
   Paper,
   Theme,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {makeStyles} from '@material-ui/styles';
-import SendIcon from '@material-ui/icons/Send';
+import SendIcon from '@mui/icons-material/Send';
 import * as React from 'react';
 import {useState} from 'react';
 import {ChatMessage} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';

@@ -1,4 +1,4 @@
-import {Button, CircularProgress, TextField} from '@material-ui/core';
+import {Button, CircularProgress, TextField} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {useUserService} from '../api/context';

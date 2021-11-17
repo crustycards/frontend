@@ -1,4 +1,4 @@
-import {Theme, Typography} from '@material-ui/core';
+import {Theme, Typography} from '@mui/material';
 import {withStyles, WithStyles} from '@material-ui/styles';
 import {CSSProperties} from '@material-ui/styles';
 import * as React from 'react';

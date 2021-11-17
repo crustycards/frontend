@@ -3,7 +3,7 @@ import {
   Card,
   CardActions,
   CardHeader
-} from '@material-ui/core';
+} from '@mui/material';
 import * as React from 'react';
 import {NavLink} from 'react-router-dom';
 import {DefaultCardpack} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';

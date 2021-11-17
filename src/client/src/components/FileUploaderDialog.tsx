@@ -5,7 +5,7 @@ import {
   Theme,
   withStyles,
   WithStyles
-} from '@material-ui/core';
+} from '@mui/material';
 import * as React from 'react';
 import {FileWithPath} from 'react-dropzone';
 import FileUploader from './FileUploader';

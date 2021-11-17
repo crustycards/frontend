@@ -8,8 +8,8 @@ import {
   Theme,
   Typography,
   TextField
-} from '@material-ui/core';
-import RefreshIcon from '@material-ui/icons/Refresh';
+} from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';

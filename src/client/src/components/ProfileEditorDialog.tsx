@@ -7,8 +7,8 @@ import {
   ExpansionPanelSummary,
   Theme,
   Typography
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {createStyles, makeStyles} from '@material-ui/styles';
 import * as React from 'react';
 import ProfileImageUploader from './ProfileImageUploader';

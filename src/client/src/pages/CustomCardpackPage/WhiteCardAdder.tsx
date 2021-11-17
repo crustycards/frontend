@@ -5,7 +5,7 @@ import {
   CardContent,
   CardActions,
   TextField
-} from '@material-ui/core';
+} from '@mui/material';
 import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
 import * as React from 'react';
 import {useState} from 'react';
