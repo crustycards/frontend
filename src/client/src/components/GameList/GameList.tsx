@@ -32,7 +32,7 @@ const GameList = (props: GameListProps) => {
   const [loadingError, setLoadingError] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
   const theme = useTheme();
-  
+
   const leftIconStyles = {
     marginRight: theme.spacing(1)
   };
