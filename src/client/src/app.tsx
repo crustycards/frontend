@@ -1,11 +1,9 @@
-import {blue, teal} from '@material-ui/core/colors';
+import {blue, teal} from '@mui/material/colors';
 import {
-  createMuiTheme,
-  MuiThemeProvider,
-  makeStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles';
+  createTheme,
+  ThemeProvider
+} from '@mui/material';
+import {styled} from '@mui/material/styles';
 import {ConnectedRouter} from 'connected-react-router';
 import {createBrowserHistory} from 'history';
 import * as React from 'react';
@@ -89,59 +87,51 @@ export const App = () => (
   </Provider>
 );
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: theme.palette.background.default,
-      height: '100%',
-      overflowY: 'auto'
-    }
-  })
+const Root = styled('div')(({theme}) => ({
+  backgroundColor: theme.palette.background.default,
+  height: '100%',
+  overflowY: 'auto'
+}));
+
+const SubApp = () => (
+  <Root>
+    {/* This meta tag makes the mobile experience
+    much better by preventing text from being tiny. */}
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <AuthRedirector/>
+    <Navbar/>
+    <StatusBar/>
+    <Switch>
+      <Route exact path='/' component={AuthRedirector}/>
+      <Route
+        exact
+        path='/users/:user/cardpacks'
+        component={CustomCardpackListPage}
+      />
+      <Route
+        exact
+        path='/users/:user/cardpacks/:cardpack'
+        component={CustomCardpackPage}
+      />
+      <Route
+        exact
+        path='/defaultCardpacks'
+        component={DefaultCardpackListPage}
+      />
+      <Route
+        exact
+        path='/defaultCardpacks/:cardpack'
+        component={DefaultCardpackPage}
+      />
+      <Route exact path='/users/:user' component={UserPage}/>
+      <Route exact path='/login' component={LoginPage}/>
+      <Route exact path='/game' component={GamePage}/>
+      <Route exact path='/gamelist' component={GameListPage}/>
+      <Route exact path='/settings' component={SettingsPage}/>
+      <Route component={NotFoundPage}/>
+    </Switch>
+  </Root>
 );
-
-const SubApp = () => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      {/* This meta tag makes the mobile experience
-      much better by preventing text from being tiny. */}
-      <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-      <AuthRedirector/>
-      <Navbar/>
-      <StatusBar/>
-      <Switch>
-        <Route exact path='/' component={AuthRedirector}/>
-        <Route
-          exact
-          path='/users/:user/cardpacks'
-          component={CustomCardpackListPage}
-        />
-        <Route
-          exact
-          path='/users/:user/cardpacks/:cardpack'
-          component={CustomCardpackPage}
-        />
-        <Route
-          exact
-          path='/defaultCardpacks'
-          component={DefaultCardpackListPage}
-        />
-        <Route
-          exact
-          path='/defaultCardpacks/:cardpack'
-          component={DefaultCardpackPage}
-        />
-        <Route exact path='/users/:user' component={UserPage}/>
-        <Route exact path='/login' component={LoginPage}/>
-        <Route exact path='/game' component={GamePage}/>
-        <Route exact path='/gamelist' component={GameListPage}/>
-        <Route exact path='/settings' component={SettingsPage}/>
-        <Route component={NotFoundPage}/>
-      </Switch>
-    </div>
-  );
-};
 
 const ThemedSubApp = () => {
   const {userSettings} = useSelector(
@@ -150,11 +140,11 @@ const ThemedSubApp = () => {
   const isDarkMode =
     userSettings?.getColorScheme() === UserSettings.ColorScheme.DEFAULT_DARK;
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       primary: blue,
       secondary: teal,
-      type: isDarkMode ? 'dark' : 'light'
+      mode: isDarkMode ? 'dark' : 'light'
     },
     props: {
       MuiAppBar: {
@@ -167,8 +157,8 @@ const ThemedSubApp = () => {
   });
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <SubApp/>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };

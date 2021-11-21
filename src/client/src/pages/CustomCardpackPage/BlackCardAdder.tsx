@@ -8,13 +8,14 @@ import {
   Select,
   TextField
 } from '@mui/material';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {createTheme} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useGlobalStyles} from '../../styles/globalStyles';
 
-const darkTheme = createMuiTheme({palette: {type: 'dark'}});
+const darkTheme = createTheme({palette: {mode: 'dark'}});
 
 interface BlackCardAdderProps {
   addCard(card: CustomBlackCard): void;
@@ -38,7 +39,7 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
   const isSubmittable = card.getText().length > 0 && card.getAnswerFields() > 0;
 
   return (
-    <MuiThemeProvider theme={darkTheme}>
+    <ThemeProvider theme={darkTheme}>
       <Card className={globalClasses.card}>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
@@ -89,7 +90,7 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
           </Button>
         </CardActions>
       </Card>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

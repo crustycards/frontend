@@ -1,8 +1,10 @@
-import Button from '@material-ui/core/Button';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import {
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem
+} from '@mui/material';
 import {withStyles} from '@material-ui/core/styles';
 import SendIcon from '@mui/icons-material/Send';
 import * as React from 'react';

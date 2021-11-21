@@ -4,8 +4,8 @@ import {
   Tab,
   Tabs,
   Theme,
-  GridList,
-  GridListTile,
+  ImageList,
+  ImageListItem,
   Typography
 } from '@mui/material';
 import {createStyles, makeStyles} from '@material-ui/styles';
@@ -155,13 +155,13 @@ const DefaultCardpackPage =
                         hasMore={hasMoreWhiteCards}
                       >
                         {
-                          <GridList cols={4}>
+                          <ImageList cols={4}>
                             {defaultWhiteCards.map((c, i) => (
-                              <GridListTile style={{height: 'auto'}} key={i}>
+                              <ImageListItem style={{height: 'auto'}} key={i}>
                                 <CAHDefaultWhiteCard card={c}/>
-                              </GridListTile>
+                              </ImageListItem>
                             ))}
-                          </GridList>
+                          </ImageList>
                         }
                       </InfiniteScroll>
                     </div>
@@ -204,13 +204,13 @@ const DefaultCardpackPage =
                         hasMore={hasMoreBlackCards}
                       >
                         {
-                          <GridList cols={4}>
+                          <ImageList cols={4}>
                             {defaultBlackCards.map((c, i) => (
-                              <GridListTile style={{height: 'auto'}} key={i}>
+                              <ImageListItem style={{height: 'auto'}} key={i}>
                                 <CAHDefaultBlackCard card={c}/>
-                              </GridListTile>
+                              </ImageListItem>
                             ))}
-                          </GridList>
+                          </ImageList>
                         }
                       </InfiniteScroll>
                     </div>

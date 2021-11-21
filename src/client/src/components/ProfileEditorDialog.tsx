@@ -2,9 +2,9 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Theme,
   Typography
 } from '@mui/material';
@@ -44,33 +44,33 @@ const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
     >
       <DialogTitle style={{textAlign: 'center'}}>Edit Profile</DialogTitle>
       <DialogContent>
-        <ExpansionPanel>
-          <ExpansionPanelSummary
+        <Accordion>
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
             <Typography className={classes.heading}>
               Upload Profile Picture
             </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <ProfileImageUploader
               userService={userService}
               currentUser={props.currentUser}
             />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
             <Typography className={classes.heading}>Change Username</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <UsernameChanger
               onSubmit={props.onDisplayNameChange || (() => null)}
             />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
       </DialogContent>
     </Dialog>
   );

@@ -53,18 +53,6 @@ const useStyles = makeStyles((theme: Theme) =>
     wrapper: {
       margin: theme.spacing(1),
       position: 'relative'
-    },
-    buttonProgress: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12
-    },
-    cardpackList: {
-      height: '200px',
-      overflow: 'auto',
-      backgroundColor: theme.palette.background.paper
     }
   })
 );
@@ -447,7 +435,13 @@ const GameCreator = (props: GameCreatorProps) => {
           isCreatingGame &&
             <CircularProgress
               size={24}
-              className={classes.buttonProgress}
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: -12,
+                marginLeft: -12
+              }}
             />
         }
       </div>

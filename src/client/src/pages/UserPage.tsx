@@ -98,7 +98,7 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
         <Grid container spacing={8}>
           <Grid item xs={12} md={5}>
             <Badge
-              overlap={'circle'}
+              overlap={'circular'}
               anchorOrigin={{
                 vertical: 'bottom',
                 horizontal: 'right'
