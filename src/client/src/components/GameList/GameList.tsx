@@ -20,7 +20,7 @@ import {StoreState} from '../../store';
 import {GameService} from '../../api/gameService';
 import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import NumberBoundTextField from '../NumberBoundTextField';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {ContentWrap, Center} from '../../styles/globalStyles';
 
 const useStyles = makeStyles((theme: Theme) => ({
   leftIcon: {
@@ -42,7 +42,6 @@ const GameList = (props: GameListProps) => {
   const [loadingError, setLoadingError] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
   const classes = useStyles();
-  const globalClasses = useGlobalStyles();
 
   const [games, setGames] = useState<GameInfo[]>([]);
 
@@ -87,9 +86,9 @@ const GameList = (props: GameListProps) => {
     return (
       <div>
         {header}
-        <div className={globalClasses.center}>
+        <Center>
           <CircularProgress size={80} thickness={5}/>
-        </div>
+        </Center>
       </div>
     );
   }
@@ -115,7 +114,7 @@ const GameList = (props: GameListProps) => {
   return (
     <div>
       {header}
-      <div className={globalClasses.contentWrap}>
+      <ContentWrap>
         <div style={{textAlign: 'center'}}>
           <div style={{display: 'inline-block'}}>
             <TextField
@@ -149,7 +148,7 @@ const GameList = (props: GameListProps) => {
             <Button onClick={props.openCreateGameDialog}>Create Game</Button>
           </div>
         </div>
-      </div>
+      </ContentWrap>
       {games.map((gameInfo, index) => (
         <Card
           style={
@@ -190,11 +189,11 @@ const GameList = (props: GameListProps) => {
       ))}
       {
         games.length === 0 &&
-        <div className={globalClasses.center}>
+        <Center>
           <span>
             There are no open games to join
           </span>
-        </div>
+        </Center>
       }
     </div>
   );

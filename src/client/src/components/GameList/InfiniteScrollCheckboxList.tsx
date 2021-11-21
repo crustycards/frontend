@@ -8,7 +8,7 @@ import {
   Theme
 } from '@mui/material';
 import {createStyles, makeStyles} from '@material-ui/styles';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Subpanel} from '../../styles/globalStyles';
 import ProtobufInfiniteScroller from '../ProtobufInfiniteScroller';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -36,10 +36,9 @@ const InfiniteScrollCheckboxList = <T extends {
   getDisplayName(): string
 }>(props: InfiniteScrollCheckboxListProps<T>) => {
   const classes = useStyles();
-  const globalClasses = useGlobalStyles();
 
   return (
-    <div className={globalClasses.subpanel}>
+    <Subpanel>
       <Typography variant={'h6'} align={'center'}>
         {props.headerName}
       </Typography>
@@ -82,7 +81,7 @@ const InfiniteScrollCheckboxList = <T extends {
           }
         />
       </div>
-    </div>
+    </Subpanel>
   );
 };
 

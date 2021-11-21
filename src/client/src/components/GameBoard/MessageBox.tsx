@@ -4,39 +4,16 @@ import {
   IconButton,
   InputBase,
   Paper,
-  Theme,
-  Typography
+  Typography,
+  useTheme
 } from '@mui/material';
-import {makeStyles} from '@material-ui/styles';
 import SendIcon from '@mui/icons-material/Send';
 import * as React from 'react';
 import {useState} from 'react';
 import {ChatMessage} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {GameService} from '../../api/gameService';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Panel} from '../../styles/globalStyles';
 import {convertTime} from '../../helpers/time';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  textBoxRoot: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center'
-  },
-  textBoxInput: {
-    marginLeft: theme.spacing(1),
-    flex: 1
-  },
-  textBoxIconButton: {
-    padding: 10,
-    position: 'relative'
-  },
-  textBoxIconButtonCircularProgress: {
-    position: 'absolute',
-    top: 2,
-    left: -1,
-    zIndex: 1
-  }
-}));
 
 interface MessageBoxProps {
   gameService: GameService;
@@ -46,11 +23,10 @@ interface MessageBoxProps {
 const MessageBox = (props: MessageBoxProps) => {
   const [messageText, setMessageText] = useState('');
   const [isSubmittingMessage, setIsSubmittingMessage] = useState(false);
-  const classes = useStyles();
-  const globalClasses = useGlobalStyles();
+  const theme = useTheme();
 
   return (
-    <div className={globalClasses.panel}>
+    <Panel>
       <Typography
         variant={'h5'}
         style={{textAlign: 'center'}}
@@ -99,15 +75,25 @@ const MessageBox = (props: MessageBoxProps) => {
           });
         }}
       >
-        <Paper className={classes.textBoxRoot}>
+        <Paper sx={{
+          padding: '2px 4px',
+          display: 'flex',
+          alignItems: 'center'
+        }}>
           <InputBase
-            className={classes.textBoxInput}
+            sx={{
+              marginLeft: theme.spacing(1),
+              flex: 1
+            }}
             placeholder={'Message'}
             value={messageText}
             onChange={(e) => setMessageText(e.target.value)}
           />
           <IconButton
-            className={classes.textBoxIconButton}
+            sx={{
+              padding: 10,
+              position: 'relative'
+            }}
             type={'submit'}
             disabled={!messageText.length || isSubmittingMessage}
           >
@@ -116,13 +102,18 @@ const MessageBox = (props: MessageBoxProps) => {
               isSubmittingMessage &&
                 <CircularProgress
                   size={40}
-                  className={classes.textBoxIconButtonCircularProgress}
+                  sx={{
+                    position: 'absolute',
+                    top: 2,
+                    left: -1,
+                    zIndex: 1
+                  }}
                 />
             }
           </IconButton>
         </Paper>
       </form>
-    </div>
+    </Panel>
   );
 };
 

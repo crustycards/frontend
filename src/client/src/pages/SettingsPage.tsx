@@ -2,20 +2,16 @@ import * as React from 'react';
 import ColorSchemeChanger from './SettingsPage/ColorSchemeChanger';
 import {StoreState} from '../store';
 import {useSelector} from 'react-redux';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {ContentWrap} from '../styles/globalStyles';
 import {Typography, Paper, Theme} from '@mui/material';
-import {makeStyles} from '@material-ui/styles';
+import {styled} from '@mui/material/styles';
+import {useTheme} from '@mui/system';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    '& > *': {
-      margin: theme.spacing(1)
-    }
-  },
-  settingsPaper: {
-    padding: `${theme.spacing(1)} ${theme.spacing(2)}`
+const Root = styled('div')(({theme}) => ({
+  display: 'flex',
+  flexWrap: 'wrap',
+  '& > *': {
+    margin: theme.spacing(1)
   }
 }));
 
@@ -24,12 +20,11 @@ const SettingsPage = () => {
     ({global: {userSettings}}: StoreState) => ({userSettings})
   );
 
-  const globalClasses = useGlobalStyles();
-  const classes = useStyles();
+  const theme = useTheme();
 
   if (userSettings === undefined) {
     return (
-      <div className={globalClasses.contentWrap}>
+      <ContentWrap>
         <Typography
           variant={'h4'}
           align={'center'}
@@ -39,20 +34,20 @@ const SettingsPage = () => {
         <div>
           You must be logged in to view your settings
         </div>
-      </div>
+      </ContentWrap>
     );
   }
 
   return (
-    <div className={globalClasses.contentWrap}>
+    <ContentWrap>
       <Typography
         variant={'h4'}
         align={'center'}
       >
         Settings
       </Typography>
-      <div className={classes.root}>
-        <Paper elevation={3} className={classes.settingsPaper}>
+      <Root>
+        <Paper elevation={3} sx={{padding: `${theme.spacing(1)} ${theme.spacing(2)}`}}>
           <Typography
             variant={'h6'}
             align={'center'}
@@ -61,8 +56,8 @@ const SettingsPage = () => {
           </Typography>
           <ColorSchemeChanger userSettings={userSettings}/>
         </Paper>
-      </div>
-    </div>
+      </Root>
+    </ContentWrap>
   );
 };
 

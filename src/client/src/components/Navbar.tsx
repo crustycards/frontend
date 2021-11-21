@@ -8,8 +8,7 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Typography,
-  Theme
+  Typography
 } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -17,7 +16,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import SettingsIcon from '@mui/icons-material/Settings';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import ViewListIcon from '@mui/icons-material/ViewList';
-import {makeStyles, createStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -28,21 +26,7 @@ const redirectTo = (url: string) => {
   window.location.replace(url);
 };
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    flex: {
-      flex: 1
-    },
-    menuButton: {
-      marginLeft: -12,
-      marginRight: 20
-    }
-  })
-);
-
 const Navbar = () => {
-  const classes = useStyles();
-
   const {
     isOpen,
     user
@@ -57,14 +41,17 @@ const Navbar = () => {
     <AppBar position={'static'}>
       <Toolbar>
         <IconButton
-          className={classes.menuButton}
+          sx={{
+            marginLeft: -12,
+            marginRight: 20
+          }}
           color={'inherit'}
           aria-label={'Menu'}
           onClick={() => dispatch(openNavbar())}
         >
           <MenuIcon/>
         </IconButton>
-        <Typography variant={'h6'} color={'inherit'} className={classes.flex}>
+        <Typography variant={'h6'} color={'inherit'} sx={{flex: 1}}>
           Cards
         </Typography>
         <Button

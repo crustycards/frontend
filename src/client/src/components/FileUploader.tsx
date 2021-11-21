@@ -1,6 +1,5 @@
 import {Theme, Typography} from '@mui/material';
-import {withStyles, WithStyles} from '@material-ui/styles';
-import {CSSProperties} from '@material-ui/styles';
+import {withStyles, WithStyles, CSSProperties} from '@material-ui/styles';
 import * as React from 'react';
 import {useMemo} from 'react';
 import {FileWithPath, useDropzone} from 'react-dropzone';

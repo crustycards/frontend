@@ -8,7 +8,7 @@ import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/mod
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
 import {PastRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Panel, Subpanel} from '../../styles/globalStyles';
 import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 
 interface ViewPastRoundsDialogProps {
@@ -19,8 +19,6 @@ interface ViewPastRoundsDialogProps {
 
 const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
   const [roundIndex, setRoundIndex] = React.useState(0);
-
-  const globalClasses = useGlobalStyles();
 
   // Since pastRounds can be reset to empty whenever the game is restarted, we
   // need to check at every render to make sure that roundIndex is in bounds.
@@ -95,34 +93,33 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
           visibleRoundBlackCard &&
             <CAHBlackCardInRound card={visibleRoundBlackCard}/>
         }
-        <div className={globalClasses.panel}>
-            {visibleRound.getWhitePlayedList().map((entry, index) => (
-              <div
-                style={
-                  playersAreEqual(
-                    entry.getPlayer(),
-                    visibleRound.getWinner()
-                  ) ? {} : {opacity: 0.5}
-                }
-                className={globalClasses.subpanel}
-                key={index}
-              >
-                <div>
-                  {getPlayerDisplayName(entry.getPlayer())}
-                </div>
-                {entry.getCardTextsList().map((cardText) => {
-                  const card = new CustomWhiteCard();
-                  card.setText(cardText);
-                  return card;
-                }).map((card, index) => (
-                  <CAHCustomWhiteCard
-                    card={card}
-                    key={index}
-                  />
-                ))}
+        <Panel>
+          {visibleRound.getWhitePlayedList().map((entry, index) => (
+            <Subpanel
+              style={
+                playersAreEqual(
+                  entry.getPlayer(),
+                  visibleRound.getWinner()
+                ) ? {} : {opacity: 0.5}
+              }
+              key={index}
+            >
+              <div>
+                {getPlayerDisplayName(entry.getPlayer())}
               </div>
-            ))}
-          </div>
+              {entry.getCardTextsList().map((cardText) => {
+                const card = new CustomWhiteCard();
+                card.setText(cardText);
+                return card;
+              }).map((card, index) => (
+                <CAHCustomWhiteCard
+                  card={card}
+                  key={index}
+                />
+              ))}
+            </Subpanel>
+          ))}
+        </Panel>
       </DialogContent>
     </Dialog>
   );

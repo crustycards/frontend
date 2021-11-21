@@ -29,7 +29,7 @@ import BlackCardAdder from './CustomCardpackPage/BlackCardAdder';
 import WhiteCardAdder from './CustomCardpackPage/WhiteCardAdder';
 import CAHCustomBlackCard from '../components/shells/CAHCustomBlackCard';
 import CAHCustomWhiteCard from '../components/shells/CAHCustomWhiteCard';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {ContentWrap, Panel} from '../styles/globalStyles';
 import ResourceNotFound from '../components/ResourceNotFound';
 import {RouteComponentProps} from 'react-router';
 
@@ -41,7 +41,6 @@ const CardList = styled('div')({
 
 const CustomCardpackPage =
 (props: RouteComponentProps<{user: string, cardpack: string}>) => {
-  const globalClasses = useGlobalStyles();
   const customCardpackName = `users/${props.match.params.user}/cardpacks/${props.match.params.cardpack}`;
 
   const [
@@ -107,8 +106,8 @@ const CustomCardpackPage =
   }
 
   return (
-    <div className={globalClasses.contentWrap}>
-      <div className={globalClasses.panel}>
+    <ContentWrap>
+      <Panel>
         <div>
           <Typography align={'center'}>
             {customCardpack.getDisplayName()}
@@ -228,8 +227,8 @@ const CustomCardpackPage =
             </SwipeableViews>
           </div>
         </div>
-      </div>
-    </div>
+      </Panel>
+    </ContentWrap>
   );
 };
 

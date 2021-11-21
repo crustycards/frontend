@@ -8,7 +8,7 @@ import GameList from '../components/GameList/GameList';
 import {useGameService, useUserService} from '../api/context';
 import {StoreState} from '../store';
 import {useSelector} from 'react-redux';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {ContentWrap} from '../styles/globalStyles';
 import {useState} from 'react';
 
 const GameListPage = () => {
@@ -23,18 +23,16 @@ const GameListPage = () => {
     currentUserSettings: userSettings
   }));
 
-  const globalClasses = useGlobalStyles();
-
   if (!gameService || !currentUser || !currentUserSettings) {
     return (
-      <div className={globalClasses.contentWrap}>
+      <ContentWrap>
         Must be logged in to view games.
-      </div>
+      </ContentWrap>
     );
   }
 
   return (
-    <div className={globalClasses.contentWrap}>
+    <ContentWrap>
       <Dialog
         open={showCreateGameDialog}
         onClose={() => setShowCreateGameDialog(false)}
@@ -53,7 +51,7 @@ const GameListPage = () => {
         gameService={gameService}
         openCreateGameDialog={() => setShowCreateGameDialog(true)}
       />
-    </div>
+    </ContentWrap>
   );
 };
 

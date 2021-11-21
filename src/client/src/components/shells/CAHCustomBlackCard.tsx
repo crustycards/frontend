@@ -4,7 +4,6 @@ import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {deleteCustomBlackCard} from '../../api/cardpackService';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 const darkTheme = createTheme({palette: {mode: 'dark'}});
 
@@ -25,11 +24,9 @@ const CAHCustomBlackCard = (props: CAHCustomBlackCardProps) => {
     });
   };
 
-  const globalClasses = useGlobalStyles();
-
   return (
     <ThemeProvider theme={darkTheme}>
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             {props.overrideTextElements || props.card.getText()}

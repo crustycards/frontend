@@ -12,7 +12,7 @@ import TopBar from '../components/GameBoard/TopBar';
 import {StoreState} from '../store';
 import {useGameService} from '../api/context';
 import {filterPlayerListToUserList} from '../helpers/proto';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {Center, Panel, ContentWrap} from '../styles/globalStyles';
 
 const GamePage = () => {
   const {
@@ -24,23 +24,23 @@ const GamePage = () => {
   }));
   const gameService = useGameService();
 
-  const globalClasses = useGlobalStyles();
-
   if (!gameService || !currentUser) {
     // TODO - Redirect to login page (if this doesn't happen already).
     return (
-      <div className={globalClasses.contentWrap}>
-        <div className={`${globalClasses.center} ${globalClasses.panel}`}>
-          {`You must be logged in to join a game.`}
-        </div>
-      </div>
+      <ContentWrap>
+        <Center>
+          <Panel>
+            {`You must be logged in to join a game.`}
+          </Panel>
+        </Center>
+      </ContentWrap>
     );
   }
 
   if (!game.view) {
     return (
       <div>
-        <div className={globalClasses.center} style={{padding: '10px'}}>
+        <Center style={{padding: '10px'}}>
           <Typography variant={'h6'} align={'center'}>
             You're not in a game.
           </Typography>
@@ -56,7 +56,7 @@ const GamePage = () => {
               See Games
             </Button>
           </NavLink>
-        </div>
+        </Center>
       </div>
     );
   }
@@ -110,23 +110,29 @@ const GamePage = () => {
             }
             {
               game.view.getJudge()?.getName() === currentUser.getName() &&
-                <Typography
-                  variant={'h5'}
-                  className={`${globalClasses.center} ${globalClasses.panel}`}
-                >
-                  You are the Judge
-                </Typography>
+                <Center>
+                  <Panel>
+                    <Typography
+                      variant={'h5'}
+                    >
+                      You are the Judge
+                    </Typography>
+                  </Panel>
+                </Center>
             }
             {
               filterPlayerListToUserList(game.view.getQueuedPlayersList())
                 .map((user) => user.getName())
                 .includes(currentUser.getName()) &&
-                  <Typography
-                    variant={'h5'}
-                    className={`${globalClasses.center} ${globalClasses.panel}`}
-                  >
-                    Waiting until the next round to join game...
-                  </Typography>
+                  <Center>
+                    <Panel>
+                      <Typography
+                        variant={'h5'}
+                      >
+                        Waiting until the next round to join game...
+                      </Typography>
+                    </Panel>
+                  </Center>
             }
             <PlayedCards
               gameService={gameService}

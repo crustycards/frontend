@@ -1,5 +1,4 @@
-import {CircularProgress, Fab, Grid, Typography, Avatar, Badge, Theme} from '@mui/material';
-import {makeStyles} from '@material-ui/styles';
+import {CircularProgress, Fab, Grid, Typography, Avatar, Badge, Theme, useTheme} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import * as React from 'react';
 import {useState, useEffect} from 'react';
@@ -13,16 +12,9 @@ import {StoreState} from '../store';
 import * as InfiniteScroll from 'react-infinite-scroller';
 import {listCustomCardpacks} from '../api/cardpackService';
 import CAHCustomCardpack from '../components/shells/CAHCustomCardpack';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {ContentWrap, Panel} from '../styles/globalStyles';
 import {RouteComponentProps} from 'react-router';
 import ResourceNotFound from '../components/ResourceNotFound';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  profileImage: {
-    width: theme.spacing(15),
-    height: theme.spacing(15)
-  }
-}));
 
 const UserPage = (props: RouteComponentProps<{user: string}>) => {
   const [isLoadingUser, setIsLoadingUser] = useState(true);
@@ -46,8 +38,7 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
     ({global: {user}}: StoreState) => ({currentUser: user})
   );
 
-  const globalClasses = useGlobalStyles();
-  const classes = useStyles();
+  const theme = useTheme();
 
   const userService = useUserService();
 
@@ -93,8 +84,8 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
   }
 
   return (
-    <div className={globalClasses.contentWrap}>
-      <div className={globalClasses.panel}>
+    <ContentWrap>
+      <Panel>
         <Grid container spacing={8}>
           <Grid item xs={12} md={5}>
             <Badge
@@ -116,7 +107,10 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
             >
               <Avatar
                 src={userService.getUserProfileImageUrl(user.getName())}
-                className={classes.profileImage}
+                sx={{
+                  width: theme.spacing(15),
+                  height: theme.spacing(15)
+                }}
               />
             </Badge>
             <Typography
@@ -197,8 +191,8 @@ const UserPage = (props: RouteComponentProps<{user: string}>) => {
             }
           </Grid>
         </Grid>
-      </div>
-    </div>
+      </Panel>
+    </ContentWrap>
   );
 };
 

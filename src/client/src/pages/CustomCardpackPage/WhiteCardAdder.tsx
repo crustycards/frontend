@@ -11,7 +11,6 @@ import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 const lightTheme = createTheme({palette: {mode: 'light'}});
 
@@ -21,7 +20,6 @@ interface WhiteCardAdderProps {
 
 const WhiteCardAdder = (props: WhiteCardAdderProps) => {
   const [card, setCard] = useState(new CustomWhiteCard());
-  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
@@ -32,7 +30,7 @@ const WhiteCardAdder = (props: WhiteCardAdderProps) => {
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField

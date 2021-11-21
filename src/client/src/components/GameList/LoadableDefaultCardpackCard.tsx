@@ -11,7 +11,6 @@ import {
   Typography
 } from '@mui/material';
 import {NavLink} from 'react-router-dom';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface LoadableDefaultCardpackCardProps {
   defaultCardpackName: string;
@@ -25,8 +24,6 @@ const LoadableDefaultCardpackCard =
     setDefaultCardpack
   ] = useState<DefaultCardpack | null | undefined>(undefined);
 
-  const globalClasses = useGlobalStyles();
-
   useEffect(() => {
     setDefaultCardpack(undefined);
     getDefaultCardpack(props.defaultCardpackName)
@@ -36,7 +33,7 @@ const LoadableDefaultCardpackCard =
 
   if (defaultCardpack === undefined) {
     return (
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <CircularProgress/>
         </CardContent>
@@ -46,7 +43,7 @@ const LoadableDefaultCardpackCard =
 
   if (defaultCardpack === null) {
     return (
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography>Could not load default cardpack.</Typography>
         </CardContent>
@@ -55,7 +52,7 @@ const LoadableDefaultCardpackCard =
   }
 
   return (
-    <Card className={globalClasses.card}>
+    <Card>
       <CardContent>
         <Typography>{defaultCardpack.getDisplayName()}</Typography>
       </CardContent>

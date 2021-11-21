@@ -8,7 +8,7 @@ import {StoreState} from '../../../store';
 import {queueCard} from '../../../store/modules/game';
 import {queuedCardIdPointsToPlayableCard} from '../../../store/modules/game';
 import DraggableCardInPlayQueue from './DraggableCardInPlayQueue';
-import {useGlobalStyles} from '../../../styles/globalStyles';
+import {Panel} from '../../../styles/globalStyles';
 
 interface PlaySlotProps {
   gameView: GameView;
@@ -19,8 +19,6 @@ interface PlaySlotProps {
 
 const PlaySlot = (props: PlaySlotProps) => {
   const {game} = useSelector(({game}: StoreState) => ({game}));
-
-  const globalClasses = useGlobalStyles();
 
   if (game.queuedCardIds[props.index]) {
     const card = props.gameView.getHandList().find(
@@ -39,8 +37,7 @@ const PlaySlot = (props: PlaySlotProps) => {
     );
   } else {
     return props.connectDropTarget(
-      <div
-        className={globalClasses.panel}
+      <Panel
         style={{
           textAlign: 'center',
           borderStyle: 'dotted',
@@ -49,7 +46,7 @@ const PlaySlot = (props: PlaySlotProps) => {
         }}
       >
         Drop a card here
-      </div>
+      </Panel>
     );
   }
 };

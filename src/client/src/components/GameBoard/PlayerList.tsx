@@ -12,7 +12,7 @@ import * as React from 'react';
 import {GameView, Player} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {getPlayerDisplayName} from '../../helpers/proto';
 import {playerHasPlayed} from '../../store';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Panel} from '../../styles/globalStyles';
 
 const styles: React.CSSProperties = {
   overflowY: 'auto',
@@ -104,13 +104,11 @@ const PlayerList = (props: PlayerListProps) => {
   const ownerName = props.gameView.getOwner()?.getName();
   const judgeName = props.gameView.getJudge()?.getName();
 
-  const globalClasses = useGlobalStyles();
-
   return (
     <div>
       {
         !!realPlayers.length &&
-          <div className={globalClasses.panel}>
+          <Panel>
             <List
               subheader={<ListSubheader>Players</ListSubheader>}
               style={styles}
@@ -130,11 +128,11 @@ const PlayerList = (props: PlayerListProps) => {
                 </div>
               ))}
             </List>
-          </div>
+          </Panel>
       }
       {
         !!artificialPlayers.length &&
-          <div className={globalClasses.panel}>
+          <Panel>
             <List
               subheader={<ListSubheader>Artificial Players</ListSubheader>}
               style={styles}
@@ -154,7 +152,7 @@ const PlayerList = (props: PlayerListProps) => {
                 </div>
               ))}
             </List>
-          </div>
+          </Panel>
       }
     </div>
   );

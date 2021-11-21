@@ -4,7 +4,6 @@ import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {deleteCustomWhiteCard} from '../../api/cardpackService';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 const lightTheme = createTheme({palette: {mode: 'light'}});
 
@@ -24,11 +23,9 @@ const CAHCustomWhiteCard = (props: CAHCustomWhiteCardProps) => {
     });
   };
 
-  const globalClasses = useGlobalStyles();
-
   return (
     <ThemeProvider theme={lightTheme}>
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography align={'left'} variant={'body2'}>
             {props.card.getText()}

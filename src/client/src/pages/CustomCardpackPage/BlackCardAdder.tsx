@@ -13,7 +13,6 @@ import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 const darkTheme = createTheme({palette: {mode: 'dark'}});
 
@@ -29,7 +28,6 @@ const getDefaultNewBlackCard = () => {
 
 const BlackCardAdder = (props: BlackCardAdderProps) => {
   const [card, setCard] = useState(getDefaultNewBlackCard());
-  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
@@ -40,7 +38,7 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
 
   return (
     <ThemeProvider theme={darkTheme}>
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField
