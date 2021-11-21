@@ -41,18 +41,14 @@ const Navbar = () => {
     <AppBar position={'static'}>
       <Toolbar>
         <IconButton
-          sx={{
-            marginLeft: -12,
-            marginRight: 20
-          }}
-          color={'inherit'}
-          aria-label={'Menu'}
+          edge={'start'}
+          sx={{mr: 2}}
           onClick={() => dispatch(openNavbar())}
         >
           <MenuIcon/>
         </IconButton>
         <Typography variant={'h6'} color={'inherit'} sx={{flex: 1}}>
-          Cards
+          Crusty Cards
         </Typography>
         <Button
           color={'secondary'}
