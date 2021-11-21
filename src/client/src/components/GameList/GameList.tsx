@@ -5,12 +5,10 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
-  Theme,
   Typography,
   TextField
 } from '@mui/material';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import {makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
@@ -21,15 +19,7 @@ import {GameService} from '../../api/gameService';
 import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import NumberBoundTextField from '../NumberBoundTextField';
 import {ContentWrap, Center} from '../../styles/globalStyles';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  leftIcon: {
-    marginRight: theme.spacing(1)
-  },
-  gameListHeader: {
-    padding: theme.spacing(1)
-  }
-}));
+import {useTheme} from '@mui/system';
 
 interface GameListProps {
   gameService: GameService,
@@ -41,7 +31,11 @@ const GameList = (props: GameListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
-  const classes = useStyles();
+  const theme = useTheme();
+  
+  const leftIconStyles = {
+    marginRight: theme.spacing(1)
+  };
 
   const [games, setGames] = useState<GameInfo[]>([]);
 
@@ -74,7 +68,7 @@ const GameList = (props: GameListProps) => {
 
   const header = (
     <Typography
-      className={classes.gameListHeader}
+      sx={{padding: theme.spacing(1)}}
       variant={'h4'}
       align={'center'}
     >
@@ -104,7 +98,7 @@ const GameList = (props: GameListProps) => {
           variant={'contained'}
           color={'secondary'}
         >
-          <RefreshIcon className={classes.leftIcon}/>
+          <RefreshIcon sx={leftIconStyles}/>
           Try Again
         </Button>
       </div>
@@ -141,7 +135,7 @@ const GameList = (props: GameListProps) => {
               variant={'contained'}
               color={'secondary'}
             >
-              <RefreshIcon className={classes.leftIcon}/>
+              <RefreshIcon sx={leftIconStyles}/>
                 Refresh
             </Button>
             <br/>
@@ -158,7 +152,6 @@ const GameList = (props: GameListProps) => {
               {}
           }
           key={index}
-          className={globalClasses.card}
         >
           <CardHeader
             title={gameInfo.getConfig()?.getDisplayName() || 'Unknown'}

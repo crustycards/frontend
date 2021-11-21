@@ -1,19 +1,11 @@
 import {Theme, Typography} from '@mui/material';
-import {withStyles, WithStyles, CSSProperties} from '@material-ui/styles';
+import {CSSProperties} from '@mui/material/styles/createTypography';
+import {useTheme} from '@mui/system';
 import * as React from 'react';
 import {useMemo} from 'react';
 import {FileWithPath, useDropzone} from 'react-dropzone';
 
-const styles = (theme: Theme) => ({
-  text: {
-    fontSize: theme.typography.pxToRem(18)
-  },
-  subtext: {
-    fontSize: theme.typography.pxToRem(15)
-  }
-});
-
-interface UploaderProps extends WithStyles<typeof styles> {
+interface UploaderProps {
   type?: string;
   onUpload(
       acceptedFiles: FileWithPath[],
@@ -56,7 +48,9 @@ const FileUploader = (props: UploaderProps) => {
     isDragReject
   } = useDropzone({accept: props.type, onDrop: props.onUpload});
 
-  const style = useMemo(() => ({
+  const theme: Theme = useTheme();
+
+  const style: CSSProperties = useMemo(() => ({
     ...baseStyle,
     ...(isDragActive ? activeStyle : {}),
     ...(isDragAccept ? acceptStyle : {}),
@@ -72,14 +66,14 @@ const FileUploader = (props: UploaderProps) => {
       margin: 0,
       transform: 'translate(-50%, -50%)'
     }}>
-      <Typography className={props.classes.text}>
+      <Typography sx={{fontSize: theme.typography.pxToRem(18)}}>
         Drop Here
       </Typography>
-      <Typography className={props.classes.subtext}>
+      <Typography sx={{fontSize: theme.typography.pxToRem(15)}}>
         (Or click to select)
       </Typography>
     </div>
   </div>;
 };
 
-export default withStyles(styles)(FileUploader);
+export default FileUploader;

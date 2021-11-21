@@ -5,21 +5,10 @@ import {
   ListItem,
   Checkbox,
   ListItemText,
-  Theme
+  useTheme
 } from '@mui/material';
-import {createStyles, makeStyles} from '@material-ui/styles';
 import {Subpanel} from '../../styles/globalStyles';
 import ProtobufInfiniteScroller from '../ProtobufInfiniteScroller';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    list: {
-      height: '200px',
-      overflow: 'auto',
-      backgroundColor: theme.palette.background.paper
-    }
-  })
-);
 
 interface InfiniteScrollCheckboxListProps<T> {
   headerName: string;
@@ -35,14 +24,18 @@ const InfiniteScrollCheckboxList = <T extends {
   getName(): string,
   getDisplayName(): string
 }>(props: InfiniteScrollCheckboxListProps<T>) => {
-  const classes = useStyles();
+  const theme = useTheme();
 
   return (
     <Subpanel>
       <Typography variant={'h6'} align={'center'}>
         {props.headerName}
       </Typography>
-      <div className={classes.list}>
+      <div style={{
+        height: '200px',
+        overflow: 'auto',
+        backgroundColor: theme.palette.background.paper
+      }}>
         <ProtobufInfiniteScroller
           loadItems={props.loadItems}
           renderItems={

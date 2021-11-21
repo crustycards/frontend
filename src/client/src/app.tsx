@@ -145,14 +145,6 @@ const ThemedSubApp = () => {
       primary: blue,
       secondary: teal,
       mode: isDarkMode ? 'dark' : 'light'
-    },
-    props: {
-      MuiAppBar: {
-        color: isDarkMode ? 'default' : 'primary'
-      },
-      MuiTypography: {
-        color: 'textPrimary'
-      }
     }
   });
 

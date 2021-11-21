@@ -5,25 +5,16 @@ import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
-  Theme,
-  Typography
+  Typography,
+  Theme
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {createStyles, makeStyles} from '@material-ui/styles';
+import {useTheme} from '@mui/system';
 import * as React from 'react';
 import ProfileImageUploader from './ProfileImageUploader';
 import UsernameChanger from './UsernameChanger';
 import {useUserService} from '../api/context';
 import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular
-    }
-  })
-);
 
 interface ProfileEditorDialogProps {
   currentUser: User;
@@ -34,7 +25,12 @@ interface ProfileEditorDialogProps {
 
 const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
   const userService = useUserService();
-  const classes = useStyles();
+  const theme: Theme = useTheme();
+
+  const headingStyles = {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  };
 
   return (
     <Dialog
@@ -48,7 +44,7 @@ const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
-            <Typography className={classes.heading}>
+            <Typography sx={headingStyles}>
               Upload Profile Picture
             </Typography>
           </AccordionSummary>
@@ -63,7 +59,7 @@ const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
-            <Typography className={classes.heading}>Change Username</Typography>
+            <Typography sx={headingStyles}>Change Username</Typography>
           </AccordionSummary>
           <AccordionDetails>
             <UsernameChanger

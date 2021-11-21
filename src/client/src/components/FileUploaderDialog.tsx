@@ -1,25 +1,13 @@
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
-  Theme,
-  withStyles,
-  WithStyles
+  DialogTitle
 } from '@mui/material';
 import * as React from 'react';
 import {FileWithPath} from 'react-dropzone';
 import FileUploader from './FileUploader';
 
-const styles = (theme: Theme) => ({
-  text: {
-    fontSize: theme.typography.pxToRem(18)
-  },
-  subtext: {
-    fontSize: theme.typography.pxToRem(15)
-  }
-});
-
-interface UploaderProps extends WithStyles<typeof styles> {
+interface UploaderProps {
   titleText?: string;
   type?: string;
   isVisible: boolean;
@@ -49,4 +37,4 @@ const FileUploaderDialog = (props: UploaderProps) => (
   </Dialog>
 );
 
-export default withStyles(styles)(FileUploaderDialog);
+export default FileUploaderDialog;
