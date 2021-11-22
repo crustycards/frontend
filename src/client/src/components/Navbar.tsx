@@ -21,6 +21,7 @@ import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {StoreState} from '../store';
 import {closeNavbar, openNavbar} from '../store/modules/global';
+import {SportsEsports as SportsEsportsIcon} from '@mui/icons-material';
 
 const redirectTo = (url: string) => {
   window.location.replace(url);
@@ -42,7 +43,7 @@ const Navbar = () => {
       <Toolbar>
         <IconButton
           edge={'start'}
-          sx={{mr: 2}}
+          sx={{mr: 2, color: 'white'}}
           onClick={() => dispatch(openNavbar())}
         >
           <MenuIcon/>
@@ -54,8 +55,9 @@ const Navbar = () => {
           color={'secondary'}
           variant={'contained'}
           onClick={() => dispatch(push('/game'))}
+          endIcon={<SportsEsportsIcon/>}
         >
-          Current Game
+          Game
         </Button>
       </Toolbar>
     </AppBar>

@@ -109,7 +109,7 @@ const GameList = (props: GameListProps) => {
     <div>
       {header}
       <ContentWrap>
-        <div style={{textAlign: 'center'}}>
+        <Center>
           <div style={{display: 'inline-block'}}>
             <TextField
               label={'Query'}
@@ -118,10 +118,9 @@ const GameList = (props: GameListProps) => {
                 setQuery(e.target.value);
               }}
             />
-            <div style={{marginTop: '8px'}}>
+            <div style={{marginTop: '12px'}}>
               <NumberBoundTextField
-                style={{width: '47%', float: 'left'}}
-                label={'Player Slots Available'}
+                label={'Open Slots'}
                 value={minAvailablePlayerSlots}
                 minValue={0}
                 maxValue={9}
@@ -139,9 +138,15 @@ const GameList = (props: GameListProps) => {
                 Refresh
             </Button>
             <br/>
-            <Button onClick={props.openCreateGameDialog}>Create Game</Button>
+            <Button
+              size={'small'}
+              onClick={props.openCreateGameDialog}
+              variant={'contained'}
+            >
+              Create Game
+            </Button>
           </div>
-        </div>
+        </Center>
       </ContentWrap>
       {games.map((gameInfo, index) => (
         <Card
@@ -183,9 +188,9 @@ const GameList = (props: GameListProps) => {
       {
         games.length === 0 &&
         <Center>
-          <span>
+          <Typography>
             There are no open games to join
-          </span>
+          </Typography>
         </Center>
       }
     </div>

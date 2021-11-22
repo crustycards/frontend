@@ -201,16 +201,15 @@ const GameCreator = (props: GameCreatorProps) => {
                   />
                   <NumberBoundTextField
                     style={{width: '47%', float: 'right'}}
-                    label={'Winning Score'}
-                    value={config.getMaxScore()}
-                    minValue={minScoreLimit}
-                    maxValue={maxScoreLimit}
+                    label={'Hand Size'}
+                    value={config.getHandSize()}
+                    minValue={minHandSizeLimit}
+                    maxValue={maxHandSizeLimit}
                     onChange={(num) => {
                       const newConfig = config.clone();
-                      newConfig.setMaxScore(num);
+                      newConfig.setHandSize(num);
                       setConfig(newConfig);
                     }}
-                    disabled={config.hasEndlessMode()}
                   />
                 </div>
                 <FormControlLabel
@@ -220,7 +219,9 @@ const GameCreator = (props: GameCreatorProps) => {
                       checked={config.hasEndlessMode()}
                       onChange={() => {
                         const newConfig = config.clone();
-                        if (!config.hasEndlessMode()) {
+                        if (config.hasEndlessMode()) {
+                          newConfig.clearEndlessMode();
+                        } else {
                           newConfig.setEndlessMode(new Empty());
                         }
                         if (!newConfig.hasEndlessMode()) {
@@ -236,17 +237,18 @@ const GameCreator = (props: GameCreatorProps) => {
                     </Typography>
                   }
                 />
-                <NumberBoundTextField
-                  label={'Hand Size'}
-                  value={config.getHandSize()}
-                  minValue={minHandSizeLimit}
-                  maxValue={maxHandSizeLimit}
-                  onChange={(num) => {
-                    const newConfig = config.clone();
-                    newConfig.setHandSize(num);
-                    setConfig(newConfig);
-                  }}
-                />
+                  <NumberBoundTextField
+                    label={'Winning Score'}
+                    value={config.getMaxScore()}
+                    minValue={minScoreLimit}
+                    maxValue={maxScoreLimit}
+                    onChange={(num) => {
+                      const newConfig = config.clone();
+                      newConfig.setMaxScore(num);
+                      setConfig(newConfig);
+                    }}
+                    disabled={config.hasEndlessMode()}
+                  />
                 <div>
                   <Button
                     color={'secondary'}

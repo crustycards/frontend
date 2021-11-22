@@ -90,10 +90,6 @@ const MessageBox = (props: MessageBoxProps) => {
             onChange={(e) => setMessageText(e.target.value)}
           />
           <IconButton
-            sx={{
-              padding: 10,
-              position: 'relative'
-            }}
             type={'submit'}
             disabled={!messageText.length || isSubmittingMessage}
           >
@@ -104,9 +100,7 @@ const MessageBox = (props: MessageBoxProps) => {
                   size={40}
                   sx={{
                     position: 'absolute',
-                    top: 2,
-                    left: -1,
-                    zIndex: 1
+                    left: -2
                   }}
                 />
             }

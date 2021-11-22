@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build-dev": "npm run generate-stubs && webpack -d --watch --mode development",
+    "build-dev": "npm run generate-stubs && webpack --watch --mode development",
     "build-prod": "npm run generate-stubs && webpack --mode production",
     "start": "ts-node src/server/main.ts",
     "start-dev": "nodemon",
