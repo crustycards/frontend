@@ -1,11 +1,9 @@
-import {blue, teal} from '@material-ui/core/colors';
+import {blue, teal} from '@mui/material/colors';
 import {
-  createMuiTheme,
-  MuiThemeProvider,
-  makeStyles,
-  createStyles,
-  Theme
-} from '@material-ui/core/styles';
+  createTheme,
+  ThemeProvider
+} from '@mui/material';
+import {styled} from '@mui/material/styles';
 import {ConnectedRouter} from 'connected-react-router';
 import {createBrowserHistory} from 'history';
 import * as React from 'react';
@@ -13,7 +11,7 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {Provider, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
-import * as Socket from 'socket.io-client';
+import {io} from 'socket.io-client';
 import {UserSettings} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPreloadedUser} from './getPreloadedState';
 import {Provider as GameServiceContextProvider} from './api/context';
@@ -46,11 +44,12 @@ const userService = new UserService(
 );
 
 // Connect through socket.io
-const socket = Socket({
+const socket = io({
   reconnection: true,
   reconnectionDelay: 500,
   reconnectionAttempts: Infinity
 });
+
 socket.on('connect', () => {
   if (gameService) {
     gameService.getGameView(); // Fetch game state for the initial render
@@ -71,7 +70,8 @@ socket.on('connect', () => {
 setInterval(() => {
   if (!socket.connected) {
     if (gameService) {
-      // TODO - It looks like since upgrading to socket.io 4.x.x, this line is always being hit. Let's figure out what's happening.
+      // TODO - It looks like since upgrading to socket.io 4.x.x, this line
+      // is always being hit. Let's figure out what's happening.
       gameService.getGameView();
     }
   }
@@ -89,59 +89,51 @@ export const App = () => (
   </Provider>
 );
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      backgroundColor: theme.palette.background.default,
-      height: '100%',
-      overflowY: 'auto'
-    }
-  })
+const Root = styled('div')(({theme}) => ({
+  backgroundColor: theme.palette.background.default,
+  height: '100%',
+  overflowY: 'auto'
+}));
+
+const SubApp = () => (
+  <Root>
+    {/* This meta tag makes the mobile experience
+    much better by preventing text from being tiny. */}
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
+    <AuthRedirector/>
+    <Navbar/>
+    <StatusBar/>
+    <Switch>
+      <Route exact path='/' component={AuthRedirector}/>
+      <Route
+        exact
+        path='/users/:user/cardpacks'
+        component={CustomCardpackListPage}
+      />
+      <Route
+        exact
+        path='/users/:user/cardpacks/:cardpack'
+        component={CustomCardpackPage}
+      />
+      <Route
+        exact
+        path='/defaultCardpacks'
+        component={DefaultCardpackListPage}
+      />
+      <Route
+        exact
+        path='/defaultCardpacks/:cardpack'
+        component={DefaultCardpackPage}
+      />
+      <Route exact path='/users/:user' component={UserPage}/>
+      <Route exact path='/login' component={LoginPage}/>
+      <Route exact path='/game' component={GamePage}/>
+      <Route exact path='/gamelist' component={GameListPage}/>
+      <Route exact path='/settings' component={SettingsPage}/>
+      <Route component={NotFoundPage}/>
+    </Switch>
+  </Root>
 );
-
-const SubApp = () => {
-  const classes = useStyles();
-
-  return (
-    <div className={classes.root}>
-      {/* This meta tag makes the mobile experience
-      much better by preventing text from being tiny. */}
-      <meta name='viewport' content='width=device-width, initial-scale=1.0'/>
-      <AuthRedirector/>
-      <Navbar/>
-      <StatusBar/>
-      <Switch>
-        <Route exact path='/' component={AuthRedirector}/>
-        <Route
-          exact
-          path='/users/:user/cardpacks'
-          component={CustomCardpackListPage}
-        />
-        <Route
-          exact
-          path='/users/:user/cardpacks/:cardpack'
-          component={CustomCardpackPage}
-        />
-        <Route
-          exact
-          path='/defaultCardpacks'
-          component={DefaultCardpackListPage}
-        />
-        <Route
-          exact
-          path='/defaultCardpacks/:cardpack'
-          component={DefaultCardpackPage}
-        />
-        <Route exact path='/users/:user' component={UserPage}/>
-        <Route exact path='/login' component={LoginPage}/>
-        <Route exact path='/game' component={GamePage}/>
-        <Route exact path='/gamelist' component={GameListPage}/>
-        <Route exact path='/settings' component={SettingsPage}/>
-        <Route component={NotFoundPage}/>
-      </Switch>
-    </div>
-  );
-};
 
 const ThemedSubApp = () => {
   const {userSettings} = useSelector(
@@ -150,25 +142,17 @@ const ThemedSubApp = () => {
   const isDarkMode =
     userSettings?.getColorScheme() === UserSettings.ColorScheme.DEFAULT_DARK;
 
-  const theme = createMuiTheme({
+  const theme = createTheme({
     palette: {
       primary: blue,
       secondary: teal,
-      type: isDarkMode ? 'dark' : 'light'
-    },
-    props: {
-      MuiAppBar: {
-        color: isDarkMode ? 'default' : 'primary'
-      },
-      MuiTypography: {
-        color: 'textPrimary'
-      }
+      mode: isDarkMode ? 'dark' : 'light'
     }
   });
 
   return (
-    <MuiThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
       <SubApp/>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };

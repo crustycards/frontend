@@ -1,5 +1,4 @@
-import {AppBar, Button, Toolbar, Typography} from '@material-ui/core';
-import {makeStyles} from '@material-ui/styles';
+import {AppBar, Button, Toolbar, Typography} from '@mui/material';
 import * as React from 'react';
 import {GameView, Player} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {GameService} from '../../api/gameService';
@@ -14,12 +13,6 @@ const buttonStyle = {
   color: 'white'
 };
 
-const useStyles = makeStyles({
-  adminBar: {
-    margin: '8px 0'
-  }
-});
-
 interface AdminBarProps {
   gameService: GameService;
   players: Player[];
@@ -29,8 +22,6 @@ interface AdminBarProps {
 }
 
 const AdminBar = (props: AdminBarProps) => {
-  const classes = useStyles();
-
   const canStartGame = () => {
     const realPlayerCount = props.players.filter(
       (player) => player.hasUser()).length;
@@ -39,7 +30,7 @@ const AdminBar = (props: AdminBarProps) => {
     return realPlayerCount >= 2 && realPlayerCount + artificialPlayerCount >= 3;
   };
 
-  return <AppBar className={classes.adminBar} position={'static'}>
+  return <AppBar sx={{margin: '8px 0'}} position={'static'}>
     <Toolbar style={{padding: 0}}>
       <Typography style={{lineHeight: '66px', margin: '0 10px', fontSize: '1.2em'}}>
         {'Admin Panel'}

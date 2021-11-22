@@ -5,14 +5,14 @@ import {
   CardContent,
   CardActions,
   TextField
-} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+} from '@mui/material';
+import {createTheme} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
-const lightTheme = createMuiTheme({palette: {type: 'light'}});
+const lightTheme = createTheme({palette: {mode: 'light'}});
 
 interface WhiteCardAdderProps {
   addCard(card: CustomWhiteCard): void;
@@ -20,7 +20,6 @@ interface WhiteCardAdderProps {
 
 const WhiteCardAdder = (props: WhiteCardAdderProps) => {
   const [card, setCard] = useState(new CustomWhiteCard());
-  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
@@ -30,8 +29,8 @@ const WhiteCardAdder = (props: WhiteCardAdderProps) => {
   const isSubmittable = card.getText().length > 0;
 
   return (
-    <MuiThemeProvider theme={lightTheme}>
-      <Card className={globalClasses.card}>
+    <ThemeProvider theme={lightTheme}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField
@@ -61,7 +60,7 @@ const WhiteCardAdder = (props: WhiteCardAdderProps) => {
           </Button>
         </CardActions>
       </Card>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

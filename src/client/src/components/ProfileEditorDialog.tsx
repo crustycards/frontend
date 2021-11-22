@@ -2,28 +2,19 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  ExpansionPanel,
-  ExpansionPanelDetails,
-  ExpansionPanelSummary,
-  Theme,
-  Typography
-} from '@material-ui/core';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import {createStyles, makeStyles} from '@material-ui/styles';
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Typography,
+  Theme
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import {useTheme} from '@mui/system';
 import * as React from 'react';
 import ProfileImageUploader from './ProfileImageUploader';
 import UsernameChanger from './UsernameChanger';
 import {useUserService} from '../api/context';
 import {User} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    heading: {
-      fontSize: theme.typography.pxToRem(15),
-      fontWeight: theme.typography.fontWeightRegular
-    }
-  })
-);
 
 interface ProfileEditorDialogProps {
   currentUser: User;
@@ -34,7 +25,12 @@ interface ProfileEditorDialogProps {
 
 const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
   const userService = useUserService();
-  const classes = useStyles();
+  const theme: Theme = useTheme();
+
+  const headingStyles = {
+    fontSize: theme.typography.pxToRem(15),
+    fontWeight: theme.typography.fontWeightRegular
+  };
 
   return (
     <Dialog
@@ -44,33 +40,33 @@ const ProfileEditorDialog = (props: ProfileEditorDialogProps) => {
     >
       <DialogTitle style={{textAlign: 'center'}}>Edit Profile</DialogTitle>
       <DialogContent>
-        <ExpansionPanel>
-          <ExpansionPanelSummary
+        <Accordion>
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
-            <Typography className={classes.heading}>
+            <Typography sx={headingStyles}>
               Upload Profile Picture
             </Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+          </AccordionSummary>
+          <AccordionDetails>
             <ProfileImageUploader
               userService={userService}
               currentUser={props.currentUser}
             />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
-        <ExpansionPanel>
-          <ExpansionPanelSummary
+          </AccordionDetails>
+        </Accordion>
+        <Accordion>
+          <AccordionSummary
             expandIcon={<ExpandMoreIcon/>}
           >
-            <Typography className={classes.heading}>Change Username</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
+            <Typography sx={headingStyles}>Change Username</Typography>
+          </AccordionSummary>
+          <AccordionDetails>
             <UsernameChanger
               onSubmit={props.onDisplayNameChange || (() => null)}
             />
-          </ExpansionPanelDetails>
-        </ExpansionPanel>
+          </AccordionDetails>
+        </Accordion>
       </DialogContent>
     </Dialog>
   );

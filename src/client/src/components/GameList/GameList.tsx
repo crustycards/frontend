@@ -5,12 +5,10 @@ import {
   CardContent,
   CardHeader,
   CircularProgress,
-  Theme,
   Typography,
   TextField
-} from '@material-ui/core';
-import RefreshIcon from '@material-ui/icons/Refresh';
-import {makeStyles} from '@material-ui/styles';
+} from '@mui/material';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
@@ -20,16 +18,8 @@ import {StoreState} from '../../store';
 import {GameService} from '../../api/gameService';
 import {SearchGamesRequest, GameInfo} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import NumberBoundTextField from '../NumberBoundTextField';
-import {useGlobalStyles} from '../../styles/globalStyles';
-
-const useStyles = makeStyles((theme: Theme) => ({
-  leftIcon: {
-    marginRight: theme.spacing(1)
-  },
-  gameListHeader: {
-    padding: theme.spacing(1)
-  }
-}));
+import {ContentWrap, Center} from '../../styles/globalStyles';
+import {useTheme} from '@mui/system';
 
 interface GameListProps {
   gameService: GameService,
@@ -41,8 +31,11 @@ const GameList = (props: GameListProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [loadingError, setLoadingError] = useState(false);
   const {game} = useSelector(({game}: StoreState) => ({game}));
-  const classes = useStyles();
-  const globalClasses = useGlobalStyles();
+  const theme = useTheme();
+
+  const leftIconStyles = {
+    marginRight: theme.spacing(1)
+  };
 
   const [games, setGames] = useState<GameInfo[]>([]);
 
@@ -75,7 +68,7 @@ const GameList = (props: GameListProps) => {
 
   const header = (
     <Typography
-      className={classes.gameListHeader}
+      sx={{padding: theme.spacing(1)}}
       variant={'h4'}
       align={'center'}
     >
@@ -87,9 +80,9 @@ const GameList = (props: GameListProps) => {
     return (
       <div>
         {header}
-        <div className={globalClasses.center}>
+        <Center>
           <CircularProgress size={80} thickness={5}/>
-        </div>
+        </Center>
       </div>
     );
   }
@@ -105,7 +98,7 @@ const GameList = (props: GameListProps) => {
           variant={'contained'}
           color={'secondary'}
         >
-          <RefreshIcon className={classes.leftIcon}/>
+          <RefreshIcon sx={leftIconStyles}/>
           Try Again
         </Button>
       </div>
@@ -115,8 +108,8 @@ const GameList = (props: GameListProps) => {
   return (
     <div>
       {header}
-      <div className={globalClasses.contentWrap}>
-        <div style={{textAlign: 'center'}}>
+      <ContentWrap>
+        <Center>
           <div style={{display: 'inline-block'}}>
             <TextField
               label={'Query'}
@@ -125,10 +118,9 @@ const GameList = (props: GameListProps) => {
                 setQuery(e.target.value);
               }}
             />
-            <div style={{marginTop: '8px'}}>
+            <div style={{marginTop: '12px'}}>
               <NumberBoundTextField
-                style={{width: '47%', float: 'left'}}
-                label={'Player Slots Available'}
+                label={'Open Slots'}
                 value={minAvailablePlayerSlots}
                 minValue={0}
                 maxValue={9}
@@ -142,14 +134,20 @@ const GameList = (props: GameListProps) => {
               variant={'contained'}
               color={'secondary'}
             >
-              <RefreshIcon className={classes.leftIcon}/>
+              <RefreshIcon sx={leftIconStyles}/>
                 Refresh
             </Button>
             <br/>
-            <Button onClick={props.openCreateGameDialog}>Create Game</Button>
+            <Button
+              size={'small'}
+              onClick={props.openCreateGameDialog}
+              variant={'contained'}
+            >
+              Create Game
+            </Button>
           </div>
-        </div>
-      </div>
+        </Center>
+      </ContentWrap>
       {games.map((gameInfo, index) => (
         <Card
           style={
@@ -159,7 +157,6 @@ const GameList = (props: GameListProps) => {
               {}
           }
           key={index}
-          className={globalClasses.card}
         >
           <CardHeader
             title={gameInfo.getConfig()?.getDisplayName() || 'Unknown'}
@@ -190,11 +187,11 @@ const GameList = (props: GameListProps) => {
       ))}
       {
         games.length === 0 &&
-        <div className={globalClasses.center}>
-          <span>
+        <Center>
+          <Typography>
             There are no open games to join
-          </span>
-        </div>
+          </Typography>
+        </Center>
       }
     </div>
   );

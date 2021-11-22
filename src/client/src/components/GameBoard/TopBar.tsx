@@ -5,11 +5,10 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  Theme,
   Toolbar,
-  Typography
-} from '@material-ui/core';
-import {createStyles, makeStyles} from '@material-ui/styles';
+  Typography,
+  useTheme
+} from '@mui/material';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useState} from 'react';
@@ -25,13 +24,6 @@ const buttonStyle = {
   width: 'auto'
 };
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  topBar: {
-    backgroundColor: theme.palette.secondary.main,
-    margin: '8px 0'
-  }
-}));
-
 interface TopBarProps {
   gameService: GameService;
   pastRounds: PastRound[];
@@ -46,10 +38,10 @@ const TopBar = (props: TopBarProps) => {
     showLeaveGameConfirmationDialog,
     setShowLeaveGameConfirmationDialog
   ] = useState(false);
-  const classes = useStyles();
+  const theme = useTheme();
   const dispatch = useDispatch();
 
-  return <AppBar className={classes.topBar} position={'static'}>
+  return <AppBar sx={{backgroundColor: theme.palette.secondary.main, margin: '8px 0'}} position={'static'}>
     <Toolbar style={{padding: 0}}>
       <div style={{height: '66px', float: 'left'}}>
         <Typography style={{lineHeight: '36px', margin: '0 10px', fontSize: '1.2em'}}>

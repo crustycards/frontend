@@ -1,4 +1,4 @@
-import {Typography} from '@material-ui/core';
+import {Typography} from '@mui/material';
 import * as React from 'react';
 import {PlayableWhiteCard, BlackCardInRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {removeAdjacentDuplicateCharacters} from '../../helpers/string';

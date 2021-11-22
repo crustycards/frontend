@@ -1,11 +1,17 @@
-import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography
+} from '@mui/material';
+import {createTheme} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {deleteCustomWhiteCard} from '../../api/cardpackService';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
-const lightTheme = createMuiTheme({palette: {type: 'light'}});
+const lightTheme = createTheme({palette: {mode: 'light'}});
 
 interface CAHCustomWhiteCardProps {
   card: CustomWhiteCard;
@@ -23,11 +29,9 @@ const CAHCustomWhiteCard = (props: CAHCustomWhiteCardProps) => {
     });
   };
 
-  const globalClasses = useGlobalStyles();
-
   return (
-    <MuiThemeProvider theme={lightTheme}>
-      <Card className={globalClasses.card}>
+    <ThemeProvider theme={lightTheme}>
+      <Card>
         <CardContent>
           <Typography align={'left'} variant={'body2'}>
             {props.card.getText()}
@@ -40,7 +44,7 @@ const CAHCustomWhiteCard = (props: CAHCustomWhiteCardProps) => {
           }
         </CardActions>
       </Card>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

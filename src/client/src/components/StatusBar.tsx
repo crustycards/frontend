@@ -1,4 +1,4 @@
-import {Snackbar} from '@material-ui/core';
+import {Snackbar} from '@mui/material';
 import * as React from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import {StoreState} from '../store';

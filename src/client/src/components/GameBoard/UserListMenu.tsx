@@ -1,23 +1,14 @@
-import Button from '@material-ui/core/Button';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import {withStyles} from '@material-ui/core/styles';
-import SendIcon from '@material-ui/icons/Send';
+import {
+  Button,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem
+} from '@mui/material';
+import SendIcon from '@mui/icons-material/Send';
 import * as React from 'react';
 import {User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
-
-const StyledMenuItem = withStyles((theme) => ({
-  root: {
-    '&:focus': {
-      'backgroundColor': theme.palette.secondary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-        color: theme.palette.common.white
-      }
-    }
-  }
-}))(MenuItem);
+import {useTheme} from '@mui/system';
 
 interface UserListMenuProps {
   buttonText: string;
@@ -28,6 +19,7 @@ interface UserListMenuProps {
 
 const UserListMenu = (props: UserListMenuProps) => {
   const [anchorEl, setAnchorEl] = React.useState<Element | null>(null);
+  const theme = useTheme();
 
   return (
     props.users.length ?
@@ -42,7 +34,6 @@ const UserListMenu = (props: UserListMenuProps) => {
         </Button>
         <Menu
           elevation={0}
-          getContentAnchorEl={null}
           anchorOrigin={{
             vertical: 'bottom',
             horizontal: 'center'
@@ -58,7 +49,18 @@ const UserListMenu = (props: UserListMenuProps) => {
         >
           {
             props.users.map((user, index) => (
-              <StyledMenuItem
+              <MenuItem
+                // TODO - Verify that the root styles here are working.
+                sx={{
+                  root: {
+                    '&:focus': {
+                      'backgroundColor': theme.palette.secondary.main,
+                      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+                        color: theme.palette.common.white
+                      }
+                    }
+                  }
+                }}
                 key={index}
                 onClick={() => {
                   setAnchorEl(null);
@@ -69,7 +71,7 @@ const UserListMenu = (props: UserListMenuProps) => {
                   <SendIcon/>
                 </ListItemIcon>
                 <ListItemText primary={user.getDisplayName()} />
-              </StyledMenuItem>
+              </MenuItem>
             ))
           }
         </Menu>

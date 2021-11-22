@@ -7,14 +7,14 @@ import {
   MenuItem,
   Select,
   TextField
-} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+} from '@mui/material';
+import {createTheme} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
-const darkTheme = createMuiTheme({palette: {type: 'dark'}});
+const darkTheme = createTheme({palette: {mode: 'dark'}});
 
 interface BlackCardAdderProps {
   addCard(card: CustomBlackCard): void;
@@ -28,7 +28,6 @@ const getDefaultNewBlackCard = () => {
 
 const BlackCardAdder = (props: BlackCardAdderProps) => {
   const [card, setCard] = useState(getDefaultNewBlackCard());
-  const globalClasses = useGlobalStyles();
 
   const submit = () => {
     props.addCard(card);
@@ -38,8 +37,8 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
   const isSubmittable = card.getText().length > 0 && card.getAnswerFields() > 0;
 
   return (
-    <MuiThemeProvider theme={darkTheme}>
-      <Card className={globalClasses.card}>
+    <ThemeProvider theme={darkTheme}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             <TextField
@@ -89,7 +88,7 @@ const BlackCardAdder = (props: BlackCardAdderProps) => {
           </Button>
         </CardActions>
       </Card>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 }
 

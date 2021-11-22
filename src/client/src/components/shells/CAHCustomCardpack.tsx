@@ -9,8 +9,8 @@ import {
   DialogContent,
   DialogTitle,
   IconButton
-} from '@material-ui/core';
-import FavoriteIcon from '@material-ui/icons/Favorite';
+} from '@mui/material';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import * as React from 'react';
 import {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
@@ -30,7 +30,6 @@ import {
 import {convertTime} from '../../helpers/time';
 import {StoreState} from '../../store';
 import {showStatusMessage} from '../../store/modules/global';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface CAHCustomCardpackProps {
   customCardpack: CustomCardpack;
@@ -49,8 +48,6 @@ const CAHCustomCardpack = (props: CAHCustomCardpackProps) => {
     useState(currentUser && !packBelongsToCurrentUser);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const globalClasses = useGlobalStyles();
 
   useEffect(() => {
     if (currentUser && !packBelongsToCurrentUser) {
@@ -112,7 +109,7 @@ const CAHCustomCardpack = (props: CAHCustomCardpackProps) => {
 
   return (
     <div>
-      <Card className={globalClasses.card}>
+      <Card>
         <CardHeader
           title={props.customCardpack.getDisplayName()}
           subheader={`Created ${convertTime(props.customCardpack.getCreateTime())}`}

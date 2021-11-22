@@ -1,4 +1,4 @@
-import {CircularProgress} from '@material-ui/core';
+import {CircularProgress} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import * as InfiniteScroll from 'react-infinite-scroller';

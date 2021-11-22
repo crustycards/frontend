@@ -4,11 +4,10 @@ import {
   Tab,
   Tabs,
   Theme,
-  GridList,
-  GridListTile,
+  ImageList,
+  ImageListItem,
   Typography
-} from '@material-ui/core';
-import {createStyles, makeStyles} from '@material-ui/styles';
+} from '@mui/material';
 import * as React from 'react';
 import {useState, useEffect} from 'react';
 import * as InfiniteScroll from 'react-infinite-scroller';
@@ -31,17 +30,14 @@ import CAHDefaultBlackCard from '../components/shells/CAHDefaultBlackCard';
 import CAHDefaultWhiteCard from '../components/shells/CAHDefaultWhiteCard';
 import ResourceNotFound from '../components/ResourceNotFound';
 import {RouteComponentProps} from 'react-router';
-import {useGlobalStyles} from '../styles/globalStyles';
+import {ContentWrap, Panel} from '../styles/globalStyles';
+import {styled} from '@mui/material/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    cardList: {
-      height: '200px',
-      overflowX: 'hidden',
-      overflowY: 'scroll'
-    }
-  })
-);
+const CardList = styled('div')({
+  height: '200px',
+  overflowX: 'hidden',
+  overflowY: 'scroll'
+});
 
 const DefaultCardpackPage =
 (props: RouteComponentProps<{cardpack: string}>) => {
@@ -51,9 +47,6 @@ const DefaultCardpackPage =
     defaultCardpack,
     setDefaultCardpack
   ] = useState<DefaultCardpack | null | undefined>(undefined);
-
-  const classes = useStyles();
-  const globalClasses = useGlobalStyles();
 
   const [
     defaultBlackCards,
@@ -100,8 +93,8 @@ const DefaultCardpackPage =
   }
 
   return (
-    <div className={globalClasses.contentWrap}>
-      <div className={globalClasses.panel}>
+    <ContentWrap>
+      <Panel>
         <div>
           <Typography align={'center'}>
             {defaultCardpack.getDisplayName()}
@@ -122,7 +115,7 @@ const DefaultCardpackPage =
                 {
                   defaultWhiteCards === undefined ?
                     <div>Failed to load cards!</div> :
-                    <div className={classes.cardList}>
+                    <CardList>
                       <InfiniteScroll
                         useWindow={false}
                         loadMore={async () => {
@@ -155,23 +148,23 @@ const DefaultCardpackPage =
                         hasMore={hasMoreWhiteCards}
                       >
                         {
-                          <GridList cols={4}>
+                          <ImageList cols={4}>
                             {defaultWhiteCards.map((c, i) => (
-                              <GridListTile style={{height: 'auto'}} key={i}>
+                              <ImageListItem style={{height: 'auto'}} key={i}>
                                 <CAHDefaultWhiteCard card={c}/>
-                              </GridListTile>
+                              </ImageListItem>
                             ))}
-                          </GridList>
+                          </ImageList>
                         }
                       </InfiniteScroll>
-                    </div>
+                    </CardList>
                 }
               </div>
               <div>
                 {
                   defaultBlackCards === undefined ?
                     <div>Failed to load cards!</div> :
-                    <div className={classes.cardList}>
+                    <CardList>
                       <InfiniteScroll
                         useWindow={false}
                         loadMore={async () => {
@@ -204,23 +197,23 @@ const DefaultCardpackPage =
                         hasMore={hasMoreBlackCards}
                       >
                         {
-                          <GridList cols={4}>
+                          <ImageList cols={4}>
                             {defaultBlackCards.map((c, i) => (
-                              <GridListTile style={{height: 'auto'}} key={i}>
+                              <ImageListItem style={{height: 'auto'}} key={i}>
                                 <CAHDefaultBlackCard card={c}/>
-                              </GridListTile>
+                              </ImageListItem>
                             ))}
-                          </GridList>
+                          </ImageList>
                         }
                       </InfiniteScroll>
-                    </div>
+                    </CardList>
                 }
               </div>
             </SwipeableViews>
           </div>
         </div>
-      </div>
-    </div>
+      </Panel>
+    </ContentWrap>
   );
 };
 

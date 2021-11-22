@@ -1,4 +1,4 @@
-import {Button, Typography} from '@material-ui/core';
+import {Button, Typography} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {CustomWhiteCard, User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
@@ -10,7 +10,7 @@ import {
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
 import {GameService} from '../../api/gameService';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Panel, Subpanel} from '../../styles/globalStyles';
 
 interface PlayedCardsProps {
   gameService: GameService;
@@ -28,8 +28,6 @@ interface PlayedCardsProps {
 const PlayedCards = (props: PlayedCardsProps) => {
   const [selectedSetIndex, setSelectedSetIndex] = useState<number | null>(null);
 
-  const globalClasses = useGlobalStyles();
-
   const canVote = props.judge?.getName() === props.currentUser.getName()
                && props.gameStage === GameView.Stage.JUDGE_PHASE;
 
@@ -45,7 +43,7 @@ const PlayedCards = (props: PlayedCardsProps) => {
   }
 
   return (
-    <div className={globalClasses.panel}>
+    <Panel>
       {
         canVote &&
           <Button
@@ -67,8 +65,7 @@ const PlayedCards = (props: PlayedCardsProps) => {
       {
         nonEmptyWhitePlayedList
           .map((entry, index) => (
-            <div
-              className={globalClasses.subpanel}
+            <Subpanel
               key={index}
               onClick={() => {
                 if (canVote) {
@@ -103,10 +100,10 @@ const PlayedCards = (props: PlayedCardsProps) => {
                   <CAHCustomWhiteCard card={card} key={index}/>
                 )
               }
-            </div>
+            </Subpanel>
           ))
       }
-    </div>
+    </Panel>
   );
 };
 

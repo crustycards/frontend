@@ -1,11 +1,17 @@
-import {Button, Card, CardActions, CardContent, Typography} from '@material-ui/core';
-import {createMuiTheme, MuiThemeProvider} from '@material-ui/core/styles';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Typography
+} from '@mui/material';
+import {createTheme} from '@mui/material/styles';
+import {ThemeProvider} from '@mui/material/styles';
 import * as React from 'react';
 import {CustomBlackCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {deleteCustomBlackCard} from '../../api/cardpackService';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
-const darkTheme = createMuiTheme({palette: {type: 'dark'}});
+const darkTheme = createTheme({palette: {mode: 'dark'}});
 
 interface CAHCustomBlackCardProps {
   card: CustomBlackCard;
@@ -24,11 +30,9 @@ const CAHCustomBlackCard = (props: CAHCustomBlackCardProps) => {
     });
   };
 
-  const globalClasses = useGlobalStyles();
-
   return (
-    <MuiThemeProvider theme={darkTheme}>
-      <Card className={globalClasses.card}>
+    <ThemeProvider theme={darkTheme}>
+      <Card>
         <CardContent>
           <Typography align={'left'} gutterBottom variant={'h6'}>
             {props.overrideTextElements || props.card.getText()}
@@ -51,7 +55,7 @@ const CAHCustomBlackCard = (props: CAHCustomBlackCardProps) => {
           }
         </CardActions>
       </Card>
-    </MuiThemeProvider>
+    </ThemeProvider>
   );
 };
 

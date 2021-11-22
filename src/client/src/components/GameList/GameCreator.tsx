@@ -11,9 +11,8 @@ import {
   Theme,
   Typography,
   Paper
-} from '@material-ui/core';
+} from '@mui/material';
 import {Empty} from 'google-protobuf/google/protobuf/empty_pb';
-import {createStyles, makeStyles} from '@material-ui/styles';
 import {push} from 'connected-react-router';
 import * as React from 'react';
 import {useState} from 'react';
@@ -33,10 +32,11 @@ import {
 import NumberBoundTextField from '../../components/NumberBoundTextField';
 import {UserService} from '../../api/userService';
 import {showStatusMessage} from '../../store/modules/global'
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Center, ContentWrap, Subpanel} from '../../styles/globalStyles';
 import LoadableCustomCardpackCard from './LoadableCustomCardpackCard';
 import LoadableDefaultCardpackCard from './LoadableDefaultCardpackCard';
 import InfiniteScrollCheckboxList from './InfiniteScrollCheckboxList';
+import {useTheme} from '@mui/system';
 
 const minPlayerLimit = 2;
 const maxPlayerLimit = 100;
@@ -47,27 +47,6 @@ const defaultScoreLimit = 8;
 const minHandSizeLimit = 3;
 const maxHandSizeLimit = 20;
 const defaultHandSizeLimit = 8;
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    wrapper: {
-      margin: theme.spacing(1),
-      position: 'relative'
-    },
-    buttonProgress: {
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      marginTop: -12,
-      marginLeft: -12
-    },
-    cardpackList: {
-      height: '200px',
-      overflow: 'auto',
-      backgroundColor: theme.palette.background.paper
-    }
-  })
-);
 
 const fillGameConfigWithDefaultValues = (config: GameConfig) => {
   if (config.getMaxPlayers() < minPlayerLimit
@@ -126,8 +105,7 @@ const GameCreator = (props: GameCreatorProps) => {
 
   const [isCreatingGame, setIsCreatingGame] = useState(false);
   const dispatch = useDispatch();
-  const classes = useStyles();
-  const globalClasses = useGlobalStyles();
+  const theme = useTheme();
 
   const handleCustomCardpackSelectChange = (customCardpackName: string) => {
     const currentCustomCardpackNamesList = config.getCustomCardpackNamesList();
@@ -194,9 +172,9 @@ const GameCreator = (props: GameCreatorProps) => {
       >
         Create Game
       </Typography>
-      <div className={globalClasses.contentWrap}>
+      <ContentWrap>
         <Grid container spacing={8}>
-          <Grid item xs={12} sm={5} className={globalClasses.center}>
+          <Grid item xs={12} sm={5} sx={{textAlign: 'center'}}>
             <Paper elevation={3}>
               <div style={{padding: '20px', maxWidth: '200px', textAlign: 'center', display: 'inline-block'}}>
                 <TextField
@@ -223,16 +201,15 @@ const GameCreator = (props: GameCreatorProps) => {
                   />
                   <NumberBoundTextField
                     style={{width: '47%', float: 'right'}}
-                    label={'Winning Score'}
-                    value={config.getMaxScore()}
-                    minValue={minScoreLimit}
-                    maxValue={maxScoreLimit}
+                    label={'Hand Size'}
+                    value={config.getHandSize()}
+                    minValue={minHandSizeLimit}
+                    maxValue={maxHandSizeLimit}
                     onChange={(num) => {
                       const newConfig = config.clone();
-                      newConfig.setMaxScore(num);
+                      newConfig.setHandSize(num);
                       setConfig(newConfig);
                     }}
-                    disabled={config.hasEndlessMode()}
                   />
                 </div>
                 <FormControlLabel
@@ -242,7 +219,9 @@ const GameCreator = (props: GameCreatorProps) => {
                       checked={config.hasEndlessMode()}
                       onChange={() => {
                         const newConfig = config.clone();
-                        if (!config.hasEndlessMode()) {
+                        if (config.hasEndlessMode()) {
+                          newConfig.clearEndlessMode();
+                        } else {
                           newConfig.setEndlessMode(new Empty());
                         }
                         if (!newConfig.hasEndlessMode()) {
@@ -258,17 +237,18 @@ const GameCreator = (props: GameCreatorProps) => {
                     </Typography>
                   }
                 />
-                <NumberBoundTextField
-                  label={'Hand Size'}
-                  value={config.getHandSize()}
-                  minValue={minHandSizeLimit}
-                  maxValue={maxHandSizeLimit}
-                  onChange={(num) => {
-                    const newConfig = config.clone();
-                    newConfig.setHandSize(num);
-                    setConfig(newConfig);
-                  }}
-                />
+                  <NumberBoundTextField
+                    label={'Winning Score'}
+                    value={config.getMaxScore()}
+                    minValue={minScoreLimit}
+                    maxValue={maxScoreLimit}
+                    onChange={(num) => {
+                      const newConfig = config.clone();
+                      newConfig.setMaxScore(num);
+                      setConfig(newConfig);
+                    }}
+                    disabled={config.hasEndlessMode()}
+                  />
                 <div>
                   <Button
                     color={'secondary'}
@@ -305,7 +285,7 @@ const GameCreator = (props: GameCreatorProps) => {
               </div>
             </Paper>
             <div>
-              <div className={globalClasses.subpanel}>
+              <Subpanel>
                 <Typography
                   variant={'h6'}
                   align={'center'}
@@ -335,8 +315,8 @@ const GameCreator = (props: GameCreatorProps) => {
                       ))
                   }
                 </List>
-              </div>
-              <div className={globalClasses.subpanel}>
+              </Subpanel>
+              <Subpanel>
                 <Typography
                   variant={'h6'}
                   align={'center'}
@@ -366,7 +346,7 @@ const GameCreator = (props: GameCreatorProps) => {
                       ))
                   }
                 </List>
-              </div>
+              </Subpanel>
             </div>
           </Grid>
           <Grid item xs={12} sm={7}>
@@ -431,8 +411,11 @@ const GameCreator = (props: GameCreatorProps) => {
             />
           </Grid>
         </Grid>
-      </div>
-      <div className={`${globalClasses.center} ${classes.wrapper}`}>
+      </ContentWrap>
+      <Center sx={{
+        margin: theme.spacing(1),
+        position: 'relative'
+      }}>
         <Button
           type='submit'
           disabled={isCreatingGame || !canSubmit}
@@ -447,10 +430,16 @@ const GameCreator = (props: GameCreatorProps) => {
           isCreatingGame &&
             <CircularProgress
               size={24}
-              className={classes.buttonProgress}
+              sx={{
+                position: 'absolute',
+                top: '50%',
+                left: '50%',
+                marginTop: -12,
+                marginLeft: -12
+              }}
             />
         }
-      </div>
+      </Center>
     </div>
   );
 };

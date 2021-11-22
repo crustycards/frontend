@@ -1,11 +1,10 @@
-import {Avatar, Button, Card, CardActions, CardHeader} from '@material-ui/core';
+import {Avatar, Button, Card, CardActions, CardHeader} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {NavLink} from 'react-router-dom';
 import {User} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {useUserService} from '../../api/context';
 import {stringToCssColor} from '../../helpers/colorGenerator';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface UserCardProps {
   user: User;
@@ -14,10 +13,9 @@ interface UserCardProps {
 const UserCard = (props: UserCardProps) => {
   const [imgError, setImgError] = useState(false);
   const userService = useUserService();
-  const globalClasses = useGlobalStyles();
 
   return (
-    <Card className={globalClasses.card}>
+    <Card>
       <CardHeader
         title={
           <div style={{height: '50px'}}>

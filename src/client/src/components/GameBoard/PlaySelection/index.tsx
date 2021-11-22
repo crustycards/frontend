@@ -1,4 +1,4 @@
-import {Button} from '@material-ui/core';
+import {Button} from '@mui/material';
 import * as React from 'react';
 import {GameView, PlayableWhiteCard} from '../../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
 import {canPlay, userHasPlayed} from '../../../store';

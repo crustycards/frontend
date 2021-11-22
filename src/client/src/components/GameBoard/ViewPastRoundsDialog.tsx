@@ -1,14 +1,14 @@
-import {Button, Dialog, DialogContent} from '@material-ui/core';
-import ArrowLeft from '@material-ui/icons/ArrowLeft';
-import ArrowRight from '@material-ui/icons/ArrowRight';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import {Button, Dialog, DialogContent} from '@mui/material';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import * as React from 'react';
 import {CustomWhiteCard} from '../../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPlayerDisplayName, playersAreEqual} from '../../helpers/proto';
 import CAHCustomWhiteCard from '../shells/CAHCustomWhiteCard';
 import {PastRound} from '../../../../../proto-gen-out/crusty_cards_api/game_service_pb';
-import {useGlobalStyles} from '../../styles/globalStyles';
+import {Panel, Subpanel} from '../../styles/globalStyles';
 import CAHBlackCardInRound from '../shells/CAHBlackCardInRound';
 
 interface ViewPastRoundsDialogProps {
@@ -19,8 +19,6 @@ interface ViewPastRoundsDialogProps {
 
 const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
   const [roundIndex, setRoundIndex] = React.useState(0);
-
-  const globalClasses = useGlobalStyles();
 
   // Since pastRounds can be reset to empty whenever the game is restarted, we
   // need to check at every render to make sure that roundIndex is in bounds.
@@ -66,26 +64,26 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
             onClick={() => setRoundIndex(0)}
             disabled={!canGoToPreviousRound}
           >
-            <KeyboardArrowLeft/>
+            <KeyboardArrowLeftIcon/>
           </Button>
           <Button
             onClick={() => setRoundIndex(roundIndex - 1)}
             disabled={!canGoToPreviousRound}
           >
-            <ArrowLeft/>
+            <ArrowLeftIcon/>
           </Button>
           Round {roundIndex + 1} of {props.pastRounds.length}
           <Button
             onClick={() => setRoundIndex(roundIndex + 1)}
             disabled={!canGoToNextRound}
           >
-            <ArrowRight/>
+            <ArrowRightIcon/>
           </Button>
           <Button
             onClick={() => setRoundIndex(props.pastRounds.length - 1)}
             disabled={!canGoToNextRound}
           >
-            <KeyboardArrowRight/>
+            <KeyboardArrowRightIcon/>
           </Button>
         </div>
         <div style={{display: 'block', textAlign: 'center'}}>
@@ -95,34 +93,33 @@ const ViewPastRoundsDialog = (props: ViewPastRoundsDialogProps) => {
           visibleRoundBlackCard &&
             <CAHBlackCardInRound card={visibleRoundBlackCard}/>
         }
-        <div className={globalClasses.panel}>
-            {visibleRound.getWhitePlayedList().map((entry, index) => (
-              <div
-                style={
-                  playersAreEqual(
-                    entry.getPlayer(),
-                    visibleRound.getWinner()
-                  ) ? {} : {opacity: 0.5}
-                }
-                className={globalClasses.subpanel}
-                key={index}
-              >
-                <div>
-                  {getPlayerDisplayName(entry.getPlayer())}
-                </div>
-                {entry.getCardTextsList().map((cardText) => {
-                  const card = new CustomWhiteCard();
-                  card.setText(cardText);
-                  return card;
-                }).map((card, index) => (
-                  <CAHCustomWhiteCard
-                    card={card}
-                    key={index}
-                  />
-                ))}
+        <Panel>
+          {visibleRound.getWhitePlayedList().map((entry, index) => (
+            <Subpanel
+              style={
+                playersAreEqual(
+                  entry.getPlayer(),
+                  visibleRound.getWinner()
+                ) ? {} : {opacity: 0.5}
+              }
+              key={index}
+            >
+              <div>
+                {getPlayerDisplayName(entry.getPlayer())}
               </div>
-            ))}
-          </div>
+              {entry.getCardTextsList().map((cardText) => {
+                const card = new CustomWhiteCard();
+                card.setText(cardText);
+                return card;
+              }).map((card, index) => (
+                <CAHCustomWhiteCard
+                  card={card}
+                  key={index}
+                />
+              ))}
+            </Subpanel>
+          ))}
+        </Panel>
       </DialogContent>
     </Dialog>
   );

@@ -1,4 +1,4 @@
-import {Switch, FormControlLabel, Typography} from '@material-ui/core';
+import {Switch, FormControlLabel, Typography} from '@mui/material';
 import * as React from 'react';
 import {useState} from 'react';
 import {useDispatch} from 'react-redux';

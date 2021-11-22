@@ -9,9 +9,8 @@ import {
   Button,
   CircularProgress,
   Typography
-} from '@material-ui/core';
+} from '@mui/material';
 import {NavLink} from 'react-router-dom';
-import {useGlobalStyles} from '../../styles/globalStyles';
 
 interface LoadableCustomCardpackCardProps {
   customCardpackName: string;
@@ -24,8 +23,6 @@ const LoadableCustomCardpackCard = (props: LoadableCustomCardpackCardProps) => {
     setCustomCardpack
   ] = useState<CustomCardpack | null | undefined>(undefined);
 
-  const globalClasses = useGlobalStyles();
-
   useEffect(() => {
     setCustomCardpack(undefined);
     getCustomCardpack(props.customCardpackName)
@@ -35,7 +32,7 @@ const LoadableCustomCardpackCard = (props: LoadableCustomCardpackCardProps) => {
 
   if (customCardpack === undefined) {
     return (
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <CircularProgress/>
         </CardContent>
@@ -45,7 +42,7 @@ const LoadableCustomCardpackCard = (props: LoadableCustomCardpackCardProps) => {
 
   if (customCardpack === null) {
     return (
-      <Card className={globalClasses.card}>
+      <Card>
         <CardContent>
           <Typography>Could not load custom cardpack.</Typography>
         </CardContent>
@@ -54,7 +51,7 @@ const LoadableCustomCardpackCard = (props: LoadableCustomCardpackCardProps) => {
   }
 
   return (
-    <Card className={globalClasses.card}>
+    <Card>
       <CardContent>
         <Typography>{customCardpack.getDisplayName()}</Typography>
       </CardContent>
