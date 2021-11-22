@@ -11,7 +11,7 @@ import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {Provider, useSelector} from 'react-redux';
 import {Route, Switch} from 'react-router';
-import * as Socket from 'socket.io-client';
+import {io} from 'socket.io-client';
 import {UserSettings} from '../../../proto-gen-out/crusty_cards_api/model_pb';
 import {getPreloadedUser} from './getPreloadedState';
 import {Provider as GameServiceContextProvider} from './api/context';
@@ -44,11 +44,12 @@ const userService = new UserService(
 );
 
 // Connect through socket.io
-const socket = Socket({
+const socket = io({
   reconnection: true,
   reconnectionDelay: 500,
   reconnectionAttempts: Infinity
 });
+
 socket.on('connect', () => {
   if (gameService) {
     gameService.getGameView(); // Fetch game state for the initial render
