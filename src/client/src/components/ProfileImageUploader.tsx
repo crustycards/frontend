@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {FileWithPath} from 'react-dropzone';
+import {FileWithPath, FileRejection} from 'react-dropzone';
 import {useUserService} from '../api/context';
 import {UserService} from '../api/userService';
 import FileUploader from './FileUploader';
@@ -25,9 +25,9 @@ const handleUpload = async (
   userService: UserService,
   userName: string,
   acceptedFiles: FileWithPath[],
-  rejectedFiles: FileWithPath[]
+  fileRejections: FileRejection[]
 ) => {
-  if (acceptedFiles.length === 1 && rejectedFiles.length === 0) {
+  if (acceptedFiles.length === 1 && fileRejections.length === 0) {
     const file = acceptedFiles[0];
     await userService.updateCurrentUserProfileImage(await blobToString(file));
     // Refresh page so that the user can see their new profile picture.
@@ -48,11 +48,11 @@ const ProfileImageUploader = (props: ProfileImageUploaderProps) => {
       <FileUploader
         type={'image/*'}
         onUpload={
-          (acceptedFiles, rejectedFiles) => handleUpload(
+          (acceptedFiles, fileRejections) => handleUpload(
             userService,
             props.currentUser.getName(),
             acceptedFiles,
-            rejectedFiles
+            fileRejections
           )
         }
       />

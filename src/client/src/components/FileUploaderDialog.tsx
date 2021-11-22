@@ -4,7 +4,7 @@ import {
   DialogTitle
 } from '@mui/material';
 import * as React from 'react';
-import {FileWithPath} from 'react-dropzone';
+import {FileRejection, FileWithPath} from 'react-dropzone';
 import FileUploader from './FileUploader';
 
 interface UploaderProps {
@@ -13,7 +13,7 @@ interface UploaderProps {
   isVisible: boolean;
   onUpload(
       acceptedFiles: FileWithPath[],
-      rejectedFiles: FileWithPath[],
+      fileRejections: FileRejection[],
       event: React.DragEvent<HTMLDivElement>
   ): void;
   onClose?(): void;

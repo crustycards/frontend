@@ -3,14 +3,14 @@ import {CSSProperties} from '@mui/material/styles/createTypography';
 import {useTheme} from '@mui/system';
 import * as React from 'react';
 import {useMemo} from 'react';
-import {FileWithPath, useDropzone} from 'react-dropzone';
+import {DropEvent, FileRejection, FileWithPath, useDropzone} from 'react-dropzone';
 
 interface UploaderProps {
   type?: string;
   onUpload(
       acceptedFiles: FileWithPath[],
-      rejectedFiles: FileWithPath[],
-      event: React.DragEvent<HTMLDivElement>
+      fileRejections: FileRejection[],
+      event: DropEvent
   ): void;
 }
 
