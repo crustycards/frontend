@@ -14,7 +14,7 @@ RUN \
     npm ci &&\
     npm run build-prod
 
-FROM node:17.1.0-alpine3.11
+FROM node:17.1.0-alpine3.14
 COPY --from=base ./app ./app
 WORKDIR /app
 EXPOSE 80
