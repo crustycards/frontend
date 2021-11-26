@@ -1,43 +1,26 @@
 import {
-  CircularProgress,
   LinearProgress,
   Tab,
   Tabs,
-  Theme,
-  ImageList,
-  ImageListItem,
   Typography
 } from '@mui/material';
 import * as React from 'react';
 import {useState, useEffect} from 'react';
-import * as InfiniteScroll from 'react-infinite-scroller';
 import SwipeableViews from 'react-swipeable-views';
 import {
   ListDefaultBlackCardsRequest,
   ListDefaultWhiteCardsRequest
 } from '../../../../proto-gen-out/crusty_cards_api/cardpack_service_pb';
-import {
-  DefaultBlackCard,
-  DefaultCardpack,
-  DefaultWhiteCard
-} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
+import {DefaultCardpack} from '../../../../proto-gen-out/crusty_cards_api/model_pb';
 import {
   getDefaultCardpack,
   listDefaultBlackCards,
   listDefaultWhiteCards
 } from '../api/cardpackService';
-import CAHDefaultBlackCard from '../components/shells/CAHDefaultBlackCard';
-import CAHDefaultWhiteCard from '../components/shells/CAHDefaultWhiteCard';
 import ResourceNotFound from '../components/ResourceNotFound';
 import {RouteComponentProps} from 'react-router';
 import {ContentWrap, Panel} from '../styles/globalStyles';
-import {styled} from '@mui/material/styles';
-
-const CardList = styled('div')({
-  height: '200px',
-  overflowX: 'hidden',
-  overflowY: 'scroll'
-});
+import {InfiniteLoadingCardList} from '../components/InfiniteLoadingCardList';
 
 const DefaultCardpackPage =
 (props: RouteComponentProps<{cardpack: string}>) => {
@@ -47,22 +30,6 @@ const DefaultCardpackPage =
     defaultCardpack,
     setDefaultCardpack
   ] = useState<DefaultCardpack | null | undefined>(undefined);
-
-  const [
-    defaultBlackCards,
-    setDefaultBlackCards
-  ] = useState<DefaultBlackCard[] | undefined>([]);
-  const [nextBlackCardPageToken, setNextBlackCardPageToken] = useState('');
-  const [hasMoreBlackCards, setHasMoreBlackCards] = useState(true);
-  const [isLoadingBlackCards, setIsLoadingBlackCards] = useState(false);
-
-  const [
-    defaultWhiteCards,
-    setDefaultWhiteCards
-  ] = useState<DefaultWhiteCard[] | undefined>([]);
-  const [nextWhiteCardPageToken, setNextWhiteCardPageToken] = useState('');
-  const [hasMoreWhiteCards, setHasMoreWhiteCards] = useState(true);
-  const [isLoadingWhiteCards, setIsLoadingWhiteCards] = useState(false);
 
   const [slideIndex, setSlideIndex] = useState(0);
 
@@ -111,104 +78,22 @@ const DefaultCardpackPage =
               onChangeIndex={handleTabChange}
               index={slideIndex}
             >
-              <div>
-                {
-                  defaultWhiteCards === undefined ?
-                    <div>Failed to load cards!</div> :
-                    <CardList>
-                      <InfiniteScroll
-                        useWindow={false}
-                        loadMore={async () => {
-                          if (!isLoadingWhiteCards) {
-                            const request = new ListDefaultWhiteCardsRequest();
-                            request.setPageToken(nextWhiteCardPageToken);
-                            request.setPageSize(10);
-                            request.setParent(defaultCardpack.getName());
-                            setIsLoadingWhiteCards(true);
-                            try {
-                              const response =
-                                await listDefaultWhiteCards(request);
-                              const nextPageToken = response.getNextPageToken();
-                              setNextWhiteCardPageToken(nextPageToken);
-                              if (nextPageToken.length === 0) {
-                                setHasMoreWhiteCards(false);
-                              }
-                              setDefaultWhiteCards([
-                                ...defaultWhiteCards,
-                                ...response.getDefaultWhiteCardsList()
-                              ]);
-                            } catch (err) {
-                              setDefaultWhiteCards(undefined);
-                            } finally {
-                              setIsLoadingWhiteCards(false);
-                            }
-                          }
-                        }}
-                        loader={<CircularProgress/>}
-                        hasMore={hasMoreWhiteCards}
-                      >
-                        {
-                          <ImageList cols={4}>
-                            {defaultWhiteCards.map((c, i) => (
-                              <ImageListItem style={{height: 'auto'}} key={i}>
-                                <CAHDefaultWhiteCard card={c}/>
-                              </ImageListItem>
-                            ))}
-                          </ImageList>
-                        }
-                      </InfiniteScroll>
-                    </CardList>
-                }
-              </div>
-              <div>
-                {
-                  defaultBlackCards === undefined ?
-                    <div>Failed to load cards!</div> :
-                    <CardList>
-                      <InfiniteScroll
-                        useWindow={false}
-                        loadMore={async () => {
-                          if (!isLoadingBlackCards) {
-                            const request = new ListDefaultBlackCardsRequest();
-                            request.setPageToken(nextBlackCardPageToken);
-                            request.setPageSize(10);
-                            request.setParent(defaultCardpack.getName());
-                            setIsLoadingBlackCards(true);
-                            try {
-                              const response =
-                                await listDefaultBlackCards(request);
-                              const nextPageToken = response.getNextPageToken();
-                              setNextBlackCardPageToken(nextPageToken);
-                              if (nextPageToken.length === 0) {
-                                setHasMoreBlackCards(false);
-                              }
-                              setDefaultBlackCards([
-                                ...defaultBlackCards,
-                                ...response.getDefaultBlackCardsList()
-                              ]);
-                            } catch (err) {
-                              setDefaultBlackCards(undefined);
-                            } finally {
-                              setIsLoadingBlackCards(false);
-                            }
-                          }
-                        }}
-                        loader={<CircularProgress/>}
-                        hasMore={hasMoreBlackCards}
-                      >
-                        {
-                          <ImageList cols={4}>
-                            {defaultBlackCards.map((c, i) => (
-                              <ImageListItem style={{height: 'auto'}} key={i}>
-                                <CAHDefaultBlackCard card={c}/>
-                              </ImageListItem>
-                            ))}
-                          </ImageList>
-                        }
-                      </InfiniteScroll>
-                    </CardList>
-                }
-              </div>
+              <InfiniteLoadingCardList loadCards={async (pageToken) => {
+                const request = new ListDefaultWhiteCardsRequest();
+                request.setPageToken(pageToken);
+                request.setPageSize(10);
+                request.setParent(defaultCardpack.getName());
+                const response = await listDefaultWhiteCards(request);
+                return {cards: response.getDefaultWhiteCardsList(), nextPageToken: response.getNextPageToken()};
+              }}/>
+              <InfiniteLoadingCardList loadCards={async (pageToken) => {
+                const request = new ListDefaultBlackCardsRequest();
+                request.setPageToken(pageToken);
+                request.setPageSize(10);
+                request.setParent(defaultCardpack.getName());
+                const response = await listDefaultBlackCards(request);
+                return {cards: response.getDefaultBlackCardsList(), nextPageToken: response.getNextPageToken()};
+              }}/>
             </SwipeableViews>
           </div>
         </div>
