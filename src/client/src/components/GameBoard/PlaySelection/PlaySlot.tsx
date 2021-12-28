@@ -37,16 +37,18 @@ const PlaySlot = (props: PlaySlotProps) => {
     );
   } else {
     return props.connectDropTarget(
-      <Panel
-        style={{
-          textAlign: 'center',
-          borderStyle: 'dotted',
-          padding: '10px',
-          margin: '5px 0'
-        }}
-      >
-        Drop a card here
-      </Panel>
+      <div>
+        <Panel
+          style={{
+            textAlign: 'center',
+            borderStyle: 'dotted',
+            padding: '10px',
+            margin: '5px 0'
+          }}
+        >
+          Drop a card here
+        </Panel>
+      </div>
     );
   }
 };
