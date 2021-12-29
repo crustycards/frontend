@@ -1,4 +1,4 @@
-FROM node:17.1.0 AS base
+FROM node:17.3.0 AS base
 COPY ./ ./app
 WORKDIR /app
 RUN \
@@ -14,7 +14,7 @@ RUN \
     npm ci &&\
     npm run build-prod
 
-FROM node:17.1.0-alpine3.14
+FROM node:17.3.0-alpine3.14
 COPY --from=base ./app ./app
 WORKDIR /app
 EXPOSE 80
